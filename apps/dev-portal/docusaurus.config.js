@@ -17,7 +17,7 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/',
+          to: 'docs/api-reference',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
@@ -37,12 +37,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
-              to: 'docs/',
+              label: 'API Reference',
+              to: 'docs/api-reference',
             },
             {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
+              label: 'Help us evolve',
+              to: 'docs/contribute',
             },
           ],
         },
