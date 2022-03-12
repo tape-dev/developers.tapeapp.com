@@ -64,7 +64,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Tape Technolgies, Inc.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Tape Technologies, Inc.`,
     },
     colorMode: {
       disableSwitch: true
