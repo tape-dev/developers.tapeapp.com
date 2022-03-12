@@ -1,0 +1,1 @@
+nx build dev-portal && cp CNAME ./docs/CNAME
