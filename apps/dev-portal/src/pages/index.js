@@ -8,32 +8,31 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: 'Easy to Use',
+    title: 'Developer friendly 💻',
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        The Tape API was designed from the ground up to be easily consumable and transparent. 
+        This way, our developers can focus on what they do best: Building powerful custo-tailored Tape solutions for their customers.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: '💪 Fast, reliable & secure',
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        We do not compromise on speed and robustness - that is why we dedicate our resources to guarantee a production ready experience that you can count and build on.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Powered by 💙 Community',
     imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Tape is about community. In order to constantly evolve and improve, we allow our development community and eco system to contribute to our docs. 
+        Because you know best what could be missing or improved.
       </>
     ),
   },
@@ -64,7 +63,7 @@ function Home() {
     >
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
+          <h1 className="hero__title">Welcome, Tape Developers 💻</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
