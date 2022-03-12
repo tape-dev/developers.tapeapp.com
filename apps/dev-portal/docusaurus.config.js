@@ -27,7 +27,7 @@ module.exports = {
           href: 'https://tapeapp.com',
           label: 'Tape',
           position: 'right',
-        },
+        }
       ],
     },
     footer: {
@@ -78,13 +78,10 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/tape-dev/developers.tapeapp.com/edit/main/apps/dev-portal',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
