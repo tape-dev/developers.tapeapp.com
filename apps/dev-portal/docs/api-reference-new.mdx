@@ -24,7 +24,7 @@ export const MyComponent = ({children, color}) =>
         credentials: "include",
         headers: { 'Content-Type': 'application/json', },
         body: getUserSessionsQuery,
-        // mode: 'no-cors'
+        mode: 'no-cors'
     };
     fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
       .then(res => res.json())
