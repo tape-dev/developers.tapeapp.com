@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "projects": {
+    "dev-portal": {
+      "projectType": "application",
+      "root": "apps/dev-portal",
+      "sourceRoot": "apps/dev-portal/src",
+      "targets": {
+        "build": {
+          "executor": "@nx-plus/docusaurus:browser",
+          "options": {
+            "outputPath": "dist/apps/dev-portal"
+          }
+        },
+        "serve": {
+          "executor": "@nx-plus/docusaurus:dev-server",
+          "options": {
+            "port": 3000
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}

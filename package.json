@@ -1,0 +1,28 @@
+{
+  "name": "dev-portal",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test"
+  },
+  "private": true,
+  "devDependencies": {
+    "@nrwl/cli": "12.10.1",
+    "@nrwl/tao": "12.10.1",
+    "@nrwl/workspace": "12.10.1",
+    "@nx-plus/docusaurus": "^12.2.0",
+    "@types/node": "14.14.33",
+    "prettier": "^2.3.1",
+    "typescript": "~4.3.5"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.0.0-alpha.70",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.70",
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  }
+}
