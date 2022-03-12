@@ -12,15 +12,21 @@ export const MyComponent = ({children, color}) =>
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
-  const query = `{"operationName":"reportActiveUserPresence","variables":{"input":{}},"query":"mutation reportActiveUserPresence($input: ReportActiveUserPresenceInput!) {\n  defaultAlias: reportActiveUserPresence(input: $input) {\n    ...VoidNoNesting\n    __typename\n  }\n}\n\nfragment VoidNoNesting on Void {\n  _void\n  __typename\n}\n"}`;
-   useEffect(() => {
+  const query = `{"operationName":"reportActiveUserPresence","variables":{"input":{}},"query":"mutation reportActiveUserPresence($input: ReportActiveUserPresenceInput!) {  defaultAlias: reportActiveUserPresence(input: $input) {    ...VoidNoNesting    __typename  }}fragment VoidNoNesting on Void {  _void  __typename}"}`;
+  const getUserSessionsQuery = `{
+  "operationName": "getUserSessions",
+  "variables": {},
+  "query": "query getUserSessions {  defaultAlias: getUserSessions {    ...UserSessionDtoNoNesting    __typename  }}fragment UserSessionDtoNoNesting on UserSessionDto {  active  userId  createdAt  __typename}"
+}`;
+  useEffect(() => {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(query),
-        mode: 'no-cors'
+        credentials: "include",
+        headers: { 'Content-Type': 'application/json', },
+        body: getUserSessionsQuery,
+        // mode: 'no-cors'
     };
-    fetch('https://tapeapp.com/graphql', requestOptions)
+    fetch('https://tapeapp.com/graphql/getUserSessions', requestOptions)
       .then(res => res.json())
       .then(
         (result) => {
@@ -33,7 +39,6 @@ export const MyComponent = ({children, color}) =>
         }
       )
   }, [])
-    console.log('yo')
 return <span
     style={{
       backgroundColor: color,
