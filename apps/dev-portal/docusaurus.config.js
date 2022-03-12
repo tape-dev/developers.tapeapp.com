@@ -47,7 +47,7 @@ module.exports = {
           ],
         },
         {
-          title: 'Community',
+          title: 'Find us',
           items: [
             {
               label: 'Twitter',
@@ -63,8 +63,22 @@ module.exports = {
             },
           ],
         },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Privacy Policy',
+              href: 'https://get.tapeapp.com/privacy-policy/'
+            },
+            {
+              label: 'Imprint',
+              href: 'https://get.tapeapp.com/imprint/'
+            },
+            
+          ],
+        },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Tape Technologies. Evolving with 💙 in Munich & the world 🌍`,
+      copyright: `Copyright © ${new Date().getFullYear()} <a href="https://get.tapeapp.com/imprint/">Tape Technologies</a>. Evolving with 💙 in Munich & the world 🌍`,
     },
     colorMode: {
       disableSwitch: true
