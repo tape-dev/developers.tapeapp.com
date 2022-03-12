@@ -1,13 +1,13 @@
 module.exports = {
   title: 'Tape Developers',
-  tagline: 'The tagline of Tape Developers',
-  url: 'https://your-docusaurus-test-site.com',
+  tagline: 'Connect, simplify, and automate your work using Tape Developer tools.',
+  url: 'https://developers.tapeapp.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'tape', // Usually your GitHub org/user name.
+  projectName: 'developers.tapeapp.com', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'Tape Developers',
@@ -64,7 +64,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Tape Technologies, Inc.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Tape Technologies. Evolving with 💙 in Munich & the world 🌍`,
     },
     colorMode: {
       disableSwitch: true
