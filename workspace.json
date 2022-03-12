@@ -9,7 +9,7 @@
         "build": {
           "executor": "@nx-plus/docusaurus:browser",
           "options": {
-            "outputPath": "www"
+            "outputPath": "docs"
           }
         },
         "serve": {
