@@ -3,11 +3,12 @@ module.exports = {
   tagline: 'Connect, simplify, and automate your work using Tape Developer tools.',
   url: 'https://developers.tapeapp.com',
   baseUrl: '/',
+  staticDirectories: ['static'],
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'tape', // Usually your GitHub org/user name.
-  projectName: 'developers.tapeapp.com', // Usually your repo name.
+  organizationName: 'tape', 
+  projectName: 'developers.tapeapp.com', 
   themeConfig: {
     navbar: {
       title: 'Tape Developers',
@@ -90,7 +91,6 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
             'https://github.com/tape-dev/developers.tapeapp.com/edit/main/apps/dev-portal',
         },

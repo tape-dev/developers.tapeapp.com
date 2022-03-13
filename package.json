@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
+    "start": "nx serve dev-portal",
+    "serve": "nx serve dev-portal",
+    "build": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME",
+    "test": "nx test dev-portal",
+    "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME"
   },
   "private": true,
   "devDependencies": {
