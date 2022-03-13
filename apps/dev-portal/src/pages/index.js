@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
+import { ActiveUserPrimaryName } from '@site/src/components/active-user/primary-name.component';
 
 const features = [
   {
@@ -67,7 +68,9 @@ function Home() {
     >
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">Welcome, Tape Developers 💻</h1>
+          <h1 className="hero__title">
+            Welcome, <ActiveUserPrimaryName></ActiveUserPrimaryName>
+          </h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
