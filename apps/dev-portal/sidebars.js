@@ -20,7 +20,7 @@ module.exports = {
           type: 'category',
           label: 'Examples',
           collapsed: true,
-          items: ['calculation/example/link'],
+          items: ['calculation/example/link', 'calculation/example/button'],
         },
       ],
     },

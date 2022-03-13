@@ -4,20 +4,23 @@ title: Calculation Field
 sidebar_label: General
 ---
 
-Calculation fields can be used to easily manipulate the data added to your apps. This very powerful tool not only allows you to perform mathematical calculations on the numbers in your app, but also lets you concatenate the values in certain fields together.
+Calculated fields can be used to easily manipulate data added to an app. With this very powerful tool, you can not only do math on numbers in your app, but also concatenate values ​​in specific fields. Use variables to add values ​​to calculated fields. Use the "@" symbol to search for variables in your app. You can reference any field in your app, and any field in the referenced app.
 
-Values are added to a calculation field using variables. Use the "@" symbol to search for variables in your app. You can reference any fields within your app, as well as any fields within referenced apps.
+### Execution Environment
 
-- Executed on the server
-  - Node.js version 12
-  - ES6 Syntax
-  - Timeout MS
-  - eval, async, setTimeout, ...
-  - We do not support client-side js script tag due to security reasons -> do this inside an IFRAME bois
+The script of a calculation field is written in JavaScript. In order to calculate the value of a record's calculation field, the Tape server gathers all the script's variables values from the database and executes the script on the server. The script is executed inside a Node.js version 12 environment, so you can use [ES6](https://www.javascripttutorial.net/es6/) syntax with all its cool features :tada:
 
-## Template Literals
+### Client-side JavaScript
 
-Template literals are an amazing feature of ES6. They are very useful for string interpolation (and multiline strings, since unescaped newlines are allowed). They allow you to easily include newlines and variables in the result of your calculation field. Here are some basic examples of the syntax:
+Tape does not support the execution of user-provided JavaScript in the client applications due to security reasons. Your JavaScript is executed on the server in an isolated and secure environment, the client only renders the result of the calculation.
+
+### Timeouts
+
+Tape has to limit the time a calculation takes to execute so that the overall performance of the system can be guaranteed. Usually, your script should not take more than a couple of milliseconds to complete. Therefore, asynchronous JavaScript features like Promises, `setTimeout` or `setInterval` cannot be used inside a calculation. If a timeout occurrs, the field value that was being calculated is marked as `invalid`.
+
+### Template Literals
+
+[Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) are an amazing feature of ES6. They are very useful for string interpolation (and multiline strings, since unescaped newlines are allowed). They allow you to easily include newlines and variables in the result of your calculation field. Here are some basic examples of the syntax:
 
 ```ts
 // A normal string
