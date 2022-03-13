@@ -24,6 +24,7 @@ export function loadActiveUserContext() {
     'https://mobile.tapeapp.com/graphql/getUserSessions',
     requestOptions
   ).then(() => {
+    // TODO: properly extract active user context from gql response once it works
     return DUMMY_ACTIVE_USER_CONTEXT;
   });
 }
