@@ -3,7 +3,7 @@ module.exports = {
   mainSidebar: [
     {
       type: 'category',
-      label: 'Tape Developer API',
+      label: 'Developer API',
       collapsed: false,
       items: ['api/api-reference', 'api/api-reference-new'],
     },
@@ -16,6 +16,12 @@ module.exports = {
         'calculation/libraries',
         'calculation/markdown',
         'calculation/html',
+        {
+          type: 'category',
+          label: 'Examples',
+          collapsed: true,
+          items: ['calculation/example/link'],
+        },
       ],
     },
     'contribute',
