@@ -1,3 +1,4 @@
+// https://docusaurus.io/docs/sidebar
 module.exports = {
   mainSidebar: [
     {
@@ -9,7 +10,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Calculation Field',
-      items: ['api/api-reference'],
+      items: ['calculation/intro', 'calculation/libraries'],
     },
     'contribute',
   ],
