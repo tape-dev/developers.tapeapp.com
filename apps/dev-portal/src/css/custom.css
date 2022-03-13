@@ -5,7 +5,7 @@
  * work well for content-centric websites.
  */
 
- @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 /* You can override the default Infima variables here. */
 :root {
@@ -16,6 +16,11 @@
   --ifm-color-primary-light: #007cce;
   --ifm-color-primary-lighter: #0082d7;
   --ifm-color-primary-lightest: #0093f3;
+  --ifm-table-stripe-background: #ffffff;
+}
+
+table > *:not(thead) tr:hover {
+  background-color: #f6f8f8;
 }
 
 :root {
@@ -27,4 +32,9 @@
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
+}
+
+.full-width-table table {
+  display: table;
+  width: 100%;
 }
