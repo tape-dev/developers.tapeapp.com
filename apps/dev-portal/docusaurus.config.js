@@ -19,7 +19,7 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/api-reference',
+          to: 'docs/api/api-reference',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
@@ -40,7 +40,7 @@ module.exports = {
           items: [
             {
               label: 'API Reference',
-              to: 'docs/api-reference',
+              to: 'docs/api/api-reference',
             },
             {
               label: 'Help us evolve',

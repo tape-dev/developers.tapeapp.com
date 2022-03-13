@@ -1,14 +1,12 @@
 ---
 id: api-reference-new
-title: API Reference
-sidebar_label: API Reference
+title: API Reference NEW
+sidebar_label: API Reference NEW
 ---
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
-
-export const MyComponent = ({children, color}) => 
-{
+export const MyComponent = ({ children, color }) => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -20,14 +18,14 @@ export const MyComponent = ({children, color}) =>
 }`;
   useEffect(() => {
     const requestOptions = {
-        method: 'POST',
-        credentials: "include",
-        headers: { 'Content-Type': 'application/json', },
-        body: getUserSessionsQuery,
-        mode: 'no-cors'
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: getUserSessionsQuery,
+      mode: 'no-cors',
     };
     fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(
         (result) => {
           setIsLoaded(true);
@@ -37,24 +35,30 @@ export const MyComponent = ({children, color}) =>
           setIsLoaded(true);
           setError(error);
         }
-      )
-  }, [])
-return <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-    {children}
-  </span>
-}  ;
+      );
+  }, []);
+  return (
+    <span
+      style={{
+        backgroundColor: color,
+        borderRadius: '2px',
+        color: '#fff',
+        padding: '0.2rem',
+      }}
+    >
+      {children}
+    </span>
+  );
+};
 
-<MyComponent color="#25c2a0">Docusaurus green</MyComponent> and <MyComponent color="#1877F2">Facebook blue</MyComponent> are my favorite colors.
+<MyComponent color="#25c2a0">Docusaurus green</MyComponent> and <MyComponent color="#1877F2">
+  Facebook blue
+</MyComponent> are my favorite colors.
 
 I can write **Markdown** alongside my _JSX_!
 
 # API Reference
+
 The Tape API follows the REST specification. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
 ## Base URL
@@ -67,7 +71,7 @@ https://api.tapeapp.com
 
 ### Personal API keys
 
-The Tape API uses personal API keys to authenticate requests. You can view and manage your API keys in your [Tape user settings](https://tapeapp.com/tape/(focus//root-modal:user-settings/profile)).
+The Tape API uses personal API keys to authenticate requests. You can view and manage your API keys in your [Tape user settings](<https://tapeapp.com/tape/(focus//root-modal:user-settings/profile)>).
 
 Your personal API key carries many privileges, so be sure to keep it secure! Avoid sharing it in public environments, such as GitHub, client-side code, and so forth. You can regenerate it anytime, the previuos one will not work in that case.
 

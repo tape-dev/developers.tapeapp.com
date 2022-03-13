@@ -10,6 +10,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Calculation Field',
+      collapsed: false,
       items: ['calculation/intro', 'calculation/libraries'],
     },
     'contribute',
