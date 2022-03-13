@@ -4,7 +4,7 @@ export function getActiveUserContext(siteConfig) {
   return siteConfig[ACTIVE_USER_CONTEXT_KEY];
 }
 
-export function getActiveUserAPIKey(siteConfig) {
+export function getActiveUserApiKey(siteConfig) {
   const activeUserContext = getActiveUserContext(siteConfig);
 
   if (!activeUserContext) {

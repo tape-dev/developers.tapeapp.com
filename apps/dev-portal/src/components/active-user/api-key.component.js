@@ -1,10 +1,11 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { getActiveUserAPIKey } from './constants';
+import { getActiveUserApiKey } from './constants';
 import { ActiveUserContext } from './context.component';
 
-export const ActiveUserAPIKey = () => {
+export const ActiveUserApiKey = () => {
   const { siteConfig } = useDocusaurusContext();
-  const apiKey = getActiveUserAPIKey(siteConfig) || 'placeholder-api-key';
+  const apiKey = getActiveUserApiKey(siteConfig) || 'placeholder-api-key';
+
   return <ActiveUserContext>{apiKey}</ActiveUserContext>;
 };
