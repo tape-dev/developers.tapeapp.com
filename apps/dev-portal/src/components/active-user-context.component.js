@@ -27,6 +27,7 @@ export const ActiveUserContext = ({ children }) => {
     requestInflight = true;
 
     // ... perform request otherwise
+    // TODO: BeAs use loadActiveUserContext here instead to reproduce CORS issue
     loadActiveUserContextMock()
       .then((activeUserContext) => {
         requestInflight = false;
