@@ -1,6 +1,6 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useEffect } from 'react';
-import { loadActiveUserContext } from './active-user-context-request';
+import { loadActiveUserContext } from './context-request';
 import { getActiveUserContext, setActiveUserContext } from './constants';
 
 let requestInflight = false;
