@@ -4,62 +4,13 @@ title: API Reference NEW
 sidebar_label: API Reference NEW
 ---
 
-import { useState, useEffect } from 'react';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-
-export const MyComponent = ({ children, color }) => {
-  const API_KEY_DUMMY = 'YOUR_API_KEY';
-  const API_KEY_PROPERTY_NAME = 'personalApiKey';
-  const siteConfigHasProperApiKey = (siteConfig) =>
-    siteConfig[API_KEY_PROPERTY_NAME] !== undefined;
-  const { siteConfig, siteMetadata } = useDocusaurusContext();
-  const query = `{"operationName":"reportActiveUserPresence","variables":{"input":{}},"query":"mutation reportActiveUserPresence($input: ReportActiveUserPresenceInput!) {  defaultAlias: reportActiveUserPresence(input: $input) {    ...VoidNoNesting    __typename  }}fragment VoidNoNesting on Void {  _void  __typename}"}`;
-  const getUserSessionsQuery = `{
-  "operationName": "getUserSessions",
-  "variables": {},
-  "query": "query getUserSessions {  defaultAlias: getUserSessions {    ...UserSessionDtoNoNesting    __typename  }}fragment UserSessionDtoNoNesting on UserSessionDto {  active  userId  createdAt  __typename}"
-}`;
-  useEffect(() => {
-    // request options
-    const requestOptions = {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: getUserSessionsQuery,
-    };
-    // skip request if API key is loaded already
-    if (siteConfigHasProperApiKey(siteConfig)) {
-      console.log('key already loaded');
-      return;
-    }
-    // ... perform request otherwise
-    fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
-      .catch(() => {
-        console.log('Error loading API key.');
-        siteConfig[API_KEY_PROPERTY_NAME] = 'FAILED_LOADING_API_KEY_DUMMY';
-      })
-      .then((result) => {
-        if (!result) {
-          siteConfig[API_KEY_PROPERTY_NAME] = 'LOADED_API_KEY_DUMMY';
-          return;
-        }
-        // extract key
-        const { personalApiKey } = result;
-        // TODO: properly extract
-      });
-  }, []);
-  return ``;
-};
-
-<MyComponent color="#25c2a0">Docusaurus green</MyComponent> and <MyComponent color="#1877F2">
-  Facebook blue
-</MyComponent> are my favorite colors.
-
-I can write **Markdown** alongside my _JSX_!
+import { ActiveUserAPIKey } from '../../src/components/active-user-api-key.component';
 
 # API Reference
 
 The Tape API follows the REST specification. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+
+Your key: <ActiveUserAPIKey />
 
 ## Base URL
 
@@ -77,12 +28,12 @@ Your personal API key carries many privileges, so be sure to keep it secure! Avo
 
 Authentication to the API is performed via HTTP Basic Auth. Provide your API key as the basic auth username value. You do not need to provide a password.
 
-In case you need to authenticate via bearer auth, use -H "Authorization: Bearer YOUR_API_KEY" instead of -u YOUR_API_KEY.
+In case you need to authenticate via bearer auth, use -H "Authorization: Bearer <ActiveUserAPIKey />" instead of -u <ActiveUserAPIKey />.
 
 All API requests are to be made over HTTPS, while calls made over plain HTTP will fail. API requests without authentication will also fail.
 
 ```
-$ curl https://api.tapeapp.com/v1/charges -u YOUR_API_KEY:
+$ curl https://api.tapeapp.com/v1/charges -u <ActiveUserAPIKey />:
 
 # The colon prevents curl from asking for a password.
 ```
