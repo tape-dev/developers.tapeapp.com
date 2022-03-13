@@ -15,7 +15,7 @@ const requestOptions = {
 };
 
 
-
+let requestInflight = false;
 
 export const ActiveUserAPIKey = () => {
     const API_KEY_DUMMY = 'YOUR_API_KEY';
@@ -32,15 +32,24 @@ export const ActiveUserAPIKey = () => {
         console.log('key already loaded');
         return;
       }
+
+      if(requestInflight) {
+        return;
+      }
+
+      requestInflight = true;
+
       // ... perform request otherwise
       fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
       .catch(() => {
         console.log('Error loading API key.');
         siteConfig[API_KEY_PROPERTY_NAME] = 'FAILED_LOADING_API_KEY_DUMMY';
+        requestInflight = false;
       })
       .then((result) => {
         if (!result) {
           siteConfig[API_KEY_PROPERTY_NAME] = 'LOADED_API_KEY_DUMMY';
+          requestInflight = false;
           return;
         }
         // extract key
