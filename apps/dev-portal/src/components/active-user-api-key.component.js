@@ -14,26 +14,23 @@ const requestOptions = {
   body: getUserSessionsQuery,
 };
 
-
-
-
 export const ActiveUserAPIKey = () => {
-    const API_KEY_DUMMY = 'YOUR_API_KEY';
-    const API_KEY_PROPERTY_NAME = 'personalApiKey';
-     
-    const siteConfigHasProperApiKey = (siteConfig) =>
-      siteConfig[API_KEY_PROPERTY_NAME] !== undefined;
-    const { siteConfig } = useDocusaurusContext();
+  const API_KEY_DUMMY = 'YOUR_API_KEY';
+  const API_KEY_PROPERTY_NAME = 'personalApiKey';
 
-    useEffect(() => {
-      // request options
-      // skip request if API key is loaded already
-      if (siteConfigHasProperApiKey(siteConfig)) {
-        console.log('key already loaded');
-        return;
-      }
-      // ... perform request otherwise
-      fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
+  const siteConfigHasProperApiKey = (siteConfig) =>
+    siteConfig[API_KEY_PROPERTY_NAME] !== undefined;
+  const { siteConfig } = useDocusaurusContext();
+
+  useEffect(() => {
+    // request options
+    // skip request if API key is loaded already
+    if (siteConfigHasProperApiKey(siteConfig)) {
+      console.log('key already loaded');
+      return;
+    }
+    // ... perform request otherwise
+    fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
       .catch(() => {
         console.log('Error loading API key.');
         siteConfig[API_KEY_PROPERTY_NAME] = 'FAILED_LOADING_API_KEY_DUMMY';
@@ -47,6 +44,6 @@ export const ActiveUserAPIKey = () => {
         const { personalApiKey } = result;
         // TODO: properly extract
       });
-    }, []);
-    return `${siteConfig[API_KEY_PROPERTY_NAME]}`;
-  };
+  }, []);
+  return `${siteConfig[API_KEY_PROPERTY_NAME]}`;
+};
