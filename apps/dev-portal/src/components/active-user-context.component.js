@@ -1,9 +1,6 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useEffect } from 'react';
-import {
-  loadActiveUserContext,
-  loadActiveUserContextMock,
-} from './active-user-context-request';
+import { loadActiveUserContext } from './active-user-context-request';
 import { getActiveUserContext, setActiveUserContext } from './constants';
 
 let requestInflight = false;
@@ -28,7 +25,7 @@ export const ActiveUserContext = ({ children }) => {
 
     // ... perform request otherwise
     // TODO: BeAs use loadActiveUserContext here instead to reproduce CORS issue
-    loadActiveUserContextMock()
+    loadActiveUserContext()
       .then((activeUserContext) => {
         requestInflight = false;
         setActiveUserContext(siteConfig, activeUserContext);
