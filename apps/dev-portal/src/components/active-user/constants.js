@@ -4,18 +4,9 @@ export function getActiveUserState(config) {
   return config[ACTIVE_USER_STATE_KEY] || {};
 }
 
+// Context
 export function getActiveUserContext(config) {
   return getActiveUserState(config).context;
-}
-
-export function getActiveUserApiKey(config) {
-  const context = getActiveUserContext(config);
-
-  if (!context) {
-    return undefined;
-  }
-
-  return context.apiKey;
 }
 
 export function setActiveUserContext(config, activeUserContext) {
@@ -42,4 +33,26 @@ export function getActiveUserContextIsLoading(config) {
 export function setActiveUserContextIsLoading(config, isLoading) {
   config[ACTIVE_USER_STATE_KEY] = config[ACTIVE_USER_STATE_KEY] || {};
   config[ACTIVE_USER_STATE_KEY].isLoading = isLoading;
+}
+
+// API key
+export function getActiveUserApiKey(config) {
+  const context = getActiveUserContext(config);
+
+  if (!context) {
+    return undefined;
+  }
+
+  return context.apiKey;
+}
+
+// Primary name
+export function getActiveUserPrimaryName(config) {
+  const context = getActiveUserContext(config);
+
+  if (!context || !context.user) {
+    return undefined;
+  }
+
+  return context.user.primaryName;
 }
