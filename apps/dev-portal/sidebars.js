@@ -1,5 +1,6 @@
 module.exports = {
-  someSidebar: {
-    "Tape Developer API": ['api-reference', 'api-reference-new', 'contribute'],
+  mainSidebar: {
+    'Tape Developer API': ['api-reference', 'api-reference-new'],
+    Contribute: ['contribute'],
   },
 };

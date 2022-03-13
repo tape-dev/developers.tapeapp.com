@@ -1,14 +1,15 @@
 module.exports = {
   title: 'Tape Developers',
-  tagline: 'Connect, simplify, and automate your work using Tape Developer tools.',
+  tagline:
+    'Connect, simplify, and automate your work using Tape Developer tools.',
   url: 'https://developers.tapeapp.com',
   baseUrl: '/',
   staticDirectories: ['static'],
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'tape', 
-  projectName: 'developers.tapeapp.com', 
+  favicon: 'img/favicon.svg',
+  organizationName: 'tape',
+  projectName: 'developers.tapeapp.com',
   themeConfig: {
     navbar: {
       title: 'Tape Developers',
@@ -28,7 +29,7 @@ module.exports = {
           href: 'https://tapeapp.com',
           label: 'Tape',
           position: 'right',
-        }
+        },
       ],
     },
     footer: {
@@ -69,21 +70,20 @@ module.exports = {
           items: [
             {
               label: 'Privacy Policy',
-              href: 'https://get.tapeapp.com/privacy-policy/'
+              href: 'https://get.tapeapp.com/privacy-policy/',
             },
             {
               label: 'Imprint',
-              href: 'https://get.tapeapp.com/imprint/'
+              href: 'https://get.tapeapp.com/imprint/',
             },
-            
           ],
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} <a href="https://get.tapeapp.com/imprint/">Tape Technologies</a>. Evolving with 💙 in Munich & the world 🌍`,
     },
     colorMode: {
-      disableSwitch: true
-    }
+      disableSwitch: true,
+    },
   },
   presets: [
     [
