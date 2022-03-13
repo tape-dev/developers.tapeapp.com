@@ -1,6 +1,16 @@
 module.exports = {
-  mainSidebar: {
-    'Tape Developer API': ['api-reference', 'api-reference-new'],
-    Contribute: ['contribute'],
-  },
+  mainSidebar: [
+    {
+      type: 'category',
+      label: 'Tape Developer API',
+      collapsed: false,
+      items: ['api/api-reference', 'api/api-reference-new'],
+    },
+    {
+      type: 'category',
+      label: 'Calculation Field',
+      items: ['api/api-reference'],
+    },
+    'contribute',
+  ],
 };
