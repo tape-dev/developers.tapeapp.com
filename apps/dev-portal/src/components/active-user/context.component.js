@@ -1,34 +1,43 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useEffect } from 'react';
+import {
+  getActiveUserState,
+  setActiveUserContext,
+  setActiveUserContextIsLoading,
+} from './constants';
 import { loadActiveUserContext } from './context-request';
-import { getActiveUserContext, setActiveUserContext } from './constants';
 
-let requestInflight = false;
+/**
+ *
+ * We know this is probably the worst code ever but we don't know anything about React, Angular devs for years :)
+ *
+ */
+
+// We need this local isLoading variable because the config update does not prevent the first N components to fire a request.
+let isLoading = false;
 
 export const ActiveUserContext = ({ children }) => {
-  const { siteConfig } = useDocusaurusContext();
+  const { siteConfig: config } = useDocusaurusContext();
 
   useEffect(() => {
-    const activeUserContext = getActiveUserContext(siteConfig);
+    const state = getActiveUserState(config);
 
     // skip request if already loading
-    if (requestInflight) {
+    if (isLoading || state.isLoading) {
       return;
     }
 
     // skip request if user context already loaded
-    if (activeUserContext) {
+    if (state.context) {
       return;
     }
 
-    requestInflight = true;
-
+    isLoading = true;
     // ... perform request otherwise
-    // TODO: BeAs use loadActiveUserContext here instead to reproduce CORS issue
     loadActiveUserContext()
       .then((activeUserContext) => {
-        requestInflight = false;
-        setActiveUserContext(siteConfig, activeUserContext);
+        setActiveUserContextIsLoading(config, 'loaded');
+        setActiveUserContext(config, activeUserContext);
       })
       .catch((error) => {
         console.error(error);

@@ -1,18 +1,45 @@
-export const ACTIVE_USER_CONTEXT_KEY = 'activeUserContext';
+export const ACTIVE_USER_STATE_KEY = 'activeUserState';
 
-export function getActiveUserContext(siteConfig) {
-  return siteConfig[ACTIVE_USER_CONTEXT_KEY];
+export function getActiveUserState(config) {
+  return config[ACTIVE_USER_STATE_KEY] || {};
 }
 
-export function getActiveUserApiKey(siteConfig) {
-  const activeUserContext = getActiveUserContext(siteConfig);
+export function getActiveUserContext(config) {
+  return getActiveUserState(config).context;
+}
 
-  if (!activeUserContext) {
+export function getActiveUserApiKey(config) {
+  const context = getActiveUserContext(config);
+
+  if (!context) {
     return undefined;
   }
-  return activeUserContext.apiKey;
+
+  return context.apiKey;
 }
 
-export function setActiveUserContext(siteConfig, activeUserContext) {
-  siteConfig[ACTIVE_USER_CONTEXT_KEY] = activeUserContext;
+export function setActiveUserContext(config, activeUserContext) {
+  config[ACTIVE_USER_STATE_KEY] = config[ACTIVE_USER_STATE_KEY] || {};
+  config[ACTIVE_USER_STATE_KEY].context = activeUserContext;
+}
+
+// Loading state
+export function getActiveUserContextIsLoading(config) {
+  const state = getActiveUserState(config);
+
+  if (!state) {
+    return undefined;
+  }
+
+  return state.isLoading;
+}
+
+/**
+ *
+ * @param config global config object
+ * @param  isLoading can be "false" | "loading" | "loaded" | "failed"
+ */
+export function setActiveUserContextIsLoading(config, isLoading) {
+  config[ACTIVE_USER_STATE_KEY] = config[ACTIVE_USER_STATE_KEY] || {};
+  config[ACTIVE_USER_STATE_KEY].isLoading = isLoading;
 }
