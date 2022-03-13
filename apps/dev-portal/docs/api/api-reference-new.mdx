@@ -5,11 +5,14 @@ sidebar_label: API Reference NEW
 ---
 
 import { useState, useEffect } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 export const MyComponent = ({ children, color }) => {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState([]);
+  const API_KEY_DUMMY = 'YOUR_API_KEY';
+  const API_KEY_PROPERTY_NAME = 'personalApiKey';
+  const siteConfigHasProperApiKey = (siteConfig) =>
+    siteConfig[API_KEY_PROPERTY_NAME] !== undefined;
+  const { siteConfig, siteMetadata } = useDocusaurusContext();
   const query = `{"operationName":"reportActiveUserPresence","variables":{"input":{}},"query":"mutation reportActiveUserPresence($input: ReportActiveUserPresenceInput!) {  defaultAlias: reportActiveUserPresence(input: $input) {    ...VoidNoNesting    __typename  }}fragment VoidNoNesting on Void {  _void  __typename}"}`;
   const getUserSessionsQuery = `{
   "operationName": "getUserSessions",
@@ -17,37 +20,35 @@ export const MyComponent = ({ children, color }) => {
   "query": "query getUserSessions {  defaultAlias: getUserSessions {    ...UserSessionDtoNoNesting    __typename  }}fragment UserSessionDtoNoNesting on UserSessionDto {  active  userId  createdAt  __typename}"
 }`;
   useEffect(() => {
+    // request options
     const requestOptions = {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: getUserSessionsQuery,
     };
+    // skip request if API key is loaded already
+    if (siteConfigHasProperApiKey(siteConfig)) {
+      console.log('key already loaded');
+      return;
+    }
+    // ... perform request otherwise
     fetch('https://mobile.tapeapp.com/graphql/getUserSessions', requestOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setItems(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
+      .catch(() => {
+        console.log('Error loading API key.');
+        siteConfig[API_KEY_PROPERTY_NAME] = 'FAILED_LOADING_API_KEY_DUMMY';
+      })
+      .then((result) => {
+        if (!result) {
+          siteConfig[API_KEY_PROPERTY_NAME] = 'LOADED_API_KEY_DUMMY';
+          return;
         }
-      );
+        // extract key
+        const { personalApiKey } = result;
+        // TODO: properly extract
+      });
   }, []);
-  return (
-    <span
-      style={{
-        backgroundColor: color,
-        borderRadius: '2px',
-        color: '#fff',
-        padding: '0.2rem',
-      }}
-    >
-      {children}
-    </span>
-  );
+  return ``;
 };
 
 <MyComponent color="#25c2a0">Docusaurus green</MyComponent> and <MyComponent color="#1877F2">
