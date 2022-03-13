@@ -1,6 +1,9 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useEffect } from 'react';
-import { loadActiveUserContextMock } from './active-user-context-request';
+import {
+  loadActiveUserContext,
+  loadActiveUserContextMock,
+} from './active-user-context-request';
 import { getActiveUserContext, setActiveUserContext } from './constants';
 
 let requestInflight = false;
@@ -26,7 +29,6 @@ export const ActiveUserContext = ({ children }) => {
     // ... perform request otherwise
     loadActiveUserContextMock()
       .then((activeUserContext) => {
-        console.log({ activeUserContext });
         requestInflight = false;
         setActiveUserContext(siteConfig, activeUserContext);
       })
