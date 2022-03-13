@@ -12,8 +12,9 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        The Tape API was designed from the ground up to be easily consumable and transparent. 
-        This way, our developers can focus on what they do best: Building powerful custo-tailored Tape solutions for their customers.
+        The Tape API was designed from the ground up to be easily consumable and
+        transparent. This way, our developers can focus on what they do best:
+        Building powerful custo-tailored Tape solutions for their customers.
       </>
     ),
   },
@@ -22,7 +23,9 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        We do not compromise on speed and robustness - that is why we dedicate our resources to guarantee a production ready experience that you can count and build on.
+        We do not compromise on speed and robustness - that is why we dedicate
+        our resources to guarantee a production ready experience that you can
+        count and build on.
       </>
     ),
   },
@@ -31,8 +34,9 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
-        Tape is about community. In order to constantly evolve and improve, we allow our development community and eco system to contribute to our docs. 
-        Because you know best what could be missing or improved.
+        Tape is about community. In order to constantly evolve and improve, we
+        allow our development community and eco system to contribute to our
+        docs. Because you know best what could be missing or improved.
       </>
     ),
   },
@@ -71,7 +75,7 @@ function Home() {
                 'button button--outline button--secondary button--lg',
                 styles.getStarted
               )}
-              to={useBaseUrl('docs/api-reference')}
+              to={useBaseUrl('docs/api/api-reference')}
             >
               Get Started
             </Link>
