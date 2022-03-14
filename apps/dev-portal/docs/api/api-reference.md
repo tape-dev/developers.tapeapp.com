@@ -5,12 +5,23 @@ sidebar_label: API Reference
 ---
 
 import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.component';
+import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
 
 # API Reference
 
 The Tape API follows the REST specification. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
 Your key: <ActiveUserApiKey />
+
+## First example
+
+<ApiKeyCodeblock>
+Line 1 
+<br />
+$USER_API_KEY
+<br />
+Line 2
+</ApiKeyCodeblock>
 
 ## Base URL
 
