@@ -1,6 +1,7 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useEffect, useState } from 'react';
 import {
+  DEFAULT_USERNAME,
   getActiveUserContextIsLoading,
   getActiveUserPrimaryName,
 } from './constants';
@@ -18,7 +19,7 @@ export const ActiveUserPrimaryName = () => {
   }, []);
 
   if (!isLoading) {
-    return 'Developer';
+    return DEFAULT_USERNAME;
   }
 
   return primaryName;

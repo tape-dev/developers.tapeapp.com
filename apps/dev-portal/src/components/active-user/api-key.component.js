@@ -1,6 +1,8 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import CodeBlock from '@theme/CodeBlock';
 import React, { useEffect, useState } from 'react';
 import {
+  DEFAULT_USERNAME,
   getActiveUserApiKey,
   getActiveUserContextIsLoading,
 } from './constants';
@@ -18,8 +20,8 @@ export const ActiveUserApiKey = () => {
   }, []);
 
   if (!isLoading) {
-    return <>******************************</>;
+    return DEFAULT_USERNAME;
   }
 
-  return `${apiKey || ''}`;
+  return <CodeBlock>{`${apiKey || ''}`}</CodeBlock>;
 };
