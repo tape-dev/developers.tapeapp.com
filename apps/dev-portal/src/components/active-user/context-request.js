@@ -1,5 +1,8 @@
 const { setCommentRange } = require('typescript');
 
+// const baseUrl = 'http://localhost:3000';
+const baseUrl = 'https://tapeapp.com';
+
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
   variables: {},
@@ -35,7 +38,7 @@ const headers = {
 };
 
 function loadActiveUserContext(uid) {
-  return fetch('http://localhost:3000/graphql/getActiveUserDevPortalContext', {
+  return fetch(`${baseUrl}/graphql/getActiveUserDevPortalContext`, {
     method: 'POST',
     headers: {
       ...headers,
@@ -53,7 +56,7 @@ function loadActiveUserContext(uid) {
 }
 
 function loadActiveUserSessions() {
-  return fetch('http://localhost:3000/graphql/getUserSessions', {
+  return fetch(`${baseUrl}/graphql/getUserSessions`, {
     method: 'POST',
     headers,
     credentials: 'include',
