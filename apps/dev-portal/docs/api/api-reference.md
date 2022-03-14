@@ -22,9 +22,7 @@ The Tape API follows the REST specification. Our API has predictable resource-or
 ## Base URL
 
 ```
-123
-456
-789
+https://api.tapeapp.com
 ```
 
 ## Authentication
