@@ -35,20 +35,10 @@ Your personal API key carries many privileges, so to keep it secure! Avoid shari
 
 Authentication to the API is performed via HTTP Basic Auth. Provide your API key as the basic auth username value, providing a password is not required.
 
-In case you need to authenticate via bearer auth, use -H "Authorization: Bearer <ActiveUserApiKey />" instead of -u <ActiveUserApiKey />.
+In case you need to authenticate via bearer auth, use `-H "Authorization: Bearer KEY"` instead of `-u KEY`.
 
 All API requests are to be made over HTTPS, while calls made over plain HTTP will fail. API requests without authentication will also fail.
-
-```
-$ curl https://api.tapeapp.com/v1/charges -u <ActiveUserApiKey />:
-
-# The colon prevents curl from asking for a password.
-```
 
 ### OAuth2 Authentication Flow
 
 In order to develop scalable integrations and applications around Tape, there will be an OAuth2 authentication flow in the future. Feel free to reach out to developers@tapeapp.com to vote for that feature.
-
-## Rate Limiting
-
-Currently a global rate limit of X is enforced for all personal API keys. Contact us if you require a different limit.
