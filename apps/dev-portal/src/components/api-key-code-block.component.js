@@ -16,14 +16,14 @@ export default function ApiKeyCodeblock({ children }) {
 
   const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
 
-  const arr =
+  const childrenArr =
     typeof children === 'string'
       ? [children]
       : Array.isArray(children)
       ? children
       : [];
 
-  const result = arr.map((child) => {
+  const result = childrenArr.map((child) => {
     if (typeof child === 'string' && child.includes(USER_API_KEY_PLACEHOLDER)) {
       return child.replace(USER_API_KEY_PLACEHOLDER, apiKey);
     }

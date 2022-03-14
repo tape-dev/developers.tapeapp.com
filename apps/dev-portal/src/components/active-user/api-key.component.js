@@ -13,5 +13,6 @@ export const ActiveUserApiKey = () => {
   }, []);
 
   const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
-  return <CodeBlock>{`${apiKey || ''}`}</CodeBlock>;
+
+  return apiKey;
 };

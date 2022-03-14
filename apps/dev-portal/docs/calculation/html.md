@@ -13,7 +13,7 @@ The Tape calculation field supports HTML syntax inside the result of a calculati
 
 The Tape color schema is available via the following CSS variables:
 
-<div class="full-width-table">
+<div className="full-width-table">
 
 | CSS Variable                   | Description                    | Color                                                 |
 | :----------------------------- | :----------------------------- | ----------------------------------------------------- |

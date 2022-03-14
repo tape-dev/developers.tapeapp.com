@@ -3,7 +3,7 @@ import React from 'react';
 export default function HexcolorPreview({ color }) {
   return (
     <div
-      class="scale-on-hover"
+      className="scale-on-hover"
       title={color}
       style={{
         width: '24px',

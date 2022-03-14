@@ -11,19 +11,20 @@ import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
 
 The Tape API follows the REST specification. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-Your key: <ActiveUserApiKey />
-
 ## First example
 
 <ApiKeyCodeblock>
-Line 1
-#USER_API_KEY
+{`curl https://api.tapeapp.com/v1/record \\
+  -u #USER_API_KEY:
+`}
 </ApiKeyCodeblock>
 
 ## Base URL
 
 ```
-https://api.tapeapp.com
+123
+456
+789
 ```
 
 ## Authentication
