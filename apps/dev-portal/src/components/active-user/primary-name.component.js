@@ -1,18 +1,24 @@
-import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useEffect, useState } from 'react';
 import {
-  getActiveUserPrimaryName,
   getActiveUserContextIsLoading,
+  getActiveUserPrimaryName,
 } from './constants';
-import { ActiveUserContext } from './context.component';
+import { activeUserContextEffect } from './context.effect';
 
 export const ActiveUserPrimaryName = () => {
+  const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
+
   const primaryName = getActiveUserPrimaryName(config);
   const isLoading = getActiveUserContextIsLoading(config);
 
+  useEffect(() => {
+    activeUserContextEffect(config, setState);
+  }, []);
+
   if (!isLoading) {
-    return <ActiveUserContext> Developer </ActiveUserContext>;
+    return 'Developer';
   }
 
   return primaryName;

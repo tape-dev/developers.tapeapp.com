@@ -43,6 +43,10 @@ module.exports = {
               to: 'docs/api/api-reference',
             },
             {
+              label: 'Calculation Field',
+              to: 'docs/calculation/intro',
+            },
+            {
               label: 'Help us evolve',
               to: 'docs/contribute',
             },

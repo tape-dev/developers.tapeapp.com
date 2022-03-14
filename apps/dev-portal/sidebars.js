@@ -5,7 +5,7 @@ module.exports = {
       type: 'category',
       label: 'Developer API',
       collapsed: false,
-      items: ['api/api-reference', 'api/api-reference-new'],
+      items: ['api/api-reference', 'api/api-reference-new', 'api/pagination', 'api/rate-limiting', 'api/errors'],
     },
     {
       type: 'category',

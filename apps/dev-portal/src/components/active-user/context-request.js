@@ -1,3 +1,6 @@
+// const baseUrl = 'http://localhost:3000';
+const baseUrl = 'https://tapeapp.com';
+
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
   variables: {},
@@ -16,12 +19,28 @@ const getActiveUserDevPortalContextQuery = JSON.stringify({
 `,
 });
 
-export function loadActiveUserContext() {
-  return fetch('http://localhost:3000/graphql/getActiveUserDevPortalContext', {
+const getUserSessionsQuery = JSON.stringify({
+  operationName: null,
+  variables: {},
+  query: `{
+      getUserSessions {
+        active
+        userId
+      }
+    }
+`,
+});
+
+const headers = {
+  'content-type': 'application/json',
+};
+
+function loadActiveUserContext(uid) {
+  return fetch(`${baseUrl}/graphql/getActiveUserDevPortalContext`, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
-      uid: 7,
+      ...headers,
+      uid,
     },
     credentials: 'include',
     mode: 'cors',
@@ -32,4 +51,37 @@ export function loadActiveUserContext() {
       const body = JSON.parse(text);
       return body?.data?.getActiveUserDevPortalContext || {};
     });
+}
+
+function loadActiveUserSessions() {
+  return fetch(`${baseUrl}/graphql/getUserSessions`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    mode: 'cors',
+    body: getUserSessionsQuery,
+  })
+    .then((res) => res.text())
+    .then((text) => {
+      const body = JSON.parse(text);
+      const sessions = body?.data?.getUserSessions || [];
+
+      return sessions;
+    });
+}
+
+export async function loadActiveUserSessionsAndContext() {
+  const sessions = await loadActiveUserSessions();
+
+  const activeUserSessions = sessions.filter((session) => session.active);
+
+  if (!activeUserSessions.length) {
+    return {};
+  }
+
+  const { userId } = activeUserSessions[0];
+
+  const activeUserContext = await loadActiveUserContext(userId);
+
+  return activeUserContext;
 }
