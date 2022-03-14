@@ -17,5 +17,5 @@ export const ActiveUserApiKey = () => {
     );
   }
 
-  return apiKey;
+  return `${apiKey || ''}`;
 };

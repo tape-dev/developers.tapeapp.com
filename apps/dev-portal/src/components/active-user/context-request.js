@@ -72,16 +72,16 @@ function loadActiveUserSessions() {
     });
 }
 
-export function loadActiveUserSessionsAndContext() {
-  return loadActiveUserSessions().then((sessions) => {
-    const activeSessions = sessions.filter((session) => session.isActive);
+export async function loadActiveUserSessionsAndContext() {
+  const sessions = await loadActiveUserSessions();
 
-    if (!activeSessions.length) {
-      return {};
-    }
+  const activeUserSessions = sessions.filter((session) => session.active);
 
-    const { userId } = activeUserSessions[0];
+  if (!activeUserSessions.length) {
+    return {};
+  }
 
-    return loadActiveUserContext(userId);
-  });
+  const { userId } = activeUserSessions[0];
+
+  return await loadActiveUserContext(userId);
 }
