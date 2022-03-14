@@ -16,11 +16,8 @@ Your key: <ActiveUserApiKey />
 ## First example
 
 <ApiKeyCodeblock>
-Line 1 
-<br />
-$USER_API_KEY
-<br />
-Line 2
+Line 1
+#USER_API_KEY
 </ApiKeyCodeblock>
 
 ## Base URL

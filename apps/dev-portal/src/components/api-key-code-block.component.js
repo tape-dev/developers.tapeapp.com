@@ -1,20 +1,34 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import CodeBlock from '@theme/CodeBlock';
-import React from 'react';
-import { getActiveUserApiKey } from './active-user/constants';
+import React, { useEffect, useState } from 'react';
+import { DEFAULT_API_KEY, getActiveUserApiKey } from './active-user/constants';
+import { activeUserContextEffect } from './active-user/context.effect';
 
-const USER_API_KEY_PLACEHOLDER = '$USER_API_KEY';
+const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
 
 export default function ApiKeyCodeblock({ children }) {
+  const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
 
-  const apiKey = getActiveUserApiKey(config);
+  useEffect(() => {
+    activeUserContextEffect(config, setState);
+  }, []);
 
-  const result = (children ?? []).map((child) => {
+  const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
+
+  const arr =
+    typeof children === 'string'
+      ? [children]
+      : Array.isArray(children)
+      ? children
+      : [];
+
+  const result = arr.map((child) => {
     if (typeof child === 'string' && child.includes(USER_API_KEY_PLACEHOLDER)) {
       return child.replace(USER_API_KEY_PLACEHOLDER, apiKey);
     }
     return child;
   });
+
   return <CodeBlock>{result}</CodeBlock>;
 }
