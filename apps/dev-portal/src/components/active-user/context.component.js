@@ -5,7 +5,7 @@ import {
   setActiveUserContext,
   setActiveUserContextIsLoading,
 } from './constants';
-import { loadActiveUserContext } from './context-request';
+import { loadActiveUserSessionsAndContext } from './context-request';
 
 /**
  *
@@ -34,14 +34,14 @@ export const ActiveUserContext = ({ children }) => {
 
     isLoading = true;
     // ... perform request otherwise
-    loadActiveUserContext()
+    loadActiveUserSessionsAndContext()
       .then((activeUserContext) => {
         setActiveUserContextIsLoading(config, 'loaded');
         setActiveUserContext(config, activeUserContext);
       })
       .catch((error) => {
         console.error(error);
-        requestInflight = false;
+        isLoading = false;
       });
   }, []);
 

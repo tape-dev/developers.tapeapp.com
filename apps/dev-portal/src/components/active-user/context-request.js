@@ -1,3 +1,5 @@
+const { setCommentRange } = require('typescript');
+
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
   variables: {},
@@ -16,12 +18,28 @@ const getActiveUserDevPortalContextQuery = JSON.stringify({
 `,
 });
 
-export function loadActiveUserContext() {
+const getUserSessionsQuery = JSON.stringify({
+  operationName: null,
+  variables: {},
+  query: `{
+      getUserSessions {
+        active
+        userId
+      }
+    }
+`,
+});
+
+const headers = {
+  'content-type': 'application/json',
+};
+
+function loadActiveUserContext(uid) {
   return fetch('http://localhost:3000/graphql/getActiveUserDevPortalContext', {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
-      uid: 7,
+      ...headers,
+      uid,
     },
     credentials: 'include',
     mode: 'cors',
@@ -32,4 +50,35 @@ export function loadActiveUserContext() {
       const body = JSON.parse(text);
       return body?.data?.getActiveUserDevPortalContext || {};
     });
+}
+
+function loadActiveUserSessions() {
+  return fetch('http://localhost:3000/graphql/getUserSessions', {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    mode: 'cors',
+    body: getUserSessionsQuery,
+  })
+    .then((res) => res.text())
+    .then((text) => {
+      const body = JSON.parse(text);
+      const sessions = body?.data?.getUserSessions || [];
+
+      return sessions;
+    });
+}
+
+export function loadActiveUserSessionsAndContext() {
+  return loadActiveUserSessions().then((sessions) => {
+    const activeSessions = sessions.filter((session) => session.isActive);
+
+    if (!activeSessions.length) {
+      return {};
+    }
+
+    const { userId } = activeUserSessions[0];
+
+    return loadActiveUserContext(userId);
+  });
 }
