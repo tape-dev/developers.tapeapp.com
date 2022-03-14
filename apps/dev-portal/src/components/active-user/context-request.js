@@ -1,5 +1,3 @@
-const { setCommentRange } = require('typescript');
-
 // const baseUrl = 'http://localhost:3000';
 const baseUrl = 'https://tapeapp.com';
 
@@ -83,5 +81,7 @@ export async function loadActiveUserSessionsAndContext() {
 
   const { userId } = activeUserSessions[0];
 
-  return await loadActiveUserContext(userId);
+  const activeUserContext = await loadActiveUserContext(userId);
+
+  return activeUserContext;
 }
