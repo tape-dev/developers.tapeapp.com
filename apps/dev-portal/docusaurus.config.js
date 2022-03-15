@@ -98,9 +98,9 @@ module.exports = {
       disableSwitch: true,
     },
     prism: {
-      theme: require('prism-react-renderer/themes/vsDark'),
+      // theme: require('prism-react-renderer/themes/vsDark'),
       // theme: require('prism-react-renderer/themes/vsLight'),
-      // theme: require('prism-react-renderer/themes/github'),
+      theme: require('prism-react-renderer/themes/github'),
       // theme: require('prism-react-renderer/themes/duotoneLight'),
     },
   },

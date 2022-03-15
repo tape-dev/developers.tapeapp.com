@@ -13,6 +13,9 @@
   letter-spacing: -0px;
 
   --ifm-color-darkest: #0e1318;
+  --ifm-color-darkest10: #0e131819;
+  --ifm-color-darkest20: #0e131832;
+
   --ifm-color-darker: #526370;
   --ifm-color-lightest: #ffffff;
   --ifm-background-color-alt: #faf7f3;

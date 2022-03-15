@@ -52,6 +52,7 @@ function Feature({ title, description }) {
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
+
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       {/* Header */}
@@ -72,6 +73,7 @@ function Home() {
                 Welcome, <ActiveUserPrimaryName></ActiveUserPrimaryName>
               </h2>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
+
               <div className={styles.buttons}>
                 <Link
                   className={clsx('button', styles.getStarted)}
@@ -84,7 +86,7 @@ function Home() {
           </section>
 
           <section style={{ flex: 1 }}>
-            <div className="container">JOO</div>
+            <div className="container"></div>
           </section>
         </div>
       </header>
