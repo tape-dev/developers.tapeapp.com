@@ -1,9 +1,11 @@
+import clsx from 'clsx';
 import React from 'react';
+import styles from './hexcolor-preview-styles.module.css';
 
 export default function HexcolorPreview({ color }) {
   return (
     <div
-      className="scale-on-hover"
+      className={clsx(styles.scaleOnHover)}
       title={color}
       style={{
         width: '24px',

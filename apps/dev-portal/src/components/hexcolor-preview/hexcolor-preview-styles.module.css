@@ -1,0 +1,8 @@
+.scaleOnHover {
+  transition-duration: 220ms;
+  transition-property: transform;
+}
+
+.scaleOnHover:hover {
+  transform: scale(1.5);
+}
