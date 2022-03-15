@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DEFAULT_API_KEY, getActiveUserApiKey } from './active-user/constants';
 import { activeUserContextEffect } from './active-user/context.effect';
 import { getBaseUrl } from '@site/src/util/base-url.utils';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
 const BASE_URL_PLACEHOLDER = '#BASE_URL';
@@ -11,7 +12,6 @@ const BASE_URL_PLACEHOLDER = '#BASE_URL';
 export default function ApiKeyCodeblock({ children, language }) {
   const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
-  const baseUrl = getBaseUrl(config);
 
   useEffect(() => {
     activeUserContextEffect(config, setState);
@@ -26,14 +26,21 @@ export default function ApiKeyCodeblock({ children, language }) {
       ? children
       : [];
 
-  const result = childrenArr.map((child) => {
-    if (typeof child === 'string') {
-      return child
-        .replace(new RegExp(USER_API_KEY_PLACEHOLDER, 'g'), apiKey)
-        .replace(new RegExp(BASE_URL_PLACEHOLDER, 'g'), baseUrl);
-    }
-    return child;
-  });
+  return (
+    <BrowserOnly>
+      {() => {
+        const baseUrl = getBaseUrl(config);
+        const result = childrenArr.map((child) => {
+          if (typeof child === 'string') {
+            return child
+              .replace(new RegExp(USER_API_KEY_PLACEHOLDER, 'g'), apiKey)
+              .replace(new RegExp(BASE_URL_PLACEHOLDER, 'g'), baseUrl);
+          }
+          return child;
+        });
 
-  return <CodeBlock language={language}>{result}</CodeBlock>;
+        return <CodeBlock language={language}>{result}</CodeBlock>;
+      }}
+    </BrowserOnly>
+  );
 }
