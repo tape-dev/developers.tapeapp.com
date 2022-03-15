@@ -138,7 +138,7 @@ function Home() {
       {/* Main */}
       <main style={{ margin: '0px 20px', padding: '20px 24px 120px 24px' }}>
         <h2 className={clsx(styles.mainHeader)}>
-          Tap into the core of <u>Tape</u> to build something amazing
+          Tap into the <u>core</u> of Tape to build something amazing
         </h2>
 
         {/* Features */}

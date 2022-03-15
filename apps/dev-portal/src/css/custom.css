@@ -85,3 +85,21 @@ mark {
   color: var(--ifm-color-primary);
   background-color: transparent;
 }
+
+button {
+  border: none;
+  cursor: pointer;
+  background-color: var(--ifm-color-primary);
+  color: var(--ifm-color-lightest);
+  font-weight: 700;
+  padding: 4.5px 13px;
+  border-radius: 9999px;
+}
+
+button:hover {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+button:active {
+  background-color: var(--ifm-color-primary-darker);
+}
