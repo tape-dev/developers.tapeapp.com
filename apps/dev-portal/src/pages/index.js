@@ -9,8 +9,7 @@ import { ActiveUserPrimaryName } from '@site/src/components/active-user/primary-
 
 const features = [
   {
-    title: 'Developer friendly 💻',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    title: 'Workspaces',
     description: (
       <>
         The Tape API was designed from the ground up to be easily consumable and
@@ -20,8 +19,7 @@ const features = [
     ),
   },
   {
-    title: '💪 Fast, reliable & secure',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    title: 'Apps',
     description: (
       <>
         We do not compromise on speed and robustness - that is why we dedicate
@@ -31,8 +29,7 @@ const features = [
     ),
   },
   {
-    title: 'Powered by 💙 Community',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    title: 'Records',
     description: (
       <>
         Tape is about community. In order to constantly evolve and improve, we
@@ -43,15 +40,9 @@ const features = [
   },
 ];
 
-function Feature({ imageUrl, title, description }) {
-  const imgUrl = useBaseUrl(imageUrl);
+function Feature({ title, description }) {
   return (
     <div className={clsx('col col--4', styles.feature)}>
-      {imgUrl && (
-        <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
-      )}
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
@@ -63,6 +54,7 @@ function Home() {
   const { siteConfig = {} } = context;
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
+      {/* Header */}
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">
@@ -79,7 +71,22 @@ function Home() {
           </div>
         </div>
       </header>
-      <main>
+
+      {/* Main */}
+      <main style={{ margin: '0px 160px', padding: '0px 24px' }}>
+        <h1
+          style={{
+            fontWeight: 900,
+            marginTop: '100px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            textAlign: 'center',
+          }}
+        >
+          Tap into the core elements of Tape to build what's next
+        </h1>
+
+        {/* Features */}
         {features && features.length > 0 && (
           <section className={styles.features}>
             <div className="container">

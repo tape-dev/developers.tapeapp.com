@@ -22,6 +22,12 @@ module.exports = {
       },
       items: [
         {
+          to: 'docs/guide/getting-started',
+          activeBasePath: 'guides',
+          label: 'Guides',
+          position: 'left',
+        },
+        {
           to: 'docs/api/api-reference',
           activeBasePath: 'docs',
           label: 'Docs',
@@ -36,7 +42,7 @@ module.exports = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Docs',
@@ -86,7 +92,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} <a href="https://get.tapeapp.com/imprint/">Tape Technologies</a>. Evolving with 💙 in Munich & the world 🌍`,
+      copyright: `© ${new Date().getFullYear()} Tape Technologies`,
     },
     colorMode: {
       defaultMode: 'light',

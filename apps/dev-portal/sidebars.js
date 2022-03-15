@@ -31,4 +31,12 @@ module.exports = {
     },
     'contribute',
   ],
+  guidesSidebar: [
+    {
+      type: 'category',
+      label: 'Getting Started',
+      collapsed: false,
+      items: ['guide/getting-started'],
+    },
+  ],
 };
