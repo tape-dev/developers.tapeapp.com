@@ -33,10 +33,9 @@ module.exports = {
   ],
   guidesSidebar: [
     {
-      type: 'category',
+      type: 'doc',
       label: 'Getting Started',
-      collapsed: false,
-      items: ['guide/getting-started'],
+      id: 'guide/getting-started',
     },
   ],
 };

@@ -22,13 +22,11 @@ module.exports = {
       items: [
         {
           to: 'docs/guide/getting-started',
-          activeBasePath: 'guides',
           label: 'Guides',
           position: 'left',
         },
         {
           to: 'docs/api/api-reference',
-          activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
         },
