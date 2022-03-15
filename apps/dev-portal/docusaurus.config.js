@@ -89,7 +89,14 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} <a href="https://get.tapeapp.com/imprint/">Tape Technologies</a>. Evolving with 💙 in Munich & the world 🌍`,
     },
     colorMode: {
+      defaultMode: 'light',
       disableSwitch: true,
+    },
+    prism: {
+      theme: require('prism-react-renderer/themes/vsDark'),
+      // theme: require('prism-react-renderer/themes/vsLight'),
+      // theme: require('prism-react-renderer/themes/github'),
+      // theme: require('prism-react-renderer/themes/duotoneLight'),
     },
   },
   presets: [

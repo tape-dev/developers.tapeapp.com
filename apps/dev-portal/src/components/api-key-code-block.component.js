@@ -6,7 +6,7 @@ import { activeUserContextEffect } from './active-user/context.effect';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
 
-export default function ApiKeyCodeblock({ children }) {
+export default function ApiKeyCodeblock({ children, language }) {
   const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
 
@@ -30,5 +30,5 @@ export default function ApiKeyCodeblock({ children }) {
     return child;
   });
 
-  return <CodeBlock>{result}</CodeBlock>;
+  return <CodeBlock language={language}>{result}</CodeBlock>;
 }

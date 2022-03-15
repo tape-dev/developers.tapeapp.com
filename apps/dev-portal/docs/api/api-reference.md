@@ -13,7 +13,7 @@ The Tape API follows the REST specification. Our API has predictable resource-or
 
 ## First example
 
-<ApiKeyCodeblock>
+<ApiKeyCodeblock language="sh">
 {`curl https://api.tapeapp.com/v1/record \\
   -u #USER_API_KEY:
 `}
