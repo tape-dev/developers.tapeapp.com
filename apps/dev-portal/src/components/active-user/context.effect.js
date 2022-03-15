@@ -25,7 +25,7 @@ export const activeUserContextEffect = (config, setState) => {
   // ... perform request otherwise
   loadActiveUserSessionsAndContext(runtime)
     .then((activeUserContext) => {
-      setActiveUserContextIsLoading(config, 'loaded');
+      setActiveUserContextIsLoading(config, false);
       setActiveUserContext(config, activeUserContext);
       setState(Date.now()); // force component rerender
     })

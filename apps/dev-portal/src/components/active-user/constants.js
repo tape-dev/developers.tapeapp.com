@@ -24,16 +24,16 @@ export function getActiveUserContextIsLoading(config) {
   const state = getActiveUserState(config);
 
   if (!state) {
-    return undefined;
+    return true;
   }
 
-  return state.isLoading;
+  return state.isLoading ?? true;
 }
 
 /**
  *
  * @param config global config object
- * @param  isLoading can be "false" | "loading" | "loaded" | "failed"
+ * @param  isLoading is boolean, default true
  */
 export function setActiveUserContextIsLoading(config, isLoading) {
   config[ACTIVE_USER_STATE_KEY] = config[ACTIVE_USER_STATE_KEY] || {};
