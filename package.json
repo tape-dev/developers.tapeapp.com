@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve dev-portal",
+    "start-dev": "runtime=DEV nx serve dev-portal",
+    "start-prd": "runtime=PRD nx serve dev-portal",
     "serve": "nx serve dev-portal",
     "build": "nx build dev-portal",
     "test": "nx test dev-portal",

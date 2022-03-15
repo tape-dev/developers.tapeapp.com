@@ -11,7 +11,7 @@ module.exports = {
   organizationName: 'tape',
   projectName: 'developers.tapeapp.com',
   customFields: {
-    runtime: process.env.runtime === 'PRD' ? 'PRD' : 'DEV',
+    runtime: process.env.runtime ?? '',
   },
   themeConfig: {
     navbar: {
