@@ -25,12 +25,14 @@ export const activeUserContextEffect = (config, setState) => {
   // ... perform request otherwise
   loadActiveUserSessionsAndContext(runtime)
     .then((activeUserContext) => {
+      isLoading = false;
       setActiveUserContextIsLoading(config, false);
       setActiveUserContext(config, activeUserContext);
       setState(Date.now()); // force component rerender
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
       isLoading = false;
+      setActiveUserContextIsLoading(config, false);
+      setState(Date.now()); // force component rerender
     });
 };
