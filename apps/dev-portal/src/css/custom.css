@@ -39,8 +39,11 @@ table > *:not(thead) tr:hover {
   width: 100%;
 }
 
-.scale-on-hover:hover {
-  transform: scale(1.5);
+.scale-on-hover {
   transition-duration: 220ms;
   transition-property: transform;
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.5);
 }

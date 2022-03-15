@@ -34,3 +34,21 @@
   height: 200px;
   width: 200px;
 }
+
+.getStarted {
+  background-color: transparent;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: 700;
+  transition-property: transform;
+  transition-duration: 220ms;
+}
+
+.getStarted:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.getStarted:active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
