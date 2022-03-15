@@ -37,6 +37,14 @@
   --ifm-footer-link-color: var(--ifm-color-darker);
 }
 
+*::selection {
+  background: rgba(0, 113, 187, 0.2);
+}
+
+*::-moz-selection {
+  background: rgba(0, 113, 187, 0.2);
+}
+
 table > *:not(thead) tr:hover {
   background-color: #f6f8f8;
 }
