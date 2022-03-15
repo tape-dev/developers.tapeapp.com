@@ -34,7 +34,7 @@
   --ifm-table-stripe-background: #ffffff;
 
   --ifm-footer-color: var(--ifm-color-darkest);
-  --ifm-footer-link-color: var(--ifm-color-darker);
+  --ifm-footer-link-color: var(--ifm-color-darkest);
 }
 
 *::selection {
@@ -71,6 +71,12 @@ h6 {
   letter-spacing: -1px;
 }
 
-a {
-  font-weight: 500;
+.footer__link-item svg {
+  width: 0px;
+  height: 0px;
+  visibility: hidden;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-darkest);
 }
