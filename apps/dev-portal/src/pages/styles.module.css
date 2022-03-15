@@ -18,6 +18,33 @@
   justify-content: left;
 }
 
+.welcomeContainer {
+  padding: 20px 100px 80px 100px;
+}
+
+@media (max-width: 800px) {
+  .welcomeContainer {
+    padding: 20px 10px 10px 10px;
+  }
+}
+
+.mainHeader {
+  font-size: 64px;
+  line-height: 64px;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  letter-spacing: -2px;
+}
+
+@media (max-width: 800px) {
+  .mainHeader {
+    font-size: 48px;
+    line-height: 48px;
+  }
+}
+
 .features {
   display: flex;
   align-items: center;

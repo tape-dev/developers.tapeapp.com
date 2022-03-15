@@ -98,10 +98,10 @@ function Home() {
         style={{ backgroundImage: `url(${TextureImageUrl})` }}
       >
         <div
+          className={clsx(styles.welcomeContainer)}
           style={{
             display: 'flex',
             flexDirection: 'row',
-            padding: '20px 100px 80px 100px',
           }}
         >
           <section style={{ flex: 1 }}>
@@ -137,17 +137,7 @@ function Home() {
 
       {/* Main */}
       <main style={{ margin: '0px 20px', padding: '20px 24px 120px 24px' }}>
-        <h2
-          style={{
-            fontSize: '64px',
-            lineHeight: '64px',
-            marginTop: '80px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            textAlign: 'center',
-            letterSpacing: '-2px',
-          }}
-        >
+        <h2 className={clsx(styles.mainHeader)}>
           Tap into the core of Tape to build something amazing
         </h2>
 
