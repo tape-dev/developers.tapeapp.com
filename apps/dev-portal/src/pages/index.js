@@ -6,25 +6,17 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 import { ActiveUserPrimaryName } from '@site/src/components/active-user/primary-name.component';
+import TextureImageUrl from '@site/static/img/texture.jpg';
 
 const features = [
   {
-    title: 'Organizations',
+    title: 'Records',
     description: (
       <>
-        The Tape API was designed from the ground up to be easily consumable and
-        transparent. This way, our developers can focus on what they do best:
-        Building powerful custo-tailored Tape solutions for their customers.
-      </>
-    ),
-  },
-  {
-    title: 'Workspaces',
-    description: (
-      <>
-        The Tape API was designed from the ground up to be easily consumable and
-        transparent. This way, our developers can focus on what they do best:
-        Building powerful custo-tailored Tape solutions for their customers.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
       </>
     ),
   },
@@ -32,9 +24,10 @@ const features = [
     title: 'Apps',
     description: (
       <>
-        We do not compromise on speed and robustness - that is why we dedicate
-        our resources to guarantee a production ready experience that you can
-        count and build on.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
       </>
     ),
   },
@@ -42,19 +35,32 @@ const features = [
     title: 'Fields',
     description: (
       <>
-        We do not compromise on speed and robustness - that is why we dedicate
-        our resources to guarantee a production ready experience that you can
-        count and build on.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
       </>
     ),
   },
   {
-    title: 'Records',
+    title: 'Workspaces',
     description: (
       <>
-        Tape is about community. In order to constantly evolve and improve, we
-        allow our development community and eco system to contribute to our
-        docs. Because you know best what could be missing or improved.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
+      </>
+    ),
+  },
+  {
+    title: 'Organizations',
+    description: (
+      <>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
       </>
     ),
   },
@@ -62,9 +68,10 @@ const features = [
     title: 'Webhooks',
     description: (
       <>
-        Tape is about community. In order to constantly evolve and improve, we
-        allow our development community and eco system to contribute to our
-        docs. Because you know best what could be missing or improved.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
       </>
     ),
   },
@@ -86,9 +93,16 @@ function Home() {
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       {/* Header */}
-      <header className={clsx(styles.heroBanner)}>
+      <header
+        className={clsx(styles.heroBanner)}
+        style={{ backgroundImage: `url(${TextureImageUrl})` }}
+      >
         <div
-          style={{ display: 'flex', flexDirection: 'row', padding: '0px 60px' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '20px 100px 80px 100px',
+          }}
         >
           <section style={{ flex: 1 }}>
             <div className="container">
@@ -107,7 +121,7 @@ function Home() {
               <div className={styles.buttons}>
                 <Link
                   className={clsx('button', styles.getStarted)}
-                  to={useBaseUrl('docs/api/api-reference')}
+                  to={useBaseUrl('docs/guide/getting-started')}
                 >
                   Get Started
                 </Link>
@@ -122,19 +136,19 @@ function Home() {
       </header>
 
       {/* Main */}
-      <main style={{ margin: '0px 20px', padding: '0px 24px' }}>
+      <main style={{ margin: '0px 20px', padding: '20px 24px 120px 24px' }}>
         <h2
           style={{
             fontSize: '64px',
             lineHeight: '64px',
-            marginTop: '100px',
+            marginTop: '80px',
             marginLeft: 'auto',
             marginRight: 'auto',
             textAlign: 'center',
             letterSpacing: '-2px',
           }}
         >
-          Tap into the core elements of Tape to build what's next
+          Tap into the core of Tape to build something amazing
         </h2>
 
         {/* Features */}
