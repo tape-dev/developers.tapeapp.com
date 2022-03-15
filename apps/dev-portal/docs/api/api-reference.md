@@ -14,16 +14,16 @@ The Tape API follows the REST specification. Our API has predictable resource-or
 ## First example
 
 <ApiKeyCodeblock language="sh">
-{`curl https://api.tapeapp.com/v1/record \\
+{`curl #BASE_URL/v1/record/1 \\
   -u #USER_API_KEY:
 `}
 </ApiKeyCodeblock>
 
 ## Base URL
 
-```
-https://api.tapeapp.com
-```
+<ApiKeyCodeblock language="sh">
+#BASE_URL
+</ApiKeyCodeblock>
 
 ## Authentication
 

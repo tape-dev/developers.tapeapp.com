@@ -1,25 +1,4 @@
-const baseUrlDev = 'http://localhost:3000';
-const baseUrlPrd = 'https://tapeapp.com';
-
-function getBaseUrl(runtime) {
-  // Developer explicitly specified the PRD runtime environment
-  if (runtime.toUpperCase() === 'PRD') {
-    return baseUrlPrd;
-  }
-
-  // Developer explicitly specified the DEV runtime environment
-  if (runtime.toUpperCase() === 'DEV') {
-    return baseUrlDev;
-  }
-
-  // Determine baseUrl based on current URL
-  const url = window.location.href ?? '';
-  if (url.includes('localhost')) {
-    return baseUrlDev;
-  }
-
-  return baseUrlPrd;
-}
+import { getBaseUrl } from '@site/src/util/base-url.utils';
 
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
