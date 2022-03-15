@@ -1,5 +1,9 @@
-// const baseUrl = 'http://localhost:3000';
-const baseUrl = 'https://tapeapp.com';
+const baseUrlPrd = 'http://localhost:3000';
+const baseUrlDev = 'https://tapeapp.com';
+
+function getBaseUrl(runtime) {
+  return runtime === 'PRD' ? baseUrlPrd : baseUrlDev;
+}
 
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
@@ -35,8 +39,8 @@ const headers = {
   'content-type': 'application/json',
 };
 
-function loadActiveUserContext(uid) {
-  return fetch(`${baseUrl}/graphql/getActiveUserDevPortalContext`, {
+function loadActiveUserContext(uid, runtime) {
+  return fetch(`${getBaseUrl(runtime)}/graphql/getActiveUserDevPortalContext`, {
     method: 'POST',
     headers: {
       ...headers,
@@ -53,8 +57,8 @@ function loadActiveUserContext(uid) {
     });
 }
 
-function loadActiveUserSessions() {
-  return fetch(`${baseUrl}/graphql/getUserSessions`, {
+function loadActiveUserSessions(runtime) {
+  return fetch(`${getBaseUrl(runtime)}/graphql/getUserSessions`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -70,8 +74,8 @@ function loadActiveUserSessions() {
     });
 }
 
-export async function loadActiveUserSessionsAndContext() {
-  const sessions = await loadActiveUserSessions();
+export async function loadActiveUserSessionsAndContext(runtime) {
+  const sessions = await loadActiveUserSessions(runtime);
 
   const activeUserSessions = sessions.filter((session) => session.active);
 
@@ -81,7 +85,7 @@ export async function loadActiveUserSessionsAndContext() {
 
   const { userId } = activeUserSessions[0];
 
-  const activeUserContext = await loadActiveUserContext(userId);
+  const activeUserContext = await loadActiveUserContext(userId, runtime);
 
   return activeUserContext;
 }

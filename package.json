@@ -5,9 +5,9 @@
   "scripts": {
     "start": "nx serve dev-portal",
     "serve": "nx serve dev-portal",
-    "build": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME",
+    "build": "nx build dev-portal",
     "test": "nx test dev-portal",
-    "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME"
+    "publish": "runtime=PRD nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME"
   },
   "private": true,
   "devDependencies": {

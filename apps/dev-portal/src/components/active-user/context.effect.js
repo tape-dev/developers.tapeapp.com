@@ -8,6 +8,7 @@ import { loadActiveUserSessionsAndContext } from './context-request';
 let isLoading = false;
 
 export const activeUserContextEffect = (config, setState) => {
+  const runtime = config.customFields.runtime;
   const state = getActiveUserState(config);
 
   // skip request if already loading
@@ -22,7 +23,7 @@ export const activeUserContextEffect = (config, setState) => {
 
   isLoading = true;
   // ... perform request otherwise
-  loadActiveUserSessionsAndContext()
+  loadActiveUserSessionsAndContext(runtime)
     .then((activeUserContext) => {
       setActiveUserContextIsLoading(config, 'loaded');
       setActiveUserContext(config, activeUserContext);

@@ -10,6 +10,9 @@ module.exports = {
   favicon: 'img/favicon.svg',
   organizationName: 'tape',
   projectName: 'developers.tapeapp.com',
+  customFields: {
+    runtime: process.env.runtime === 'PRD' ? 'PRD' : 'DEV',
+  },
   themeConfig: {
     navbar: {
       title: 'Tape Developers',
