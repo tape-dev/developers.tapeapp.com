@@ -5,26 +5,37 @@
  * work well for content-centric websites.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto+Slab%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&display=auto&ver=7e790a435540122bce84e06847c4bbc4');
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-font-family-base: 'Roboto';
+  letter-spacing: -0px;
+
+  --ifm-color-darkest: #0e1318;
+  --ifm-color-darker: #526370;
+  --ifm-color-lightest: #ffffff;
+  --ifm-background-color-alt: #faf7f3;
+
   --ifm-color-primary: #0071bb;
-  --ifm-color-primary-dark: #0066a8;
-  --ifm-color-primary-darker: #00609f;
-  --ifm-color-primary-darkest: #004f83;
-  --ifm-color-primary-light: #007cce;
-  --ifm-color-primary-lighter: #0082d7;
-  --ifm-color-primary-lightest: #0093f3;
+  --ifm-color-primary-dark: #0065a8ff;
+  --ifm-color-primary-darker: #005a95ff;
+  --ifm-color-primary-darkest: #005a95ff;
+
+  --ifm-color-primary-light: #0071bb19;
+  --ifm-color-primary-lighter: #0071bb32;
+  --ifm-color-primary-lightest: #0071bb32;
+
+  --ifm-background-color: #ffffff;
+  --ifm-footer-background-color: var(--ifm-background-color-alt);
   --ifm-table-stripe-background: #ffffff;
+
+  --ifm-footer-color: var(--ifm-color-darkest);
+  --ifm-footer-link-color: var(--ifm-color-darker);
 }
 
 table > *:not(thead) tr:hover {
   background-color: #f6f8f8;
-}
-
-:root {
-  --ifm-font-family-base: 'Roboto';
 }
 
 .docusaurus-highlight-code-line {
@@ -37,4 +48,18 @@ table > *:not(thead) tr:hover {
 .full-width-table table {
   display: table;
   width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+a {
+  font-weight: 500;
 }

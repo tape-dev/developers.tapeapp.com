@@ -1,7 +1,6 @@
 module.exports = {
   title: 'Tape Developers',
-  tagline:
-    'Connect, simplify, and automate your work using Tape Developer tools.',
+  tagline: 'Connect, simplify, and automate your work using Tape.',
   url: 'https://developers.tapeapp.com',
   baseUrl: '/',
   staticDirectories: ['static'],
@@ -56,7 +55,7 @@ module.exports = {
               to: 'docs/calculation/intro',
             },
             {
-              label: 'Help us evolve',
+              label: 'Contribute',
               to: 'docs/contribute',
             },
           ],
@@ -92,7 +91,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} Tape Technologies`,
+      // copyright: `© ${new Date().getFullYear()} Tape Technologies`,
     },
     colorMode: {
       defaultMode: 'light',

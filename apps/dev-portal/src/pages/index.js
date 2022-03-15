@@ -55,36 +55,55 @@ function Home() {
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       {/* Header */}
-      <header className={clsx('hero hero--primary', styles.heroBanner)}>
-        <div className="container">
-          <h1 className="hero__title">
-            Welcome, <ActiveUserPrimaryName></ActiveUserPrimaryName>
-          </h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className={clsx('button', styles.getStarted)}
-              to={useBaseUrl('docs/api/api-reference')}
-            >
-              Get Started
-            </Link>
-          </div>
+      <header className={clsx(styles.heroBanner)}>
+        <div
+          style={{ display: 'flex', flexDirection: 'row', padding: '0px 60px' }}
+        >
+          <section style={{ flex: 1 }}>
+            <div className="container">
+              <h2
+                className="hero__title"
+                style={{
+                  fontSize: '64px',
+                  lineHeight: '64px',
+                  letterSpacing: '-2px',
+                }}
+              >
+                Welcome, <ActiveUserPrimaryName></ActiveUserPrimaryName>
+              </h2>
+              <p className="hero__subtitle">{siteConfig.tagline}</p>
+              <div className={styles.buttons}>
+                <Link
+                  className={clsx('button', styles.getStarted)}
+                  to={useBaseUrl('docs/api/api-reference')}
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          <section style={{ flex: 1 }}>
+            <div className="container">JOO</div>
+          </section>
         </div>
       </header>
 
       {/* Main */}
-      <main style={{ margin: '0px 160px', padding: '0px 24px' }}>
-        <h1
+      <main style={{ margin: '0px 20px', padding: '0px 24px' }}>
+        <h2
           style={{
-            fontWeight: 900,
+            fontSize: '64px',
+            lineHeight: '64px',
             marginTop: '100px',
             marginLeft: 'auto',
             marginRight: 'auto',
             textAlign: 'center',
+            letterSpacing: '-2px',
           }}
         >
           Tap into the core elements of Tape to build what's next
-        </h1>
+        </h2>
 
         {/* Features */}
         {features && features.length > 0 && (
