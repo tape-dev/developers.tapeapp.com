@@ -80,3 +80,8 @@ h6 {
 .footer__link-item:hover {
   color: var(--ifm-color-darkest);
 }
+
+mark {
+  color: var(--ifm-color-primary);
+  background-color: transparent;
+}

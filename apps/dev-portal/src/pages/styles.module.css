@@ -76,3 +76,9 @@
   color: var(--ifm-color--darkest);
   background-color: var(--ifm-color-darkest20);
 }
+
+.subline {
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 28px;
+}
