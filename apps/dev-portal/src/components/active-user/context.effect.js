@@ -36,7 +36,7 @@ export const activeUserContextEffect = (config, setState) => {
         return;
       }
 
-      // Do not re-fetch on document hidden
+      // Do not re-fetch on document hiding
       if (!isVisible) {
         return;
       }
