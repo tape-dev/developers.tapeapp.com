@@ -23,9 +23,9 @@ module.exports = {
         'calculation/html',
         {
           type: 'category',
-          label: 'Examples',
+          label: 'Components',
           collapsed: true,
-          items: ['calculation/example/link', 'calculation/example/button'],
+          items: ['calculation/component/link', 'calculation/component/button'],
         },
       ],
     },
