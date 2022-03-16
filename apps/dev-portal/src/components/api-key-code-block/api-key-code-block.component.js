@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { DEFAULT_API_KEY, getActiveUserApiKey } from '../active-user/constants';
 import { activeUserContextEffect } from '../active-user/context.effect';
 import { getDevApiBaseUrl } from '@site/src/util/base-url.utils';
+import clsx from 'clsx';
+import styles from './api-key-code-block-styles.module.css';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
 const BASE_URL_PLACEHOLDER = '#BASE_URL';
@@ -36,7 +38,7 @@ export default function ApiKeyCodeblock({ children, language }) {
   });
 
   return (
-    <div style={{ overflowX: 'scroll' }}>
+    <div className={clsx(styles.codeBlock)}>
       <CodeBlock language={language}>{result}</CodeBlock>
     </div>
   );
