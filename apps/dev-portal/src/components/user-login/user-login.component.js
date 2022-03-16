@@ -29,15 +29,12 @@ export default function UserLogin() {
         <span>
           Hey {primaryName} 👋 Looks like you are already logged into Tape, so
           we were able to prefill your user API key and some IDs for records,
-          fields and so on in the examples requests below.
-        </span>
-
-        <p>
-          Here's you personal User API token:
+          fields and so on in the examples requests below. Here's you personal
+          User API token:
           <br />
           <br />
           <ApiKeyCodeblock>#USER_API_KEY</ApiKeyCodeblock>
-        </p>
+        </span>
       </div>
     );
   }

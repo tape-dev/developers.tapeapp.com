@@ -22,11 +22,6 @@ export function getBaseUrl(configOrRuntime) {
     return baseUrlDev;
   }
 
-  // Determine baseUrl based on current URL
-  const url = window.location.href ?? '';
-  if (url.includes('localhost')) {
-    return baseUrlDev;
-  }
-
+  // Default is PRD
   return baseUrlPrd;
 }

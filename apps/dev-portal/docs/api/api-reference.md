@@ -11,17 +11,9 @@ import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
 
 The Tape API follows the REST specification. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-## First example
-
-<ApiKeyCodeblock language="sh">
-{`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:
-`}
-</ApiKeyCodeblock>
-
 ## Base URL
 
-<ApiKeyCodeblock language="sh">
+<ApiKeyCodeblock language="shell">
 #BASE_URL
 </ApiKeyCodeblock>
 

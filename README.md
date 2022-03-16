@@ -6,7 +6,7 @@ Welcome to the Tape Developers portal repository. It contains everything needed 
 
 Execute the following commands to get a local version of the developer portal up and running:
 
-```sh
+```shell
 # Clone the repository
 git clone git@github.com:tape-dev/developers.tapeapp.com.git
 

@@ -2,8 +2,7 @@ export const ACTIVE_USER_STATE_KEY = 'activeUserState';
 
 // Defaults
 export const DEFAULT_USERNAME = 'Developer';
-export const DEFAULT_API_KEY =
-  'user_key_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiLvv71cdTAwMDZcdTAwMTLvv73vv71cdTAwMWXvv73vv71U77-9Iiwic2NvcGUiOiJ1a192MSJ9.JTmsHguUWkP0b2dvwIZc2q8dsbjkDXg2FbZyC4_Sh20';
+export const DEFAULT_API_KEY = '$YOUR_USER_API_KEY';
 
 export function getActiveUserState(config) {
   return config[ACTIVE_USER_STATE_KEY] || {};

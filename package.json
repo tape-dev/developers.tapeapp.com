@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve dev-portal",
+    "start": "runtime=DEV nx serve dev-portal",
     "start-dev": "runtime=DEV nx serve dev-portal",
     "start-prd": "runtime=PRD nx serve dev-portal",
-    "serve": "nx serve dev-portal",
+    "serve": "runtime=DEV nx serve dev-portal",
     "build": "nx build dev-portal",
     "test": "nx test dev-portal",
     "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME"
