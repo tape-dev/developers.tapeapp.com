@@ -9,32 +9,39 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  letter-spacing: 0px;
+
+  /* Tape color schema */
+  --tape-color-primary: #0071bb;
+  --tape-color-primary-dark-10: #0065a8ff;
+  --tape-color-primary-dark-20: #005a95ff;
+  --tape-color-primary-10: #0071bb19;
+  --tape-color-primary-20: #0071bb32;
+  --tape-color-lightest: #ffffff;
+  --tape-color-lighter: #f6f8f8;
+  --tape-color-mediumlight: #ebedef;
+  --tape-color-light: #eef2f3;
+  --tape-color-dark: #ced8dd;
+  --tape-color-darker: #526370;
+  --tape-color-darkest: #0e1318;
+  --tape-color-darkest10: #0e131819;
+  --tape-color-darkest20: #0e131832;
+  --tape-color-success: #007959;
+  --tape-color-danger: #df245e;
+  --tape-color-danger-dark-10: #c82054ff;
+  --tape-color-danger-dark-20: #b21c4bff;
+  --tape-color-danger-10: #df245e19;
+  --tape-color-danger-20: #df245e32;
+
+  /* IFM CSS variables*/
   --ifm-font-family-base: 'Roboto';
-  letter-spacing: -0px;
-
-  --ifm-color-darkest: #0e1318;
-  --ifm-color-darkest10: #0e131819;
-  --ifm-color-darkest20: #0e131832;
-
-  --ifm-color-darker: #526370;
-  --ifm-color-lightest: #ffffff;
-  --ifm-background-color-alt: #faf7f3;
-
-  --ifm-color-primary: #0071bb;
-  --ifm-color-primary-dark: #0065a8ff;
-  --ifm-color-primary-darker: #005a95ff;
-  --ifm-color-primary-darkest: #005a95ff;
-
-  --ifm-color-primary-light: #0071bb19;
-  --ifm-color-primary-lighter: #0071bb32;
-  --ifm-color-primary-lightest: #0071bb32;
-
+  --ifm-color-darkest: var(--tape-color-darkest);
+  --ifm-color-primary: var(--tape-color-primary);
   --ifm-background-color: #ffffff;
-  --ifm-footer-background-color: var(--ifm-background-color-alt);
+  --ifm-footer-background-color: #faf7f3;
   --ifm-table-stripe-background: #ffffff;
-
-  --ifm-footer-color: var(--ifm-color-darkest);
-  --ifm-footer-link-color: var(--ifm-color-darkest);
+  --ifm-footer-color: var(--tape-color-darkest);
+  --ifm-footer-link-color: var(--tape-color-darkest);
 }
 
 *::selection {
@@ -87,19 +94,74 @@ mark {
 }
 
 button {
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 9999px;
   border: none;
   cursor: pointer;
-  background-color: var(--ifm-color-primary);
-  color: var(--ifm-color-lightest);
-  font-weight: 700;
-  padding: 4.5px 13px;
-  border-radius: 9999px;
 }
 
 button:hover {
-  background-color: var(--ifm-color-primary-dark);
+  background-color: var(--tape-color-primary);
+  color: var(--tape-color-lightest);
 }
 
 button:active {
-  background-color: var(--ifm-color-primary-darker);
+  background-color: var(--tape-color-primary-dark-10);
+  color: var(--tape-color-lightest);
+}
+
+button[type='primary'] {
+  background-color: var(--tape-color-primary);
+  color: var(--tape-color-lightest);
+}
+
+button[type='primary']:hover {
+  background-color: var(--tape-color-primary-dark-10);
+}
+
+button[type='primary']:active {
+  background-color: var(--tape-color-primary-dark20);
+}
+
+button[type='danger'] {
+  border: 1px solid var(--tape-color-danger);
+  background-color: var(--tape-color-danger);
+  color: var(--tape-color-lightest);
+}
+
+button[type='danger']:hover {
+  background-color: var(--tape-color-danger-dark-10);
+}
+
+button[type='danger']:active {
+  background-color: var(--tape-color-danger-dark20);
+}
+
+button[type='outline'] {
+  color: var(--tape-color-primary);
+  border: 1px solid var(--tape-color-primary);
+  background-color: transparent;
+}
+
+button[type='outline']:hover {
+  background-color: var(--tape-color-primary-10);
+}
+
+button[type='outline']:active {
+  background-color: var(--tape-color-primary-20);
+}
+
+button[type='outline-danger'] {
+  color: var(--tape-color-danger);
+  border: 1px solid var(--tape-color-danger);
+  background-color: transparent;
+}
+
+button[type='outline-danger']:hover {
+  background-color: var(--tape-color-danger-10);
+}
+
+button[type='outline-danger']:active {
+  background-color: var(--tape-color-danger-20);
 }

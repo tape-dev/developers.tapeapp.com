@@ -13,9 +13,9 @@ The Tape API follows the REST specification. Our API has predictable resource-or
 
 ## Base URL
 
-<ApiKeyCodeblock language="shell">
-#BASE_URL
-</ApiKeyCodeblock>
+```shell
+https://api.tapeapp.com/
+```
 
 ## Authentication
 

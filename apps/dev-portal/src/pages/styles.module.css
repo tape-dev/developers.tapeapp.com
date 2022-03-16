@@ -59,7 +59,7 @@
 
 .getStarted {
   background-color: transparent;
-  color: var(--ifm-color--darkest);
+  color: var(--tape-color--darkest);
   border-radius: 999px;
   font-weight: 700;
   transition-property: transform;
@@ -67,14 +67,14 @@
 }
 
 .getStarted:hover {
-  color: var(--ifm-color--darkest);
-  background-color: var(--ifm-color-darkest10);
+  color: var(--tape-color--darkest);
+  background-color: var(--tape-color-darkest10);
   transform: translateY(-2px);
 }
 
 .getStarted:active {
-  color: var(--ifm-color--darkest);
-  background-color: var(--ifm-color-darkest20);
+  color: var(--tape-color--darkest);
+  background-color: var(--tape-color-darkest20);
 }
 
 .subline {

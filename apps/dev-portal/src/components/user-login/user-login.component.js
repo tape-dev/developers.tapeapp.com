@@ -44,11 +44,13 @@ export default function UserLogin() {
       <span>
         Hey there 👋 Looks like you are currently not logged into Tape. All
         examples in this guide will be pre-filled with stub data. To change
-        this, log into your Tape account and{' '}
+        this, log into your Tape account.
       </span>
       <p>
         <a target="_blank" href="https://tapeapp.com/signin">
-          <button style={{ margin: '9px 0px' }}>Login here</button>
+          <button type="primary" style={{ margin: '9px 0px' }}>
+            Login here
+          </button>
         </a>
       </p>
     </div>
