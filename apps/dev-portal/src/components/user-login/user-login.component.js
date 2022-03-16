@@ -9,7 +9,7 @@ import { activeUserContextEffect } from '../active-user/context.effect';
 import ApiKeyCode from '@site/src/components/api-key-code.component';
 import Admonition from '@theme/Admonition';
 
-const STATIC_HEIGHT = '172px';
+const STATIC_HEIGHT = '175px';
 
 export default function UserLoginInfo() {
   const [_, setState] = useState(Date.now());

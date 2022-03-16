@@ -12,7 +12,6 @@ import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
 
 <ApiKeyCodeblock language="shell">
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:
-# The colon prevents curl from asking for a password.
+  -u #USER_API_KEY: -w "\\n\\n"
 `}
 </ApiKeyCodeblock>
