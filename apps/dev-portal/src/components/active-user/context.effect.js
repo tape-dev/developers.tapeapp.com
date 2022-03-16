@@ -7,7 +7,7 @@ import {
 import { loadActiveUserSessionsAndContext } from './context-request';
 
 let isLoading = false;
-let registerVisibilityChange = false;
+let visibilityChangeRegistered = true; // Deactivate for now
 
 export const activeUserContextEffect = (config, setState) => {
   const runtime = config.customFields.runtime;
@@ -23,8 +23,8 @@ export const activeUserContextEffect = (config, setState) => {
     return;
   }
 
-  if (!registerVisibilityChange) {
-    registerVisibilityChange = true;
+  if (!visibilityChangeRegistered) {
+    visibilityChangeRegistered = true;
     addEventListener('visibilitychange', (event) => {
       const ctx = getActiveUserContext(config);
       const hasUserId = !!ctx?.userId;

@@ -93,25 +93,12 @@ mark {
   background-color: transparent;
 }
 
-button {
+button[type='primary'] {
   font-weight: 700;
   padding: 9px 13px;
   border-radius: 9999px;
   border: none;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: var(--tape-color-primary);
-  color: var(--tape-color-lightest);
-}
-
-button:active {
-  background-color: var(--tape-color-primary-dark-10);
-  color: var(--tape-color-lightest);
-}
-
-button[type='primary'] {
   background-color: var(--tape-color-primary);
   color: var(--tape-color-lightest);
 }
@@ -125,6 +112,11 @@ button[type='primary']:active {
 }
 
 button[type='danger'] {
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
   border: 1px solid var(--tape-color-danger);
   background-color: var(--tape-color-danger);
   color: var(--tape-color-lightest);
@@ -139,6 +131,11 @@ button[type='danger']:active {
 }
 
 button[type='outline'] {
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
   color: var(--tape-color-primary);
   border: 1px solid var(--tape-color-primary);
   background-color: transparent;
@@ -153,6 +150,11 @@ button[type='outline']:active {
 }
 
 button[type='outline-danger'] {
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
   color: var(--tape-color-danger);
   border: 1px solid var(--tape-color-danger);
   background-color: transparent;
@@ -167,6 +169,11 @@ button[type='outline-danger']:active {
 }
 
 button[type='outline-darkest'] {
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
   color: var(--tape-color-darkest);
   border: 1px solid var(--tape-color-darkest);
   background-color: transparent;
