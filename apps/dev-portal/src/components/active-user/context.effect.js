@@ -25,17 +25,21 @@ export const activeUserContextEffect = (config, setState) => {
   if (!registerVisibilityChange) {
     registerVisibilityChange = true;
     addEventListener('visibilitychange', (event) => {
-      performLoadActiveUserSessionsAndContext(runtime, config);
+      performLoadActiveUserSessionsAndContext(runtime, config, setState).then(
+        () => {
+          setState(Date.now()); // force component rerender
+        }
+      );
     });
   }
 
   isLoading = true;
-  performLoadActiveUserSessionsAndContext(runtime, config);
+  performLoadActiveUserSessionsAndContext(runtime, config, setState);
 };
 
-function performLoadActiveUserSessionsAndContext(runtime, config) {
+function performLoadActiveUserSessionsAndContext(runtime, config, setState) {
   // ... perform request otherwise
-  loadActiveUserSessionsAndContext(runtime)
+  const load = loadActiveUserSessionsAndContext(runtime)
     .then((activeUserContext) => {
       isLoading = false;
       setActiveUserContextIsLoading(config, false);
@@ -47,4 +51,6 @@ function performLoadActiveUserSessionsAndContext(runtime, config) {
       setActiveUserContextIsLoading(config, false);
       setState(Date.now()); // force component rerender
     });
+
+  return load.then(() => setState);
 }
