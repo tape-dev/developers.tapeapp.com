@@ -3,12 +3,10 @@ id: getting-started
 title: Getting Started
 ---
 
-import UserLogin from '@site/src/components/user-login/user-login.component';
+import UserLoginInfo from '@site/src/components/user-login/user-login.component';
 import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
 
-<UserLogin></UserLogin>
-
-test : `tes`
+<UserLoginInfo></UserLoginInfo>
 
 ## Fetch your first Record
 

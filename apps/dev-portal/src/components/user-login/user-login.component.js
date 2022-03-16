@@ -9,7 +9,7 @@ import { activeUserContextEffect } from '../active-user/context.effect';
 import ApiKeyCode from '@site/src/components/api-key-code.component';
 import Admonition from '@theme/Admonition';
 
-export default function UserLogin() {
+export default function UserLoginInfo() {
   const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
 
@@ -30,10 +30,7 @@ export default function UserLogin() {
         <span>
           Hey {primaryName} 👋 Looks like you are already logged into Tape, so
           we were able to prefill your user API key and some IDs for records,
-          fields and so on in the examples requests below. Here's you personal
-          User API token:
-          <br />
-          <ApiKeyCode>#USER_API_KEY</ApiKeyCode>
+          fields and so on in the examples requests below.
         </span>
       </Admonition>
     );
@@ -48,7 +45,7 @@ export default function UserLogin() {
       </span>
       <p>
         <a target="_blank" href="https://tapeapp.com/signin">
-          <button type="primary" style={{ margin: '9px 0px' }}>
+          <button type="outline-darkest" style={{ margin: '9px 0px' }}>
             Login here
           </button>
         </a>

@@ -68,13 +68,13 @@
 
 .getStarted:hover {
   color: var(--tape-color--darkest);
-  background-color: var(--tape-color-darkest10);
+  background-color: var(--tape-color-darkest-10);
   transform: translateY(-2px);
 }
 
 .getStarted:active {
   color: var(--tape-color--darkest);
-  background-color: var(--tape-color-darkest20);
+  background-color: var(--tape-color-darkest-20);
 }
 
 .subline {

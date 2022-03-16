@@ -24,8 +24,8 @@
   --tape-color-dark: #ced8dd;
   --tape-color-darker: #526370;
   --tape-color-darkest: #0e1318;
-  --tape-color-darkest10: #0e131819;
-  --tape-color-darkest20: #0e131832;
+  --tape-color-darkest-10: #0e131819;
+  --tape-color-darkest-20: #0e131832;
   --tape-color-success: #007959;
   --tape-color-danger: #df245e;
   --tape-color-danger-dark-10: #c82054ff;
@@ -164,4 +164,18 @@ button[type='outline-danger']:hover {
 
 button[type='outline-danger']:active {
   background-color: var(--tape-color-danger-20);
+}
+
+button[type='outline-darkest'] {
+  color: var(--tape-color-darkest);
+  border: 1px solid var(--tape-color-darkest);
+  background-color: transparent;
+}
+
+button[type='outline-darkest']:hover {
+  background-color: var(--tape-color-darkest-10);
+}
+
+button[type='outline-darkest']:active {
+  background-color: var(--tape-color-darkest-20);
 }
