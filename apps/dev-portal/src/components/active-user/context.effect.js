@@ -1,4 +1,5 @@
 import {
+  getActiveUserContext,
   getActiveUserState,
   setActiveUserContext,
   setActiveUserContextIsLoading,
@@ -25,11 +26,22 @@ export const activeUserContextEffect = (config, setState) => {
   if (!registerVisibilityChange) {
     registerVisibilityChange = true;
     addEventListener('visibilitychange', (event) => {
-      performLoadActiveUserSessionsAndContext(runtime, config, setState).then(
-        () => {
-          setState(Date.now()); // force component rerender
-        }
-      );
+      const ctx = getActiveUserContext(config);
+      const hasUserId = !!ctx?.userId;
+      const isVisible = event?.target?.visibilityState === 'visible';
+      // console.log({ hasUserId, isVisible })
+
+      // Do not re-fetch if user is logged in
+      if (hasUserId) {
+        return;
+      }
+
+      // Do not re-fetch on document hidden
+      if (!isVisible) {
+        return;
+      }
+
+      performLoadActiveUserSessionsAndContext(runtime, config, setState);
     });
   }
 
