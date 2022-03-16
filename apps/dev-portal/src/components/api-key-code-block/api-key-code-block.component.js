@@ -1,8 +1,8 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import CodeBlock from '@theme/CodeBlock';
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_API_KEY, getActiveUserApiKey } from './active-user/constants';
-import { activeUserContextEffect } from './active-user/context.effect';
+import { DEFAULT_API_KEY, getActiveUserApiKey } from '../active-user/constants';
+import { activeUserContextEffect } from '../active-user/context.effect';
 import { getDevApiBaseUrl } from '@site/src/util/base-url.utils';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
@@ -35,5 +35,9 @@ export default function ApiKeyCodeblock({ children, language }) {
     return child;
   });
 
-  return <CodeBlock language={language}>{result}</CodeBlock>;
+  return (
+    <div style={{ overflowX: 'scroll' }}>
+      <CodeBlock language={language}>{result}</CodeBlock>
+    </div>
+  );
 }

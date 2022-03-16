@@ -4,7 +4,7 @@ title: Getting Started
 ---
 
 import UserLoginInfo from '@site/src/components/user-login/user-login.component';
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
+import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
 
 <UserLoginInfo></UserLoginInfo>
 

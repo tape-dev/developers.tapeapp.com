@@ -5,7 +5,7 @@ sidebar_label: API Reference
 ---
 
 import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.component';
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
+import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
 
 # API Reference
 
