@@ -20,7 +20,13 @@ The calculation field has support for HTML buttons. The "type" attribute can be 
 ```
 
 Here's how the button types from above will be rendered:
-<img width="300" src="/img/docs/calculation/calculation-buttons.png"></img>
+<button type="primary"> Default button </button>
+&nbsp;&nbsp;
+<button type="outline"> Outline button </button>
+&nbsp;&nbsp;
+<button type="danger"> Danger button </button>
+&nbsp;&nbsp;
+<button type="outline-danger"> Outline danger button </button>
 
 <br />
 <br />

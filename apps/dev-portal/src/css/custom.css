@@ -121,7 +121,7 @@ button[type='primary']:hover {
 }
 
 button[type='primary']:active {
-  background-color: var(--tape-color-primary-dark20);
+  background-color: var(--tape-color-primary-dark-20);
 }
 
 button[type='danger'] {
@@ -135,7 +135,7 @@ button[type='danger']:hover {
 }
 
 button[type='danger']:active {
-  background-color: var(--tape-color-danger-dark20);
+  background-color: var(--tape-color-danger-dark-20);
 }
 
 button[type='outline'] {
