@@ -6,7 +6,8 @@ import {
   getActiveUserPrimaryName,
 } from '../active-user/constants';
 import { activeUserContextEffect } from '../active-user/context.effect';
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block.component';
+import ApiKeyCode from '@site/src/components/api-key-code.component';
+import Admonition from '@theme/Admonition';
 
 export default function UserLogin() {
   const [_, setState] = useState(Date.now());
@@ -25,22 +26,21 @@ export default function UserLogin() {
 
   if (primaryName) {
     return (
-      <div>
+      <Admonition type="info">
         <span>
           Hey {primaryName} 👋 Looks like you are already logged into Tape, so
           we were able to prefill your user API key and some IDs for records,
           fields and so on in the examples requests below. Here's you personal
           User API token:
           <br />
-          <br />
-          <ApiKeyCodeblock>#USER_API_KEY</ApiKeyCodeblock>
+          <ApiKeyCode>#USER_API_KEY</ApiKeyCode>
         </span>
-      </div>
+      </Admonition>
     );
   }
 
   return (
-    <div>
+    <Admonition type="info">
       <span>
         Hey there 👋 Looks like you are currently not logged into Tape. All
         examples in this guide will be pre-filled with stub data. To change
@@ -53,6 +53,6 @@ export default function UserLogin() {
           </button>
         </a>
       </p>
-    </div>
+    </Admonition>
   );
 }
