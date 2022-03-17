@@ -8,6 +8,7 @@ module.exports = {
       items: [
         'api/api-reference',
         'api/pagination',
+        'api/files',
         'api/rate-limiting',
         'api/date-timezone',
         'api/errors',
