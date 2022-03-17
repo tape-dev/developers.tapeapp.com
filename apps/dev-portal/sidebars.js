@@ -9,6 +9,7 @@ module.exports = {
         'api/api-reference',
         'api/pagination',
         'api/rate-limiting',
+        'api/date-timezone',
         'api/errors',
       ],
     },
