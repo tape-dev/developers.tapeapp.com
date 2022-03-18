@@ -35,7 +35,7 @@ Executing custom JavaScript code in the browser of the user is not permitted due
 
 ```html
 <a target="_blank" href="https://get.tapeapp.com">
-  <button>Open Tape</button>
+  <button>Go to Tape</button>
 </a>
 ```
 

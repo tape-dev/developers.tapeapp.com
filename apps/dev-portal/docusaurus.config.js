@@ -33,7 +33,7 @@ module.exports = {
         // { to: 'blog', label: 'Blog', position: 'left' },
         {
           href: 'https://tapeapp.com',
-          label: 'Open Tape',
+          label: 'Go to Tape',
           position: 'right',
         },
       ],
