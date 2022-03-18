@@ -19,6 +19,7 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'private-beta',
   },
   {
     title: 'Apps',
@@ -30,6 +31,7 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'not-available',
   },
   {
     title: 'Fields',
@@ -41,6 +43,7 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'not-available',
   },
   {
     title: 'Workspaces',
@@ -52,6 +55,7 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'not-available',
   },
   {
     title: 'Organizations',
@@ -63,6 +67,7 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'not-available',
   },
   {
     title: 'Webhooks',
@@ -74,13 +79,26 @@ const features = [
         commodo consequat.
       </>
     ),
+    badge: 'not-available',
   },
 ];
 
-function Feature({ title, description }) {
+function Feature({ title, description, badge }) {
+  const badgeComponent =
+    badge === 'private-beta' ? (
+      <span type="primary" className={styles.badge}>
+        PRIVATE BETA
+      </span>
+    ) : (
+      <span className={styles.badge}>NOT AVAILABLE</span>
+    );
+
   return (
     <div className={clsx('col col--4', styles.feature)}>
-      <h3>{title}</h3>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <h3>{title}</h3>
+        {badgeComponent}
+      </div>
       <p>{description}</p>
     </div>
   );
