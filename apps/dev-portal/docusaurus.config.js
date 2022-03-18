@@ -26,7 +26,7 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'docs/api/api-reference',
+          to: 'docs/api/introduction',
           label: 'Docs',
           position: 'left',
         },
@@ -46,7 +46,7 @@ module.exports = {
           items: [
             {
               label: 'API Reference',
-              to: 'docs/api/api-reference',
+              to: 'docs/api/introduction',
             },
             {
               label: 'Calculation Field',

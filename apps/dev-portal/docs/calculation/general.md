@@ -1,7 +1,7 @@
 ---
 id: intro
 title: Calculation Field
-sidebar_label: General
+sidebar_label: Introduction
 ---
 
 Calculated fields can be used to easily manipulate data added to an app. With this very powerful tool, you can not only do math on numbers in your app, but also concatenate values ​​in specific fields. Use variables to add values ​​to calculated fields. Use the "@" symbol to search for variables in your app. You can reference any field in your app, and any field in the referenced app.

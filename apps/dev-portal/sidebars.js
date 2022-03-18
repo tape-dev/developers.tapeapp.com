@@ -4,13 +4,15 @@ module.exports = {
     {
       type: 'category',
       label: 'Developer API',
-      collapsed: false,
+      collapsed: true,
       items: [
-        'api/api-reference',
+        'api/introduction',
+        'api/authentication',
         'api/pagination',
+        'api/versioning',
+        'api/errors',
         'api/rate-limiting',
         'api/date-timezone',
-        'api/errors',
         {
           type: 'category',
           label: 'Resources',
@@ -27,7 +29,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Calculation Field',
-      collapsed: false,
+      collapsed: true,
       items: [
         'calculation/intro',
         'calculation/libraries',
@@ -36,7 +38,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Components',
-          collapsed: true,
+          collapsed: false,
           items: ['calculation/component/link', 'calculation/component/button'],
         },
       ],
