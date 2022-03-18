@@ -7,6 +7,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 import { ActiveUserPrimaryName } from '@site/src/components/active-user/primary-name.component';
 import TextureImageUrl from '@site/static/img/texture.jpg';
+import LinkSvg from '@site/static/icon/link.svg';
 
 const features = [
   {
@@ -96,9 +97,20 @@ function Feature({ title, description, badge, link, linkLabel }) {
     );
 
   const linkComponent = link ? (
-    <Link to={useBaseUrl(link)}>{linkLabel}</Link>
+    <Link
+      to={useBaseUrl(link)}
+      style={{
+        width: 'fit-content',
+        display: 'flex',
+        flexDirection: 'row',
+        fill: 'var(--tape-color-primary)',
+      }}
+    >
+      <span>{linkLabel}</span>
+      <LinkSvg style={{ marginLeft: '4px', marginTop: '1px' }} width="15px" />
+    </Link>
   ) : (
-    ''
+    <div></div>
   );
 
   return (
@@ -107,7 +119,7 @@ function Feature({ title, description, badge, link, linkLabel }) {
         <h3>{title}</h3>
         {badgeComponent}
       </div>
-      <p>
+      <p style={{ marginBottom: '30px' }}>
         <span>{description}</span>
         <div style={{ marginTop: '4px' }}></div>
         <span>{linkComponent}</span>
