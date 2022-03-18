@@ -63,7 +63,7 @@ table > *:not(thead) tr:hover {
   padding: 0 var(--ifm-pre-padding);
 }
 
-.full-width-table table {
+table {
   display: table;
   width: 100%;
 }
@@ -71,11 +71,15 @@ table > *:not(thead) tr:hover {
 h1,
 h2,
 h3,
-h4,
+h4 {
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
 h5,
 h6 {
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: -0.25px;
 }
 
 .footer__link-item svg {

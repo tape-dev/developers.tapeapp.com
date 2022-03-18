@@ -13,8 +13,6 @@ The Tape calculation field supports HTML syntax inside the result of a calculati
 
 The Tape color schema is available via the following CSS variables:
 
-<div className="full-width-table">
-
 | CSS Variable                   | Description                    | Color                                                 |
 | :----------------------------- | :----------------------------- | ----------------------------------------------------- |
 | `--tape-color-primary`         | Primary color                  | <HexcolorPreview color="#0071BB"></HexcolorPreview>   |
@@ -35,5 +33,3 @@ The Tape color schema is available via the following CSS variables:
 | `--tape-color-danger-dark-20`  | Danger color 20% darker        | <HexcolorPreview color="#B21C4BFF"></HexcolorPreview> |
 | `--tape-color-danger-10`       | Danger color 10% opacity       | <HexcolorPreview color="#DF245E19"></HexcolorPreview> |
 | `--tape-color-danger-20`       | Danger color 20% opacity       | <HexcolorPreview color="#DF245E32"></HexcolorPreview> |
-
-</div>

@@ -6,7 +6,7 @@ sidebar_label: Request Limits
 
 To ensure a consistent developer experience for all API users, the Tape API is rate limited and basic size limits apply to request parameters.
 
-## Rate limits
+## Rate Limits
 
 Rate-limited requests will return a `too_many_requests` error code (HTTP response status 429). **The rate limit for incoming requests is an average of 3 requests per second**. Some bursts beyond the average rate are allowed.
 
@@ -15,6 +15,22 @@ Integrations should accommodate variable rate limits by handling HTTP 429 respon
 :::caution Rate limits may change
 In the future, Tape plans to adjust rate limits to balance for demand and reliability. Tape may also introduce distinct rate limits for organizations in different pricing plans.
 :::
+
+### Rate Limit Credits
+
+Tape uses a credit-based system to enforce rate limits.
+
+### Rate Limit Headers
+
+Rate limit headers are sent **with every response**. This allows the integration to prevent rate limiting errors and back off before the actual rate limit is hit.
+
+| HTTP Header          | Description                                                                 | Example               |
+| :------------------- | :-------------------------------------------------------------------------- | :-------------------- |
+| `X-RateLimit-Limit ` | Total credits that can be used per time interval                            | `1000`                |
+| `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
+| `X-Retry-Cost`       | The amount of credits consumed by the current request                       | `20`                  |
+| `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
+| `Retry-After`        | The amount of seconds remaining in this interval until credits are resetted | `60`                  |
 
 ## Tips for reducing API usage
 
