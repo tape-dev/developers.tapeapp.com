@@ -20,6 +20,8 @@ const features = [
       </>
     ),
     badge: 'private-beta',
+    linkLabel: 'Jump to the reference',
+    link: 'docs/api/resource/record',
   },
   {
     title: 'Apps',
@@ -83,7 +85,7 @@ const features = [
   },
 ];
 
-function Feature({ title, description, badge }) {
+function Feature({ title, description, badge, link, linkLabel }) {
   const badgeComponent =
     badge === 'private-beta' ? (
       <span type="primary" className={styles.badge}>
@@ -93,13 +95,23 @@ function Feature({ title, description, badge }) {
       <span className={styles.badge}>NOT AVAILABLE</span>
     );
 
+  const linkComponent = link ? (
+    <Link to={useBaseUrl(link)}>{linkLabel}</Link>
+  ) : (
+    ''
+  );
+
   return (
     <div className={clsx('col col--4', styles.feature)}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <h3>{title}</h3>
         {badgeComponent}
       </div>
-      <p>{description}</p>
+      <p>
+        <span>{description}</span>
+        <div style={{ marginTop: '4px' }}></div>
+        <span>{linkComponent}</span>
+      </p>
     </div>
   );
 }
