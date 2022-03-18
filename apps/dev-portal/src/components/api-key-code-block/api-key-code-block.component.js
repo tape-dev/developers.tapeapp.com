@@ -32,7 +32,7 @@ export default function ApiKeyCodeblock({ children, language, title }) {
   const baseUrl = getDevApiBaseUrl(config);
 
   function replacePlaceholders(str) {
-    return str
+    return (str || '')
       .replace(new RegExp(USER_API_KEY_PLACEHOLDER, 'g'), apiKey)
       .replace(new RegExp(BASE_URL_PLACEHOLDER, 'g'), baseUrl)
       .replace(new RegExp(RECORD_ID_PLACEHOLDER, 'g'), recordId)

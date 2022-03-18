@@ -50,7 +50,7 @@ module.exports = {
             },
             {
               label: 'Calculation Field',
-              to: 'docs/calculation/intro',
+              to: 'docs/calculation/introduction',
             },
             {
               label: 'Contribute',
