@@ -84,7 +84,7 @@ const features = [
 
 function Feature({ title, description, badge, link, linkLabel }) {
   const badgeComponent = !badge ? (
-    ''
+    <span></span>
   ) : badge === 'private-beta' ? (
     <span type="primary" className={styles.badge}>
       PRIVATE BETA
@@ -116,11 +116,11 @@ function Feature({ title, description, badge, link, linkLabel }) {
         <h3>{title}</h3>
         {badgeComponent}
       </div>
-      <p style={{ marginBottom: '30px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <span>{description}</span>
         <div style={{ marginTop: '4px' }}></div>
         <span>{linkComponent}</span>
-      </p>
+      </div>
     </div>
   );
 }

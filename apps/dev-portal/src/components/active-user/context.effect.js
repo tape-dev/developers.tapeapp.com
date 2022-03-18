@@ -1,5 +1,6 @@
+import { setDemoRecordState } from '../demo-record/constants';
+import { loadActiveUserDemoRecord } from '../demo-record/demo-record-request';
 import {
-  getActiveUserContext,
   getActiveUserState,
   setActiveUserContext,
   setActiveUserContextIsLoading,
@@ -7,7 +8,6 @@ import {
 import { loadActiveUserSessionsAndContext } from './context-request';
 
 let isLoading = false;
-let visibilityChangeRegistered = true; // Deactivate for now
 
 export const activeUserContextEffect = (config, setState) => {
   const runtime = config.customFields.runtime;
@@ -23,33 +23,7 @@ export const activeUserContextEffect = (config, setState) => {
     return;
   }
 
-  if (!visibilityChangeRegistered) {
-    visibilityChangeRegistered = true;
-    addEventListener('visibilitychange', (event) => {
-      const ctx = getActiveUserContext(config);
-      const hasUserId = !!ctx?.userId;
-      const isVisible = event?.target?.visibilityState === 'visible';
-      // console.log({ hasUserId, isVisible })
-
-      // Do not re-fetch if user is logged in
-      if (hasUserId) {
-        return;
-      }
-
-      // Do not re-fetch on document hiding
-      if (!isVisible) {
-        return;
-      }
-
-      performLoadActiveUserSessionsAndContext(runtime, config, setState);
-    });
-  }
-
   isLoading = true;
-  performLoadActiveUserSessionsAndContext(runtime, config, setState);
-};
-
-function performLoadActiveUserSessionsAndContext(runtime, config, setState) {
   // ... perform request otherwise
   const load = loadActiveUserSessionsAndContext(runtime)
     .then((activeUserContext) => {
@@ -57,12 +31,18 @@ function performLoadActiveUserSessionsAndContext(runtime, config, setState) {
       setActiveUserContextIsLoading(config, false);
       setActiveUserContext(config, activeUserContext);
       setState(Date.now()); // force component rerender
+      return activeUserContext;
+    })
+    .then(({ userId }) => {
+      return loadActiveUserDemoRecord(userId, runtime);
+    })
+    .then((demoRecord) => {
+      setDemoRecordState(config, demoRecord);
+      setState(Date.now()); // force component rerender
     })
     .catch(() => {
       isLoading = false;
       setActiveUserContextIsLoading(config, false);
       setState(Date.now()); // force component rerender
     });
-
-  return load.then(() => setState);
-}
+};
