@@ -194,3 +194,7 @@ button[type='outline-darkest']:active {
 .tabs__item {
   padding: 9px 13px;
 }
+
+.markdown > ul > li::marker {
+  content: url(@site/static/icon/bullet.svg);
+}
