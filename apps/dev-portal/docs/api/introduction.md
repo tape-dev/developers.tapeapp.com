@@ -24,7 +24,7 @@ The Tape API follows RESTful conventions when possible, with most operations per
 ### JSON conventions
 
 - Property names are in snake_case (not camelCase or kebab-case).
-- Temporal values (dates and datetimes) are returned strings in a ISO 8601 similar format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). A detailed explanation can be found [here](date-timezone).
+- Temporal values (dates and datetimes) are returned strings in a ISO 8601 similar format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). [More details on date and datetimes](date-timezone).
 
 ## Code samples
 
