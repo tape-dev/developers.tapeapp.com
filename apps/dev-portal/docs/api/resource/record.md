@@ -4,37 +4,31 @@ title: Record
 sidebar_label: Record
 ---
 
+import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
+
 ## Get Record
 
-:::info URL
-**GET** https://api.tapeapp.com/v1/record/{recordId}
-:::
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{recordId}" />
 
-_Returns the record with the specified `recordId`._
+Returns the record with the specified `recordId`.
 
 ## Create Record
 
-:::info URL
-**POST** https://api.tapeapp.com/v1/record/app/{appId}
-:::
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{appId}" />
 
-_Creates a new record for the App with the specified `appId` and returns the newly created record.`._
+Creates a new record for the App with the specified `appId` and returns the newly created record.`.
 
 ## Update Record
 
-:::info URL
-**PUT** https://api.tapeapp.com/v1/record/{recordId}
-:::
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{recordId}" />
 
-_Updates the record with the specified `recordId` and returns the updated record.`._
+Updates the record with the specified `recordId` and returns the updated record.`.
 
 ## Get Records for App
 
-:::info URL
-**GET** https://api.tapeapp.com/v1/record/app/{appId}
-:::
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/app/{appId}" />
 
-_Returns records for the App with the specified `appId`._
+Returns records for the App with the specified `appId`.
 
 ### Query Parameters
 
@@ -46,11 +40,9 @@ _Returns records for the App with the specified `appId`._
 
 ## Filter Records for App
 
-:::info URL
-**POST** https://api.tapeapp.com/v1/record/app/{appId}/filter
-:::
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{appId}/filter" />
 
-_Returns records for the App with the specified `appId` based on the filters and sorts._
+Returns records for the App with the specified `appId` based on the filters and sorts.
 
 ### Query Parameters
 

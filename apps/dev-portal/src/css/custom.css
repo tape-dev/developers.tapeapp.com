@@ -39,7 +39,7 @@
   --ifm-color-primary: var(--tape-color-primary);
   --ifm-background-color: #ffffff;
   --ifm-footer-background-color: #faf7f3;
-  --ifm-table-stripe-background: #ffffff;
+  --ifm-table-stripe-background: transparent;
   --ifm-footer-color: var(--tape-color-darkest);
   --ifm-footer-link-color: var(--tape-color-darkest);
 }
