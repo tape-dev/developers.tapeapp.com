@@ -9,7 +9,7 @@ import { activeUserContextEffect } from '../active-user/context.effect';
 import ApiKeyCode from '@site/src/components/api-key-code.component';
 import Admonition from '@theme/Admonition';
 
-const STATIC_HEIGHT = '175px';
+const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
   const [_, setState] = useState(Date.now());
@@ -23,12 +23,12 @@ export default function UserLoginInfo() {
   }, []);
 
   if (isLoading) {
-    return <div style={{ height: STATIC_HEIGHT }}></div>;
+    return <div style={{ minHeight: STATIC_HEIGHT }}></div>;
   }
 
   if (primaryName) {
     return (
-      <div style={{ height: STATIC_HEIGHT }}>
+      <div style={{ minHeight: STATIC_HEIGHT }}>
         <Admonition type="tip" title="Logged in" icon="✅">
           <span>
             Hey {primaryName} 👋 Looks like you are already logged into Tape, so
@@ -43,12 +43,12 @@ export default function UserLoginInfo() {
   }
 
   return (
-    <div style={{ height: STATIC_HEIGHT }}>
+    <div style={{ minHeight: STATIC_HEIGHT }}>
       <Admonition type="info" title="Log in" icon="👤">
         <span>
           Hey there 👋 Looks like you are currently not logged into Tape. All
           examples in this guide will be pre-filled with stub data. To change
-          this, log into your Tape account.
+          this, log into your Tape account and refresh this page.
         </span>
         <p>
           <a target="_blank" href="https://tapeapp.com/signin">
