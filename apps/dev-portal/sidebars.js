@@ -31,7 +31,7 @@ module.exports = {
       label: 'Calculation Field',
       collapsed: true,
       items: [
-        'calculation/intro',
+        'calculation/introduction',
         'calculation/libraries',
         'calculation/markdown',
         'calculation/html',

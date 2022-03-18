@@ -14,38 +14,33 @@ const features = [
     title: 'Records',
     description: (
       <>
-        Create, update and delete Records. Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Build almost anything by creating, retrieving or udpating Records in
+        Tape.
       </>
     ),
     badge: 'private-beta',
-    linkLabel: 'Jump to the reference',
+    linkLabel: 'Learn more',
     link: 'docs/api/resource/record',
   },
   {
     title: 'Apps',
     description: (
       <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Get up and running by accessing Apps via the Developer API. Create apps
+        from scratch, duplicate or move an existing app from one workspace to
+        another.
       </>
     ),
     badge: 'not-available',
-    linkLabel: 'Jump to the reference',
+    linkLabel: 'Learn more',
     link: 'docs/api/resource/app',
   },
   {
     title: 'Fields',
     description: (
       <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Leverage Tape's customizability by creating, retrieving or updating
+        fields.
       </>
     ),
     badge: 'not-available',
@@ -54,51 +49,49 @@ const features = [
     title: 'Workspaces',
     description: (
       <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Facilitate user onboarding and permission management via the workspace
+        endpoints. To move lots of data quickly, you can duplicate an existing
+        workspace from the same or another organization.
       </>
     ),
     badge: 'not-available',
-    linkLabel: 'Jump to the reference',
+    linkLabel: 'Learn more',
     link: 'docs/api/resource/workspace',
-  },
-  {
-    title: 'Organizations',
-    description: (
-      <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
-      </>
-    ),
-    badge: 'not-available',
   },
   {
     title: 'Webhooks',
     description: (
       <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Tap into what's happening via webhooks. Get notified for Record changes,
+        App changes, workspace changes and much more. Programmaticaly register
+        and de-register webhooks for new resources.
       </>
     ),
     badge: 'not-available',
   },
+  {
+    title: 'Calculations',
+    description: (
+      <>
+        Leverage the power of custom JavaScript to solve your business needs.
+        Calculation fields support Markdown, HTML and CSS.
+      </>
+    ),
+    linkLabel: 'Learn more',
+    link: 'docs/calculation/introduction',
+  },
 ];
 
 function Feature({ title, description, badge, link, linkLabel }) {
-  const badgeComponent =
-    badge === 'private-beta' ? (
-      <span type="primary" className={styles.badge}>
-        PRIVATE BETA
-      </span>
-    ) : (
-      <span className={styles.badge}>NOT AVAILABLE</span>
-    );
+  const badgeComponent = !badge ? (
+    ''
+  ) : badge === 'private-beta' ? (
+    <span type="primary" className={styles.badge}>
+      PRIVATE BETA
+    </span>
+  ) : (
+    <span className={styles.badge}>NOT AVAILABLE</span>
+  );
 
   const linkComponent = link ? (
     <Link
