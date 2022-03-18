@@ -9,7 +9,19 @@ module.exports = {
         'api/api-reference',
         'api/pagination',
         'api/rate-limiting',
+        'api/date-timezone',
         'api/errors',
+        {
+          type: 'category',
+          label: 'Resources',
+          collapsed: false,
+          items: [
+            'api/resource/record',
+            'api/resource/app',
+            'api/resource/workspace',
+            'api/resource/files',
+          ],
+        },
       ],
     },
     {
