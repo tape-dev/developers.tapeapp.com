@@ -35,6 +35,8 @@ const features = [
       </>
     ),
     badge: 'not-available',
+    linkLabel: 'Jump to the reference',
+    link: 'docs/api/resource/app',
   },
   {
     title: 'Fields',
@@ -59,6 +61,8 @@ const features = [
       </>
     ),
     badge: 'not-available',
+    linkLabel: 'Jump to the reference',
+    link: 'docs/api/resource/workspace',
   },
   {
     title: 'Organizations',

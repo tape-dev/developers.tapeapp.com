@@ -4,8 +4,8 @@ title: Workspace
 sidebar_label: Workspace
 ---
 
-:::note
+:::caution Not available
 
-**Workspace** endpoints are not available yet. Contact us if those are important for your integrations.
+**Workspace** endpoints are not available. Contact us if those are important for your integrations.
 
 :::

@@ -21,7 +21,7 @@ The base URL to send all API requests is `https://api.tapeapp.com`. HTTPS is req
 
 The Tape API follows RESTful conventions when possible, with most operations performed via `GET`, `POST`, `PUT`, and `DELETE` requests on all resources. Request and response bodies are encoded as JSON.
 
-### JSON conventions
+**JSON conventions**
 
 - Property names are in snake_case (not camelCase or kebab-case).
 - Temporal values (dates and datetimes) are returned strings in a ISO 8601 similar format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). [More details on date and datetimes](date-timezone).

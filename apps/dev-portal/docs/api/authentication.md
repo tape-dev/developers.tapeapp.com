@@ -19,20 +19,21 @@ Here is your user API Key:
 You can use it to authenticate via the HTTP `Authorization` header:
 
 <Tabs>
-<TabItem value="http" label="HTTP">
-<ApiKeyCodeblock language="http">
-{`GET /v1/record/1 HTTP/1.1
-Host: api.tapeapp.com
-Authorization: Bearer #USER_API_KEY
-`}
-</ApiKeyCodeblock>
-</TabItem>
 
 <TabItem value="curl" label="cURL">
 <ApiKeyCodeblock language="shell">
 {`curl #BASE_URL/v1/record/1 \\
 -H "Authorization: Bearer #USER_API_KEY"
  
+`}
+</ApiKeyCodeblock>
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+<ApiKeyCodeblock language="http">
+{`GET /v1/record/1 HTTP/1.1
+Host: api.tapeapp.com
+Authorization: Bearer #USER_API_KEY
 `}
 </ApiKeyCodeblock>
 </TabItem>

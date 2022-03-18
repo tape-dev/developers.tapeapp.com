@@ -4,8 +4,8 @@ title: App
 sidebar_label: App
 ---
 
-:::note
+:::caution Not available
 
-**App** endpoints are not available yet. Contact us if those are important for your integrations.
+**App** endpoints are not available. Contact us if those are important for your integrations.
 
 :::
