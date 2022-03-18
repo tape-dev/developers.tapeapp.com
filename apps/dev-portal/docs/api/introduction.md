@@ -6,6 +6,7 @@ sidebar_label: Introduction
 
 import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.component';
 import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
+import Admonition from '@theme/Admonition';
 
 The reference is your key to a comprehensive understanding of the Tape Developer API.
 
