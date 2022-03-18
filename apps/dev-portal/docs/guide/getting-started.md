@@ -12,6 +12,6 @@ import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-cod
 
 <ApiKeyCodeblock language="shell">
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY: -w "\\n\\n"
+  -u #USER_API_KEY:
 `}
 </ApiKeyCodeblock>
