@@ -33,9 +33,9 @@ export default function UserLoginInfo() {
           <span>
             Hey {primaryName} 👋 Looks like you are already logged into Tape, so
             we were able to prefill your user API key and some IDs in the
-            examples below. You can use the "copy" button to copy the example
-            code to your clipboard. Most cURL requests work out of the box and
-            can be directly pasted into a terminal.
+            examples below. You can use the "copy" button to copy the code to
+            your clipboard. Most cURL requests work out of the box and can be
+            directly pasted into a terminal.
           </span>
         </Admonition>
       </div>

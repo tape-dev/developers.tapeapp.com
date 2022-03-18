@@ -16,7 +16,7 @@ The easiest way to authenticate with the Developer API is to use your personal u
 
 ## Retrieve your first Record
 
-<ApiKeyCodeblock language="shell">
+<ApiKeyCodeblock language="shell" title='Get your record "#RECORD_TITLE"'>
 {`curl #BASE_URL/v1/record/#RECORD_ID  \\
   -u #USER_API_KEY:
 `}
