@@ -190,3 +190,7 @@ button[type='outline-darkest']:hover {
 button[type='outline-darkest']:active {
   background-color: var(--tape-color-darkest-20);
 }
+
+.tabs__item {
+  padding: 9px 13px;
+}

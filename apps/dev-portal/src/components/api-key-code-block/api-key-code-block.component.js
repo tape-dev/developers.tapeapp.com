@@ -28,6 +28,7 @@ export default function ApiKeyCodeblock({ children, language }) {
       : [];
 
   const baseUrl = getDevApiBaseUrl(config);
+  console.log(childrenArr);
   const result = childrenArr.map((child) => {
     if (typeof child === 'string') {
       return child
