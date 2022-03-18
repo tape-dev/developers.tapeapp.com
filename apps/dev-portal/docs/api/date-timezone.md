@@ -6,9 +6,9 @@ sidebar_label: Date & Timezone
 
 # Date & Timezone
 
-## Date Format
+## Datetime Format
 
-The Tape API returns all dates in a formatted string, similar to ISO 8601 and in UTC timezone.
+The Tape API returns all dates as a formatted string, similar to ISO 8601 and in UTC timezone.
 
 ```
 2022-02-01 15:00
@@ -20,12 +20,14 @@ which would be equal to the following in standardized ISO 8601:
 2022-02-01T15:00Z
 ```
 
-## Calendar days
+The format chosen by Tape is optimized for readability. While not included in the official ISO 8601 standard, most programming languages & libraries support still support the chosen format.
 
-Calendar days are represented as follows:
+## Date Format
+
+Dates are represented as follows:
 
 ```
-TODO:
+2022-02-01
 ```
 
 ## Timezone support

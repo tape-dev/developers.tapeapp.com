@@ -11,7 +11,7 @@ module.exports = {
         'api/pagination',
         'api/versioning',
         'api/errors',
-        'api/rate-limiting',
+        'api/request-limits',
         'api/date-timezone',
         {
           type: 'category',
