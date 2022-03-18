@@ -44,12 +44,23 @@ module.exports = {
       ],
     },
     'contribute',
+    {
+      type: 'link',
+      label: 'Roadmap',
+      href: 'https://get.tapeapp.com/roadmap/',
+    },
   ],
   guidesSidebar: [
     {
       type: 'doc',
       label: 'Getting Started',
       id: 'guide/getting-started',
+    },
+    'contribute',
+    {
+      type: 'link',
+      label: 'Roadmap',
+      href: 'https://get.tapeapp.com/roadmap/',
     },
   ],
 };
