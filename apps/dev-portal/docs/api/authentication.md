@@ -16,7 +16,7 @@ Here is your user API Key:
 #USER_API_KEY
 </ApiKeyCodeblock>
 
-You can use it to authenticate via the HTTP `Authorization` header:
+You can use it to authenticate via the HTTP `Authorization` header like this:
 
 <Tabs>
 

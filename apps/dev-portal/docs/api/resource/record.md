@@ -6,6 +6,8 @@ sidebar_label: Record
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
 
+Records are the place where work gets done inside a Tape organization.
+
 ## Create Record
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />

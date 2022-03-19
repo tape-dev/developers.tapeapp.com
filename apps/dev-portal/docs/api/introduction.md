@@ -8,7 +8,7 @@ import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.compo
 import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
 import Admonition from '@theme/Admonition';
 
-The reference is your key to a comprehensive understanding of the Tape Developer API.
+This documentation is your key to a comprehensive understanding of the Tape Developer API.
 
 Developers use the API to access Tape's records, apps, fields and so on. Developers can connect services to Tape and build interactive experiences for users within Tape. Using the navigation on the left, you'll find details for each endpoint and type of resource used in the API.
 
@@ -25,7 +25,7 @@ The Tape API follows RESTful conventions when possible, with most operations per
 **JSON conventions**
 
 - Property names are in snake_case (not camelCase or kebab-case).
-- Temporal values (dates and datetimes) are returned strings in a ISO 8601 similar format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). [More details on date and datetimes](date-timezone).
+- Temporal values (dates and datetimes) are returned as strings in a ISO 8601 similar format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). [More details on date and datetimes](date-timezone).
 
 ## Code samples
 

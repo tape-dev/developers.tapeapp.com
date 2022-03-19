@@ -22,8 +22,9 @@ The easiest way to authenticate with the Developer API is to use your personal u
 
 The world runs on JSON over HTTP (or HTTPS hopefully). The Tape API is no exception, so if you know how to send and receive JSON data via HTTPS, you are all set.
 The API is RESTful for the most part, meaning that you can use the HTTP verbs `GET`, `POST`, `PUT`, and `DELETE` to interact with resources like records, apps and workspaces.
+The base URL to send all API requests is `https://api.tapeapp.com`.
 
-The base URL to send all API requests is `https://api.tapeapp.com`. Now, with the boring stuff out of the way, let's have some fun, shall we? 🥂
+Now, with the boring stuff out of the way, let's have some fun, shall we? 🥂
 
 ## Retrieve your first Record
 
@@ -89,3 +90,5 @@ print(json.dumps(req.json(), indent=2))
 </TabItem>
 
 </Tabs>
+
+That's it, you just got your first response from the Tape API :tada: <br /> Explore all you can do with records [here](/docs/api/resource/record).
