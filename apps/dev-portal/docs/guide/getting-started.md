@@ -39,8 +39,8 @@ Records are the place where work gets done inside every Tape organization. The e
 </ApiKeyCodeblock>
 </TabItem>
 
-<TabItem value="js" label="JavaScript">
-<ApiKeyCodeblock language="shell" title='Get your record "#RECORD_TITLE"'>
+<TabItem value="js" label="Node.js">
+<ApiKeyCodeblock language="javascript" title='Get your record "#RECORD_TITLE"'>
 {`let req = http.get(
   "#BASE_URL/v1/record/#RECORD_ID",
   {
@@ -59,15 +59,25 @@ Records are the place where work gets done inside every Tape organization. The e
 </TabItem>
 
 <TabItem value="php" label="PHP">
-<ApiKeyCodeblock language="shell" title='Get your record "#RECORD_TITLE"'>
-{`curl #BASE_URL/v1/record/#RECORD_ID  \\
-  -u #USER_API_KEY:
-`}
+<ApiKeyCodeblock language="php" title='Get your record "#RECORD_TITLE"'>
+{`<?php
+$opts = array(
+  'http'=>array(
+    'method'=>"GET",
+    'header'=>"Authorization: Bearer #USER_API_KEY"
+  )
+);
+\n
+$context = stream_context_create($opts);
+$data = file_get_contents('#BASE_URL/v1/record/20', false, $context);
+$responseContent = json_decode($data, true);
+echo json_encode($responseContent, JSON_PRETTY_PRINT);
+?>`}
 </ApiKeyCodeblock>
 </TabItem>
 
 <TabItem value="python" label="Python">
-<ApiKeyCodeblock language="shell" title='Get your record "#RECORD_TITLE"'>
+<ApiKeyCodeblock language="python" title='Get your record "#RECORD_TITLE"'>
 {`curl #BASE_URL/v1/record/#RECORD_ID  \\
   -u #USER_API_KEY:
 `}
