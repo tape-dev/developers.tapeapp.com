@@ -14,8 +14,9 @@ const features = [
     title: 'Records',
     description: (
       <>
-        Build almost anything by creating, retrieving or udpating Records in
-        Tape.
+        Build almost anything by creating, retrieving or updating records in
+        Tape. The comprehensive sort, filter and pagination options give you
+        full control over the data you receive.
       </>
     ),
     badge: 'private-beta',
@@ -26,9 +27,9 @@ const features = [
     title: 'Apps',
     description: (
       <>
-        Get up and running by accessing Apps via the Developer API. Create apps
-        from scratch, duplicate or move an existing app from one workspace to
-        another.
+        Dynamically adapt your team's data and processes to changing
+        requirements. Create an app from scratch, duplicate an existing one or
+        move an app from one workspace to another.
       </>
     ),
     badge: 'not-available',
@@ -39,8 +40,9 @@ const features = [
     title: 'Fields',
     description: (
       <>
-        Leverage Tape's customizability by creating, retrieving or updating
-        fields.
+        Shape and connect your data to your needs by leveraging one of the many
+        field types of Tape. The relation field allows you to stay organized by
+        connecting records across apps and workspaces.
       </>
     ),
     badge: 'not-available',
@@ -49,8 +51,8 @@ const features = [
     title: 'Workspaces',
     description: (
       <>
-        Facilitate user onboarding and permission management via the workspace
-        endpoints. To move lots of data quickly, you can duplicate an existing
+        Facilitate onboarding and permission management via the workspace
+        endpoints. Move lots of data with ease by duplicating an existing
         workspace from the same or another organization.
       </>
     ),
@@ -62,9 +64,10 @@ const features = [
     title: 'Webhooks',
     description: (
       <>
-        Tap into what's happening via webhooks. Get notified for Record changes,
-        App changes, workspace changes and much more. Programmaticaly register
-        and de-register webhooks for new resources.
+        Create powerful integrations via webhooks. Get detailed insights into
+        everything that happens inside Tape including record, app and workspace
+        changes. Programmatically register and de-register webhooks for all
+        resources.
       </>
     ),
     badge: 'not-available',
@@ -73,8 +76,9 @@ const features = [
     title: 'Calculations',
     description: (
       <>
-        Leverage the power of custom JavaScript to solve your business needs.
-        Calculation fields support Markdown, HTML and CSS.
+        Leverage the power of calculations to solve your business needs.
+        Calculation fields can range from simple additions to custom JavaScript
+        code. Furthermore, the output rendering supports Markdown, HTML and CSS.
       </>
     ),
     linkLabel: 'Learn more',
@@ -162,7 +166,7 @@ function Home() {
                   className={clsx('button', styles.getStarted)}
                   to={useBaseUrl('docs/guide/getting-started')}
                 >
-                  Get Started
+                  Get started
                 </Link>
               </div>
             </div>

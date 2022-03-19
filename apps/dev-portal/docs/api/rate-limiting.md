@@ -8,7 +8,7 @@ To ensure a consistent developer experience for all API users, the Tape API is r
 
 ## Rate Limits
 
-Rate-limited requests will return a `too_many_requests` error code (HTTP response status 429). **The rate limit for incoming requests is an average of 3 requests per second**. Some bursts beyond the average rate are allowed.
+Rate-limited requests will return a `too_many_requests` error code (HTTP response status 429). **The base rate limit for incoming requests is an average of 3 requests per second**. Some bursts beyond the average rate are allowed.
 
 Integrations should accommodate variable rate limits by handling HTTP 429 responses and backing off (or slowing down) the speed of future requests. A common way to implement this is using one or several queues for pending requests, which can be consumed by sending requests as long as Tape does not respond with an HTTP 429.
 
