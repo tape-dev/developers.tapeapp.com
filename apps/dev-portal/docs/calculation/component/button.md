@@ -20,14 +20,11 @@ The calculation field has support for HTML buttons. The "type" attribute can be 
 ```
 
 Here's how the button types from above will be rendered:
-<button type="primary"> Default button </button>
-&nbsp;&nbsp;
-<button type="outline"> Outline button </button>
-&nbsp;&nbsp;
-<button type="danger"> Danger button </button>
-&nbsp;&nbsp;
-<button type="outline-danger"> Outline danger button </button>
 
+<button style={{ margin: '4px 4px' }} type="primary"> Default button </button>
+<button style={{ margin: '4px 4px' }} type="outline"> Outline button </button>
+<button style={{ margin: '4px 4px' }} type="danger"> Danger button </button>
+<button style={{ margin: '4px 4px' }} type="outline-danger"> Outline danger button </button>
 <br />
 <br />
 
