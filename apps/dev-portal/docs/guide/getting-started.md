@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 <UserLoginInfo></UserLoginInfo>
 
-If you're new to the Tape API and want to build cool stuff, you've come to the right place. In this guide you'll learn how to use the Tape API by interacting with a record.
+If you're new to the Tape API, you've come to the right place. In this guide you'll learn how to use the Tape API by interacting with a record.
 
 ## Authentication
 
@@ -23,8 +23,6 @@ The easiest way to authenticate with the Developer API is to use your personal u
 The world runs on JSON over HTTP (or HTTPS hopefully). The Tape API is no exception, so if you know how to send and receive JSON data via HTTPS, you are all set.
 The API is RESTful for the most part, meaning that you can use the HTTP verbs `GET`, `POST`, `PUT`, and `DELETE` to interact with resources like records, apps and workspaces.
 The base URL to send all API requests is `https://api.tapeapp.com`.
-
-Now, with the boring stuff out of the way, let's have some fun, shall we? 🥂
 
 ## Retrieve your first Record
 
