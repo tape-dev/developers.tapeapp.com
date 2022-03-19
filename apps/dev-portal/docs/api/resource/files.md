@@ -40,7 +40,7 @@ Content-Type: multipart/form-data`}
 </TabItem>
 </Tabs>
 
-You receive a file reference, that can then be used when creating or updating a resource. See below exaple to attach a file to a single attachment field:
+You receive a file reference, that can then be used when creating or updating a resource. See the example below to attach a file to a single attachment field:
 
 ```json
 {
