@@ -27,7 +27,7 @@ The base URL to send all API requests is `https://api.tapeapp.com`. Now, with th
 
 ## Retrieve your first Record
 
-Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/records/{record_id}`. Let's get started by retrieving a record from your Tape organization:
+Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/records/{record_id}`. Let's go ahead and retrieve a record:
 
 <Tabs>
 
@@ -78,8 +78,12 @@ echo json_encode($responseContent, JSON_PRETTY_PRINT);
 
 <TabItem value="python" label="Python">
 <ApiKeyCodeblock language="python" title='Get your record "#RECORD_TITLE"'>
-{`curl #BASE_URL/v1/record/#RECORD_ID  \\
-  -u #USER_API_KEY:
+{`
+import requests
+import json
+\n
+req = requests.get('#BASE_URL/v1/record/#RECORD_ID', auth=('#USER_API_KEY', ''))
+print(json.dumps(req.json(), indent=2))
 `}
 </ApiKeyCodeblock>
 </TabItem>
