@@ -3,7 +3,7 @@ export const ACTIVE_USER_STATE_KEY = 'activeUserState';
 // Defaults
 export const DEFAULT_USERNAME = 'Developer';
 
-export const DEFAULT_API_KEY = 'your_personal_user_api_key';
+export const DEFAULT_API_KEY = 'user_key_replace_with_your_api_key';
 
 export function getActiveUserState(config) {
   return config[ACTIVE_USER_STATE_KEY] || {};
