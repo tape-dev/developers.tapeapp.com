@@ -20,7 +20,7 @@ which would be equal to the following in standardized ISO 8601:
 2022-02-01T15:00Z
 ```
 
-The format chosen by Tape is optimized for readability. While not included in the official ISO 8601 standard, most programming languages & libraries support still support the chosen format.
+The format chosen by Tape is optimized for readability. While not included in the official ISO 8601 standard, most programming languages & libraries support the chosen format.
 
 ## Date Format
 
