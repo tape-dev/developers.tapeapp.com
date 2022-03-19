@@ -8,9 +8,7 @@ import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.compo
 import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
 import Admonition from '@theme/Admonition';
 
-This documentation is your key to a comprehensive understanding of the Tape Developer API.
-
-Developers use the API to access Tape's records, apps, fields and so on. Developers can connect services to Tape and build interactive experiences for users within Tape. Using the navigation on the left, you'll find details for each endpoint and type of resource used in the API.
+Developers use the API to access Tape's core resources like records, apps or workspaces. Developers can connect services to Tape and build interactive experiences for users within Tape. Using the navigation on the left, you'll find details for each endpoint and type of resource used in the API.
 
 :::info
 If this is your first look at the Tape API, we recommend beginning with the [Getting started guide](/docs/guide/getting-started).
