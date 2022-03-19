@@ -4,7 +4,17 @@ title: Errors
 sidebar_label: Errors
 ---
 
-Responses from the API use HTTP response codes are used to indicate general classes of success and error. Error responses contain more detail about the error in the response body, in the `error_code` and `error_message` properties.
+Responses from the API use HTTP response codes to indicate general classes of success and error. Error responses contain more detail about the error in the response body, in the `error_code` and `error_message` properties.
+Here is an example error response body for a requesting a non-existent resource:
+
+```json
+{
+  "status_code": 404,
+  "endpoint": "/v1/record/123",
+  "error_code": "record_not_exists",
+  "error_message": "Record does not exist(123)!"
+}
+```
 
 | Status | error_code              | Description                                                                                                                                                  |
 | ------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |

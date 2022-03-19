@@ -32,6 +32,33 @@ Rate limit headers are sent **with every response**. This allows the integration
 | `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
 | `Retry-After`        | The amount of seconds remaining in this interval until credits are resetted | `60`                  |
 
+Here is an example for the response headers of a valid request:
+
+```http
+HTTP/1.1 200 OK
+Retry-After: 57
+X-RateLimit-Limit: 50
+X-Retry-Remaining: 46
+X-Retry-Cost: 2
+X-Retry-Reset: 2022-03-19 14:44:36
+```
+
+In case the rate limit is exceeded, the error response body will also include alle rate limit information:
+
+```json
+{
+  "status_code": 429,
+  "endpoint": "/v1/record/123",
+  "error_code": "too_many_requests",
+  "error_message": "Too many requests (0/50 points left), retry after 58 seconds (2022-03-19 14:41:11). Your current request costs 10 points. Check https://developers.tapeapp.com/ for more info",
+  "retry_after": 58,
+  "rate_limit": 50,
+  "rate_limit_remaining": 0,
+  "rate_limit_cost": 10,
+  "rate_limit_reset": "2022-03-19 14:41:11"
+}
+```
+
 ### Tips for reducing API usage
 
 - Avoid making API requests inside loops. Instead of loading individual objects inside a loop, load a collection of objects in one API operation.
