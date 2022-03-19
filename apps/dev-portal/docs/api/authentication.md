@@ -17,7 +17,7 @@ Here's an example of how to correctly set the `Authorization` header:
 <TabItem value="curl" label="cURL">
 <ApiKeyCodeblock language="shell">
 {`curl #BASE_URL/v1/record/1 \\
--H "Authorization: Bearer #USER_API_KEY"
+  -H "Authorization: Bearer #USER_API_KEY"
   
 `}
 </ApiKeyCodeblock>

@@ -96,7 +96,7 @@ module.exports = {
       disableSwitch: true,
     },
     prism: {
-      additionalLanguages: ['php'],
+      additionalLanguages: ['php', 'http'],
       // theme: require('prism-react-renderer/themes/vsDark'),
       // theme: require('prism-react-renderer/themes/vsLight'),
       theme: require('prism-react-renderer/themes/github'),
