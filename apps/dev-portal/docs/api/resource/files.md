@@ -19,8 +19,12 @@ There are many reasons why a file upload via HTTP can fail (file too large, bad 
 
 :::
 
-Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `mime_type`, `size` and `download_link`.
+Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `size` and `download_url`.
 Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
+
+## Thumbnails
+
+Tape tries to generate thumbnail images for uploaded files in multiple sizes.
 
 ## Upload a file
 
@@ -58,7 +62,7 @@ You receive a file reference, that can then be used when creating or updating a 
   "filename": "filename.txt",
   "size": 20,
   "created_on": "2022-01-01 12:00:00",
-  "download_url": "d8f205f4daaced0f3f714b5ebb76ad"
+  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/d8f205f4daaced0f3f714b5ebb76ad"
 }
 ```
 
