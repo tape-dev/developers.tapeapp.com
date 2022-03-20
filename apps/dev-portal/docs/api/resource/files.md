@@ -9,10 +9,20 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Files have a name, a mime-type, a size and a download link.
-Since most files are binary, use `multipart/form-data` instead of JSON when uploading files.
+A file is a container for data and primarily identified by its file name. A file could be a spreadsheet, an image, PDF, video, or just binary data. Tape supports various file formats to be attached to resources like records, comments and chat messages.
 
-## Uploading a file
+:::info
+There are many reasons why a file upload via HTTP can fail (file too large, bad network connection, ...). To prevent critical operations like creating a record to fail due to an unsuccessful upload, attaching a file to a resource is a two-step process:
+
+1. The file is uploaded to Tape and the server returns a unique file ID.
+2. The file ID is used to attach the uploaded file to a resource (record, comment, ...).
+
+:::
+
+Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `mime_type`, `size` and `download_link`.
+Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
+
+## Upload a file
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
@@ -52,11 +62,11 @@ You receive a file reference, that can then be used when creating or updating a 
 }
 ```
 
-## Upload multiple files at once
+## Upload multiple files
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
-You can also upload multiple files at the same time by providing the `file` parameter:
+You can also upload multiple files at the same time by providing the `file` field multiple times:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -125,6 +135,8 @@ Uploading 300MB: 8x credits
 As you can see, uploading multiple files at once costs less credits than uploading every file individually.
 
 ## Validation errors
+
+A lot can go wrong when uploading files via HTTP. Tape handles most error cases and returns detailed error messages.
 
 ```json title="No file provided validation error"
 {
