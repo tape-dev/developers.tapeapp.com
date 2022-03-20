@@ -40,7 +40,7 @@ Records are the place where work gets done inside every Tape organization. The e
 
 <TabItem value="js" label="Node.js">
 <ApiKeyCodeblock language="javascript" title='Get your record "#RECORD_TITLE"'>
-{`let req = http.get(
+{`let req = https.get(
   "#BASE_URL/v1/record/#RECORD_ID",
   {
     method: "get",
