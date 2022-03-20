@@ -14,14 +14,14 @@ Since most files are binary, use `multipart/form-data` instead of JSON when uplo
 
 ## Uploading a file
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/upload" />
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
 When uploading files to Tape, use the dedicated endpoint to create a temporary file reference first:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
 <ApiKeyCodeblock language="shell">
-{`curl #BASE_URL/v1/upload \\
+{`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename.txt'
 `}
@@ -30,7 +30,7 @@ When uploading files to Tape, use the dedicated endpoint to create a temporary f
 
 <TabItem value="http" label="HTTP">
 <ApiKeyCodeblock language="http">
-{`POST /v1/upload HTTP/1.1
+{`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 Accept: */*
@@ -54,14 +54,14 @@ You receive a file reference, that can then be used when creating or updating a 
 
 ## Upload multiple files at once
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/upload" />
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
 You can also upload multiple files at the same time by providing the `file` parameter:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
 <ApiKeyCodeblock language="shell">
-{`curl #BASE_URL/v1/upload \\
+{`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename1.txt' \\
   -F 'file=@./filename2.txt'
@@ -71,7 +71,7 @@ You can also upload multiple files at the same time by providing the `file` para
 
 <TabItem value="http" label="HTTP">
 <ApiKeyCodeblock language="http">
-{`POST /v1/upload HTTP/1.1
+{`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 Accept: */*
@@ -129,8 +129,8 @@ As you can see, uploading multiple files at once costs less credits than uploadi
 ```json title="No file provided validation error"
 {
   "status_code": 400,
-  "endpoint": "/v1/upload",
+  "endpoint": "/v1/file/upload",
   "error_code": "validation",
-  "error_message": "No file provided to upload endpoint '/v1/upload/' via multipart/form-data name: 'file'"
+  "error_message": "No file provided to upload endpoint '/v1/file/upload/' via multipart/form-data name: 'file'"
 }
 ```
