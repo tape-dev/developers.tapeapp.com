@@ -6,7 +6,7 @@ sidebar_label: Request Limits
 
 To ensure a consistent developer experience for all API users, the Tape API is rate limited and basic size limits apply to request parameters.
 
-## Rate Limits
+## Rate limits
 
 Rate-limited requests will return a `too_many_requests` error code (HTTP response status 429). **The base rate limit for incoming requests is an average of 3 requests per second**. Some bursts beyond the average rate are allowed.
 
@@ -16,13 +16,13 @@ Integrations should accommodate variable rate limits by handling HTTP 429 respon
 In the future, Tape plans to adjust rate limits to balance for demand and reliability. Tape may also introduce distinct rate limits for organizations in different pricing plans.
 :::
 
-### Rate Limit Credits
+### Rate limit credits
 
 Tape uses a credit-based system to enforce rate limits. Each API key has a certain amount of credits per time interval (currently 50 credits per minute). After the time interval, the credits are replenished. By default, each request costs 1 credit. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
 
 You can see how many credits your API key has left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
 
-### Rate Limit Headers
+### Rate limit headers
 
 Rate limit headers are sent **with every response**. This allows the integration to prevent rate limiting errors and back off before the actual rate limit is hit.
 
@@ -68,7 +68,7 @@ In case the rate limit is exceeded, the error response body will also include al
 - Do not poll for changed data. Use webhooks to react to changes instead.
 - Use logging to see how many requests you're making
 
-### Getting more Credits
+### Getting more credits
 
 If your integration needs more credits per time interval, you can always ask the Tape team to increase the rate limit credits of your API key. It is discouraged to do key rotations to get around this problem.
 

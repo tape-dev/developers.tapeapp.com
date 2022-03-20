@@ -19,7 +19,7 @@ firstLinkUrl
 
 Markdown will automatically make a link clickable if it has the correct URL format.
 
-## Open a Link In a New Tab
+## Open a link in a new tab
 
 A markdown link does not have the option to open the link in a new tab. We can use HTML for this:
 

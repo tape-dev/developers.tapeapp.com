@@ -6,7 +6,7 @@ sidebar_label: Date & Timezone
 
 # Date & Timezone
 
-## Datetime Format
+## Datetime format
 
 The Tape API returns all dates as a formatted string, similar to ISO 8601 and in UTC timezone.
 
@@ -22,7 +22,7 @@ which would be equal to the following in standardized ISO 8601:
 
 The format chosen by Tape is optimized for readability. While not included in the official ISO 8601 standard, most programming languages & libraries support the chosen format.
 
-## Date Format
+## Date format
 
 Dates are represented as follows:
 

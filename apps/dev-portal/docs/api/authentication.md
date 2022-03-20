@@ -36,7 +36,7 @@ Authorization: Bearer #USER_API_KEY
 </TabItem>
 </Tabs>
 
-## Authentication Errors
+## Authentication errors
 
 Tape returns comprehensive error messages for authentication failures:
 

@@ -6,7 +6,7 @@ sidebar_label: Introduction
 
 Calculated fields can be used to easily manipulate data added to an app. With this very powerful tool, you can not only do math on numbers in your app, but also concatenate values ​​in specific fields. Use variables to add values ​​to calculated fields. Use the "@" symbol to search for variables in your app. You can reference any field in your app, and any field in the referenced app.
 
-### Execution Environment
+### Execution environment
 
 The script of a calculation field is written in JavaScript. In order to calculate the value of a record's calculation field, the Tape server gathers all the script's variables values from the database and executes the script on the server. The script is executed inside a Node.js version 12 environment, so you can use [ES6](https://www.javascripttutorial.net/es6/) syntax with all its cool features :tada:
 
@@ -18,7 +18,7 @@ Tape does not support the execution of user-provided JavaScript in the client ap
 
 Tape has to limit the time a calculation takes to execute so that the overall performance of the system can be guaranteed. Usually, your script should not take more than a couple of milliseconds to complete. Therefore, asynchronous JavaScript features like Promises, `setTimeout` or `setInterval` cannot be used inside a calculation. If a timeout occurrs, the field value that was being calculated is marked as `invalid`.
 
-### Template Literals
+### Template literals
 
 [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) are an amazing feature of ES6. They are very useful for string interpolation (and multiline strings, since unescaped newlines are allowed). They allow you to easily include newlines and variables in the result of your calculation field. Here are some basic examples of the syntax:
 

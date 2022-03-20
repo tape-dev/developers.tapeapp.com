@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 Files have a name, a mime-type, a size and a download link.
 Since most files are binary, use `multipart/form-data` instead of JSON when uploading files.
 
-## Uploading Files
+## Uploading a file
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/upload" />
 
@@ -100,17 +100,26 @@ Content-Type: multipart/form-data`}
 ]
 ```
 
-## Rate Limit Credits
+## Rate limit credits
 
-TODO
+Uploading a file takes 3 times the credits of a normal request. As uploading multiple files at the same time allows for more efficient processing, every consecutive upload will only take 2 times the credits of a normal request.
+
+```
+Uploading 1 file: 3x credits
+Uploading 2 files: 3x credits + 2x credits
+Uploading 3 files: 3x credits + 2x credits + 2x credits
+...
+```
 
 ## Upload limits
 
 | Variable | Limit |
 | :------- | :---- |
 |          |       |
+|          |       |
+|          |       |
 
-## Validation Errors
+## Validation errors
 
 ```json title="No file provided validation error"
 {
