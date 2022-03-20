@@ -1,7 +1,7 @@
 ---
 id: files
-title: Files
-sidebar_label: Files
+title: File
+sidebar_label: File
 ---
 
 import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
@@ -100,17 +100,6 @@ Content-Type: multipart/form-data`}
 ]
 ```
 
-## Rate limit credits
-
-Uploading a file takes 3 times the credits of a normal request. As uploading multiple files at the same time allows for more efficient processing, every consecutive upload will only take 2 times the credits of a normal request.
-
-```
-Uploading 1 file: 3x credits
-Uploading 2 files: 3x credits + 2x credits
-Uploading 3 files: 3x credits + 2x credits + 2x credits
-...
-```
-
 ## Upload limits
 
 | Variable | Limit |
@@ -118,6 +107,22 @@ Uploading 3 files: 3x credits + 2x credits + 2x credits
 |          |       |
 |          |       |
 |          |       |
+
+## Rate limit credits
+
+File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always cost 2x credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half the maximum filesize costs 3x credits.
+
+```
+Uploading 1KB: 2x credits
+Uploading 50MB: 3x credits
+Uploading 100MB: 4x credits
+Uploading 150MB: 5x credits
+Uploading 200MB: 6x credits
+Uploading 300MB: 8x credits
+...
+```
+
+As you can see, uploading multiple files at once costs less credits than uploading every file individually.
 
 ## Validation errors
 
