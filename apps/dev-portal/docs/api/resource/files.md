@@ -34,7 +34,7 @@ When uploading files to Tape, use the dedicated endpoint to create a temporary f
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 Accept: */*
-Content-Length: 123
+Content-Length: 20
 Content-Type: multipart/form-data`}
 </ApiKeyCodeblock>
 </TabItem>
@@ -44,8 +44,79 @@ You receive a file reference, that can then be used when creating or updating a 
 
 ```json
 {
-  "temporaryFileId": "12341234-12341234-12341234",
-  "size": 1024,
-  "downloadUrl": "https://files.tapeapp.com/4312sadfdsa41sdfsdaf324324321413243asfsdf"
+  "id": 1,
+  "filename": "filename.txt",
+  "size": 20,
+  "created_on": "2022-01-01 12:00:00",
+  "download_url": "d8f205f4daaced0f3f714b5ebb76ad"
+}
+```
+
+## Upload multiple files at once
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/upload" />
+
+You can also upload multiple files at the same time by providing the `file` parameter:
+
+<Tabs>
+<TabItem value="curl" label="cURL">
+<ApiKeyCodeblock language="shell">
+{`curl #BASE_URL/v1/upload \\
+  -u #USER_API_KEY: \\
+  -F 'file=@./filename1.txt' \\
+  -F 'file=@./filename2.txt'
+`}
+</ApiKeyCodeblock>
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+<ApiKeyCodeblock language="http">
+{`POST /v1/upload HTTP/1.1
+Host: api.tapeapp.com
+Authorization: Bearer #USER_API_KEY
+Accept: */*
+Content-Length: 40
+Content-Type: multipart/form-data`}
+</ApiKeyCodeblock>
+</TabItem>
+</Tabs>
+
+```json
+[
+  {
+    "id": 2,
+    "filename": "filename1.txt",
+    "size": 20,
+    "created_on": "2022-01-01 12:00:00",
+    "download_url": "61bc95fa43c2bbef3e29a13bc3307d"
+  },
+  {
+    "id": 3,
+    "filename": "filename2.txt",
+    "size": 20,
+    "created_on": "2022-01-01 12:00:00",
+    "download_url": "a0af01bf9c34413d15511608ec0e1d"
+  }
+]
+```
+
+## Rate Limit Credits
+
+TODO
+
+## Upload limits
+
+| Variable | Limit |
+| :------- | :---- |
+|          |       |
+
+## Validation Errors
+
+```json title="No file provided validation error"
+{
+  "status_code": 400,
+  "endpoint": "/v1/upload",
+  "error_code": "validation",
+  "error_message": "No file provided to upload endpoint '/v1/upload/' via multipart/form-data name: 'file'"
 }
 ```
