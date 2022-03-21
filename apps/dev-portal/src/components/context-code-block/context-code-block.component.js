@@ -27,9 +27,10 @@ export default function ContextCodeBlock({ children, language, title }) {
   const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
 
   // Initialize application state usage
+  const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
   useEffect(() => {
-    return subscribeToAppState(setAppState);
+    return subscribeToAppState(ctx, setAppState);
   }, []);
 
   const recordId = getDemoRecordId(config) ?? DEFAULT_RECORD_ID;

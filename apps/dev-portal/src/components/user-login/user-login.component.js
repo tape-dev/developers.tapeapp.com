@@ -1,3 +1,4 @@
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Admonition from '@theme/Admonition';
 import React, { useEffect, useState } from 'react';
 import {
@@ -10,22 +11,11 @@ import {
 const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
-  /**
-  const [_, setState] = useState(0);
-  const { siteConfig: config } = useDocusaurusContext();
-
-  const primaryName = getActiveUserPrimaryName(config) ?? '';
-  const isLoading = getActiveUserContextIsLoading(config);
-
-  useEffect(() => {
-    activeUserContextEffect(config, setState);
-  }, []);
-   */
-
   // Initialize application state usage
+  const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
   useEffect(() => {
-    return subscribeToAppState(setAppState);
+    return subscribeToAppState(ctx, setAppState);
   }, []);
 
   const isLoading = getActiveUserIsLoading(state);
@@ -42,7 +32,7 @@ export default function UserLoginInfo() {
         <Admonition type="tip" title="Logged in" icon="✅">
           <span>
             Hey {primaryName} 👋 Looks like you are already logged into Tape, so
-            we were able to prefill your user API key and some IDs in the
+            we were able to pre-fill your user API key and some IDs in the
             examples below. You can use the "copy" button to copy the code to
             your clipboard. Most cURL requests work out of the box and can be
             directly pasted into a terminal.
