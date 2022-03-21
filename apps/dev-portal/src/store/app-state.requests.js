@@ -28,15 +28,11 @@ const getUserSessionsQuery = JSON.stringify({
 `,
 });
 
-const headers = {
-  'content-type': 'application/json',
-};
-
 function loadActiveUserContext(baseUrl, userId) {
   return fetch(`${baseUrl}/graphql/getActiveUserDevPortalContext`, {
     method: 'POST',
     headers: {
-      ...headers,
+      'content-type': 'application/json',
       uid: userId,
     },
     credentials: 'include',
@@ -53,7 +49,9 @@ function loadActiveUserContext(baseUrl, userId) {
 function loadActiveUserSessions(baseUrl) {
   return fetch(`${baseUrl}/graphql/getUserSessions`, {
     method: 'POST',
-    headers,
+    headers: {
+      'content-type': 'application/json',
+    },
     credentials: 'include',
     mode: 'cors',
     body: getUserSessionsQuery,
@@ -78,4 +76,33 @@ export async function loadActiveUserSessionsAndContext(baseUrl) {
   const { userId } = activeUserSessions[0];
   const activeUserContext = await loadActiveUserContext(baseUrl, userId);
   return activeUserContext;
+}
+
+const getActiveUserDevPortalDemoRecordQuery = JSON.stringify({
+  operationName: null,
+  variables: {},
+  query: `{
+  getActiveUserDevPortalDemoBlabItem {
+    id
+    title
+  }
+}`,
+});
+
+export function loadActiveUserDemoRecord(baseUrl, userId) {
+  return fetch(`${baseUrl}/graphql/getActiveUserDevPortalDemoRecord`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      uid: userId,
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: getActiveUserDevPortalDemoRecordQuery,
+  })
+    .then((res) => res.text())
+    .then((text) => {
+      const body = JSON.parse(text);
+      return body?.data?.getActiveUserDevPortalDemoBlabItem || {};
+    });
 }

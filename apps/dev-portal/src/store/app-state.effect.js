@@ -1,7 +1,9 @@
 import { getBaseUrlForRuntime } from '@site/src/utils';
-import { loadActiveUserSessionsAndContext } from './active-user-context-request';
+import {
+  loadActiveUserDemoRecord,
+  loadActiveUserSessionsAndContext,
+} from './app-state.requests';
 import { getAppState, setAppState } from './app-state.store';
-import { loadActiveUserDemoRecord } from './demo-record-request';
 
 export async function loadAppStateFromServer(runtime) {
   if (getAppState().initializing) {
@@ -30,6 +32,7 @@ export async function loadAppStateFromServer(runtime) {
       });
     }
   } catch (err) {
+    console.error(err);
     setAppState({
       ...getAppState(),
       activeUserContextIsLoading: false,
