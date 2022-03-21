@@ -1,9 +1,8 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_USERNAME } from './constants';
 import {
   getActiveUserIsLoading,
-  getActiveUserPrimaryName,
+  getActiveUserPrimaryNameWithFallback,
   getAppState,
   subscribeToAppState,
 } from '../../store';
@@ -17,7 +16,7 @@ export const ActiveUserPrimaryName = () => {
   }, []);
 
   const isLoading = getActiveUserIsLoading(state);
-  const primaryName = getActiveUserPrimaryName(state);
+  const primaryName = getActiveUserPrimaryNameWithFallback(state);
 
   if (isLoading) {
     return '';

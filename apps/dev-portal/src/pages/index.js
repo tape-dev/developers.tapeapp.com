@@ -5,7 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
-import { ActiveUserPrimaryName } from '@site/src/components/active-user/primary-name.component';
+import { ActiveUserPrimaryName } from '@site/src/components/active-user-primary-name/active-user-primary-name.component';
 import TextureImageUrl from '@site/static/img/texture.jpg';
 import LinkSvg from '@site/static/icon/link.svg';
 

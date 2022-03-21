@@ -1,3 +1,5 @@
+import { DEFAULT_PRIMARY_NAME } from './app-state.constants';
+
 // Active user context
 export function getActiveUserCtx(state) {
   return state.activeUserContext ?? {};
@@ -9,6 +11,10 @@ export function getActiveUserApiKey(state) {
 
 export function getActiveUserPrimaryName(state) {
   return getActiveUserCtx(state).user?.primaryName;
+}
+
+export function getActiveUserPrimaryNameWithFallback(state) {
+  return getActiveUserPrimaryName(state) ?? DEFAULT_PRIMARY_NAME;
 }
 
 export function getActiveUserIsLoading(state) {

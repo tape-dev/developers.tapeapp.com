@@ -5,13 +5,6 @@ import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { getActiveUserApiKey } from '../../store';
-import { DEFAULT_API_KEY } from '../active-user/constants';
-import {
-  DEFAULT_RECORD_ID,
-  DEFAULT_RECORD_TITLE,
-  getDemoRecordId,
-  getDemoRecordTitle,
-} from '../demo-record/constants';
 import styles from './context-code-block-styles.module.css';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
