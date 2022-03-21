@@ -3,6 +3,9 @@ import { makeObservable } from '@site/src/utils';
 const store = makeObservable({
   initializing: false,
 
+  // Runtime
+  runtime: 'PRD',
+
   // Active user context
   activeUserContext: undefined,
   activeUserContextIsLoading: true,

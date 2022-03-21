@@ -1,6 +1,5 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { getAppState, subscribeToAppState } from '@site/src/store';
-import { getDevApiBaseUrl } from '@site/src/utils/base-url.utils';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
@@ -8,6 +7,7 @@ import {
   getActiveUserApiKeyWithFallback,
   getDemoRecordIdWithFallback,
   getDemoRecordTitleWithFallback,
+  getDevApiBaseUrl,
 } from '../../store';
 import styles from './context-code-block-styles.module.css';
 
