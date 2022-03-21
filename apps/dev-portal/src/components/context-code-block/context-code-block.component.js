@@ -4,7 +4,11 @@ import { getDevApiBaseUrl } from '@site/src/utils/base-url.utils';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { getActiveUserApiKey } from '../../store';
+import {
+  getActiveUserApiKeyWithFallback,
+  getDemoRecordIdWithFallback,
+  getDemoRecordTitleWithFallback,
+} from '../../store';
 import styles from './context-code-block-styles.module.css';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
@@ -24,9 +28,10 @@ export default function ContextCodeBlock({ children, language, title }) {
     return subscribeToAppState(ctx, setAppState);
   }, []);
 
-  const apiKey = getActiveUserApiKey(state) ?? DEFAULT_API_KEY;
-  const recordId = getDemoRecordId(state) ?? DEFAULT_RECORD_ID;
-  const recordTitle = getDemoRecordTitle(state) ?? DEFAULT_RECORD_TITLE;
+  // Select properties from state
+  const apiKey = getActiveUserApiKeyWithFallback(state);
+  const recordId = getDemoRecordIdWithFallback(state);
+  const recordTitle = getDemoRecordTitleWithFallback(state);
   const baseUrl = getDevApiBaseUrl(state);
 
   function replacePlaceholders(str) {

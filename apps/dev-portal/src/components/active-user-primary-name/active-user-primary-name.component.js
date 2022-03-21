@@ -15,6 +15,7 @@ export const ActiveUserPrimaryName = () => {
     return subscribeToAppState(ctx, setAppState);
   }, []);
 
+  // Select properties from state
   const isLoading = getActiveUserIsLoading(state);
   const primaryName = getActiveUserPrimaryNameWithFallback(state);
 

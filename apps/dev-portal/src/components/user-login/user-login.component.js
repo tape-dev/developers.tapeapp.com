@@ -18,6 +18,7 @@ export default function UserLoginInfo() {
     return subscribeToAppState(ctx, setAppState);
   }, []);
 
+  // Select properties from state
   const isLoading = getActiveUserIsLoading(state);
   const primaryName = getActiveUserPrimaryName(state);
 
