@@ -1,4 +1,5 @@
 import { getAppState, setAppState } from './app-state.store';
+import { loadActiveUserSessionsAndContext } from './active-user-context-request';
 
 export async function loadAppStateFromServer() {
   const state = getAppState();
@@ -7,5 +8,11 @@ export async function loadAppStateFromServer() {
   }
   setAppState({ initializing: true });
 
+  loadActiveUserSessionsAndContext('DEV').then((activeUserContext) => {
+    setAppState({
+      ...state,
+      activeUserContext,
+    });
+  });
   console.log('LOADING!');
 }
