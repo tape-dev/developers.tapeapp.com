@@ -4,7 +4,7 @@ export function getActiveUserCtx(state) {
 }
 
 export function getActiveUserApiKey(state) {
-  return getActiveUserCtx(state).user?.apiKey;
+  return getActiveUserCtx(state).apiKey;
 }
 
 export function getActiveUserPrimaryName(state) {

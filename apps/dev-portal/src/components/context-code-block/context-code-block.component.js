@@ -4,7 +4,8 @@ import { getDevApiBaseUrl } from '@site/src/utils/base-url.utils';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_API_KEY, getActiveUserApiKey } from '../active-user/constants';
+import { getActiveUserApiKey } from '../../store';
+import { DEFAULT_API_KEY } from '../active-user/constants';
 import {
   DEFAULT_RECORD_ID,
   DEFAULT_RECORD_TITLE,
@@ -23,9 +24,6 @@ const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
  * Replaces placeholders inside the title and children components.
  */
 export default function ContextCodeBlock({ children, language, title }) {
-  const { siteConfig: config } = useDocusaurusContext();
-  const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
-
   // Initialize application state usage
   const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
@@ -33,9 +31,11 @@ export default function ContextCodeBlock({ children, language, title }) {
     return subscribeToAppState(ctx, setAppState);
   }, []);
 
-  const recordId = getDemoRecordId(config) ?? DEFAULT_RECORD_ID;
-  const recordTitle = getDemoRecordTitle(config) ?? DEFAULT_RECORD_TITLE;
-  const baseUrl = getDevApiBaseUrl(config);
+  console.log(state);
+  const apiKey = getActiveUserApiKey(state) ?? DEFAULT_API_KEY;
+  const recordId = getDemoRecordId(state) ?? DEFAULT_RECORD_ID;
+  const recordTitle = getDemoRecordTitle(state) ?? DEFAULT_RECORD_TITLE;
+  const baseUrl = getDevApiBaseUrl(state);
 
   function replacePlaceholders(str) {
     return (str || '')

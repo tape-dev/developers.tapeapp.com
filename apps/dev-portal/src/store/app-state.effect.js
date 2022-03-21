@@ -3,8 +3,7 @@ import { loadActiveUserSessionsAndContext } from './active-user-context-request'
 import { loadActiveUserDemoRecord } from './demo-record-request';
 
 export async function loadAppStateFromServer(runtime) {
-  const state = getAppState();
-  if (state.initializing) {
+  if (getAppState().initializing) {
     return;
   }
   setAppState({ initializing: true });

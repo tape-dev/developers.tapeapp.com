@@ -11,9 +11,9 @@ const devApiBaseUrlPrd = 'https://api.tapeapp.com';
  */
 export function getBaseUrl(configOrRuntime) {
   const runtime =
-    typeof configOrRuntime === 'string'
+    (typeof configOrRuntime === 'string'
       ? configOrRuntime
-      : configOrRuntime?.customFields?.runtime;
+      : configOrRuntime?.customFields?.runtime) ?? 'PRD';
 
   // Developer explicitly specified the PRD runtime environment
   if (runtime.toUpperCase() === 'PRD') {
@@ -36,9 +36,9 @@ export function getBaseUrl(configOrRuntime) {
  */
 export function getDevApiBaseUrl(configOrRuntime) {
   const runtime =
-    typeof configOrRuntime === 'string'
+    (typeof configOrRuntime === 'string'
       ? configOrRuntime
-      : configOrRuntime?.customFields?.runtime;
+      : configOrRuntime?.customFields?.runtime) ?? 'PRD';
 
   // Developer explicitly specified the PRD runtime environment
   if (runtime.toUpperCase() === 'PRD') {
