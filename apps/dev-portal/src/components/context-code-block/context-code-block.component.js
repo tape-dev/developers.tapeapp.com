@@ -32,8 +32,6 @@ export default function ContextCodeBlock({ children, language, title }) {
     return subscribeToAppState(setAppState);
   }, []);
 
-  console.log({ state: JSON.stringify(state) });
-
   const recordId = getDemoRecordId(config) ?? DEFAULT_RECORD_ID;
   const recordTitle = getDemoRecordTitle(config) ?? DEFAULT_RECORD_TITLE;
   const baseUrl = getDevApiBaseUrl(config);

@@ -12,6 +12,7 @@ export async function loadAppStateFromServer() {
     setAppState({
       ...state,
       activeUserContext,
+      activeUserContextIsLoading: false,
     });
   });
   console.log('LOADING!');

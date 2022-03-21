@@ -2,7 +2,9 @@ import { makeObservable } from '@site/src/utils';
 
 const store = makeObservable({
   initializing: false,
+
   activeUserContext: undefined,
+  activeUserContextIsLoading: true,
 });
 
 export function subscribeToAppState(listenerFunc) {

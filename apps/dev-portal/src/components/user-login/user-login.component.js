@@ -1,5 +1,11 @@
 import Admonition from '@theme/Admonition';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  getActiveUserIsLoading,
+  getActiveUserPrimaryName,
+  getAppState,
+  subscribeToAppState,
+} from '../../store';
 
 const STATIC_HEIGHT = '180px';
 
@@ -15,8 +21,16 @@ export default function UserLoginInfo() {
     activeUserContextEffect(config, setState);
   }, []);
    */
-  const isLoading = false;
-  const primaryName = 'TesT';
+
+  // Initialize application state usage
+  const [state, setAppState] = useState(getAppState());
+  useEffect(() => {
+    return subscribeToAppState(setAppState);
+  }, []);
+
+  const isLoading = getActiveUserIsLoading(state);
+  const primaryName = getActiveUserPrimaryName(state);
+  console.log(state);
 
   if (isLoading) {
     return <div style={{ minHeight: STATIC_HEIGHT }}></div>;
