@@ -1,4 +1,4 @@
-import { getBaseUrl } from '@site/src/util/base-url.utils';
+import { getBaseUrl } from '@site/src/utils/base-url.utils';
 
 const getActiveUserDevPortalDemoRecordQuery = JSON.stringify({
   operationName: null,

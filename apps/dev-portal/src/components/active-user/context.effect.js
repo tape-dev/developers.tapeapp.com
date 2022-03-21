@@ -1,3 +1,4 @@
+import { makeObservable } from '../../utils/observable.utils';
 import { setDemoRecordState } from '../demo-record/constants';
 import { loadActiveUserDemoRecord } from '../demo-record/demo-record-request';
 import {
@@ -9,40 +10,39 @@ import { loadActiveUserSessionsAndContext } from './context-request';
 
 let isLoading = false;
 
-export const activeUserContextEffect = (config, setState) => {
+export const activeUserStore = makeObservable({
+  isLoading: false,
+  ctx: undefined,
+});
+
+export const activeUserContextEffect = (config, setStateNEW) => {
   const runtime = config.customFields.runtime;
   const state = getActiveUserState(config);
 
   // skip request if already loading
-  if (isLoading || state.isLoading) {
-    return;
+  if (isLoading || state.isLoading || state.context) {
+  } else {
+    isLoading = true;
+    // ... perform request otherwise
+    return loadActiveUserSessionsAndContext(runtime)
+      .then((activeUserContext) => {
+        isLoading = false;
+        setActiveUserContextIsLoading(config, false);
+        setActiveUserContext(config, activeUserContext);
+        activeUserStore.set(activeUserContext); // force component rerender
+        return activeUserContext;
+      })
+      .then(({ userId }) => {
+        return loadActiveUserDemoRecord(userId, runtime);
+      })
+      .then((demoRecord) => {
+        setDemoRecordState(config, demoRecord);
+        setStateNEW(2); // force component rerender
+      })
+      .catch(() => {
+        isLoading = false;
+        setActiveUserContextIsLoading(config, false);
+        setStateNEW(2); // force component rerender
+      });
   }
-
-  // skip request if user context already loaded
-  if (state.context) {
-    return;
-  }
-
-  isLoading = true;
-  // ... perform request otherwise
-  const load = loadActiveUserSessionsAndContext(runtime)
-    .then((activeUserContext) => {
-      isLoading = false;
-      setActiveUserContextIsLoading(config, false);
-      setActiveUserContext(config, activeUserContext);
-      setState(Date.now()); // force component rerender
-      return activeUserContext;
-    })
-    .then(({ userId }) => {
-      return loadActiveUserDemoRecord(userId, runtime);
-    })
-    .then((demoRecord) => {
-      setDemoRecordState(config, demoRecord);
-      setState(Date.now()); // force component rerender
-    })
-    .catch(() => {
-      isLoading = false;
-      setActiveUserContextIsLoading(config, false);
-      setState(Date.now()); // force component rerender
-    });
 };

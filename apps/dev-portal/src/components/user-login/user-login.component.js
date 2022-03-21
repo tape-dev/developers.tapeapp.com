@@ -10,7 +10,7 @@ import { activeUserContextEffect } from '../active-user/context.effect';
 const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
-  const [_, setState] = useState(Date.now());
+  const [_, setState] = useState(0);
   const { siteConfig: config } = useDocusaurusContext();
 
   const primaryName = getActiveUserPrimaryName(config) ?? '';

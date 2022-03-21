@@ -8,7 +8,7 @@ import {
 import { activeUserContextEffect } from './context.effect';
 
 export const ActiveUserPrimaryName = () => {
-  const [_, setState] = useState(Date.now());
+  const [_, setState] = useState(0);
   const { siteConfig: config } = useDocusaurusContext();
 
   const primaryName = getActiveUserPrimaryName(config) ?? '';

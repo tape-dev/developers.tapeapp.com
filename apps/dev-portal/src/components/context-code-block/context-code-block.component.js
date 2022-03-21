@@ -1,9 +1,12 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import CodeBlock from '@theme/CodeBlock';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { DEFAULT_API_KEY, getActiveUserApiKey } from '../active-user/constants';
-import { activeUserContextEffect } from '../active-user/context.effect';
-import { getDevApiBaseUrl } from '@site/src/util/base-url.utils';
+import {
+  activeUserContextEffect,
+  activeUserStore,
+} from '../active-user/context.effect';
+import { getDevApiBaseUrl } from '@site/src/utils/base-url.utils';
 import clsx from 'clsx';
 import styles from './context-code-block-styles.module.css';
 import {
@@ -23,14 +26,21 @@ const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
  * Replaces placeholders inside the title and children components.
  */
 export default function ContextCodeBlock({ children, language, title }) {
-  const [_, setState] = useState(Date.now());
+  const [activeUserState, setActiveUserState] = useState(activeUserStore.get());
   const { siteConfig: config } = useDocusaurusContext();
 
+  const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
+
   useEffect(() => {
-    activeUserContextEffect(config, setState);
+    return activeUserStore.subscribe(setActiveUserState);
   }, []);
 
-  const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
+  useEffect(() => {
+    activeUserContextEffect(config, setActiveUserState);
+  }, []);
+
+  console.log(activeUserState);
+
   const recordId = getDemoRecordId(config) ?? DEFAULT_RECORD_ID;
   const recordTitle = getDemoRecordTitle(config) ?? DEFAULT_RECORD_TITLE;
   const baseUrl = getDevApiBaseUrl(config);
