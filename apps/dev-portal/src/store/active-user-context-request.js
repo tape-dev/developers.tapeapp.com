@@ -1,5 +1,3 @@
-import { getBaseUrl } from '@site/src/utils';
-
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
   variables: {},
@@ -34,12 +32,12 @@ const headers = {
   'content-type': 'application/json',
 };
 
-function loadActiveUserContext(uid, runtime) {
-  return fetch(`${getBaseUrl(runtime)}/graphql/getActiveUserDevPortalContext`, {
+function loadActiveUserContext(baseUrl, userId) {
+  return fetch(`${baseUrl}/graphql/getActiveUserDevPortalContext`, {
     method: 'POST',
     headers: {
       ...headers,
-      uid,
+      uid: userId,
     },
     credentials: 'include',
     mode: 'cors',
@@ -52,8 +50,8 @@ function loadActiveUserContext(uid, runtime) {
     });
 }
 
-function loadActiveUserSessions(runtime) {
-  return fetch(`${getBaseUrl(runtime)}/graphql/getUserSessions`, {
+function loadActiveUserSessions(baseUrl) {
+  return fetch(`${baseUrl}/graphql/getUserSessions`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -69,9 +67,8 @@ function loadActiveUserSessions(runtime) {
     });
 }
 
-export async function loadActiveUserSessionsAndContext(runtime) {
-  const sessions = await loadActiveUserSessions(runtime);
-
+export async function loadActiveUserSessionsAndContext(baseUrl) {
+  const sessions = await loadActiveUserSessions(baseUrl);
   const activeUserSessions = sessions.filter((session) => session.active);
 
   if (!activeUserSessions.length) {
@@ -79,8 +76,6 @@ export async function loadActiveUserSessionsAndContext(runtime) {
   }
 
   const { userId } = activeUserSessions[0];
-
-  const activeUserContext = await loadActiveUserContext(userId, runtime);
-
+  const activeUserContext = await loadActiveUserContext(baseUrl, userId);
   return activeUserContext;
 }

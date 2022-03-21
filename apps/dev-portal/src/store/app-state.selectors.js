@@ -1,12 +1,9 @@
+import { getBaseUrlForRuntime, getDevApiBaseUrlForRuntime } from '../utils';
 import {
-  BASE_URL_DEV,
-  BASE_URL_PRD,
   DEFAULT_API_KEY,
   DEFAULT_PRIMARY_NAME,
   DEFAULT_RECORD_ID,
   DEFAULT_RECORD_TITLE,
-  DEV_API_BASE_URL_DEV,
-  DEV_API_BASE_URL_PRD,
 } from './app-state.constants';
 
 // Runtime
@@ -16,12 +13,12 @@ export function getRuntime(state) {
 
 export function getBaseUrl(state) {
   const runtime = getRuntime(state);
-  return runtime === 'DEV' ? BASE_URL_DEV : BASE_URL_PRD;
+  return getBaseUrlForRuntime(runtime);
 }
 
 export function getDevApiBaseUrl(state) {
   const runtime = getRuntime(state);
-  return runtime === 'DEV' ? DEV_API_BASE_URL_DEV : DEV_API_BASE_URL_PRD;
+  return getDevApiBaseUrlForRuntime(runtime);
 }
 
 // Active user context

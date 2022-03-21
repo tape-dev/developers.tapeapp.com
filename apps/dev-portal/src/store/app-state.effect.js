@@ -1,15 +1,17 @@
-import { getAppState, setAppState } from './app-state.store';
+import { getBaseUrlForRuntime } from '../utils';
 import { loadActiveUserSessionsAndContext } from './active-user-context-request';
+import { getAppState, setAppState } from './app-state.store';
 import { loadActiveUserDemoRecord } from './demo-record-request';
 
 export async function loadAppStateFromServer(runtime) {
   if (getAppState().initializing) {
     return;
   }
-  setAppState({ initializing: true });
+  setAppState({ ...getAppState(), initializing: true });
 
   // Load active user context
-  const activeUserContext = await loadActiveUserSessionsAndContext(runtime);
+  const baseUrl = getBaseUrlForRuntime(runtime);
+  const activeUserContext = await loadActiveUserSessionsAndContext(baseUrl);
 
   setAppState({
     ...getAppState(),
@@ -20,7 +22,7 @@ export async function loadAppStateFromServer(runtime) {
   // Load demo record
   const userId = activeUserContext.user?.id;
   if (userId) {
-    const demoRecord = await loadActiveUserDemoRecord(runtime, userId);
+    const demoRecord = await loadActiveUserDemoRecord(baseUrl, userId);
 
     setAppState({
       ...getAppState(),

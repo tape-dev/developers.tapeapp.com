@@ -1,4 +1,5 @@
 import { loadAppStateFromServer } from './app-state.effect';
+import { getRuntime } from './app-state.selectors';
 import {
   getAppState,
   setAppState,
@@ -12,7 +13,8 @@ export function subscribeToAppState(docusaurusContext, listenerFunc) {
   )
     .trim()
     .toUpperCase();
-  if (getAppState().runtime !== runtime) {
+
+  if (getRuntime(getAppState()) !== runtime) {
     setAppState({ ...getAppState(), runtime });
   }
 
