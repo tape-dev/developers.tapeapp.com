@@ -1,4 +1,4 @@
-import { getBaseUrlForRuntime } from '../utils';
+import { getBaseUrlForRuntime } from '@site/src/utils';
 import { loadActiveUserSessionsAndContext } from './active-user-context-request';
 import { getAppState, setAppState } from './app-state.store';
 import { loadActiveUserDemoRecord } from './demo-record-request';

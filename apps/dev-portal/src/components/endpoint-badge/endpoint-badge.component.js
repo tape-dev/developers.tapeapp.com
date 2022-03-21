@@ -1,6 +1,4 @@
-import clsx from 'clsx';
 import React from 'react';
-import styles from './endpoint-badge-styles.module.css';
 
 export default function EndpointBadge({ method, url }) {
   let methodColor;

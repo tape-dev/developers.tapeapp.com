@@ -1,4 +1,7 @@
-import { getBaseUrlForRuntime, getDevApiBaseUrlForRuntime } from '../utils';
+import {
+  getBaseUrlForRuntime,
+  getDevApiBaseUrlForRuntime,
+} from '@site/src/utils';
 import {
   DEFAULT_API_KEY,
   DEFAULT_PRIMARY_NAME,

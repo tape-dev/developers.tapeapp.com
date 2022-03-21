@@ -6,7 +6,7 @@ import {
   getActiveUserPrimaryName,
   getAppState,
   subscribeToAppState,
-} from '../../store';
+} from '@site/src/store';
 
 const STATIC_HEIGHT = '180px';
 

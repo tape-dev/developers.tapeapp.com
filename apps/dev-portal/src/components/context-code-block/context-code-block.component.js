@@ -8,7 +8,7 @@ import {
   getDemoRecordIdWithFallback,
   getDemoRecordTitleWithFallback,
   getDevApiBaseUrl,
-} from '../../store';
+} from '@site/src/store';
 import styles from './context-code-block-styles.module.css';
 
 const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';

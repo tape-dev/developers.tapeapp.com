@@ -5,7 +5,7 @@ import {
   getActiveUserPrimaryNameWithFallback,
   getAppState,
   subscribeToAppState,
-} from '../../store';
+} from '@site/src/store';
 
 export const ActiveUserPrimaryName = () => {
   // Initialize application state usage
