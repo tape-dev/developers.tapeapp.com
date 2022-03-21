@@ -1,4 +1,4 @@
-import { getBaseUrl } from '@site/src/utils/base-url.utils';
+import { getBaseUrl } from '@site/src/utils';
 
 const getActiveUserDevPortalContextQuery = JSON.stringify({
   operationName: null,
