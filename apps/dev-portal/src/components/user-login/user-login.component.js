@@ -12,11 +12,8 @@ const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
   // Initialize application state usage
-  const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
-  useEffect(() => {
-    return subscribeToAppState(ctx, setAppState);
-  }, []);
+  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
 
   // Select properties from state
   const isLoading = getActiveUserIsLoading(state);

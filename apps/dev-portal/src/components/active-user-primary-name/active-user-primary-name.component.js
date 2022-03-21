@@ -9,11 +9,8 @@ import {
 
 export const ActiveUserPrimaryName = () => {
   // Initialize application state usage
-  const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
-  useEffect(() => {
-    return subscribeToAppState(ctx, setAppState);
-  }, []);
+  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
 
   // Select properties from state
   const isLoading = getActiveUserIsLoading(state);
@@ -23,5 +20,5 @@ export const ActiveUserPrimaryName = () => {
     return '';
   }
 
-  return <mark>{primaryName || DEFAULT_USERNAME}</mark>;
+  return <mark>{primaryName}</mark>;
 };

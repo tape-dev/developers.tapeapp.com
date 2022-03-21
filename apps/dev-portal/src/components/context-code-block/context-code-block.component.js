@@ -22,11 +22,8 @@ const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
  */
 export default function ContextCodeBlock({ children, language, title }) {
   // Initialize application state usage
-  const ctx = useDocusaurusContext();
   const [state, setAppState] = useState(getAppState());
-  useEffect(() => {
-    return subscribeToAppState(ctx, setAppState);
-  }, []);
+  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
 
   // Select properties from state
   const apiKey = getActiveUserApiKeyWithFallback(state);

@@ -21,5 +21,5 @@ export function subscribeToAppState(docusaurusContext, listenerFunc) {
   // Lazy initialize app state
   loadAppStateFromServer(runtime);
 
-  return _subscribeToAppState(listenerFunc);
+  return () => _subscribeToAppState(listenerFunc);
 }
