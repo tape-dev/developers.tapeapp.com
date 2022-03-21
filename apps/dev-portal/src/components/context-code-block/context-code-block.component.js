@@ -31,7 +31,6 @@ export default function ContextCodeBlock({ children, language, title }) {
     return subscribeToAppState(ctx, setAppState);
   }, []);
 
-  console.log(state);
   const apiKey = getActiveUserApiKey(state) ?? DEFAULT_API_KEY;
   const recordId = getDemoRecordId(state) ?? DEFAULT_RECORD_ID;
   const recordTitle = getDemoRecordTitle(state) ?? DEFAULT_RECORD_TITLE;
