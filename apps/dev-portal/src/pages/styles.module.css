@@ -69,7 +69,7 @@
 .getStarted:hover {
   color: var(--tape-color--darkest);
   background-color: var(--tape-color-darkest-10);
-  transform: translateY(-2px);
+  transform: scale(1.03);
 }
 
 .getStarted:active {
