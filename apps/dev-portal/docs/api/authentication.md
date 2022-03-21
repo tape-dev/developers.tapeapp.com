@@ -4,7 +4,7 @@ title: Authentication
 sidebar_label: Authentication
 ---
 
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
+import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -19,20 +19,20 @@ Here's an example of how to correctly set the `Authorization` header:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ApiKeyCodeblock language="shell">
+<ContextCodeBlock language="shell">
 {`curl #BASE_URL/v1/record/1 \\
   -H "Authorization: Bearer #USER_API_KEY"
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="http" label="HTTP">
-<ApiKeyCodeblock language="http">
+<ContextCodeBlock language="http">
 {`GET /v1/record/1 HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 </Tabs>
 

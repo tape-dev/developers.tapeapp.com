@@ -5,7 +5,7 @@ import { DEFAULT_API_KEY, getActiveUserApiKey } from '../active-user/constants';
 import { activeUserContextEffect } from '../active-user/context.effect';
 import { getDevApiBaseUrl } from '@site/src/util/base-url.utils';
 import clsx from 'clsx';
-import styles from './api-key-code-block-styles.module.css';
+import styles from './context-code-block-styles.module.css';
 import {
   DEFAULT_RECORD_ID,
   DEFAULT_RECORD_TITLE,
@@ -22,7 +22,7 @@ const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
  * Context-aware CodeBlock component wrapper, replacing placeholders with the respective values from the context.
  * Replaces placeholders inside the title and children components.
  */
-export default function ContextCodeblock({ children, language, title }) {
+export default function ContextCodeBlock({ children, language, title }) {
   const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
 

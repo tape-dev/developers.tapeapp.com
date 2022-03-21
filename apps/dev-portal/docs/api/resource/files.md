@@ -4,7 +4,7 @@ title: File
 sidebar_label: File
 ---
 
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
+import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -30,23 +30,23 @@ When uploading files to Tape, use the dedicated endpoint to create a temporary f
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ApiKeyCodeblock language="shell">
+<ContextCodeBlock language="shell">
 {`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename.txt'
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="http" label="HTTP">
-<ApiKeyCodeblock language="http">
+<ContextCodeBlock language="http">
 {`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 Accept: */*
 Content-Length: 20
 Content-Type: multipart/form-data`}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 </Tabs>
 
@@ -70,24 +70,24 @@ You can also upload multiple files at the same time by providing the `file` fiel
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ApiKeyCodeblock language="shell">
+<ContextCodeBlock language="shell">
 {`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename1.txt' \\
   -F 'file=@./filename2.txt'
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="http" label="HTTP">
-<ApiKeyCodeblock language="http">
+<ContextCodeBlock language="http">
 {`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
 Accept: */*
 Content-Length: 40
 Content-Type: multipart/form-data`}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 </Tabs>
 

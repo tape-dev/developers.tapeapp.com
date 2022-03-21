@@ -4,7 +4,7 @@ title: Getting Started
 ---
 
 import UserLoginInfo from '@site/src/components/user-login/user-login.component';
-import ApiKeyCodeblock from '@site/src/components/api-key-code-block/api-key-code-block.component';
+import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -31,15 +31,15 @@ Records are the place where work gets done inside every Tape organization. The e
 <Tabs>
 
 <TabItem value="curl" label="cURL">
-<ApiKeyCodeblock language="shell" title='Get your record "#RECORD_TITLE"'>
+<ContextCodeBlock language="shell" title='Get your record "#RECORD_TITLE"'>
 {`curl #BASE_URL/v1/record/#RECORD_ID  \\
   -u #USER_API_KEY:
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="js" label="Node.js">
-<ApiKeyCodeblock language="javascript" title='Get your record "#RECORD_TITLE"'>
+<ContextCodeBlock language="javascript" title='Get your record "#RECORD_TITLE"'>
 {`let req = https.get(
   "#BASE_URL/v1/record/#RECORD_ID",
   {
@@ -54,11 +54,11 @@ Records are the place where work gets done inside every Tape organization. The e
     });
   }
 );`}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="php" label="PHP">
-<ApiKeyCodeblock language="php" title='Get your record "#RECORD_TITLE"'>
+<ContextCodeBlock language="php" title='Get your record "#RECORD_TITLE"'>
 {`<?php
 $opts = array(
   'http'=>array(
@@ -72,11 +72,11 @@ $data = file_get_contents('#BASE_URL/v1/record/20', false, $context);
 $responseContent = json_decode($data, true);
 echo json_encode($responseContent, JSON_PRETTY_PRINT);
 ?>`}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 <TabItem value="python" label="Python">
-<ApiKeyCodeblock language="python" title='Get your record "#RECORD_TITLE"'>
+<ContextCodeBlock language="python" title='Get your record "#RECORD_TITLE"'>
 {`
 import requests
 import json
@@ -84,7 +84,7 @@ import json
 req = requests.get('#BASE_URL/v1/record/#RECORD_ID', auth=('#USER_API_KEY', ''))
 print(json.dumps(req.json(), indent=2))
 `}
-</ApiKeyCodeblock>
+</ContextCodeBlock>
 </TabItem>
 
 </Tabs>
