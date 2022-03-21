@@ -22,10 +22,6 @@ There are many reasons why a file upload via HTTP can fail (file too large, bad 
 Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `size` and `download_url`.
 Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
 
-## Thumbnails
-
-Tape tries to generate thumbnail images for uploaded files in multiple sizes.
-
 ## Upload a file
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
@@ -112,6 +108,18 @@ Content-Type: multipart/form-data`}
     "download_url": "a0af01bf9c34413d15511608ec0e1d"
   }
 ]
+```
+
+## Thumbnails
+
+Tape tries to generate thumbnail images for uploaded files in multiple sizes. Thumbnails are optimized for displaying them as a user avatar, a file thumbnail or something similar.
+
+```json
+{
+  "small": "",
+  "medium": "",
+  "large": ""
+}
 ```
 
 ## Upload limits

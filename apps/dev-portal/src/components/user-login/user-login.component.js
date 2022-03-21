@@ -1,13 +1,11 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Admonition from '@theme/Admonition';
 import React, { useEffect, useState } from 'react';
 import {
-  DEFAULT_USERNAME,
   getActiveUserContextIsLoading,
   getActiveUserPrimaryName,
 } from '../active-user/constants';
 import { activeUserContextEffect } from '../active-user/context.effect';
-import ApiKeyCode from '@site/src/components/api-key-code.component';
-import Admonition from '@theme/Admonition';
 
 const STATIC_HEIGHT = '180px';
 

@@ -18,7 +18,11 @@ const BASE_URL_PLACEHOLDER = '#BASE_URL';
 const RECORD_ID_PLACEHOLDER = '#RECORD_ID';
 const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
 
-export default function ApiKeyCodeblock({ children, language, title }) {
+/**
+ * Context-aware CodeBlock component wrapper, replacing placeholders with the respective values from the context.
+ * Replaces placeholders inside the title and children components.
+ */
+export default function ContextCodeblock({ children, language, title }) {
   const [_, setState] = useState(Date.now());
   const { siteConfig: config } = useDocusaurusContext();
 
