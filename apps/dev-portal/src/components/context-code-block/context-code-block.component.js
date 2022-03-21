@@ -26,12 +26,13 @@ export default function ContextCodeBlock({ children, language, title }) {
   const { siteConfig: config } = useDocusaurusContext();
   const apiKey = getActiveUserApiKey(config) ?? DEFAULT_API_KEY;
 
+  // Initialize application state usage
   const [state, setAppState] = useState(getAppState());
-
-  // Subscribe to application state
   useEffect(() => {
     return subscribeToAppState(setAppState);
   }, []);
+
+  console.log({ state: JSON.stringify(state) });
 
   const recordId = getDemoRecordId(config) ?? DEFAULT_RECORD_ID;
   const recordTitle = getDemoRecordTitle(config) ?? DEFAULT_RECORD_TITLE;
