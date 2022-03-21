@@ -20,7 +20,6 @@ export default function UserLoginInfo() {
 
   const isLoading = getActiveUserIsLoading(state);
   const primaryName = getActiveUserPrimaryName(state);
-  console.log(state);
 
   if (isLoading) {
     return <div style={{ minHeight: STATIC_HEIGHT }}></div>;

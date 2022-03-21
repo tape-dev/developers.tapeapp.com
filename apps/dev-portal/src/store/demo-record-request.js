@@ -15,14 +15,14 @@ const headers = {
   'content-type': 'application/json',
 };
 
-export function loadActiveUserDemoRecord(uid, runtime) {
+export function loadActiveUserDemoRecord(runtime, userId) {
   return fetch(
     `${getBaseUrl(runtime)}/graphql/getActiveUserDevPortalDemoRecord`,
     {
       method: 'POST',
       headers: {
         ...headers,
-        uid,
+        uid: userId,
       },
       credentials: 'include',
       mode: 'cors',
