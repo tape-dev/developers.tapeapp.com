@@ -4,7 +4,6 @@ title: Tape Developer API
 sidebar_label: Introduction
 ---
 
-import { ActiveUserApiKey } from '@site/src/components/active-user/api-key.component';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Admonition from '@theme/Admonition';
 

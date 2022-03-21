@@ -1,15 +1,10 @@
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Admonition from '@theme/Admonition';
-import React, { useEffect, useState } from 'react';
-import {
-  getActiveUserContextIsLoading,
-  getActiveUserPrimaryName,
-} from '../active-user/constants';
-import { activeUserContextEffect } from '../active-user/context.effect';
+import React from 'react';
 
 const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
+  /**
   const [_, setState] = useState(0);
   const { siteConfig: config } = useDocusaurusContext();
 
@@ -19,6 +14,9 @@ export default function UserLoginInfo() {
   useEffect(() => {
     activeUserContextEffect(config, setState);
   }, []);
+   */
+  const isLoading = false;
+  const primaryName = 'TesT';
 
   if (isLoading) {
     return <div style={{ minHeight: STATIC_HEIGHT }}></div>;
