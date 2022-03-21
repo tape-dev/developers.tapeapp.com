@@ -8,25 +8,31 @@ export async function loadAppStateFromServer(runtime) {
     return;
   }
   setAppState({ ...getAppState(), initializing: true });
-
-  // Load active user context
   const baseUrl = getBaseUrlForRuntime(runtime);
-  const activeUserContext = await loadActiveUserSessionsAndContext(baseUrl);
 
-  setAppState({
-    ...getAppState(),
-    activeUserContext,
-    activeUserContextIsLoading: false,
-  });
-
-  // Load demo record
-  const userId = activeUserContext.user?.id;
-  if (userId) {
-    const demoRecord = await loadActiveUserDemoRecord(baseUrl, userId);
-
+  try {
+    // Load active user context
+    const activeUserContext = await loadActiveUserSessionsAndContext(baseUrl);
     setAppState({
       ...getAppState(),
-      demoRecord,
+      activeUserContext,
+      activeUserContextIsLoading: false,
+    });
+
+    // Load demo record
+    const userId = activeUserContext.user?.id;
+    if (userId) {
+      const demoRecord = await loadActiveUserDemoRecord(baseUrl, userId);
+      setAppState({
+        ...getAppState(),
+        demoRecord,
+        demoRecordIsLoading: false,
+      });
+    }
+  } catch (err) {
+    setAppState({
+      ...getAppState(),
+      activeUserContextIsLoading: false,
       demoRecordIsLoading: false,
     });
   }
