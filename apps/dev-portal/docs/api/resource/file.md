@@ -26,7 +26,7 @@ Files that are uploaded but not attached to a resource will be deleted automatic
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
-When uploading files to Tape, use the dedicated endpoint to create a temporary file reference first:
+A single file can be uploaded via the `/file/upload` endpoint via the `file` field:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -50,7 +50,7 @@ Content-Type: multipart/form-data`}
 </TabItem>
 </Tabs>
 
-You receive a file reference, that can then be used when creating or updating a resource. See the example below to attach a file to a single attachment field:
+The response will be a file object containing information of the uploaded file:
 
 ```json
 {
@@ -66,7 +66,7 @@ You receive a file reference, that can then be used when creating or updating a 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/file/upload" />
 
-You can also upload multiple files at the same time by providing the `file` field multiple times:
+Multiple files can be uploaded at the same time via the `/file/upload` endpoint by providing the `file` field multiple times:
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -91,6 +91,8 @@ Content-Type: multipart/form-data`}
 </TabItem>
 </Tabs>
 
+The response will be an array of file objects containing information of the uploaded files:
+
 ```json
 [
   {
@@ -98,17 +100,19 @@ Content-Type: multipart/form-data`}
     "filename": "filename1.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "61bc95fa43c2bbef3e29a13bc3307d"
+    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/61bc95fa43c2bbef3e29a13bc3307d"
   },
   {
     "id": 3,
     "filename": "filename2.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "a0af01bf9c34413d15511608ec0e1d"
+    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/a0af01bf9c34413d15511608ec0e1d"
   }
 ]
 ```
+
+If you intended to upload multiple files but only provided one, you receive a single file object instead of an array. The API will always return a file object if only one file was uploaded and an array of file objects if more than one file was uploaded.
 
 ## Thumbnails
 
