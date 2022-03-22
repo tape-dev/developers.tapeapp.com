@@ -30,7 +30,7 @@ A single file can be uploaded via the `/file/upload` endpoint via the `file` fie
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell">
+<ContextCodeBlock language="shell"  title="➡️      Request">
 {`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename.txt'
@@ -39,7 +39,7 @@ A single file can be uploaded via the `/file/upload` endpoint via the `file` fie
 </TabItem>
 
 <TabItem value="http" label="HTTP">
-<ContextCodeBlock language="http">
+<ContextCodeBlock language="http"  title="➡️      Request">
 {`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
@@ -52,7 +52,7 @@ Content-Type: multipart/form-data`}
 
 The response will be a file object containing information of the uploaded file:
 
-```json
+```json title="⬅️      Response"
 {
   "id": 1,
   "filename": "filename.txt",
@@ -77,7 +77,7 @@ Multiple files can be uploaded at the same time via the `/file/upload` endpoint 
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell">
+<ContextCodeBlock language="shell" title="➡️      Request">
 {`curl #BASE_URL/v1/file/upload \\
   -u #USER_API_KEY: \\
   -F 'file=@./filename1.txt' \\
@@ -87,7 +87,7 @@ Multiple files can be uploaded at the same time via the `/file/upload` endpoint 
 </TabItem>
 
 <TabItem value="http" label="HTTP">
-<ContextCodeBlock language="http">
+<ContextCodeBlock language="http"  title="➡️      Request">
 {`POST /v1/file/upload HTTP/1.1
 Host: api.tapeapp.com
 Authorization: Bearer #USER_API_KEY
@@ -100,7 +100,7 @@ Content-Type: multipart/form-data`}
 
 The response will be an array of file objects containing information of the uploaded files:
 
-```json
+```json title="⬅️      Response"
 [
   {
     "id": 2,
