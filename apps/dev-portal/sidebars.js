@@ -22,6 +22,7 @@ module.exports = {
             'api/resource/app',
             'api/resource/workspace',
             'api/resource/file',
+            'api/resource/link-preview',
           ],
         },
       ],
