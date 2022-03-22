@@ -68,9 +68,48 @@ Returns the record with the specified `record_id`.
 `}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
-{}
-```
+<ContextCodeBlock language="shell" title='⬅️      Response'>
+{`{
+  "id": 1,
+  "title": "Module 5",
+  "app": {
+    "app_id": 16,
+    "icon": "star",
+    "name": "Modules",
+    "record_name": "Module",
+    "workspace_id": 4,
+    "config": {
+      "name": "Modules",
+      "icon": "star",
+      "record_name": "Module",
+      "workspace_id": 4
+    }
+  },
+  "created_on": "2022-03-22 13:32:37",
+  "fields": [
+    {
+      "field_id": 93,
+      "slug": "title",
+      "label": "Title",
+      "type": "text",
+      "field_type": "SINGLE_TEXT",
+      "config": {
+        "label": "Title",
+        "delta": "A",
+        "required": true,
+        "settings": {
+          "formatted": false
+        }
+      },
+      "values": [
+        {
+          "value": "Module 5"
+        }
+      ]
+    }
+  ]
+}`}
+</ContextCodeBlock>
 
 Attempting to retrieve a deleted record returns the following error:
 
