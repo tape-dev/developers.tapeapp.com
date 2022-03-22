@@ -29,7 +29,6 @@ The base URL to send all API requests is `https://api.tapeapp.com`.
 Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/records/{record_id}`. Let's go ahead and retrieve a record:
 
 <Tabs>
-
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='Get your record "#RECORD_TITLE"'>
 {`curl #BASE_URL/v1/record/#RECORD_ID  \\
@@ -86,7 +85,6 @@ print(json.dumps(req.json(), indent=2))
 `}
 </ContextCodeBlock>
 </TabItem>
-
 </Tabs>
 
 That's it, you just got your first response from the Tape API :tada: <br /> Explore all you can do with records [here](/docs/api/resource/record).

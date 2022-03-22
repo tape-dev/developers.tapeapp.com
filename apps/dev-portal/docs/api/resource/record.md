@@ -5,6 +5,10 @@ sidebar_label: Record
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
+import RecordBody from '@site/static/data/record.json'
 
 Records are the place where work gets done inside a Tape organization.
 
@@ -19,6 +23,20 @@ Creates a new record for the App with the specified `app_id` and returns the new
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
 Returns the record with the specified `record_id`.
+
+<Tabs>
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/#RECORD_ID  \\
+  -u #USER_API_KEY:
+`}
+</ContextCodeBlock>
+</TabItem>
+</Tabs>
+
+<ContextCodeBlock language="shell" title='⬅️      Response'>
+{ JSON.stringify(RecordBody, null, 2) }
+</ContextCodeBlock>
 
 ## Update a Record
 

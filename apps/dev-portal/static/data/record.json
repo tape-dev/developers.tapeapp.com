@@ -1,0 +1,427 @@
+{
+  "id": 148,
+  "title": "Issue No. 75",
+  "app": {
+    "app_id": 18,
+    "icon": "bug_report",
+    "name": "Issues",
+    "record_name": "Issue",
+    "workspace_id": 4,
+    "config": {
+      "name": "Issues",
+      "icon": "bug_report",
+      "record_name": "Issue",
+      "workspace_id": 4
+    }
+  },
+  "created_on": "2022-03-22 13:32:39",
+  "fields": [
+    {
+      "field_id": 108,
+      "slug": "title",
+      "label": "Title",
+      "type": "text",
+      "field_type": "SINGLE_TEXT",
+      "config": {
+        "label": "Title",
+        "delta": "A",
+        "required": true,
+        "settings": {
+          "formatted": false
+        }
+      },
+      "values": [
+        {
+          "value": "Issue No. 75 "
+        }
+      ]
+    },
+    {
+      "field_id": 106,
+      "slug": "type",
+      "label": "Type",
+      "type": "category",
+      "field_type": "SINGLE_CATEGORY",
+      "config": {
+        "label": "Type",
+        "delta": "E",
+        "required": false,
+        "settings": {
+          "multiple": false,
+          "options": [
+            {
+              "color": "RED",
+              "id": 20,
+              "text": "Bug"
+            },
+            {
+              "color": "BLUE",
+              "id": 21,
+              "text": "Improvement"
+            },
+            {
+              "color": "BLUE",
+              "id": 22,
+              "text": "Story"
+            },
+            {
+              "color": "GRAY",
+              "id": 23,
+              "text": "Tech"
+            },
+            {
+              "color": "PURPLE",
+              "id": 24,
+              "text": "Brainstorming"
+            },
+            {
+              "color": "BROWN",
+              "id": 25,
+              "text": "External Feedback"
+            }
+          ]
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "color": "BLUE",
+            "id": 22,
+            "text": "Story"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 105,
+      "slug": "platform",
+      "label": "Platform",
+      "field_type": "MULTI_CATEGORY",
+      "type": "category",
+      "config": {
+        "label": "Platform",
+        "delta": "D",
+        "required": false,
+        "settings": {
+          "multiple": true,
+          "options": [
+            {
+              "color": "DEFAULT",
+              "id": 1,
+              "text": "Web-client"
+            },
+            {
+              "color": "DEFAULT",
+              "id": 2,
+              "text": "Mobile-client"
+            },
+            {
+              "color": "DEFAULT",
+              "id": 3,
+              "text": "Server"
+            }
+          ]
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "color": "DEFAULT",
+            "id": 1,
+            "text": "Web-client"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 101,
+      "slug": "responsible",
+      "label": "Responsible",
+      "type": "contact",
+      "field_type": "MULTI_USER",
+      "config": {
+        "label": "Responsible",
+        "delta": "C",
+        "required": false,
+        "settings": {
+          "multiple": false
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "user_id": 4,
+            "mail": ["user2@example.org"],
+            "image": null,
+            "name": "Demo User 2",
+            "org_id": 1,
+            "type": "user"
+          }
+        },
+        {
+          "value": {
+            "user_id": 7,
+            "mail": ["user1@example.org"],
+            "image": null,
+            "name": "Demo User",
+            "org_id": 1,
+            "type": "user"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 104,
+      "slug": "belongs_to_sprint",
+      "label": "Belongs to Sprint",
+      "type": "app",
+      "field_type": "SINGLE_RELATION",
+      "config": {
+        "label": "Belongs to Sprint",
+        "delta": "J",
+        "required": false,
+        "settings": {
+          "multiple": false,
+          "referenced_apps": [
+            {
+              "app_id": 17,
+              "app": {
+                "app_id": 17,
+                "icon": "schedule",
+                "name": "Sprints",
+                "record_name": "Sprint",
+                "workspace_id": 4,
+                "config": {
+                  "name": "Sprints",
+                  "icon": "schedule",
+                  "record_name": "Sprint",
+                  "workspace_id": 4
+                }
+              }
+            }
+          ]
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "app_id": 17,
+            "created_on": "2022-03-22 13:32:38",
+            "record_id": 71,
+            "title": "Sprint 48",
+            "app": {
+              "app_id": 17,
+              "icon": "schedule",
+              "name": "Sprints",
+              "record_name": "Sprint",
+              "workspace_id": 4,
+              "config": {
+                "name": "Sprints",
+                "icon": "schedule",
+                "record_name": "Sprint",
+                "workspace_id": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 103,
+      "slug": "belongs_to_module",
+      "label": "Belongs to Module",
+      "type": "app",
+      "field_type": "MULTI_RELATION",
+      "config": {
+        "label": "Belongs to Module",
+        "delta": "K",
+        "required": false,
+        "settings": {
+          "multiple": false,
+          "referenced_apps": [
+            {
+              "app_id": 16,
+              "app": {
+                "app_id": 16,
+                "icon": "star",
+                "name": "Modules",
+                "record_name": "Module",
+                "workspace_id": 4,
+                "config": {
+                  "name": "Modules",
+                  "icon": "star",
+                  "record_name": "Module",
+                  "workspace_id": 4
+                }
+              }
+            }
+          ]
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "title": "Module 6",
+            "app_id": 16,
+            "record_id": 19,
+            "created_on": "2022-03-22 13:32:37",
+            "app": {
+              "app_id": 16,
+              "icon": "star",
+              "name": "Modules",
+              "record_name": "Module",
+              "workspace_id": 4,
+              "config": {
+                "name": "Modules",
+                "icon": "star",
+                "record_name": "Module",
+                "workspace_id": 4
+              }
+            }
+          }
+        },
+        {
+          "value": {
+            "title": "Module 9",
+            "app_id": 16,
+            "record_id": 22,
+            "created_on": "2022-03-22 13:32:37",
+            "app": {
+              "app_id": 16,
+              "icon": "star",
+              "name": "Modules",
+              "record_name": "Module",
+              "workspace_id": 4,
+              "config": {
+                "name": "Modules",
+                "icon": "star",
+                "record_name": "Module",
+                "workspace_id": 4
+              }
+            }
+          }
+        },
+        {
+          "value": {
+            "title": "Module 10",
+            "app_id": 16,
+            "record_id": 23,
+            "created_on": "2022-03-22 13:32:37",
+            "app": {
+              "app_id": 16,
+              "icon": "star",
+              "name": "Modules",
+              "record_name": "Module",
+              "workspace_id": 4,
+              "config": {
+                "name": "Modules",
+                "icon": "star",
+                "record_name": "Module",
+                "workspace_id": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 97,
+      "slug": "status",
+      "label": "Status",
+      "type": "category",
+      "field_type": "STATUS",
+      "config": {
+        "label": "Status",
+        "delta": "H",
+        "required": true,
+        "settings": {
+          "multiple": false,
+          "options": [
+            {
+              "color": "RED",
+              "id": 1,
+              "text": "Not started",
+              "meansCompleted": false
+            },
+            {
+              "color": "YELLOW",
+              "id": 2,
+              "text": "In progress",
+              "meansCompleted": false
+            },
+            {
+              "color": "GREEN",
+              "id": 3,
+              "text": "Done",
+              "meansCompleted": true
+            },
+            {
+              "color": "GRAY",
+              "id": 4,
+              "text": "Duplicate",
+              "meansCompleted": true
+            },
+            {
+              "color": "GRAY",
+              "id": 5,
+              "text": "Discarded",
+              "meansCompleted": true
+            }
+          ]
+        }
+      },
+      "values": [
+        {
+          "value": {
+            "color": "GRAY",
+            "id": 5,
+            "text": "Discarded",
+            "meansCompleted": true
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 100,
+      "slug": "tasks",
+      "label": "Tasks",
+      "field_type": "CHECKLIST",
+      "type": "checklist",
+      "config": {
+        "label": "Tasks",
+        "delta": "G",
+        "required": false
+      },
+      "values": [
+        {
+          "id": 147,
+          "assignee": null,
+          "description": "",
+          "title": "Checklist-Item No. 75",
+          "dueAt": null
+        },
+        {
+          "id": 148,
+          "assignee": null,
+          "description": "",
+          "title": "Checklist-Item No. 76",
+          "dueAt": "2021-05-02 00:00:00"
+        },
+        {
+          "id": 149,
+          "assignee": null,
+          "description": "Checklist-Item description",
+          "title": "Checklist-Item No. 77",
+          "dueAt": null
+        },
+        {
+          "id": 150,
+          "assignee": null,
+          "description": "",
+          "title": "Checklist-Item No. 78",
+          "dueAt": null
+        }
+      ]
+    }
+  ]
+}
