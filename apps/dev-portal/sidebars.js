@@ -21,7 +21,7 @@ module.exports = {
             'api/resource/record',
             'api/resource/app',
             'api/resource/workspace',
-            'api/resource/files',
+            'api/resource/file',
           ],
         },
       ],
