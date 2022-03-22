@@ -19,6 +19,15 @@ module.exports = {
           collapsed: false,
           items: [
             'api/resource/record',
+            {
+              type: 'category',
+              label: 'Field Value',
+              collapsed: true,
+              items: [
+                'api/resource/field-value/general',
+                'api/resource/field-value/text',
+              ],
+            },
             'api/resource/app',
             'api/resource/workspace',
             'api/resource/file',
