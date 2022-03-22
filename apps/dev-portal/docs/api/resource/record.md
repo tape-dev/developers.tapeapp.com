@@ -62,19 +62,25 @@ Creates a new record for the App with the specified `app_id` and returns the new
 
 Returns the record with the specified `record_id`.
 
-<Tabs>
-<TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/record/#RECORD_ID  \\
   -u #USER_API_KEY:
 `}
 </ContextCodeBlock>
-</TabItem>
-</Tabs>
 
-<ContextCodeBlock language="shell" title='⬅️      Response'>
-{`
-`}
+```json title='⬅️      Response'
+{}
+```
+
+Attempting to retrieve a deleted record returns the following error:
+
+<ContextCodeBlock language="json">
+{`{
+"status_code": 400,
+"endpoint": "/v1/record/17",
+"error_code": "record_deleted",
+"error_message": "Record is deleted(17)!"
+}`}
 </ContextCodeBlock>
 
 ## Update a Record
@@ -83,11 +89,68 @@ Returns the record with the specified `record_id`.
 
 Updates the record with the specified `record_id` and returns the updated record:
 
+<ContextCodeBlock title='➡️      Request'>
+{`{
+  "external_id": The external ID of the record.
+  "fields": The values for each field,
+  {
+    "{field_id/external_id}": The values for the given field in one of the formats:
+      [
+        {
+          "{sub_id}":{value},
+          ... (more sub_ids and values)
+        },
+        ... (more values)
+      ]
+      or
+      [
+        {value},
+        ... (more values)
+      ]
+      or
+      {
+        "{sub_id}":{value},
+        ... (more sub_ids and values)
+      }
+      or
+      {value}
+    },
+    .... (more fields)
+  },
+}
+`}
+</ContextCodeBlock>
+
+```json title='⬅️      Response'
+{}
+```
+
 ## Delete a Record
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-Delete the record with the specified `record_id`.
+Delete the record with the specified `record_id`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X DELETE #BASE_URL/v1/record/#RECORD_ID  \\
+  -u #USER_API_KEY:
+`}
+</ContextCodeBlock>
+
+```json title='⬅️      Response'
+{}
+```
+
+If the record has already been deleted, the following error is returned:
+
+<ContextCodeBlock language="json">
+{`{
+  "status_code": 400,
+  "endpoint": "/v1/record/#RECORD_ID",
+  "error_code": "record_deleted",
+  "error_message": "Record is deleted(#RECORD_ID)!"
+}`}
+</ContextCodeBlock>
 
 ## Get Records for an App
 
