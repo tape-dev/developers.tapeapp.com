@@ -4,8 +4,10 @@ title: Link Preview
 sidebar_label: Link Preview
 ---
 
-import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
+import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 Tape generates link previews for URLs inside link fields or that are shared via comments, replies and chat messages. A link preview always has the `id` and `url` properties, all other properties (`title`, `description`, `previewImage`) are optional, depending on whether Tape was able to access the provided URL.
 
