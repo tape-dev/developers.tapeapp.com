@@ -8,7 +8,6 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
-import RecordBody from '@site/static/data/record.json'
 
 Records are the place where work gets done inside a Tape organization.
 
@@ -17,6 +16,45 @@ Records are the place where work gets done inside a Tape organization.
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
 Creates a new record for the App with the specified `app_id` and returns the newly created record:
+
+<ContextCodeBlock title='➡️      Request'>
+{`{
+  "external_id": The external ID of the record.
+  "fields": The values for each field,
+  {
+    "{field_id/external_id}": The values for the given field in one of the formats:
+      [
+        {
+          "{sub_id}":{value},
+          ... (more sub_ids and values)
+        },
+        ... (more values)
+      ]
+      or
+      [
+        {value},
+        ... (more values)
+      ]
+      or
+      {
+        "{sub_id}":{value},
+        ... (more sub_ids and values)
+      }
+      or
+      {value}
+    },
+    .... (more fields)
+  },
+}
+`}
+</ContextCodeBlock>
+
+```json title='⬅️      Response'
+{
+  "record_id": "The ID of the newly created record",
+  "title": "The title of the newly created record"
+}
+```
 
 ## Retrieve a Record
 
@@ -35,7 +73,8 @@ Returns the record with the specified `record_id`.
 </Tabs>
 
 <ContextCodeBlock language="shell" title='⬅️      Response'>
-{ JSON.stringify(RecordBody, null, 2) }
+{`
+`}
 </ContextCodeBlock>
 
 ## Update a Record
