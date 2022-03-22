@@ -58,9 +58,16 @@ The response will be a file object containing information of the uploaded file:
   "filename": "filename.txt",
   "size": 20,
   "created_on": "2022-01-01 12:00:00",
-  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/d8f205f4daaced0f3f714b5ebb76ad"
+  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/d8f205f4daaced0f3f714b5ebb76ad",
+  "thumbnail": {
+    "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
+    "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
+    "large": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/f8f105f4daaced0f3f714b5ebb76ae"
+  }
 }
 ```
+
+The `thumbnail` property is optional and will only be available in case a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
 
 ## Upload multiple files
 
@@ -107,36 +114,49 @@ The response will be an array of file objects containing information of the uplo
     "filename": "filename2.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/a0af01bf9c34413d15511608ec0e1d"
+    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/a0af01bf9c34413d15511608ec0e1d",
+    "thumbnail": {
+      "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
+      "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
+      "large": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/f8f105f4daaced0f3f714b5ebb76ae"
+    }
   }
 ]
 ```
+
+The `thumbnail` property is optional and will only be available in case a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
 
 If you intended to upload multiple files but only provided one, you receive a single file object instead of an array. The API will always return a file object if only one file was uploaded and an array of file objects if more than one file was uploaded.
 
 ## Thumbnails
 
-Tape tries to generate thumbnail images for uploaded files in multiple sizes. Thumbnails are optimized for displaying them as a user avatar, a file thumbnail or something similar.
+Tape tries to generate thumbnail images for uploaded files in multiple sizes. Thumbnails are optimized for displaying them as a user avatar, a file thumbnail or something similar. Thumbnails will be available in different sizes depending on their use:
+
+- `small`: JPG with 100px width and 100px height
+- `medium`: JPG with 200px width and 200px height
+- `large`: JPG with the image's original width and height
+
+An example thumbnail object:
 
 ```json
 {
-  "small": "",
-  "medium": "",
-  "large": ""
+  "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
+  "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
+  "large": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/f8f105f4daaced0f3f714b5ebb76ae"
 }
 ```
 
 ## Upload limits
 
-| Variable | Limit |
-| :------- | :---- |
-|          |       |
-|          |       |
-|          |       |
+The following limits are enforced for all file upload enpoints:
+
+| Variable          | Limit |
+| :---------------- | :---- |
+| Maximum file size | 100MB |
 
 ## Rate limit credits
 
-File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always cost 2x credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half the maximum filesize costs 3x credits.
+File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always cost 2x credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
 
 ```
 Uploading 1KB: 2x credits
