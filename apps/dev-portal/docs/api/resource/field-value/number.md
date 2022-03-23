@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A number field value consists of its `value` property of type `number`. The value is a decimal like `1`, `1.0` or `1.5`.
+A number field value consists of its `value` property of type `number`. The value is a decimal like 1, 1.0 or 1.5. A `NUMBER` field value holds at most one value.
 
 ## Record creation
 

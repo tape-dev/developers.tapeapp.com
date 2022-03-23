@@ -9,7 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A user field value consists of its `value` property which holds a reference to a user. A user has the properties `user_id` (unique ID), `name` (the username), `org_Id` (ID of the user's organization) and others. A `SINGLE_USER` field value holds at most one user while a `MULTI_USER` field value can hold multiple users.
+A user field value consists of its `value` property which holds a reference to a user. A user has the properties `user_id` (unique ID), `name` (the username), `org_Id` (ID of the user's organization) and others.
+A `SINGLE_USER` field value holds at most one user reference while a `MULTI_USER` field value can hold multiple user references.
 
 ## Record creation
 
