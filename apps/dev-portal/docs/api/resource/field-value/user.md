@@ -15,7 +15,7 @@ A user field value consists of its `value` property which holds a reference to a
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A user field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name`, a value for the "Supervisor" field with ID 2, type `SINGLE_USER` and external ID `supervisor` and a value for the "Interviewed by" field with ID 3, type `MULTI_USER` and external ID `interviewed_by`:
+A user field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Supervisor" field with ID 2, type `SINGLE_USER` and external ID `supervisor` and a value for the "Interviewed by" field with ID 3, type `MULTI_USER` and external ID `interviewed_by`:
 
 <Tabs defaultValue="curl">
 
@@ -26,7 +26,6 @@ A user field value can be created as part of a record creation. Here is an examp
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "first_name": "Adam Smith",
       "supervisor": 1,
       "interviewed_by": [4, 5]
     }
@@ -40,7 +39,6 @@ A user field value can be created as part of a record creation. Here is an examp
 ```json title="➡️      Request">
 {
   "fields": {
-    "first_name": "Adam Smith",
     "supervisor": 1,
     "interviewed_by": [4, 5]
   }
@@ -53,16 +51,8 @@ A user field value can be created as part of a record creation. Here is an examp
 ```json title="⬅️      Response"
 {
   "id": 1,
-  "title": "Adam Smith",
+  "title": "Zoe Maxwell",
   "fields": [
-    {
-      "field_Id": 1,
-      "external_id": "first_name",
-      "type": "text",
-      "field_type": "SINGLE_TEXT",
-      "label": "First Name",
-      "values": [{ "value": "Adam Smith" }]
-    },
     {
       "field_id": 2,
       "slug": "supervisor",
@@ -129,16 +119,8 @@ A user field value can be retrieved as part of a record retrieval:
 ```json title='⬅️      Response'
 {
   "id": 1,
-  "title": "Adam Smith",
+  "title": "Zoe Maxwell",
   "fields": [
-    {
-      "field_Id": 1,
-      "external_id": "first_name",
-      "type": "text",
-      "field_type": "SINGLE_TEXT",
-      "label": "First Name",
-      "values": [{ "value": "Adam Smith" }]
-    },
     {
       "field_id": 2,
       "slug": "supervisor",
@@ -231,16 +213,8 @@ One or more user field values can be updated as part of a record update. Here is
 ```json title='⬅️      Response'
 {
   "id": 1,
-  "title": "Adam Smith",
+  "title": "Delaney Beatty",
   "fields": [
-    {
-      "field_Id": 1,
-      "external_id": "first_name",
-      "type": "text",
-      "field_type": "SINGLE_TEXT",
-      "label": "First Name",
-      "values": [{ "value": "Adam Smith" }]
-    },
     {
       "field_id": 2,
       "slug": "supervisor",

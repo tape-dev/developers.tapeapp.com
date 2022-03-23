@@ -15,7 +15,7 @@ A text field value consists of its `value` property of type `string`. The value 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A text field value can be created as part of a record creation. Here is an example request body for creating a record with the text field value "Adam Smith" for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
+A text field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
 
 <Tabs defaultValue="curl">
 
@@ -113,7 +113,7 @@ A text field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more text field values can be updated as part of a record update. Here is an example request body for updating a record with the text field value "Andrea Lim" for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
+One or more text field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
 
 <Tabs defaultValue="curl">
 
