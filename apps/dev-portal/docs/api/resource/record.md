@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 Records are the place where work gets done inside a Tape organization. Records can be created, retrieved, updated and deleted via the API.
 
-## Create a Record
+## Create a record
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
@@ -79,7 +79,7 @@ Upon successful creation, the server returns the created record:
 }
 ```
 
-## Retrieve a Record
+## Retrieve a record
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
@@ -196,14 +196,14 @@ Updates the record with the specified `record_id` and returns the updated record
 }
 ```
 
-## Delete a Record
+## Delete a record
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
 Delete the record with the specified `record_id`:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X DELETE #BASE_URL/v1/record/#RECORD_ID  \\
+{`curl -X DELETE #BASE_URL/v1/record/1  \\
   -u #USER_API_KEY:
 `}
 </ContextCodeBlock>
@@ -217,13 +217,13 @@ If the record has already been deleted, the following error is returned:
 <ContextCodeBlock language="json">
 {`{
   "status_code": 400,
-  "endpoint": "/v1/record/#RECORD_ID",
+  "endpoint": "/v1/record/1",
   "error_code": "record_deleted",
-  "error_message": "Record is deleted(#RECORD_ID)!"
+  "error_message": "Record is deleted(1)!"
 }`}
 </ContextCodeBlock>
 
-## Get Records for an App
+## Get records for an app
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
@@ -325,22 +325,22 @@ Retrieve records for the app with the specified `app_id`:
 
 **Query Parameters**
 
-| Parameter | Type    | ** Type**                                    | Min | Max |
-| --------- | ------- | -------------------------------------------- | --- | --- |
-| limit     | Integer | Number of records to return. Defaults to 50. | 0   | 500 |
-| cursor    | String  | Cursor for pagination                        | -   | -   |
-| sort_by   | String  | Slug of the field that should be sorted by.  | -   | -   |
+| Parameter | Type      | ** Type**                                          | Min | Max |
+| --------- | --------- | -------------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
+| `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
+| `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
 
-## Filter Records for an App
+## Get filtered records for an app
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/filter" />
 
-Returns records for the App with the specified `app_id` based on the filters and sorts.
+Returns records for the app with the specified `app_id` based on the filters and sorts.
 
 **Query Parameters**
 
-| Parameter | Type    | Description                                  | Min | Max |
-| --------- | ------- | -------------------------------------------- | --- | --- |
-| limit     | Integer | Number of records to return. Defaults to 50. | 0   | 500 |
-| cursor    | String  | Cursor for pagination                        | -   | -   |
-| sort_by   | String  | Slug of the field that should be sorted by.  | -   | -   |
+| Parameter | Type      | Description                                        | Min | Max |
+| --------- | --------- | -------------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
+| `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
+| `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
