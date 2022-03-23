@@ -10,10 +10,10 @@ Endpoints which return a list of objects use pagination. Pagination allows an in
 
 Each paginated endpoint accepts the following request parameters:
 
-| Parameter   | Type                | Description                                                                                                                                                                                                    |
-| :---------- | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cursor`    | `string` (optional) | A `cursor` returned from a previous response, used to request the next page of results. Treat this as an opaque value. Default: `undefined`, which indicates to return results from the beginning of the list. |
-| `page_size` | `number` (optional) | The number of items from the full list desired in the response. Default: `50` Maximum: `500` The response may contain fewer than this number of results.                                                       |
+| Parameter | Type                | Description                                                                                                                                                                                                    |
+| :-------- | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cursor`  | `string` (optional) | A `cursor` returned from a previous response, used to request the next page of results. Treat this as an opaque value. Default: `undefined`, which indicates to return results from the beginning of the list. |
+| `limit`   | `number` (optional) | The number of objects from the full list desired in the response. Default: `50` Maximum: `500` The response may contain fewer than this number of results.                                                     |
 
 :::info Parameter location varies by endpoint
 For endpoints using the HTTP `GET` method, these parameters are accepted in the request query string. For endpoints using the HTTP `POST` method, these parameters are accepted in the request body.

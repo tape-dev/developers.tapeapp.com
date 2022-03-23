@@ -46,10 +46,6 @@ To create a new record for the app with the specified `app_id`, issue a POST req
 </TabItem>
 </Tabs>
 
-The example above only specifies a `SINGLE_TEXT` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
-
-Upon successful creation, the server returns the created record:
-
 ```json title='⬅️      Response'
 {
   "id": 1,
@@ -71,6 +67,8 @@ Upon successful creation, the server returns the created record:
   ]
 }
 ```
+
+The example above only specifies a `SINGLE_TEXT` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 ## Retrieve a record
 
@@ -174,6 +172,8 @@ Updates the record with the specified `record_id` and returns the updated record
   ]
 }
 ```
+
+The example above only specifies a `SINGLE_TEXT` field value as part of the record update. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 ## Delete a record
 
