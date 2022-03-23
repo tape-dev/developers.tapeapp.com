@@ -26,7 +26,7 @@ module.exports = {
               items: [
                 'api/resource/field-value/general',
                 'api/resource/field-value/text',
-                // 'api/resource/field-value/category',
+                'api/resource/field-value/category',
               ],
             },
             'api/resource/app',
