@@ -54,11 +54,11 @@ The response will be a file object containing information of the uploaded file:
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "id": "temporary-file-1",
   "filename": "filename.txt",
   "size": 20,
   "created_on": "2022-01-01 12:00:00",
-  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/d8f205f4daaced0f3f714b5ebb76ad",
+  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/9d43730ffad8d249e3ac313193cd83?Expires=1648134130&Signature=VzrbvlfI35hp4iU7jMa%2BK%2FnutPU%3D",
   "thumbnail": {
     "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
     "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
@@ -103,18 +103,18 @@ The response will be an array of file objects containing information of the uplo
 ```json title="⬅️      Response"
 [
   {
-    "id": 2,
+    "id": "temporary-file-2",
     "filename": "filename1.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/61bc95fa43c2bbef3e29a13bc3307d"
+    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/d429d8095b14a641f05a1a45e946c9?Expires=1648134279&Signature=5fS7eq7HVBXNauF94KpejfIZbjo%3D"
   },
   {
-    "id": 3,
+    "id": "temporary-file-3",
     "filename": "filename2.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/a0af01bf9c34413d15511608ec0e1d",
+    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/fab57aefe677c3c07c6e6425c441cf?Expires=1648134325&Signature=Zx1ENKO%2FcHOqvAJSOYzv7Dta%2F1U%3D",
     "thumbnail": {
       "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
       "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
