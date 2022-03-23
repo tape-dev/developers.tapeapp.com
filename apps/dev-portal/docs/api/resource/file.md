@@ -19,8 +19,9 @@ There are many reasons why a file upload via HTTP can fail (file too large, bad 
 
 :::
 
-Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `size` and `download_url`.
-Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
+Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `size` and `download_url`. The `download_url` will expire after some hours, after which the file cannot be downloaded anymore via that URL. You can retrieve the file again to obtain a fresh `download_url`.
+
+Files that have been attached to a resource are deleted and can only be retrieved in the context of the resource. Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
 
 ## Upload a file
 
