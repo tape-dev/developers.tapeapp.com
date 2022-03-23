@@ -73,9 +73,9 @@ A user field value can be created as part of a record creation. Here is an examp
         {
           "value": {
             "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "mail": ["zoe@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Zoe Maxwell",
             "org_id": 1,
             "type": "user"
           }
@@ -91,10 +91,10 @@ A user field value can be created as part of a record creation. Here is an examp
       "values": [
         {
           "value": {
-            "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "user_id": 4,
+            "mail": ["dan@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Dan Jacob",
             "org_id": 1,
             "type": "user"
           }
@@ -102,9 +102,9 @@ A user field value can be created as part of a record creation. Here is an examp
         {
           "value": {
             "user_id": 5,
-            "mail": ["andrea@tapeapp.com"],
+            "mail": ["sierra@tapeapp.com"],
             "image": null,
-            "name": "Andrea Lim",
+            "name": "Sierra Johns",
             "org_id": 1,
             "type": "user"
           }
@@ -149,9 +149,9 @@ A user field value can be retrieved as part of a record retrieval:
         {
           "value": {
             "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "mail": ["zoe@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Zoe Maxwell",
             "org_id": 1,
             "type": "user"
           }
@@ -167,20 +167,20 @@ A user field value can be retrieved as part of a record retrieval:
       "values": [
         {
           "value": {
-            "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "user_id": 4,
+            "mail": ["dan@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Dan Jacob",
             "org_id": 1,
             "type": "user"
           }
         },
         {
           "value": {
-            "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "user_id": 5,
+            "mail": ["sierra@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Sierra Johns",
             "org_id": 1,
             "type": "user"
           }
@@ -250,9 +250,12 @@ One or more user field values can be updated as part of a record update. Here is
       "values": [
         {
           "value": {
-            "id": 2,
-            "text": "Mrs.",
-            "color": "DC0080"
+            "user_id": 2,
+            "mail": ["delaney@tapeapp.com"],
+            "image": null,
+            "name": "Delaney Beatty",
+            "org_id": 1,
+            "type": "user"
           }
         }
       ]
@@ -266,10 +269,10 @@ One or more user field values can be updated as part of a record update. Here is
       "values": [
         {
           "value": {
-            "user_id": 1,
-            "mail": ["adam@tapeapp.com"],
+            "user_id": 5,
+            "mail": ["sierra@tapeapp.com"],
             "image": null,
-            "name": "Adam Smith",
+            "name": "Sierra Johns",
             "org_id": 1,
             "type": "user"
           }
