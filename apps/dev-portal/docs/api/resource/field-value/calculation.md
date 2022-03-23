@@ -36,6 +36,18 @@ A calculation field value can be retrieved as part of a record retrieval:
       "field_type": "CALCULATION",
       "label": "Vacation days left",
       "values": [{ "value": 12 }]
+    },
+    {
+      "field_Id": 2,
+      "external_id": "linkedin_profile",
+      "type": "calculation",
+      "field_type": "CALCULATION",
+      "label": "LinkedIn Profile",
+      "values": [
+        {
+          "value": "<a  target=_blank href='https://www.linkedin.com/in/adam-smith/'>"
+        }
+      ]
     }
   ]
 }
