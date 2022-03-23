@@ -42,7 +42,7 @@ Retry-After: 57
 X-RateLimit-Limit: 50
 X-Retry-Remaining: 46
 X-Retry-Cost: 2
-X-Retry-Reset: 2022-03-19 14:44:36
+X-Retry-Reset: 2022-03-01 12:00:00
 ```
 
 In case the rate limit is exceeded, the error response body will also include alle rate limit information:
@@ -52,12 +52,12 @@ In case the rate limit is exceeded, the error response body will also include al
   "status_code": 429,
   "endpoint": "/v1/record/123",
   "error_code": "too_many_requests",
-  "error_message": "Too many requests (0/50 points left), retry after 58 seconds (2022-03-19 14:41:11). Your current request costs 10 points. Check https://developers.tapeapp.com/ for more info",
+  "error_message": "Too many requests (0/50 points left), retry after 58 seconds (2022-03-01 12:00:00). Your current request costs 10 points. Check https://developers.tapeapp.com/ for more info",
   "retry_after": 58,
   "rate_limit": 50,
   "rate_limit_remaining": 0,
   "rate_limit_cost": 10,
-  "rate_limit_reset": "2022-03-19 14:41:11"
+  "rate_limit_reset": "2022-03-01 12:00:00"
 }
 ```
 

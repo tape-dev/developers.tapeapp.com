@@ -9,93 +9,74 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-Records are the place where work gets done inside a Tape organization.
+Records are the place where work gets done inside a Tape organization. Records can be created, retrieved, updated and deleted via the API.
 
 ## Create a Record
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-Creates a new record for the App with the specified `app_id` and returns the newly created record:
+To create a new record for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body specifies has to contain the `fields` property with the key-value pairs of the field values to create for this record.
 
-<ContextCodeBlock title='➡️      Request'>
-{`{
-  "external_id": The external ID of the record.
-  "fields": The values for each field,
-  {
-    "{field_id/external_id}": The values for the given field in one of the formats:
-      [
-        {
-          "{sub_id}":{value},
-          ... (more sub_ids and values)
-        },
-        ... (more values)
-      ]
-      or
-      [
-        {value},
-        ... (more values)
-      ]
-      or
-      {
-        "{sub_id}":{value},
-        ... (more sub_ids and values)
-      }
-      or
-      {value}
-    },
-    .... (more fields)
-  },
-}
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/app/1  \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "fields": {
+      "first_name": "Adam Smith"
+    }
+  }' 
 `}
 </ContextCodeBlock>
+</TabItem>
 
-```json title='⬅️      Response'
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
 {
-  "record_id": "The ID of the newly created record",
-  "title": "The title of the newly created record"
+  "fields": {
+    "first_name": "Adam Smith"
+  }
 }
 ```
 
-## Retrieve a Record
+</TabItem>
+</Tabs>
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
+The example above only specifies a `SINGLE_TEXT` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
-Returns the record with the specified `record_id`.
+Upon successful creation, the server returns the created record:
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/record/#RECORD_ID  \\
-  -u #USER_API_KEY:
-`}
-</ContextCodeBlock>
-
-<ContextCodeBlock language="shell" title='⬅️      Response'>
-{`{
+```json title='⬅️      Response'
+{
   "id": 1,
-  "title": "Module 5",
+  "title": "Adam Smith",
+  "created_on": "2022-03-01 12:00:00",
   "app": {
-    "app_id": 16,
-    "icon": "star",
-    "name": "Modules",
-    "record_name": "Module",
-    "workspace_id": 4,
+    "app_id": 1,
+    "icon": "event_available",
+    "name": "Contacts",
+    "record_name": "Contact",
+    "workspace_id": 1,
     "config": {
-      "name": "Modules",
-      "icon": "star",
-      "record_name": "Module",
-      "workspace_id": 4
+      "name": "Contacts",
+      "icon": "event_available",
+      "record_name": "Contact",
+      "workspace_id": 1
     }
   },
-  "created_on": "2022-03-22 13:32:37",
   "fields": [
     {
-      "field_id": 93,
-      "slug": "title",
-      "label": "Title",
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
       "type": "text",
       "field_type": "SINGLE_TEXT",
       "config": {
-        "label": "Title",
-        "delta": "A",
+        "label": "Full Name",
         "required": true,
         "settings": {
           "formatted": false
@@ -103,13 +84,68 @@ Returns the record with the specified `record_id`.
       },
       "values": [
         {
-          "value": "Module 5"
+          "value": "Adam Smith"
         }
       ]
     }
   ]
-}`}
+}
+```
+
+## Retrieve a Record
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
+
+Retrieve the record with the specified `record_id`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/1 \\
+  -u #USER_API_KEY:`}
 </ContextCodeBlock>
+
+```json title='⬅️      Response'
+{
+  "id": 1,
+  "title": "Adam Smith",
+  "created_on": "2022-03-01 12:00:00",
+  "app": {
+    "app_id": 1,
+    "icon": "event_available",
+    "name": "Contacts",
+    "record_name": "Contact",
+    "workspace_id": 1,
+    "config": {
+      "name": "Contacts",
+      "icon": "event_available",
+      "record_name": "Contact",
+      "workspace_id": 1
+    }
+  },
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "SINGLE_TEXT",
+      "config": {
+        "label": "Full Name",
+        "required": true,
+        "settings": {
+          "formatted": false
+        }
+      },
+      "values": [
+        {
+          "value": "Adam Smith"
+        }
+      ]
+    }
+  ]
+}
+```
+
+The example response above only contains a `SINGLE_TEXT` field value. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 Attempting to retrieve a deleted record returns the following error:
 
