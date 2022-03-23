@@ -164,40 +164,75 @@ Attempting to retrieve a deleted record returns the following error:
 
 Updates the record with the specified `record_id` and returns the updated record:
 
-<ContextCodeBlock title='➡️      Request'>
-{`{
-  "external_id": The external ID of the record.
-  "fields": The values for each field,
-  {
-    "{field_id/external_id}": The values for the given field in one of the formats:
-      [
-        {
-          "{sub_id}":{value},
-          ... (more sub_ids and values)
-        },
-        ... (more values)
-      ]
-      or
-      [
-        {value},
-        ... (more values)
-      ]
-      or
-      {
-        "{sub_id}":{value},
-        ... (more sub_ids and values)
-      }
-      or
-      {value}
-    },
-    .... (more fields)
-  },
-}
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X PUT #BASE_URL/v1/record/1  \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "fields": {
+      "first_name": "Andrea Lim"
+    }
+  }' 
 `}
 </ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "fields": {
+    "first_name": "Andrea Lim"
+  }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ```json title='⬅️      Response'
-{}
+{
+  "id": 1,
+  "title": "Andrea Lim",
+  "created_on": "2022-03-01 12:00:00",
+  "app": {
+    "app_id": 1,
+    "icon": "event_available",
+    "name": "Contacts",
+    "record_name": "Contact",
+    "workspace_id": 1,
+    "config": {
+      "name": "Contacts",
+      "icon": "event_available",
+      "record_name": "Contact",
+      "workspace_id": 1
+    }
+  },
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "SINGLE_TEXT",
+      "config": {
+        "label": "Full Name",
+        "required": true,
+        "settings": {
+          "formatted": false
+        }
+      },
+      "values": [
+        {
+          "value": "Andrea Lim"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ## Delete a Record
