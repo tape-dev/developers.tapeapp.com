@@ -15,7 +15,7 @@ A category field value consists of its `value` property which holds a reference 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A category field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name`, a value for the "Saluation" field with ID 2, type `SINGLE_CATEGORY` and external ID `salutation` and a value for the "Tags" field with ID 3, type `MULTI_CATEGORY` and external ID `tags`:
+A category field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name`, a value for the "Salutation" field with ID 2, type `SINGLE_CATEGORY` and external ID `salutation` and a value for the "Tags" field with ID 3, type `MULTI_CATEGORY` and external ID `tags`:
 
 <Tabs defaultValue="curl">
 
