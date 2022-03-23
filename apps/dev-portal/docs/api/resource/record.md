@@ -55,19 +55,6 @@ Upon successful creation, the server returns the created record:
   "id": 1,
   "title": "Adam Smith",
   "created_on": "2022-03-01 12:00:00",
-  "app": {
-    "app_id": 1,
-    "icon": "event_available",
-    "name": "Contacts",
-    "record_name": "Contact",
-    "workspace_id": 1,
-    "config": {
-      "name": "Contacts",
-      "icon": "event_available",
-      "record_name": "Contact",
-      "workspace_id": 1
-    }
-  },
   "fields": [
     {
       "field_id": 1,
@@ -108,19 +95,6 @@ Retrieve the record with the specified `record_id`:
   "id": 1,
   "title": "Adam Smith",
   "created_on": "2022-03-01 12:00:00",
-  "app": {
-    "app_id": 1,
-    "icon": "event_available",
-    "name": "Contacts",
-    "record_name": "Contact",
-    "workspace_id": 1,
-    "config": {
-      "name": "Contacts",
-      "icon": "event_available",
-      "record_name": "Contact",
-      "workspace_id": 1
-    }
-  },
   "fields": [
     {
       "field_id": 1,
@@ -198,19 +172,6 @@ Updates the record with the specified `record_id` and returns the updated record
   "id": 1,
   "title": "Andrea Lim",
   "created_on": "2022-03-01 12:00:00",
-  "app": {
-    "app_id": 1,
-    "icon": "event_available",
-    "name": "Contacts",
-    "record_name": "Contact",
-    "workspace_id": 1,
-    "config": {
-      "name": "Contacts",
-      "icon": "event_available",
-      "record_name": "Contact",
-      "workspace_id": 1
-    }
-  },
   "fields": [
     {
       "field_id": 1,
@@ -266,7 +227,101 @@ If the record has already been deleted, the following error is returned:
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-Returns records for the App with the specified `app_id`.
+Retrieve records for the app with the specified `app_id`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/app/1?limit=2 \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
+  "records": [
+    {
+      "id": 2,
+      "title": "Adam Smith",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1,
+        "config": {
+          "name": "Contacts",
+          "icon": "event_available",
+          "record_name": "Contact",
+          "workspace_id": 1
+        }
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "SINGLE_TEXT",
+          "config": {
+            "label": "Full Name",
+            "delta": "A",
+            "required": true,
+            "settings": {
+              "formatted": false
+            }
+          },
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "Andrea Lim",
+      "created_on": "2022-03-23 08:43:03",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1,
+        "config": {
+          "name": "Contacts",
+          "icon": "event_available",
+          "record_name": "Contact",
+          "workspace_id": 1
+        }
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "SINGLE_TEXT",
+          "config": {
+            "label": "Full Name",
+            "delta": "A",
+            "required": true,
+            "settings": {
+              "formatted": false
+            }
+          },
+          "values": [
+            {
+              "value": "Andrea Lim"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`}
+</ContextCodeBlock>
 
 **Query Parameters**
 

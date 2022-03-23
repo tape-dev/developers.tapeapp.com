@@ -1,6 +1,6 @@
 .codeBlock pre {
   overflow-x: scroll;
 
-  max-height: 400px;
+  max-height: 450px;
   overflow-y: auto;
 }
