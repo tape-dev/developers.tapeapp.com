@@ -62,13 +62,6 @@ Upon successful creation, the server returns the created record:
       "label": "Full Name",
       "type": "text",
       "field_type": "SINGLE_TEXT",
-      "config": {
-        "label": "Full Name",
-        "required": true,
-        "settings": {
-          "formatted": false
-        }
-      },
       "values": [
         {
           "value": "Adam Smith"
@@ -102,13 +95,6 @@ Retrieve the record with the specified `record_id`:
       "label": "Full Name",
       "type": "text",
       "field_type": "SINGLE_TEXT",
-      "config": {
-        "label": "Full Name",
-        "required": true,
-        "settings": {
-          "formatted": false
-        }
-      },
       "values": [
         {
           "value": "Adam Smith"
@@ -179,13 +165,6 @@ Updates the record with the specified `record_id` and returns the updated record
       "label": "Full Name",
       "type": "text",
       "field_type": "SINGLE_TEXT",
-      "config": {
-        "label": "Full Name",
-        "required": true,
-        "settings": {
-          "formatted": false
-        }
-      },
       "values": [
         {
           "value": "Andrea Lim"
@@ -223,7 +202,7 @@ If the record has already been deleted, the following error is returned:
 }`}
 </ContextCodeBlock>
 
-## Get records for an app
+## Retrieve records for an app
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
@@ -248,13 +227,7 @@ Retrieve records for the app with the specified `app_id`:
         "icon": "event_available",
         "name": "Contacts",
         "record_name": "Contact",
-        "workspace_id": 1,
-        "config": {
-          "name": "Contacts",
-          "icon": "event_available",
-          "record_name": "Contact",
-          "workspace_id": 1
-        }
+        "workspace_id": 1
       },
       "fields": [
         {
@@ -263,14 +236,6 @@ Retrieve records for the app with the specified `app_id`:
           "label": "Full Name",
           "type": "text",
           "field_type": "SINGLE_TEXT",
-          "config": {
-            "label": "Full Name",
-            "delta": "A",
-            "required": true,
-            "settings": {
-              "formatted": false
-            }
-          },
           "values": [
             {
               "value": "Adam Smith"
@@ -288,13 +253,7 @@ Retrieve records for the app with the specified `app_id`:
         "icon": "event_available",
         "name": "Contacts",
         "record_name": "Contact",
-        "workspace_id": 1,
-        "config": {
-          "name": "Contacts",
-          "icon": "event_available",
-          "record_name": "Contact",
-          "workspace_id": 1
-        }
+        "workspace_id": 1
       },
       "fields": [
         {
@@ -303,14 +262,6 @@ Retrieve records for the app with the specified `app_id`:
           "label": "Full Name",
           "type": "text",
           "field_type": "SINGLE_TEXT",
-          "config": {
-            "label": "Full Name",
-            "delta": "A",
-            "required": true,
-            "settings": {
-              "formatted": false
-            }
-          },
           "values": [
             {
               "value": "Andrea Lim"
@@ -326,20 +277,6 @@ Retrieve records for the app with the specified `app_id`:
 **Query Parameters**
 
 | Parameter | Type      | ** Type**                                          | Min | Max |
-| --------- | --------- | -------------------------------------------------- | --- | --- |
-| `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
-| `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
-| `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
-
-## Get filtered records for an app
-
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/filter" />
-
-Returns records for the app with the specified `app_id` based on the filters and sorts.
-
-**Query Parameters**
-
-| Parameter | Type      | Description                                        | Min | Max |
 | --------- | --------- | -------------------------------------------------- | --- | --- |
 | `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
