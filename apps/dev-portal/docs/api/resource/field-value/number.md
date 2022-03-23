@@ -26,7 +26,7 @@ A number field value can be created as part of a record creation. Here is an exa
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "salary": 10
+      "salary": 2000
     }
   }' 
 `}
@@ -38,7 +38,7 @@ A number field value can be created as part of a record creation. Here is an exa
 ```json title="➡️      Request">
 {
   "fields": {
-    "salary": 10
+    "salary": 2000
   }
 }
 ```
@@ -49,7 +49,7 @@ A number field value can be created as part of a record creation. Here is an exa
 ```json title="⬅️      Response"
 {
   "id": 1,
-  "title": "10",
+  "title": "2000$",
   "fields": [
     {
       "field_Id": 2,
@@ -57,7 +57,7 @@ A number field value can be created as part of a record creation. Here is an exa
       "type": "number",
       "field_type": "NUMBER",
       "label": "Salary",
-      "values": [{ "value": 10 }]
+      "values": [{ "value": 2000 }]
     }
   ]
 }
@@ -77,7 +77,7 @@ A number field value can be retrieved as part of a record retrieval:
 ```json title='⬅️      Response'
 {
   "id": 1,
-  "title": "10",
+  "title": "2000$",
   "fields": [
     {
       "field_Id": 2,
@@ -85,7 +85,7 @@ A number field value can be retrieved as part of a record retrieval:
       "type": "number",
       "field_type": "NUMBER",
       "label": "Salary",
-      "values": [{ "value": 10 }]
+      "values": [{ "value": 2000 }]
     }
   ]
 }
@@ -106,7 +106,7 @@ One or more number field values can be updated as part of a record update. Here 
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "salary": 20
+      "salary": 4000
     }
   }' 
 `}
@@ -118,7 +118,7 @@ One or more number field values can be updated as part of a record update. Here 
 ```json title="➡️      Request">
 {
   "fields": {
-    "salary": 20
+    "salary": 4000
   }
 }
 ```
@@ -129,7 +129,7 @@ One or more number field values can be updated as part of a record update. Here 
 ```json title="⬅️      Response"
 {
   "id": 1,
-  "title": "20",
+  "title": "4000$",
   "fields": [
     {
       "field_Id": 2,
@@ -137,7 +137,7 @@ One or more number field values can be updated as part of a record update. Here 
       "type": "number",
       "field_type": "NUMBER",
       "label": "Salary",
-      "values": [{ "value": 20 }]
+      "values": [{ "value": 4000 }]
     }
   ]
 }
