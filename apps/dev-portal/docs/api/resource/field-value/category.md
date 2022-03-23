@@ -9,13 +9,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A category field value consists of its `value` property which holds a reference to a category option. A category option has the properties `id`, `text` and `color`. A `SINGLE_CATEGORY` field value holds at most one category option while a `MULTI_CATEGORY` field value can hold multiple category options.
+A category field value consists of its `value` property which holds a reference to a category option. A category option has the properties `id` (unique ID), `text` (the label) and `color` (hexcolor value). A `SINGLE_CATEGORY` field value holds at most one category option while a `MULTI_CATEGORY` field value can hold multiple category options.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A category field value can be created as part of a record creation. Here is an example request body for creating a record with the category field value "Adam Smith" for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Saluation" field with ID 2, type `SINGLE_CATEGORY` and external ID `salutation`:
+A category field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name`, a value for the "Saluation" field with ID 2, type `SINGLE_CATEGORY` and external ID `salutation` and a value for the "Tags" field with ID 3, type `MULTI_CATEGORY` and external ID `tags`:
 
 <Tabs defaultValue="curl">
 
@@ -27,7 +27,8 @@ A category field value can be created as part of a record creation. Here is an e
   --data '{
     "fields": {
       "first_name": "Adam Smith",
-      "salutation": 1
+      "salutation": 1,
+      "tags": [4, 5]
     }
   }' 
 `}
@@ -40,7 +41,8 @@ A category field value can be created as part of a record creation. Here is an e
 {
   "fields": {
     "first_name": "Adam Smith",
-    "salutation": 1
+    "salutation": 1,
+    "tags": [4, 5]
   }
 }
 ```
@@ -72,7 +74,30 @@ A category field value can be created as part of a record creation. Here is an e
           "value": {
             "id": 1,
             "text": "Mr.",
-            "color": "RED"
+            "color": "CDCCC9"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 3,
+      "slug": "tags",
+      "label": "Tags",
+      "field_type": "MULTI_CATEGORY",
+      "type": "category",
+      "values": [
+        {
+          "value": {
+            "id": 4,
+            "color": "CDCCC9",
+            "text": "Interview outstanding"
+          }
+        },
+        {
+          "value": {
+            "id": 5,
+            "color": "6E7174",
+            "text": "Missing contact details"
           }
         }
       ]
@@ -116,7 +141,30 @@ A category field value can be retrieved as part of a record retrieval:
           "value": {
             "id": 1,
             "text": "Mr.",
-            "color": "RED"
+            "color": "CDCCC9"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 3,
+      "slug": "tags",
+      "label": "Tags",
+      "field_type": "MULTI_CATEGORY",
+      "type": "category",
+      "values": [
+        {
+          "value": {
+            "id": 4,
+            "color": "CDCCC9",
+            "text": "Interview outstanding"
+          }
+        },
+        {
+          "value": {
+            "id": 5,
+            "color": "6E7174",
+            "text": "Missing contact details"
           }
         }
       ]
@@ -129,7 +177,7 @@ A category field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more category field values can be updated as part of a record update. Here is an example request body for updating a record with the category field value "Andrea Lim" for the "First Name" field with ID 1, type `SINGLE_CATEGORY` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_CATEGORY` and external ID `notes`:
+One or more category field values can be updated as part of a record update. Here is an example request body for updating multiple category field values of a record:
 
 <Tabs defaultValue="curl">
 
@@ -140,7 +188,8 @@ One or more category field values can be updated as part of a record update. Her
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "salutation": 2
+      "salutation": 2,
+      "tags": [5]
     }
   }' 
 `}
@@ -152,7 +201,8 @@ One or more category field values can be updated as part of a record update. Her
 ```json title="➡️      Request">
 {
   "fields": {
-    "salutation": 2
+    "salutation": 2,
+    "tags": [5]
   }
 }
 ```
@@ -184,7 +234,23 @@ One or more category field values can be updated as part of a record update. Her
           "value": {
             "id": 2,
             "text": "Mrs.",
-            "color": "BLUE"
+            "color": "DC0080"
+          }
+        }
+      ]
+    },
+    {
+      "field_id": 3,
+      "slug": "tags",
+      "label": "Tags",
+      "field_type": "MULTI_CATEGORY",
+      "type": "category",
+      "values": [
+        {
+          "value": {
+            "id": 5,
+            "color": "6E7174",
+            "text": "Missing contact details"
           }
         }
       ]
