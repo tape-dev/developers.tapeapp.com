@@ -146,28 +146,6 @@ One or more text field values can be updated as part of a record update. Here is
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
-{
-  "id": 1,
-  "title": "Andrea Lim",
-  "created_on": "2022-03-01 12:00:00",
-  "fields": [
-    {
-      "field_id": 1,
-      "external_id": "full_name",
-      "label": "Full Name",
-      "type": "text",
-      "field_type": "SINGLE_TEXT",
-      "values": [
-        {
-          "value": "Andrea Lim"
-        }
-      ]
-    }
-  ]
-}
-```
-
 ```json title="⬅️      Response"
 {
   "id": 1,
