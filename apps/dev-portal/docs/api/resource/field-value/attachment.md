@@ -1,5 +1,5 @@
 ---
-id: user
+id: attachment
 title: Attachment Field Value
 sidebar_label: Attachment
 ---
@@ -24,7 +24,7 @@ A attachment field value can be created as part of a record creation. Here is an
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
@@ -177,7 +177,8 @@ A attachment field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more attachment field values can be updated as part of a record update. Here is an example request body for updating multiple attachment field values of a record:
+One or more attachment field values can be updated as part of a record update. Both existing IDs (integers) as well as temporary file IDs (strings) can be provided as input.
+Here is an example request body for updating multiple attachment field values of a record:
 
 <Tabs defaultValue="curl">
 

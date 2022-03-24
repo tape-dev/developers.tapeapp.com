@@ -19,7 +19,7 @@ There are many reasons why a file upload via HTTP can fail (file too large, bad 
 
 :::
 
-Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `id`, a `filename`, `size` and `download_url`. The `download_url` will expire after some hours, after which the file cannot be downloaded anymore via that URL. You can retrieve the file again to obtain a fresh `download_url`.
+Files can be uploaded to Tape via the API by using the `multipart/form-data` HTTP content type. Once uploaded, file objects have a unique `file_id`, a `name`, `size` and `link`. The `link` URL will expire after some hours, after which the file cannot be downloaded anymore via that URL. You can retrieve the file again to obtain a fresh `link`.
 
 Files that have been attached to a resource are deleted and can only be retrieved in the context of the resource. Files that are uploaded but not attached to a resource will be deleted automatically after 24 hours.
 
@@ -55,11 +55,11 @@ The response will be a file object containing information of the uploaded file:
 
 ```json title="⬅️      Response"
 {
-  "id": "temporary-file-1",
-  "filename": "filename.txt",
+  "file_id": "temporary-file-1",
+  "name": "filename.txt",
   "size": 20,
   "created_on": "2022-01-01 12:00:00",
-  "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/9d43730ffad8d249e3ac313193cd83?Expires=1648134130&Signature=VzrbvlfI35hp4iU7jMa%2BK%2FnutPU%3D",
+  "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/9d43730ffad8d249e3ac313193cd83?Expires=1648134130&Signature=VzrbvlfI35hp4iU7jMa%2BK%2FnutPU%3D",
   "thumbnail": {
     "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
     "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
@@ -104,18 +104,18 @@ The response will be an array of file objects containing information of the uplo
 ```json title="⬅️      Response"
 [
   {
-    "id": "temporary-file-2",
-    "filename": "filename1.txt",
+    "file_id": "temporary-file-2",
+    "name": "filename1.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/d429d8095b14a641f05a1a45e946c9?Expires=1648134279&Signature=5fS7eq7HVBXNauF94KpejfIZbjo%3D"
+    "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/d429d8095b14a641f05a1a45e946c9?Expires=1648134279&Signature=5fS7eq7HVBXNauF94KpejfIZbjo%3D"
   },
   {
-    "id": "temporary-file-3",
-    "filename": "filename2.txt",
+    "file_id": "temporary-file-3",
+    "name": "filename2.txt",
     "size": 20,
     "created_on": "2022-01-01 12:00:00",
-    "download_url": "https://s3.eu-central-1.amazonaws.com/tape-attachments/fab57aefe677c3c07c6e6425c441cf?Expires=1648134325&Signature=Zx1ENKO%2FcHOqvAJSOYzv7Dta%2F1U%3D",
+    "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/fab57aefe677c3c07c6e6425c441cf?Expires=1648134325&Signature=Zx1ENKO%2FcHOqvAJSOYzv7Dta%2F1U%3D",
     "thumbnail": {
       "small": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/def09e9319ca30e9ab2bc13e061982",
       "medium": "https://s3.eu-central-1.amazonaws.com/tape-thumbnails/82f3c2669deca95c16d1ad955734e0",
