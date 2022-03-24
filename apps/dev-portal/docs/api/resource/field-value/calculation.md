@@ -26,7 +26,7 @@ A calculation field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "12 days",
   "fields": [
     {

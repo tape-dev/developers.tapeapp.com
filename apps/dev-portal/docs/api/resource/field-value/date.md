@@ -52,7 +52,7 @@ A date field value can be created as part of a record creation. Here is an examp
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Tuesday, 1. March 2022",
   "fields": [
     {
@@ -112,7 +112,7 @@ A date field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Tuesday, 1. March 2022",
   "fields": [
     {
@@ -198,7 +198,7 @@ One or more date field values can be updated as part of a record update. Here is
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Wednesday, 2. March 2022",
   "fields": [
     {

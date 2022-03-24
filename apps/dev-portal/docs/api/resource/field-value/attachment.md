@@ -53,7 +53,7 @@ A attachment field value can be created as part of a record creation. Here is an
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "200301_letter-of-recommendation.pdf",
   "fields": [
     {
@@ -118,7 +118,7 @@ A attachment field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Zoe Maxwell",
   "fields": [
     {
@@ -213,7 +213,7 @@ Here is an example request body for updating multiple attachment field values of
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Delaney Beatty",
   "fields": [
     {

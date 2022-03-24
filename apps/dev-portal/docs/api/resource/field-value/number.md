@@ -48,7 +48,7 @@ A number field value can be created as part of a record creation. Here is an exa
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "2000$",
   "fields": [
     {
@@ -76,7 +76,7 @@ A number field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "2000$",
   "fields": [
     {
@@ -128,7 +128,7 @@ One or more number field values can be updated as part of a record update. Here 
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "4000$",
   "fields": [
     {

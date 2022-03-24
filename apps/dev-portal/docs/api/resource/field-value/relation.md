@@ -51,7 +51,7 @@ A relation field value can be created as part of a record creation. Here is an e
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Tape Technologies GmbH",
   "fields": [
     {
@@ -110,7 +110,7 @@ A relation field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Tape Technologies GmbH",
   "fields": [
     {
@@ -195,7 +195,7 @@ One or more relation field values can be updated as part of a record update. Her
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Delaney Beatty",
   "fields": [
     {

@@ -48,7 +48,7 @@ A status field value can be created as part of a record creation. Here is an exa
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Not started",
   "fields": [
     {
@@ -85,7 +85,7 @@ A status field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Not started",
   "fields": [
     {
@@ -146,7 +146,7 @@ One or more status field values can be updated as part of a record update. Here 
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Done",
   "fields": [
     {

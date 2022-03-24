@@ -50,7 +50,7 @@ A text field value can be created as part of a record creation. Here is an examp
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Adam Smith",
   "fields": [
     {
@@ -86,7 +86,7 @@ A text field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Adam Smith",
   "fields": [
     {
@@ -148,7 +148,7 @@ One or more text field values can be updated as part of a record update. Here is
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Andrea Lim",
   "fields": [
     {

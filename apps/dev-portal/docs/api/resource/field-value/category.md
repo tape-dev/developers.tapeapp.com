@@ -50,7 +50,7 @@ A category field value can be created as part of a record creation. Here is an e
 
 ```json title="⬅️      Response"
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Mr.",
   "fields": [
     {
@@ -109,7 +109,7 @@ A category field value can be retrieved as part of a record retrieval:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Mr.",
   "fields": [
     {
@@ -194,7 +194,7 @@ One or more category field values can be updated as part of a record update. Her
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Mrs.",
   "fields": [
     {

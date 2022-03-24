@@ -48,7 +48,7 @@ To create a new record for the app with the specified `app_id`, issue a POST req
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Adam Smith",
   "created_on": "2022-03-01 12:00:00",
   "fields": [
@@ -83,7 +83,7 @@ Retrieve the record with the specified `record_id`:
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Adam Smith",
   "created_on": "2022-03-01 12:00:00",
   "fields": [
@@ -153,7 +153,7 @@ Updates the record with the specified `record_id` and returns the updated record
 
 ```json title='⬅️      Response'
 {
-  "id": 1,
+  "record_id": 1,
   "title": "Andrea Lim",
   "created_on": "2022-03-01 12:00:00",
   "fields": [
@@ -219,7 +219,7 @@ Retrieve records for the app with the specified `app_id`:
   "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
   "records": [
     {
-      "id": 2,
+      "record_id": 2,
       "title": "Adam Smith",
       "created_on": "2022-03-23 08:48:42",
       "app": {
@@ -245,7 +245,7 @@ Retrieve records for the app with the specified `app_id`:
       ]
     },
     {
-      "id": 1,
+      "record_id": 1,
       "title": "Andrea Lim",
       "created_on": "2022-03-23 08:43:03",
       "app": {
