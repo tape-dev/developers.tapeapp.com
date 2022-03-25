@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A date field value consists of its `value` property which holds a start date and optionally an end date. A start date has the properties `start` (datetime string), `start_date` (date string), `start_time` (HH:mm:ss formatted string), an end date is structured in the same way. A `SINGLE_DATE` field value can only hold a start date while a `RANGE_DATE` field value can hold an additional end date.
+A date field value consists of its `value` property which holds a start date and optionally an end date. A start date has the properties `start` (datetime string), `start_date` (date string), `start_time` (HH:mm:ss formatted string), an end date is structured in the same way. A `single_date` field value can only hold a start date while a `range_date` field value can hold an additional end date.
 
 More details on date and datetime strings can be found [here](/docs/api/date-timezone).
 
@@ -17,7 +17,7 @@ More details on date and datetime strings can be found [here](/docs/api/date-tim
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A date field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Date of employment" field with ID 2, type `SINGLE_DATE` and external ID `date_of_employment` and a value for the "Onboarding week" field with ID 3, type `RANGE_DATE` and external ID `onboarding_week`:
+A date field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Date of employment" field with ID 2, type `single_date` and external ID `date_of_employment` and a value for the "Onboarding week" field with ID 3, type `range_date` and external ID `onboarding_week`:
 
 <Tabs defaultValue="curl">
 
@@ -60,7 +60,7 @@ A date field value can be created as part of a record creation. Here is an examp
       "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
-      "field_type": "SINGLE_DATE",
+      "field_type": "single_date",
       "values": [
         {
           "start": "2022-03-01 00:00:00",
@@ -76,7 +76,7 @@ A date field value can be created as part of a record creation. Here is an examp
       "field_id": 3,
       "external_id": "onboarding_week",
       "label": "Onboarding week",
-      "field_type": "RANGE_DATE",
+      "field_type": "range_date",
       "type": "date",
       "values": [
         {
@@ -120,7 +120,7 @@ A date field value can be retrieved as part of a record retrieval:
       "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
-      "field_type": "SINGLE_DATE",
+      "field_type": "single_date",
       "values": [
         {
           "start": "2022-03-01 00:00:00",
@@ -136,7 +136,7 @@ A date field value can be retrieved as part of a record retrieval:
       "field_id": 3,
       "external_id": "onboarding_week",
       "label": "Onboarding week",
-      "field_type": "RANGE_DATE",
+      "field_type": "range_date",
       "type": "date",
       "values": [
         {
@@ -206,7 +206,7 @@ One or more date field values can be updated as part of a record update. Here is
       "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
-      "field_type": "SINGLE_DATE",
+      "field_type": "single_date",
       "values": [
         {
           "start": "2022-03-02 00:00:00",
@@ -222,7 +222,7 @@ One or more date field values can be updated as part of a record update. Here is
       "field_id": 3,
       "external_id": "onboarding_week",
       "label": "Onboarding week",
-      "field_type": "RANGE_DATE",
+      "field_type": "range_date",
       "type": "date",
       "values": [
         {
