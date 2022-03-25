@@ -10,13 +10,13 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 A relation field value consists of its `value` property which holds a reference to another record. A relation to another record has the properties `record_id` (unique record ID), `app_id` (unique ID of the record's app), `title` (title of the record) and others.
-A `SINGLE_RELATION` field value holds at most one record reference while a `MULTI_RELATION` field value can hold multiple record references.
+A `single_relation` field value holds at most one record reference while a `multi_relation` field value can hold multiple record references.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A relation field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Belongs to Company" field with ID 2, type `SINGLE_RELATION` and external ID `belongs_to_company` and a value for the "Tasks assigned" field with ID 3, type `MULTI_RELATION` and external ID `tasks_assigned`:
+A relation field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Belongs to Company" field with ID 2, type `single_relation` and external ID `belongs_to_company` and a value for the "Tasks assigned" field with ID 3, type `multi_relation` and external ID `tasks_assigned`:
 
 <Tabs defaultValue="curl">
 
@@ -59,7 +59,7 @@ A relation field value can be created as part of a record creation. Here is an e
       "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
-      "field_type": "SINGLE_RELATION",
+      "field_type": "single_relation",
       "values": [
         {
           "value": {
@@ -74,7 +74,7 @@ A relation field value can be created as part of a record creation. Here is an e
       "field_id": 3,
       "external_id": "tasks_assigned",
       "label": "Tasks assigned",
-      "field_type": "MULTI_RELATION",
+      "field_type": "multi_relation",
       "type": "relation",
       "values": [
         {
@@ -118,7 +118,7 @@ A relation field value can be retrieved as part of a record retrieval:
       "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
-      "field_type": "SINGLE_RELATION",
+      "field_type": "single_relation",
       "values": [
         {
           "value": {
@@ -133,7 +133,7 @@ A relation field value can be retrieved as part of a record retrieval:
       "field_id": 3,
       "external_id": "tasks_assigned",
       "label": "Tasks assigned",
-      "field_type": "MULTI_RELATION",
+      "field_type": "multi_relation",
       "type": "relation",
       "values": [
         {
@@ -203,7 +203,7 @@ One or more relation field values can be updated as part of a record update. Her
       "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
-      "field_type": "SINGLE_RELATION",
+      "field_type": "single_relation",
       "values": [
         {
           "value": {
@@ -218,7 +218,7 @@ One or more relation field values can be updated as part of a record update. Her
       "field_id": 3,
       "external_id": "tasks_assigned",
       "label": "Tasks assigned",
-      "field_type": "MULTI_RELATION",
+      "field_type": "multi_relation",
       "type": "relation",
       "values": [
         {

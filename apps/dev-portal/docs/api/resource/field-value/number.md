@@ -9,13 +9,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A number field value consists of its `value` property of type `number`. The value is a decimal like 1, 1.0 or 1.5. A `NUMBER` field value holds at most one value.
+A number field value consists of its `value` property of type `number`. The value is a decimal like 1, 1.0 or 1.5. A `number` field value holds at most one value.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A number field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Salary" field with ID 2, type `NUMBER` and external ID `salary`:
+A number field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Salary" field with ID 2, type `number` and external ID `salary`:
 
 <Tabs defaultValue="curl">
 
@@ -55,7 +55,7 @@ A number field value can be created as part of a record creation. Here is an exa
       "field_Id": 2,
       "external_id": "salary",
       "type": "number",
-      "field_type": "NUMBER",
+      "field_type": "number",
       "label": "Salary",
       "values": [{ "value": 2000 }]
     }
@@ -83,7 +83,7 @@ A number field value can be retrieved as part of a record retrieval:
       "field_Id": 2,
       "external_id": "salary",
       "type": "number",
-      "field_type": "NUMBER",
+      "field_type": "number",
       "label": "Salary",
       "values": [{ "value": 2000 }]
     }
@@ -95,7 +95,7 @@ A number field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more number field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "Salary" field with ID 2, type `NUMBER` and external ID `salary`:
+One or more number field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "Salary" field with ID 2, type `number` and external ID `salary`:
 
 <Tabs defaultValue="curl">
 
@@ -135,7 +135,7 @@ One or more number field values can be updated as part of a record update. Here 
       "field_Id": 2,
       "external_id": "salary",
       "type": "number",
-      "field_type": "NUMBER",
+      "field_type": "number",
       "label": "Salary",
       "values": [{ "value": 4000 }]
     }

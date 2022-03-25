@@ -9,13 +9,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A status field value consists of its `value` property which holds a reference to a status option. A status option has the properties `id` (unique ID), `text` (the label), `color` (hexcolor value) and `means_completed` (whether the status indicates completion). A `STATUS` field value holds at most one status option.
+A status field value consists of its `value` property which holds a reference to a status option. A status option has the properties `id` (unique ID), `text` (the label), `color` (hexcolor value) and `means_completed` (whether the status indicates completion). A `status` field value holds at most one status option.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A status field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Onboarding status" field with ID 2, type `STATUS` and external ID `onboarding_status`:
+A status field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Onboarding status" field with ID 2, type `status` and external ID `onboarding_status`:
 
 <Tabs defaultValue="curl">
 
@@ -56,7 +56,7 @@ A status field value can be created as part of a record creation. Here is an exa
       "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
-      "field_type": "STATUS",
+      "field_type": "status",
       "values": [
         {
           "value": {
@@ -93,7 +93,7 @@ A status field value can be retrieved as part of a record retrieval:
       "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
-      "field_type": "STATUS",
+      "field_type": "status",
       "values": [
         {
           "value": {
@@ -154,7 +154,7 @@ One or more status field values can be updated as part of a record update. Here 
       "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
-      "field_type": "STATUS",
+      "field_type": "status",
       "values": [
         {
           "value": {
