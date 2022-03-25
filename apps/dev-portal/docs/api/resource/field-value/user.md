@@ -10,13 +10,13 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 A user field value consists of its `value` property which holds a reference to a user. A user has the properties `user_id` (unique ID), `name` (the username), `org_Id` (ID of the user's organization) and others.
-A `SINGLE_USER` field value holds at most one user reference while a `MULTI_USER` field value can hold multiple user references.
+A `single_user` field value holds at most one user reference while a `multi_user` field value can hold multiple user references.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A user field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Supervisor" field with ID 2, type `SINGLE_USER` and external ID `supervisor` and a value for the "Interviewed by" field with ID 3, type `MULTI_USER` and external ID `interviewed_by`:
+A user field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Supervisor" field with ID 2, type `single_user` and external ID `supervisor` and a value for the "Interviewed by" field with ID 3, type `multi_user` and external ID `interviewed_by`:
 
 <Tabs defaultValue="curl">
 
@@ -59,7 +59,7 @@ A user field value can be created as part of a record creation. Here is an examp
       "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
-      "field_type": "SINGLE_USER",
+      "field_type": "single_user",
       "values": [
         {
           "value": {
@@ -77,7 +77,7 @@ A user field value can be created as part of a record creation. Here is an examp
       "field_id": 3,
       "external_id": "interviewed_by",
       "label": "Interviewed by",
-      "field_type": "MULTI_USER",
+      "field_type": "multi_user",
       "type": "user",
       "values": [
         {
@@ -127,7 +127,7 @@ A user field value can be retrieved as part of a record retrieval:
       "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
-      "field_type": "SINGLE_USER",
+      "field_type": "single_user",
       "values": [
         {
           "value": {
@@ -145,7 +145,7 @@ A user field value can be retrieved as part of a record retrieval:
       "field_id": 3,
       "external_id": "interviewed_by",
       "label": "Interviewed by",
-      "field_type": "MULTI_USER",
+      "field_type": "multi_user",
       "type": "user",
       "values": [
         {
@@ -221,7 +221,7 @@ One or more user field values can be updated as part of a record update. Here is
       "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
-      "field_type": "SINGLE_USER",
+      "field_type": "single_user",
       "values": [
         {
           "value": {
@@ -239,7 +239,7 @@ One or more user field values can be updated as part of a record update. Here is
       "field_id": 3,
       "external_id": "interviewed_by",
       "label": "Interviewed by",
-      "field_type": "MULTI_USER",
+      "field_type": "multi_user",
       "type": "user",
       "values": [
         {
