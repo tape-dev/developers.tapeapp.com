@@ -58,6 +58,7 @@ The response will be a file object containing information of the uploaded file:
   "file_id": "temporary-file-1",
   "name": "filename.txt",
   "size": 20,
+  "mimetype": "text/plain",
   "created_on": "2022-01-01 12:00:00",
   "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/9d43730ffad8d249e3ac313193cd83?Expires=1648134130&Signature=VzrbvlfI35hp4iU7jMa%2BK%2FnutPU%3D",
   "thumbnail": {
@@ -107,6 +108,7 @@ The response will be an array of file objects containing information of the uplo
     "file_id": "temporary-file-2",
     "name": "filename1.txt",
     "size": 20,
+    "mimetype": "text/plain",
     "created_on": "2022-01-01 12:00:00",
     "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/d429d8095b14a641f05a1a45e946c9?Expires=1648134279&Signature=5fS7eq7HVBXNauF94KpejfIZbjo%3D"
   },
@@ -114,6 +116,7 @@ The response will be an array of file objects containing information of the uplo
     "file_id": "temporary-file-3",
     "name": "filename2.txt",
     "size": 20,
+    "mimetype": "text/plain",
     "created_on": "2022-01-01 12:00:00",
     "link": "https://s3.eu-central-1.amazonaws.com/tape-attachments/fab57aefe677c3c07c6e6425c441cf?Expires=1648134325&Signature=Zx1ENKO%2FcHOqvAJSOYzv7Dta%2F1U%3D",
     "thumbnail": {
