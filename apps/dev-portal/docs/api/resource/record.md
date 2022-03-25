@@ -57,7 +57,7 @@ To create a new record for the app with the specified `app_id`, issue a POST req
       "external_id": "full_name",
       "label": "Full Name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "values": [
         {
           "value": "Adam Smith"
@@ -68,7 +68,7 @@ To create a new record for the app with the specified `app_id`, issue a POST req
 }
 ```
 
-The example above only specifies a `SINGLE_TEXT` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 ## Retrieve a record
 
@@ -92,7 +92,7 @@ Retrieve the record with the specified `record_id`:
       "external_id": "full_name",
       "label": "Full Name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "values": [
         {
           "value": "Adam Smith"
@@ -103,7 +103,7 @@ Retrieve the record with the specified `record_id`:
 }
 ```
 
-The example response above only contains a `SINGLE_TEXT` field value. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example response above only contains a `single_text` field value. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 Attempting to retrieve a deleted record returns the following error:
 
@@ -162,7 +162,7 @@ Updates the record with the specified `record_id` and returns the updated record
       "external_id": "full_name",
       "label": "Full Name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "values": [
         {
           "value": "Andrea Lim"
@@ -173,7 +173,7 @@ Updates the record with the specified `record_id` and returns the updated record
 }
 ```
 
-The example above only specifies a `SINGLE_TEXT` field value as part of the record update. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record update. See the [field value](field-value/general) documentation section for examples of all supported field types.
 
 ## Delete a record
 
@@ -235,7 +235,7 @@ Retrieve records for the app with the specified `app_id`:
           "external_id": "full_name",
           "label": "Full Name",
           "type": "text",
-          "field_type": "SINGLE_TEXT",
+          "field_type": "single_text",
           "values": [
             {
               "value": "Adam Smith"
@@ -261,7 +261,7 @@ Retrieve records for the app with the specified `app_id`:
           "external_id": "full_name",
           "label": "Full Name",
           "type": "text",
-          "field_type": "SINGLE_TEXT",
+          "field_type": "single_text",
           "values": [
             {
               "value": "Andrea Lim"

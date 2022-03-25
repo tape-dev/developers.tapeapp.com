@@ -9,13 +9,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A text field value consists of its `value` property of type `string`. The value is plaintext if the type of its corresponding field is `SINGLE_TEXT` and rich-text (HTML) if the field's type is `MULTI_TEXT`.
+A text field value consists of its `value` property of type `string`. The value is plaintext if the type of its corresponding field is `single_text` and rich-text (HTML) if the field's type is `multi_text`.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A text field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
+A text field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "First Name" field with ID 1, type `single_text` and external ID `first_name` and a value for the "Notes" field with ID 2, type `multi_text` and external ID `notes`:
 
 <Tabs defaultValue="curl">
 
@@ -57,7 +57,7 @@ A text field value can be created as part of a record creation. Here is an examp
       "field_Id": 1,
       "external_id": "first_name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "label": "First Name",
       "values": [{ "value": "Adam Smith" }]
     },
@@ -65,7 +65,7 @@ A text field value can be created as part of a record creation. Here is an examp
       "field_Id": 2,
       "external_id": "notes",
       "type": "text",
-      "field_type": "MULTI_TEXT",
+      "field_type": "multi_text",
       "label": "Notes",
       "values": [{ "value": "<p>Registered <b>10</b> month ago.</p>" }]
     }
@@ -93,7 +93,7 @@ A text field value can be retrieved as part of a record retrieval:
       "field_Id": 1,
       "external_id": "first_name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "label": "First Name",
       "values": [{ "value": "Adam Smith" }]
     },
@@ -101,7 +101,7 @@ A text field value can be retrieved as part of a record retrieval:
       "field_Id": 2,
       "external_id": "notes",
       "type": "text",
-      "field_type": "MULTI_TEXT",
+      "field_type": "multi_text",
       "label": "Notes",
       "values": [{ "value": "<p>Registered <b>10</b> month ago.</p>" }]
     }
@@ -113,7 +113,7 @@ A text field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more text field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "First Name" field with ID 1, type `SINGLE_TEXT` and external ID `first_name` and a value for the "Notes" field with ID 2, type `MULTI_TEXT` and external ID `notes`:
+One or more text field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "First Name" field with ID 1, type `single_text` and external ID `first_name` and a value for the "Notes" field with ID 2, type `multi_text` and external ID `notes`:
 
 <Tabs defaultValue="curl">
 
@@ -155,7 +155,7 @@ One or more text field values can be updated as part of a record update. Here is
       "field_Id": 1,
       "external_id": "first_name",
       "type": "text",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "label": "First Name",
       "values": [{ "value": "Andrea Lim" }]
     },
@@ -163,7 +163,7 @@ One or more text field values can be updated as part of a record update. Here is
       "field_Id": 2,
       "external_id": "notes",
       "type": "text",
-      "field_type": "MULTI_TEXT",
+      "field_type": "multi_text",
       "label": "Notes",
       "values": [{ "value": "<p>Has <b>not</b> registered yet.</p>" }]
     }
