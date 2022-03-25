@@ -56,7 +56,7 @@ A user field value can be created as part of a record creation. Here is an examp
   "fields": [
     {
       "field_id": 2,
-      "slug": "supervisor",
+      "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
       "field_type": "SINGLE_USER",
@@ -75,7 +75,7 @@ A user field value can be created as part of a record creation. Here is an examp
     },
     {
       "field_id": 3,
-      "slug": "interviewed_by",
+      "external_id": "interviewed_by",
       "label": "Interviewed by",
       "field_type": "MULTI_USER",
       "type": "user",
@@ -124,7 +124,7 @@ A user field value can be retrieved as part of a record retrieval:
   "fields": [
     {
       "field_id": 2,
-      "slug": "supervisor",
+      "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
       "field_type": "SINGLE_USER",
@@ -143,7 +143,7 @@ A user field value can be retrieved as part of a record retrieval:
     },
     {
       "field_id": 3,
-      "slug": "interviewed_by",
+      "external_id": "interviewed_by",
       "label": "Interviewed by",
       "field_type": "MULTI_USER",
       "type": "user",
@@ -218,7 +218,7 @@ One or more user field values can be updated as part of a record update. Here is
   "fields": [
     {
       "field_id": 2,
-      "slug": "supervisor",
+      "external_id": "supervisor",
       "label": "Supervisor",
       "type": "user",
       "field_type": "SINGLE_USER",
@@ -237,7 +237,7 @@ One or more user field values can be updated as part of a record update. Here is
     },
     {
       "field_id": 3,
-      "slug": "interviewed_by",
+      "external_id": "interviewed_by",
       "label": "Interviewed by",
       "field_type": "MULTI_USER",
       "type": "user",

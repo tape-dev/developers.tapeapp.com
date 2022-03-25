@@ -55,7 +55,7 @@ A category field value can be created as part of a record creation. Here is an e
   "fields": [
     {
       "field_id": 2,
-      "slug": "salutation",
+      "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
       "field_type": "SINGLE_CATEGORY",
@@ -71,7 +71,7 @@ A category field value can be created as part of a record creation. Here is an e
     },
     {
       "field_id": 3,
-      "slug": "tags",
+      "external_id": "tags",
       "label": "Tags",
       "field_type": "MULTI_CATEGORY",
       "type": "category",
@@ -114,7 +114,7 @@ A category field value can be retrieved as part of a record retrieval:
   "fields": [
     {
       "field_id": 2,
-      "slug": "salutation",
+      "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
       "field_type": "SINGLE_CATEGORY",
@@ -130,7 +130,7 @@ A category field value can be retrieved as part of a record retrieval:
     },
     {
       "field_id": 3,
-      "slug": "tags",
+      "external_id": "tags",
       "label": "Tags",
       "field_type": "MULTI_CATEGORY",
       "type": "category",
@@ -199,7 +199,7 @@ One or more category field values can be updated as part of a record update. Her
   "fields": [
     {
       "field_id": 2,
-      "slug": "salutation",
+      "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
       "field_type": "SINGLE_CATEGORY",
@@ -215,7 +215,7 @@ One or more category field values can be updated as part of a record update. Her
     },
     {
       "field_id": 3,
-      "slug": "tags",
+      "external_id": "tags",
       "label": "Tags",
       "field_type": "MULTI_CATEGORY",
       "type": "category",

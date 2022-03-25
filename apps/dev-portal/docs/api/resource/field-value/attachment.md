@@ -58,7 +58,7 @@ A attachment field value can be created as part of a record creation. Here is an
   "fields": [
     {
       "field_id": 2,
-      "slug": "letter_of_recommendation",
+      "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
       "type": "user",
       "field_type": "SINGLE_ATTACHMENT",
@@ -74,7 +74,7 @@ A attachment field value can be created as part of a record creation. Here is an
     },
     {
       "field_id": 3,
-      "slug": "hr_documents",
+      "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "MULTI_ATTACHMENT",
       "type": "user",
@@ -119,30 +119,27 @@ A attachment field value can be retrieved as part of a record retrieval:
 ```json title='⬅️      Response'
 {
   "record_id": 1,
-  "title": "Zoe Maxwell",
+  "title": "200301_letter-of-recommendation.pdf",
   "fields": [
     {
       "field_id": 2,
-      "slug": "letter_of_recommendation",
+      "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
       "type": "user",
       "field_type": "SINGLE_ATTACHMENT",
       "values": [
         {
           "value": {
-            "user_id": 1,
-            "mail": ["zoe@tapeapp.com"],
-            "image": null,
-            "name": "Zoe Maxwell",
-            "org_id": 1,
-            "type": "user"
+            "id": 100,
+            "filename": "200301_letter-of-recommendation.pdf",
+            "size": 12300
           }
         }
       ]
     },
     {
       "field_id": 3,
-      "slug": "hr_documents",
+      "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "MULTI_ATTACHMENT",
       "type": "user",
@@ -218,7 +215,7 @@ Here is an example request body for updating multiple attachment field values of
   "fields": [
     {
       "field_id": 2,
-      "slug": "letter_of_recommendation",
+      "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
       "type": "user",
       "field_type": "SINGLE_ATTACHMENT",
@@ -237,7 +234,7 @@ Here is an example request body for updating multiple attachment field values of
     },
     {
       "field_id": 3,
-      "slug": "hr_documents",
+      "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "MULTI_ATTACHMENT",
       "type": "user",

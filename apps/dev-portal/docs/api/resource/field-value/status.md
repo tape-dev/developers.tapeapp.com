@@ -53,7 +53,7 @@ A status field value can be created as part of a record creation. Here is an exa
   "fields": [
     {
       "field_id": 2,
-      "slug": "onboarding_status",
+      "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
       "field_type": "STATUS",
@@ -90,7 +90,7 @@ A status field value can be retrieved as part of a record retrieval:
   "fields": [
     {
       "field_id": 2,
-      "slug": "onboarding_status",
+      "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
       "field_type": "STATUS",
@@ -151,7 +151,7 @@ One or more status field values can be updated as part of a record update. Here 
   "fields": [
     {
       "field_id": 2,
-      "slug": "onboarding_status",
+      "external_id": "onboarding_status",
       "label": "Onboarding status",
       "type": "status",
       "field_type": "STATUS",

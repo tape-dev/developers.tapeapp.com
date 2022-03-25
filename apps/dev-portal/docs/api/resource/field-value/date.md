@@ -57,7 +57,7 @@ A date field value can be created as part of a record creation. Here is an examp
   "fields": [
     {
       "field_id": 2,
-      "slug": "date_of_employment",
+      "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
       "field_type": "SINGLE_DATE",
@@ -74,7 +74,7 @@ A date field value can be created as part of a record creation. Here is an examp
     },
     {
       "field_id": 3,
-      "slug": "onboarding_week",
+      "external_id": "onboarding_week",
       "label": "Onboarding week",
       "field_type": "RANGE_DATE",
       "type": "date",
@@ -117,7 +117,7 @@ A date field value can be retrieved as part of a record retrieval:
   "fields": [
     {
       "field_id": 2,
-      "slug": "date_of_employment",
+      "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
       "field_type": "SINGLE_DATE",
@@ -134,7 +134,7 @@ A date field value can be retrieved as part of a record retrieval:
     },
     {
       "field_id": 3,
-      "slug": "onboarding_week",
+      "external_id": "onboarding_week",
       "label": "Onboarding week",
       "field_type": "RANGE_DATE",
       "type": "date",
@@ -203,7 +203,7 @@ One or more date field values can be updated as part of a record update. Here is
   "fields": [
     {
       "field_id": 2,
-      "slug": "date_of_employment",
+      "external_id": "date_of_employment",
       "label": "Date of employment",
       "type": "date",
       "field_type": "SINGLE_DATE",
@@ -220,7 +220,7 @@ One or more date field values can be updated as part of a record update. Here is
     },
     {
       "field_id": 3,
-      "slug": "onboarding_week",
+      "external_id": "onboarding_week",
       "label": "Onboarding week",
       "field_type": "RANGE_DATE",
       "type": "date",

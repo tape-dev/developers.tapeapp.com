@@ -56,7 +56,7 @@ A relation field value can be created as part of a record creation. Here is an e
   "fields": [
     {
       "field_id": 2,
-      "slug": "belongs_to_company",
+      "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
       "field_type": "SINGLE_RELATION",
@@ -72,7 +72,7 @@ A relation field value can be created as part of a record creation. Here is an e
     },
     {
       "field_id": 3,
-      "slug": "tasks_assigned",
+      "external_id": "tasks_assigned",
       "label": "Tasks assigned",
       "field_type": "MULTI_RELATION",
       "type": "relation",
@@ -115,7 +115,7 @@ A relation field value can be retrieved as part of a record retrieval:
   "fields": [
     {
       "field_id": 2,
-      "slug": "belongs_to_company",
+      "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
       "field_type": "SINGLE_RELATION",
@@ -131,7 +131,7 @@ A relation field value can be retrieved as part of a record retrieval:
     },
     {
       "field_id": 3,
-      "slug": "tasks_assigned",
+      "external_id": "tasks_assigned",
       "label": "Tasks assigned",
       "field_type": "MULTI_RELATION",
       "type": "relation",
@@ -200,7 +200,7 @@ One or more relation field values can be updated as part of a record update. Her
   "fields": [
     {
       "field_id": 2,
-      "slug": "belongs_to_company",
+      "external_id": "belongs_to_company",
       "label": "Belongs to Company",
       "type": "relation",
       "field_type": "SINGLE_RELATION",
@@ -216,7 +216,7 @@ One or more relation field values can be updated as part of a record update. Her
     },
     {
       "field_id": 3,
-      "slug": "tasks_assigned",
+      "external_id": "tasks_assigned",
       "label": "Tasks assigned",
       "field_type": "MULTI_RELATION",
       "type": "relation",
