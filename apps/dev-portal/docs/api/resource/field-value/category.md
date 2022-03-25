@@ -9,13 +9,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A category field value consists of its `value` property which holds a reference to a category option. A category option has the properties `id` (unique ID), `text` (the label) and `color` (hexcolor value). A `SINGLE_CATEGORY` field value holds at most one category option while a `MULTI_CATEGORY` field value can hold multiple category options.
+A category field value consists of its `value` property which holds a reference to a category option. A category option has the properties `id` (unique ID), `text` (the label) and `color` (hexcolor value). A `single_category` field value holds at most one category option while a `multi_category` field value can hold multiple category options.
 
 ## Record creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A category field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Salutation" field with ID 2, type `SINGLE_CATEGORY` and external ID `salutation` and a value for the "Tags" field with ID 3, type `MULTI_CATEGORY` and external ID `tags`:
+A category field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Salutation" field with ID 2, type `single_category` and external ID `salutation` and a value for the "Tags" field with ID 3, type `multi_category` and external ID `tags`:
 
 <Tabs defaultValue="curl">
 
@@ -58,7 +58,7 @@ A category field value can be created as part of a record creation. Here is an e
       "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
-      "field_type": "SINGLE_CATEGORY",
+      "field_type": "single_category",
       "values": [
         {
           "value": {
@@ -73,7 +73,7 @@ A category field value can be created as part of a record creation. Here is an e
       "field_id": 3,
       "external_id": "tags",
       "label": "Tags",
-      "field_type": "MULTI_CATEGORY",
+      "field_type": "multi_category",
       "type": "category",
       "values": [
         {
@@ -117,7 +117,7 @@ A category field value can be retrieved as part of a record retrieval:
       "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
-      "field_type": "SINGLE_CATEGORY",
+      "field_type": "single_category",
       "values": [
         {
           "value": {
@@ -132,7 +132,7 @@ A category field value can be retrieved as part of a record retrieval:
       "field_id": 3,
       "external_id": "tags",
       "label": "Tags",
-      "field_type": "MULTI_CATEGORY",
+      "field_type": "multi_category",
       "type": "category",
       "values": [
         {
@@ -202,7 +202,7 @@ One or more category field values can be updated as part of a record update. Her
       "external_id": "salutation",
       "label": "Salutation",
       "type": "category",
-      "field_type": "SINGLE_CATEGORY",
+      "field_type": "single_category",
       "values": [
         {
           "value": {
@@ -217,7 +217,7 @@ One or more category field values can be updated as part of a record update. Her
       "field_id": 3,
       "external_id": "tags",
       "label": "Tags",
-      "field_type": "MULTI_CATEGORY",
+      "field_type": "multi_category",
       "type": "category",
       "values": [
         {
