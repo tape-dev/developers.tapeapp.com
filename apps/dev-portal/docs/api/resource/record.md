@@ -21,7 +21,7 @@ To create a new record for the app with the specified `app_id`, issue a POST req
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
@@ -126,7 +126,7 @@ Updates the record with the specified `record_id` and returns the updated record
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X PUT #BASE_URL/v1/record/1  \\
+{`curl -X PUT #BASE_URL/v1/record/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
@@ -182,7 +182,7 @@ The example above only specifies a `single_text` field value as part of the reco
 Delete the record with the specified `record_id`:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X DELETE #BASE_URL/v1/record/1  \\
+{`curl -X DELETE #BASE_URL/v1/record/1 \\
   -u #USER_API_KEY:
 `}
 </ContextCodeBlock>
