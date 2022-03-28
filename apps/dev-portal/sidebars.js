@@ -19,7 +19,6 @@ module.exports = {
           collapsed: false,
           items: [
             'api/resource/record',
-            'api/resource/record-comment',
             {
               type: 'category',
               label: 'Field Value',
@@ -41,6 +40,7 @@ module.exports = {
                 'api/resource/field-value/phone',
               ],
             },
+            'api/resource/record-comment',
             'api/resource/app',
             'api/resource/workspace',
             'api/resource/file',
