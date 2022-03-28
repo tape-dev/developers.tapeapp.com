@@ -92,6 +92,7 @@ Here is an example request body for creating a record with a value for the "Subt
           "description": "Please do not forget the sink.",
           "due": "2022-03-15",
           "completed": false,
+          "completed_at": null,
           "assignee": {
             "user_id": 600,
             "mail": ["dan@tapeapp.com"],
@@ -106,7 +107,9 @@ Here is an example request body for creating a record with a value for the "Subt
           "title": "Tidy up the living room",
           "description": "",
           "due": "2022-03-15 15:00",
-          "completed": false
+          "completed": false,
+          "completed_at": null,
+          "assignee": null
         }
       ]
     }
@@ -145,6 +148,7 @@ A checklist field value can be retrieved as part of a record retrieval:
           "description": "Please do not forget the sink.",
           "due": "2022-03-15",
           "completed": false,
+          "completed_at": null,
           "assignee": {
             "user_id": 600,
             "mail": ["dan@tapeapp.com"],
@@ -159,7 +163,9 @@ A checklist field value can be retrieved as part of a record retrieval:
           "title": "Tidy up the living room",
           "description": "",
           "due": "2022-03-15 15:00",
-          "completed": false
+          "completed": false,
+          "completed_at": null,
+          "assigne": null
         }
       ]
     }
@@ -253,6 +259,7 @@ One or more checklist field values can be updated as part of a record update, an
           "description": "Please do not forget the sink.",
           "due": "2022-03-15",
           "completed": false,
+          "completed_at": null,
           "assignee": {
             "user_id": 601,
             "mail": ["luke@tapeapp.com"],
@@ -267,7 +274,9 @@ One or more checklist field values can be updated as part of a record update, an
           "title": "Tidy up the living room",
           "description": "",
           "due": "2022-03-15 15:00",
-          "completed": true
+          "completed": true,
+          "completed_at": "2022-03-15 14:55",
+          "assigne": null
         }
       ]
     }
