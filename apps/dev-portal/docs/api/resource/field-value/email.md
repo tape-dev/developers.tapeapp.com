@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-An email field value consists of its `value` property which holds one or multiple email address entries. An entry contains the email address itself, plus its type, e.g. `work` or `home`. If no type is provided, email address entries always default to `work`.
+An email field value consists of its `value` property which holds one or multiple email address entries. An entry contains the email address itself, plus its type, e.g. `work` or `home`. Currently the following values are allowed as type: `work`, `home` and `other`. If no type is provided, email address entries always default to `work`.
 
 ## Record creation
 
