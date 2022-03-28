@@ -22,11 +22,18 @@ The records API is in active development. Feel free to use the endpoints, but as
 
 To create a new record comment for the record with the specified `record_id`, issue a POST request to this endpoint. The POST body has to contain the `value` property with the text of the comment. It may further specify `files`, an array of temporary file IDs analog to the attachment field type. More details on file uploads can be found [here](/docs/api/resource/file).
 
+Apart from plain text, the comment `value` property supports limited formatting and extra options:
+
+- Forcing newlines using `\n`
+- Adding a user mention using the proper syntax, e.g. for this user with ID 123 and name "Dan Jacob": ` @[Dan Jacob](user:123)`
+
+The following example creates a plain text comment on the record with ID 1:
+
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
+{`curl -X POST #BASE_URL/v1/comment/record/1  \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
