@@ -64,7 +64,7 @@ Here is an example request body for creating a record with a value for the "Cust
       "field_type": "multi_link",
       "values": [
         {
-          "id": 100,
+          "embed_id": 100,
           "url": "https://somecustomerwebsite.com"
         }
       ]
@@ -73,7 +73,7 @@ Here is an example request body for creating a record with a value for the "Cust
 }
 ```
 
-Note that the individual link address entries contain an ID. Be sure to include them in updates, to keep existing link entries. If you omit the ID, new entries will be created instead and the respective existing ones will be removed. Individual link entries can not be updated, only removed.
+Note that the individual link address entries contain an `embed_id`. Be sure to include them in updates, to keep existing link entries. If you omit it, new entries will be created instead and the respective existing ones will be removed. Individual link entries can not be updated, only removed.
 
 After the link preview has been fully generated, it will contain meta info. The body will contain more information in that case, follow the next section about record retrieval:
 
@@ -90,10 +90,11 @@ After the link preview has been fully generated, it will contain meta info. The 
       "field_type": "multi_link",
       "values": [
         {
-          "id": 100,
+          "embed_id": 100,
           "url": "https://somecustomerwebsite.com",
           "title": "Some awesome customer website",
-          "description": "Welcome, Find our products and services here."
+          "description": "Welcome, Find our products and services here.",
+          "type": "link"
         }
       ]
     }
@@ -125,10 +126,11 @@ A link field value can be retrieved as part of a record retrieval:
       "field_type": "multi_link",
       "values": [
         {
-          "id": 100,
+          "embed_id": 100,
           "url": "https://somecustomerwebsite.com",
           "title": "Some awesome customer website",
-          "description": "Welcome, Find our products and services here."
+          "description": "Welcome, Find our products and services here.",
+          "type": "link"
         }
       ]
     }
@@ -154,7 +156,7 @@ One or more link field values can be updated as part of a record update, while o
       "customer_website": 
       [
         {
-          "id": 100,
+          "embed_id": 100,
           "url": "https://somecustomerwebsite.com",
           "title": "Some awesome customer website",
           "description": "Welcome, Find our products and services here."
@@ -174,7 +176,7 @@ One or more link field values can be updated as part of a record update, while o
   "fields": {
     "customer_website": [
       {
-        "id": 100,
+        "embed_id": 100,
         "url": "https://somecustomerwebsite.com",
         "title": "Some awesome customer website",
         "description": "Welcome, Find our products and services here."
@@ -201,16 +203,18 @@ One or more link field values can be updated as part of a record update, while o
       "field_type": "multi_link",
       "values": [
         {
-          "id": 100,
+          "embed_id": 100,
           "url": "https://somecustomerwebsite.com",
           "title": "Some awesome customer website",
-          "description": "Welcome, Find our products and services here."
+          "description": "Welcome, Find our products and services here.",
+          "type": "link"
         },
         {
-          "id": 101,
+          "embed_id": 101,
           "url": "https://secondcustomerwebsite.com",
           "title": "Another awesome customer website",
-          "description": "Welcome, Find our more and other products and services here."
+          "description": "Welcome, Find our more and other products and services here.",
+          "type": "link"
         }
       ]
     }
