@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 A phone field value consists of its `value` property which holds one or multiple phone number entries. An entry contains the phone number itself, plus its type, e.g. `work` or `home`.
 
-Currently the following values are allowed as type: `work`, `work_fax`, `home`, `home_fax`, `main`, `main_fax`, `mobile`, and `other`. If no type is provided, phone address entries always default to `work`.
+Currently the following values are allowed as type: `work`, `work_fax`, `home`, `home_fax`, `main`, `mobile`, and `other`. If no type is provided, phone address entries always default to `work`.
 
 ## Record creation
 
