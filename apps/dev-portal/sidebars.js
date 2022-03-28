@@ -19,6 +19,7 @@ module.exports = {
           collapsed: false,
           items: [
             'api/resource/record',
+            'api/resource/record-comment',
             {
               type: 'category',
               label: 'Field Value',
