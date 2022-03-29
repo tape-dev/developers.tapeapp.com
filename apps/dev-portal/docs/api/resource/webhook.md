@@ -212,8 +212,45 @@ Connection      close
 
 `record.delete`
 
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.delete"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.delete"
+}
+```
+
+</TabItem>
+</Tabs>
+
 ## Rate Limits
 
-```
+Webhook executions are rate limited. The current rate limit is 100 webhook executions per minute per app.
 
-```
+:::caution Rate limits may change
+In the future, Tape plans to adjust rate limits to balance for demand and reliability. Tape may also introduce distinct rate limits for organizations in different pricing plans.
+:::
