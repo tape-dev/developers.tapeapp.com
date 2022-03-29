@@ -152,12 +152,12 @@ The Tape server will send a POST request to the provided URL with the following 
 ```http title='⬅️      Incoming request'
 POST https://webhook.example.org/example-webhook-endpoint
 
-accept          application/json, text/plain, */*
-content-type    application/json;charset=utf-8
-user-agent      Tape Webhook
-content-length  51
-host            localhost:3009
-connection      close
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
 
 {
   "hook_id": 1,
@@ -172,6 +172,41 @@ connection      close
 ### Record updated
 
 `record.update`
+
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.update"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.update"
+}
+```
+
+</TabItem>
+</Tabs>
 
 ### Record deleted
 
