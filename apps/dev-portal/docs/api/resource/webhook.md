@@ -131,6 +131,54 @@ The Tape server will send a POST request to the provided URL with the following 
 
 ## Webhook types
 
-### Record create
+### Record created
 
-### Record update
+`record.create`
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.create"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+accept          application/json, text/plain, */*
+content-type    application/json;charset=utf-8
+user-agent      Tape Webhook
+content-length  51
+host            localhost:3009
+connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.create"
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Record updated
+
+`record.update`
+
+### Record deleted
+
+`record.delete`
+
+## Rate Limits
+
+```
+
+```
