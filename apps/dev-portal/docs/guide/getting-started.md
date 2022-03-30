@@ -31,7 +31,7 @@ Records are the place where work gets done inside every Tape organization. The e
 <Tabs>
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='Get your record "#RECORD_TITLE"'>
-{`curl #BASE_URL/v1/record/#RECORD_ID  \\
+{`curl #BASE_URL/v1/record/#RECORD_ID \\
   -u #USER_API_KEY:
 `}
 </ContextCodeBlock>

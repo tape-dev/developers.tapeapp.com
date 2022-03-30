@@ -70,7 +70,9 @@ const features = [
         resources.
       </>
     ),
-    badge: 'not-available',
+    badge: 'private-beta',
+    linkLabel: 'Learn more',
+    link: 'docs/api/resource/webhook',
   },
   {
     title: 'Calculations',

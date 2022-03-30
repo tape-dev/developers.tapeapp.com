@@ -45,6 +45,7 @@ module.exports = {
             'api/resource/workspace',
             'api/resource/file',
             'api/resource/link-preview',
+            'api/resource/webhook',
           ],
         },
       ],

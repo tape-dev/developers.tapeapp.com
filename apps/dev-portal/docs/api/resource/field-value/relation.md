@@ -22,7 +22,7 @@ A relation field value can be created as part of a record creation. Here is an e
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
@@ -166,7 +166,7 @@ One or more relation field values can be updated as part of a record update. Her
 
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X PUT #BASE_URL/v1/record/1  \\
+{`curl -X PUT #BASE_URL/v1/record/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
