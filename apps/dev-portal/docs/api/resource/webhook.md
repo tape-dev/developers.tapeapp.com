@@ -9,7 +9,11 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+A webhook enables Tape to push real-time notifications to your app. Tape uses HTTP or HTTPS to send these notifications to your app as a JSON payload. You can then use these notifications to execute actions in your backend systems.
+
 ## Create a webhook
+
+A webhook can be created via the API by providing a URL and the type of events you want to get notified for. See the list of available webhook types [below](#webhook-types).
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/app/{app_id}" />
 
@@ -52,6 +56,8 @@ import TabItem from '@theme/TabItem';
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/{hook_id}/verify/request" />
 
+To avoid potential abuse of webhooks and increase security, every webhook URL must be verified first before Tape starts sending requests to that URL. You can request the verification code via the API. This will cause the webhook to send a request to the URL with the parameter `type` set to `hook.verify` and `code` set to the verification code. The endpoint must then call the validate method with the code to complete the verification.
+
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/hook/1/verify/request \\
   -u #USER_API_KEY:
@@ -77,6 +83,8 @@ The Tape server will send a POST request to the provided URL with the following 
 ```
 
 ## Validate hook verification
+
+Validates the hook using the code received from the verify call. On successful validation the hook will become active.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/{hook_id}/verify/validate" />
 
@@ -117,6 +125,8 @@ The Tape server will send a POST request to the provided URL with the following 
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/hook/{hook_id}" />
 
+A webhook can be deleted via the API by providing the ID of the webhook.
+
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X DELETE #BASE_URL/v1/hook/1 \\
   -u #USER_API_KEY:
@@ -131,9 +141,12 @@ The Tape server will send a POST request to the provided URL with the following 
 
 ## Webhook types
 
+Webhooks have to specify a `type`, which indicates which events should be sent to this webhook. The types of webhooks currently available are the following:
+
 ### Record created
 
-`record.create`
+The `record.create` webhook type allows you to get notified whenever a record was created in the app the webhook is registered for. Here is an example incoming POST request payload:
+
 <Tabs>
 <TabItem value="json" label="JSON">
 
@@ -171,7 +184,7 @@ Connection      close
 
 ### Record updated
 
-`record.update`
+The `record.update` webhook type allows you to get notified whenever a record was updated in the app the webhook is registered for. Here is an example incoming POST request payload:
 
 <Tabs>
 <TabItem value="json" label="JSON">
@@ -210,7 +223,7 @@ Connection      close
 
 ### Record deleted
 
-`record.delete`
+The `record.delete` webhook type allows you to get notified whenever a record was deleted in the app the webhook is registered for. Here is an example incoming POST request payload:
 
 <Tabs>
 <TabItem value="json" label="JSON">
