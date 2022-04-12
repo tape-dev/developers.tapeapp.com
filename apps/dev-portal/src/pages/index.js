@@ -83,6 +83,7 @@ const features = [
         code. Furthermore, the output rendering supports Markdown, HTML and CSS.
       </>
     ),
+    badge: 'released',
     linkLabel: 'Learn more',
     link: 'docs/calculation/introduction',
   },
@@ -94,6 +95,10 @@ function Feature({ title, description, badge, link, linkLabel }) {
   ) : badge === 'private-beta' ? (
     <span type="primary" className={styles.badge}>
       PRIVATE BETA
+    </span>
+  ) : badge === 'released' ? (
+    <span type="primary" className={styles.badge}>
+      RELEASED
     </span>
   ) : (
     <span className={styles.badge}>NOT AVAILABLE</span>
