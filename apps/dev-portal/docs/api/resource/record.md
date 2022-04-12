@@ -16,6 +16,12 @@ Records are the place where work gets done inside a Tape organization. Records c
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
 To create a new record for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body specifies has to contain the `fields` property with the key-value pairs of the field values to create for this record.
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
 
 <Tabs defaultValue="curl">
 
@@ -120,7 +126,13 @@ Attempting to retrieve a deleted record returns the following error:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-Updates the record with the specified `record_id` and returns the updated record:
+Updates the record with the specified `record_id` and returns the updated record.
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
 
 <Tabs defaultValue="curl">
 
@@ -179,7 +191,13 @@ The example above only specifies a `single_text` field value as part of the reco
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-Delete the record with the specified `record_id`:
+Delete the record with the specified `record_id`.
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X DELETE #BASE_URL/v1/record/1 \\

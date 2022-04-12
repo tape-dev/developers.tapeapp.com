@@ -12,10 +12,6 @@ import Admonition from '@theme/Admonition';
 
 While data is stored inside records, communication in Tape usually happens inside comments on those records. Comments can be created, retrieved, updated and deleted via the API.
 
-<Admonition type="caution" icon="🚧" title="In development">
-The records API is in active development. Feel free to use the endpoints, but as of March 28, 2022 this is actively developed.
-</Admonition>
-
 ## Create a record comment
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/comment/record/{record_id}" />
@@ -26,6 +22,13 @@ Apart from plain text, the comment `value` property supports limited formatting 
 
 - Forcing newlines using `\n`
 - Adding a user mention using the proper syntax, e.g. for this user with ID 123 and name "Dan Jacob": `@[Dan Jacob](user:123)`
+
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
 
 The following example creates a plain text comment on the record with ID 1:
 
@@ -103,7 +106,13 @@ Retrieve the comment with the specified `comment_id`:
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/comment/{comment_id}" />
 
-Delete the comment with the specified `comment_id`:
+Delete the comment with the specified `comment_id`.
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X DELETE #BASE_URL/v1/comment/1  \\
