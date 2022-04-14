@@ -9,8 +9,10 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A attachment field value consists of its `value` property which holds a reference to an attachment. An attachment has the properties `id` (unique ID), `filename` (the filename), `size` (filesize in bytes), `download_url` (URL to download the file) and others.
+An attachment field value consists of its `value` property which holds a reference to an attachment. An attachment has the properties `id` (unique ID), `filename` (the filename), `size` (filesize in bytes), `download_url` (URL to download the file) and others.
 A `single_attachment` field value holds at most one attachment reference while a `multi_attachment` field value can hold multiple attachment references.
+
+Attachment fields behave quite similarly to [image fields](/docs/api/resource/field-value/image), also allowing non-image files.
 
 More details on the file object and the two-step file upload process can be found [here](/docs/api/resource/file).
 
@@ -60,7 +62,7 @@ A attachment field value can be created as part of a record creation. Here is an
       "field_id": 2,
       "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
-      "type": "user",
+      "type": "attachment",
       "field_type": "single_attachment",
       "values": [
         {
@@ -77,26 +79,20 @@ A attachment field value can be created as part of a record creation. Here is an
       "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "multi_attachment",
-      "type": "user",
+      "type": "attachment",
       "values": [
         {
           "value": {
-            "user_id": 101,
-            "mail": ["dan@tapeapp.com"],
-            "image": null,
-            "name": "Dan Jacob",
-            "org_id": 1,
-            "type": "user"
+            "id": 101,
+            "filename": "200301_hr_document-1.pdf",
+            "size": 15000
           }
         },
         {
           "value": {
-            "user_id": 102,
-            "mail": ["sierra@tapeapp.com"],
-            "image": null,
-            "name": "Sierra Johns",
-            "org_id": 1,
-            "type": "user"
+            "id": 102,
+            "filename": "200301_hr_document-2.pdf",
+            "size": 16000
           }
         }
       ]
@@ -125,7 +121,7 @@ A attachment field value can be retrieved as part of a record retrieval:
       "field_id": 2,
       "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
-      "type": "user",
+      "type": "attachment",
       "field_type": "single_attachment",
       "values": [
         {
@@ -142,26 +138,20 @@ A attachment field value can be retrieved as part of a record retrieval:
       "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "multi_attachment",
-      "type": "user",
+      "type": "attachment",
       "values": [
         {
           "value": {
-            "user_id": 101,
-            "mail": ["dan@tapeapp.com"],
-            "image": null,
-            "name": "Dan Jacob",
-            "org_id": 1,
-            "type": "user"
+            "id": 101,
+            "filename": "200301_hr_document-1.pdf",
+            "size": 15000
           }
         },
         {
           "value": {
-            "user_id": 102,
-            "mail": ["sierra@tapeapp.com"],
-            "image": null,
-            "name": "Sierra Johns",
-            "org_id": 1,
-            "type": "user"
+            "id": 102,
+            "filename": "200301_hr_document-2.pdf",
+            "size": 16000
           }
         }
       ]
@@ -211,23 +201,20 @@ Here is an example request body for updating multiple attachment field values of
 ```json title='⬅️      Response'
 {
   "record_id": 1,
-  "title": "Delaney Beatty",
+  "title": "200301_letter-of-recommendation.pdf",
   "fields": [
     {
       "field_id": 2,
       "external_id": "letter_of_recommendation",
       "label": "Letter of recommendation",
-      "type": "user",
+      "type": "attachment",
       "field_type": "single_attachment",
       "values": [
         {
           "value": {
-            "user_id": 2,
-            "mail": ["delaney@tapeapp.com"],
-            "image": null,
-            "name": "Delaney Beatty",
-            "org_id": 1,
-            "type": "user"
+            "id": 100,
+            "filename": "200301_letter-of-recommendation.pdf",
+            "size": 12300
           }
         }
       ]
@@ -237,16 +224,20 @@ Here is an example request body for updating multiple attachment field values of
       "external_id": "hr_documents",
       "label": "HR Documents",
       "field_type": "multi_attachment",
-      "type": "user",
+      "type": "attachment",
       "values": [
         {
           "value": {
-            "user_id": 102,
-            "mail": ["sierra@tapeapp.com"],
-            "image": null,
-            "name": "Sierra Johns",
-            "org_id": 1,
-            "type": "user"
+            "id": 101,
+            "filename": "200301_hr_document-1.pdf",
+            "size": 15000
+          }
+        },
+        {
+          "value": {
+            "id": 102,
+            "filename": "200301_hr_document-2.pdf",
+            "size": 16000
           }
         }
       ]

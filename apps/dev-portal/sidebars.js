@@ -32,6 +32,7 @@ module.exports = {
                 'api/resource/field-value/date',
                 'api/resource/field-value/relation',
                 'api/resource/field-value/attachment',
+                'api/resource/field-value/image',
                 'api/resource/field-value/checklist',
                 'api/resource/field-value/number',
                 'api/resource/field-value/link',
