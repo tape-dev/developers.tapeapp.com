@@ -32,7 +32,7 @@ const features = [
         move an app from one workspace to another.
       </>
     ),
-    badge: 'not-available',
+    badge: 'private-beta',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/app',
   },
@@ -56,7 +56,7 @@ const features = [
         workspace from the same or another organization.
       </>
     ),
-    badge: 'not-available',
+    badge: 'private-beta',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/workspace',
   },
