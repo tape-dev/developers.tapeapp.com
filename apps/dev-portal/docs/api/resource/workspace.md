@@ -25,19 +25,19 @@ Retrieve all workspaces that the active user has access to (inside the active us
   "total": 2,
   "workspaces": [
     {
-      workspace_id: 1,
-      name: "Task management",
-      slug: "task-management",
-      description: "Manage all tasks and projects inside this workspace.",
-      org_id: 1337
+      "workspace_id": 1,
+      "name": "Task management",
+      "slug": "task-management",
+      "description": "Manage all tasks and projects inside this workspace.",
+      "org_id": 1337
     },
     {
-      workspace_id: 2,
-      name: "Contact directory",
-      slug: "contact-directory",
-      description: "Keep track of our contacts here.",
-      org_id: 1337
-    },
+      "workspace_id": 2,
+      "name": "Contact directory",
+      "slug": "contact-directory",
+      "description": "Keep track of our contacts here.",
+      "org_id": 1337
+    }
   ]
 }`}
 </ContextCodeBlock>

@@ -122,7 +122,7 @@ Attempting to retrieve a deleted record returns the following error:
 }`}
 </ContextCodeBlock>
 
-## Update a Record
+## Update a record
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
