@@ -260,6 +260,127 @@ Connection      close
 </TabItem>
 </Tabs>
 
+### Record restored
+
+The `record.restore` webhook type allows you to get notified whenever a record was restored in the app the webhook is registered for. Here is an example incoming POST request payload:
+
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.restore"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "type": "record.restore"
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Comment created
+
+The `comment.create` webhook type allows you to get notified whenever a comment was created for a record in the app the webhook is registered for. Here is an example incoming POST request payload:
+
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "comment_id": 500,
+  "type": "comment.create"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "comment_id": 500,
+  "type": "comment.create"
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Comment deleted
+
+The `comment.delete` webhook type allows you to get notified whenever a comment was deleted for a record in the app the webhook is registered for. Here is an example incoming POST request payload:
+
+<Tabs>
+<TabItem value="json" label="JSON">
+
+```json title='⬅️      Incoming request'
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "comment_id": 500,
+  "type": "comment.delete"
+}
+```
+
+</TabItem>
+
+<TabItem value="http" label="HTTP">
+
+```http title='⬅️      Incoming request'
+POST https://webhook.example.org/example-webhook-endpoint
+
+Accept          application/json, text/plain, */*
+Content-type    application/json;charset=utf-8
+User-agent      Tape Webhook
+Content-length  51
+Host            localhost:3009
+Connection      close
+
+{
+  "hook_id": 1,
+  "record_id": 100,
+  "comment_id": 500,
+  "type": "comment.delete"
+}
+```
+
+</TabItem>
+</Tabs>
+
 ## Error handling
 
 The webhook must respond with a 2xx status code. If the status code is different from 2xx more than 50 consecutive times the webhook will return to being unverified and will have to be verified again to be active. Additionally, your webhook may return to unverified if you do not send responses in a timely manner (5 seconds). You should handle any heavy processing asynchronously.
