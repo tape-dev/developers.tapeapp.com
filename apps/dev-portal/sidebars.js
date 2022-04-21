@@ -37,6 +37,7 @@ module.exports = {
                 'api/resource/field-value/number',
                 'api/resource/field-value/link',
                 'api/resource/field-value/calculation',
+                'api/resource/field-value/location',
                 'api/resource/field-value/email',
                 'api/resource/field-value/phone',
               ],
