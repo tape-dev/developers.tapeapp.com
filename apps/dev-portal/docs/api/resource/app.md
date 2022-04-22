@@ -13,7 +13,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspaceId}" />
 
-Retrieve all apps for the workspace with ID `200`:
+Retrieve all apps for the workspace with ID `200` (Note that the response does not contain the fields):
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/app/workspace/200 \\
@@ -45,6 +45,53 @@ Retrieve all apps for the workspace with ID `200`:
       }
     }
 ]
+}`}
+</ContextCodeBlock>
+
+## Retrieve a single app
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}" />
+
+Retrieve an app with fields by its ID `1`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/app/1 \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "apps": [
+    {
+      "app_id": 1,
+      "workspace_id": 200,
+      "name": "Tasks",
+      "slug": "tasks",
+      "config": {
+        "item_name": "Task",
+        "description": ""
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "config": {
+            "description": null,
+            "required": false,
+            "label": "FST",
+            "settings": {
+              "format": "plain",
+              "size": "small"
+            }
+          },
+        }
+      ]
+    },
+  ]
 }`}
 </ContextCodeBlock>
 
