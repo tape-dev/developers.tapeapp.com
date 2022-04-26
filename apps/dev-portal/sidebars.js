@@ -43,6 +43,7 @@ module.exports = {
               ],
             },
             'api/resource/record-comment',
+            'api/resource/record-revision',
             'api/resource/app',
             'api/resource/workspace',
             'api/resource/file',
