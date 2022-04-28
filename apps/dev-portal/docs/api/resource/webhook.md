@@ -154,6 +154,7 @@ The `record.create` webhook type allows you to get notified whenever a record wa
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 0,
   "type": "record.create"
 }
 ```
@@ -175,6 +176,7 @@ Connection      close
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 0,
   "type": "record.create"
 }
 ```
@@ -193,6 +195,7 @@ The `record.update` webhook type allows you to get notified whenever a record wa
 {
   "hook_id": 1,
   "record_id": 100,
+  "revisoin_id": 1,
   "type": "record.update"
 }
 ```
@@ -214,6 +217,7 @@ Connection      close
 {
   "hook_id": 1,
   "record_id": 100,
+  "revisoin_id": 1,
   "type": "record.update"
 }
 ```
@@ -232,6 +236,7 @@ The `record.delete` webhook type allows you to get notified whenever a record wa
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 2,
   "type": "record.delete"
 }
 ```
@@ -253,6 +258,7 @@ Connection      close
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 2,
   "type": "record.delete"
 }
 ```
@@ -271,6 +277,7 @@ The `record.restore` webhook type allows you to get notified whenever a record w
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 3,
   "type": "record.restore"
 }
 ```
@@ -292,6 +299,7 @@ Connection      close
 {
   "hook_id": 1,
   "record_id": 100,
+  "revision_id": 3,
   "type": "record.restore"
 }
 ```
