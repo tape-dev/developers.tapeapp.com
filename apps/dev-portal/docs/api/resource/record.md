@@ -80,7 +80,11 @@ The example above only specifies a `single_text` field value as part of the reco
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-Retrieve the record with the specified `record_id`:
+Retrieve the record with the specified `record_id`.
+
+| Query param       | Type      | Description                                                                          |
+| :---------------- | :-------- | :----------------------------------------------------------------------------------- |
+| `include_deleted` | `boolean` | Include records that are deleted but still accessible via a trash (default: `false`) |
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/record/1 \\
