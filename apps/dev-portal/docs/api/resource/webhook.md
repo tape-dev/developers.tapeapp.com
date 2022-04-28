@@ -195,7 +195,7 @@ The `record.update` webhook type allows you to get notified whenever a record wa
 {
   "hook_id": 1,
   "record_id": 100,
-  "revisoin_id": 1,
+  "revision_id": 1,
   "type": "record.update"
 }
 ```
@@ -217,7 +217,7 @@ Connection      close
 {
   "hook_id": 1,
   "record_id": 100,
-  "revisoin_id": 1,
+  "revision_id": 1,
   "type": "record.update"
 }
 ```
