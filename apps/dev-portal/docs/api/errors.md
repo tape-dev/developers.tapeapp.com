@@ -4,7 +4,7 @@ title: Errors
 sidebar_label: Errors
 ---
 
-Responses from the API use HTTP response codes to indicate general classes of success and error. Error responses contain more detail about the error in the response body, in the `error_code` and `error_message` properties.
+Responses from the API use HTTP response codes to indicate overview classes of success and error. Error responses contain more detail about the error in the response body, in the `error_code` and `error_message` properties.
 Here is an example error response body for a requesting a non-existent resource:
 
 ```json

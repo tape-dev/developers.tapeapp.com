@@ -74,7 +74,7 @@ The following query paramters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/overview) documentation section for examples of all supported field types.
 
 ## Retrieve a record
 
@@ -113,7 +113,7 @@ Retrieve the record with the specified `record_id`.
 }
 ```
 
-The example response above only contains a `single_text` field value. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example response above only contains a `single_text` field value. See the [field value](field-value/overview) documentation section for examples of all supported field types.
 
 Attempting to retrieve a deleted record returns the following error:
 
@@ -189,7 +189,7 @@ The following query paramters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record update. See the [field value](field-value/general) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record update. See the [field value](field-value/overview) documentation section for examples of all supported field types.
 
 ## Delete a record
 

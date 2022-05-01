@@ -1,7 +1,7 @@
 ---
-id: general
+id: overview
 title: Field Value
-sidebar_label: General
+sidebar_label: Overview
 ---
 
 A record object consist of its static properties like `id`, `title` or `created_on` and its field values. For each field of the record's app, the record can have a field value.

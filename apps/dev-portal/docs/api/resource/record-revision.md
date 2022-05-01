@@ -68,7 +68,7 @@ Note that **_Revisions_** do not contain the actual changes made, but only the m
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}/revision/previous/{toRevisionId}" />
 
-In order to understand how a record changed over time, the Tape-API provides consumers with the concept of **_Revision Deltas_**. Revision deltas will include a `from` and `to` property, describing the transition of individual fields from one value (or no value) to another (or none). These properties follow the same form as record field `values` property, check the [field value section](/docs/api/resource/field-value/general) for more details.
+In order to understand how a record changed over time, the Tape-API provides consumers with the concept of **_Revision Deltas_**. Revision deltas will include a `from` and `to` property, describing the transition of individual fields from one value (or no value) to another (or none). These properties follow the same form as record field `values` property, check the [field value section](/docs/api/resource/field-value/overview) for more details.
 
 A single record revision may include deltas for multiple fields, if the changes were made at the same time by the same entity.
 
