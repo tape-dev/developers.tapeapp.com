@@ -26,7 +26,7 @@ The following example fetches the revisions of record with ID `1`, that was crea
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X GET #BASE_URL/v1/record/1/revision  \\
-  -u #USER_API_KEY: \\
+  -u #USER_API_KEY:
 `}
 </ContextCodeBlock>
 
@@ -76,7 +76,7 @@ The following example fetches the revision delta of revision number `1` of recor
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X GET #BASE_URL/v1/record/1/revision/previous/1  \\
-  -u #USER_API_KEY: \\
+  -u #USER_API_KEY:
 `}
 </ContextCodeBlock>
 
