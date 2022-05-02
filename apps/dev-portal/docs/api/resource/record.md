@@ -198,10 +198,11 @@ The example above only specifies a `single_text` field value as part of the reco
 Delete the record with the specified `record_id`.
 The following query paramters are available:
 
-| Query param | Type      | Description                                                         |
-| :---------- | :-------- | :------------------------------------------------------------------ |
-| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
-| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| Query param  | Type      | Description                                                                                        |
+| :----------- | :-------- | :------------------------------------------------------------------------------------------------- |
+| `silent`     | `boolean` | Do not generate notifications for this operation (default: `false`)                                |
+| `hook`       | `boolean` | Execute webhooks for this operation (default: `true`)                                              |
+| `skip_trash` | `boolean` | Do not place the deleted record in any trashes. Instead, remove it permanently. (default: `false`) |
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X DELETE #BASE_URL/v1/record/1 \\
