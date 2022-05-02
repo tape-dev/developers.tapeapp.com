@@ -47,8 +47,10 @@ A webhook can be created via the API by providing a URL and the type of events y
 ```json title='⬅️      Response'
 {
   "hook_id": 1,
-  "url": "https://webhook.example.org/example-webhook-endpoint",
-  "status": "inactive"
+  "app_id": 1,
+  "status": "inactive",
+  "type": "record.create",
+  "url": "https://webhook.example.org/example-webhook-endpoint"
 }
 ```
 
@@ -67,8 +69,9 @@ To avoid potential abuse of webhooks and increase security, every webhook URL mu
 ```json title='⬅️      Response'
 {
   "hook_id": 1,
-  "url": "https://webhook.example.org/example-webhook-endpoint",
-  "status": "inactive"
+  "status": "inactive",
+  "type": "record.create",
+  "url": "https://webhook.example.org/example-webhook-endpoint"
 }
 ```
 
@@ -116,8 +119,9 @@ Validates the hook using the code received from the verify call. On successful v
 ```json title='⬅️      Response'
 {
   "hook_id": 1,
-  "url": "https://webhook.example.org/example-webhook-endpoint",
-  "status": "active"
+  "status": "active",
+  "type": "record.create",
+  "url": "https://webhook.example.org/example-webhook-endpoint"
 }
 ```
 
@@ -135,7 +139,10 @@ A webhook can be deleted via the API by providing the ID of the webhook.
 
 ```json title='⬅️      Response'
 {
-  "hook_id": 1
+  "hook_id": 1,
+  "status": "inactive",
+  "type": "record.create",
+  "url": "https://webhook.example.org/example-webhook-endpoint"
 }
 ```
 
