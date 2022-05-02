@@ -210,7 +210,26 @@ The following query paramters are available:
 </ContextCodeBlock>
 
 ```json title='⬅️      Response'
-{}
+{
+  "record_id": 1,
+  "title": "Adam Smith",
+  "created_on": "2022-03-01 12:00:00",
+  "deleted_on": "2022-03-01 13:00:00",
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [
+        {
+          "value": "Adam Smith"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 If the record has already been deleted, the following error is returned:
@@ -223,6 +242,46 @@ If the record has already been deleted, the following error is returned:
   "error_message": "Record is deleted(1)!"
 }`}
 </ContextCodeBlock>
+
+## Restore a record
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/{record_id}/restore" />
+
+Restore the record with the specified `record_id`. This is only allowed if the record is in a trash you have access to.
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/1/restore \\
+  -u #USER_API_KEY:
+`}
+</ContextCodeBlock>
+
+```json title='⬅️      Response'
+{
+  "record_id": 1,
+  "title": "Adam Smith",
+  "created_on": "2022-03-01 12:00:00",
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [
+        {
+          "value": "Adam Smith"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## Retrieve records for an app
 
