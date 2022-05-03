@@ -13,7 +13,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/workspace/org" />
 
-Retrieve all workspaces that the active user has access to (inside the active user organization with ID `1337`):
+Retrieve all workspaces that you have access to (inside the active user organization with ID `1337`):
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/workspace/org \\
