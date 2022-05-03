@@ -24,6 +24,10 @@ Record revisions will include the author of the revision as `created_by`, the da
 
 The following example fetches the revisions of record with ID `1`, that was created and updated once by the user `Dan Jacob` with ID `600`:
 
+| Query param       | Type      | Description                                                                          |
+| :---------------- | :-------- | :----------------------------------------------------------------------------------- |
+| `include_deleted` | `boolean` | Include records that are deleted but still accessible via a trash (default: `false`) |
+
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X GET #BASE_URL/v1/record/1/revision  \\
   -u #USER_API_KEY:
