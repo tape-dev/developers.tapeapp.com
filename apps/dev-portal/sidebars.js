@@ -46,6 +46,7 @@ module.exports = {
             'api/resource/record-revision',
             'api/resource/app',
             'api/resource/workspace',
+            'api/resource/organization',
             'api/resource/file',
             'api/resource/link-preview',
             'api/resource/webhook',
