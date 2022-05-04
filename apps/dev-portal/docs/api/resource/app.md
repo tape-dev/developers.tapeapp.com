@@ -48,6 +48,55 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
 }`}
 </ContextCodeBlock>
 
+## Retrieve all available apps
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspaceId}" />
+
+Retrieve all apps inside the workspaces that you have access to (Note that the response does not contain the fields):
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/app \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 3,
+  "apps": [
+    {
+      "app_id": 1,
+      "workspace_id": 200,
+      "name": "Tasks",
+      "slug": "tasks",
+      "config": {
+        "item_name": "Task",
+        "description": ""
+      }
+    },
+    {
+      "app_id": 2,
+      "workspace_id": 200,
+      "name": "Projects",
+      "slug": "projects",
+      "config": { 
+        "item_name": "Project",
+        "description": ""
+      },
+    },
+    {
+    "app_id": 3,
+    "workspace_id": 300,
+    "name": "Contacts",
+    "slug": "contacts",
+    "config": { 
+      "item_name": "Contact",
+      "description": ""
+    }
+  }
+]
+}`}
+</ContextCodeBlock>
+
 ## Retrieve a single app
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}" />
