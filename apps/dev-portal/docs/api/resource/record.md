@@ -363,3 +363,41 @@ Retrieve records for the app with the specified `app_id`:
 | `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
 | `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
+
+## Find relatable records for a relation field
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/field/{field_id}/find" />
+
+Find records that can be related for the relation field (single or multi) with the specified `field_id`, in this case there is an app relation for that field to the app Contacts with `app_id` 1.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/field/1/find?text=adam \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
+  "records": [
+    {
+      "record_id": 2,
+      "title": "Adam Smith",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      }
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+**Query Parameters**
+
+| Parameter | Type     | ** Type**              | Min | Max |
+| --------- | -------- | ---------------------- | --- | --- |
+| `text`    | `string` | The text to search for | -   | -   |
