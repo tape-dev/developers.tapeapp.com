@@ -16,14 +16,14 @@ For communication that happens outside of tape, the API offers an endpoint to se
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/email/send" />
 
-To send an email to one or more recipients, make a POST request to that endpoint. The POST body must contain the "to" property with one or more recipient email addresses, the "subject" property, and the "html" property which contains the formatted email body.
+To send an email to one or more recipients, make a POST request to that endpoint. The POST body must contain the `to` property with one or more recipient email addresses, the `subject` property, and the `html` property which contains the formatted email body.
 
 Optionally, the request can contain `cc`, `bcc` and `reply_to` properties, all of which can contain a list of email addresses.
 
 Further specify `attachment_ids`, an array of existing file IDs analog to the attachment field type (temporary file ids are not yet supported). More details on file inputs can be found [here](/docs/api/resource/field-value/attachment).
 
 :::info
-If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly.
+If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly in the request transaction.
 The response to the request only contains information about whether the email passed input validation and was successfully queued, not whether the email was successfully delivered.
 Currently, there is no way to query the delivery status of an email through the API.
 
@@ -129,7 +129,7 @@ The following limits are enforced for each email:
 
 ## Rate limit credits
 
-Emails are rate limited based on their number of recipient addresses. Every request consumes an additional credit:
+Emails are rate limited based on their number of recipient addresses (sum of addresses contained in the properties `to`, `cc` and `bcc` of the request body). Every request consumes an additional credit:
 
 ```
 Sending to 1 recipient:  2x credits
