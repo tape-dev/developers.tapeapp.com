@@ -72,10 +72,14 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
 ```
 
 By default, emails are sent from the address `reply.automations@tape-app.com`.
+
+<b>Coming Soon: </b><br/>
 If your organization has configured its own SMTP server in the organization settings, the email can also be sent from your own email address. To do this, specify the `use_organization_smtp_config` flag and the `from` property that contains the sender address. Note that your SMTP server must be authorized to send email on behalf of this address for the email to be sent successfully.
 
-The next example sends an email with subject, and body to `recipient-one@example.com` and `recipient-two@example.com` with the sender address `sender@example.com`.
-The addresses `carbon-copy-one@example.com` and `carbon-copy-two@example.com` recieve a copy of the email.
+<br/>
+<br/>
+The next example sends an email with subject, and body to "recipient-one@example.com" and "recipient-two@example.com" with the sender address "sender@example.com".
+The addresses "carbon-copy-one@example.com" and "carbon-copy-two@example.com" recieve a copy of the email.
 In addition, the email contains an attachment with file ID 42, which is present in an attachment or image field-value in a record in your organization.
 
 <Tabs defaultValue="curl">
