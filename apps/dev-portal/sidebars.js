@@ -50,6 +50,7 @@ module.exports = {
             'api/resource/file',
             'api/resource/link-preview',
             'api/resource/webhook',
+            'api/resource/email',
           ],
         },
       ],

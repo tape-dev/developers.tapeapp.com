@@ -22,15 +22,6 @@ Optionally, the request can contain `cc`, `bcc` and `reply_to` properties, all o
 
 Further specify `attachment_ids`, an array of existing file IDs analog to the attachment field type (temporary file ids are not yet supported). More details on file inputs can be found [here](/docs/api/resource/field-value/attachment).
 
-By default, emails are sent from the address `reply.automations@tape-app.com`.
-If your organization has configured its own SMTP server in the organization settings, the email can also be sent from your own email address. To do this, specify the `use_organization_smtp_config` flag and the `from` property that contains the sender address. Note that your SMTP server must be authorized to send email on behalf of this address for the email to be sent successfully.
-
-If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly.
-The response to the request only contains information about whether the email passed input validation and was successfully queued, not whether the email was successfully delivered.
-Currently, there is no way to query the delivery status of an email through the API.
-
-If an email could not be delivered, the job is rescheduled after 10, 100 and 1000 seconds. If the email could not be delivered after the 4th attempt, the job is canceled.
-
 The following example sends an email with subject, and body to `recipient@example.com` with the default sender address.
 In case the recipient clicks on reply-to in its email client, the recipient of the reply is `reply-to@example.com`
 
@@ -71,6 +62,15 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
   //TODO
 }
 ```
+
+By default, emails are sent from the address `reply.automations@tape-app.com`.
+If your organization has configured its own SMTP server in the organization settings, the email can also be sent from your own email address. To do this, specify the `use_organization_smtp_config` flag and the `from` property that contains the sender address. Note that your SMTP server must be authorized to send email on behalf of this address for the email to be sent successfully.
+
+If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly.
+The response to the request only contains information about whether the email passed input validation and was successfully queued, not whether the email was successfully delivered.
+Currently, there is no way to query the delivery status of an email through the API.
+
+If an email could not be delivered, the job is rescheduled after 10, 100 and 1000 seconds. If the email could not be delivered after the 4th attempt, the job is canceled.
 
 The next example sends an email with subject, and body to `recipient-one@example.com` and `recipient-two@example.com` with the sender address `sender@example.com`.
 The addresses `carbon-copy-one@example.com` and `carbon-copy-two@example.com` recieve a copy of the email.
