@@ -22,6 +22,7 @@ The following query paramters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
 
 <Tabs defaultValue="curl">
 
@@ -137,6 +138,7 @@ The following query paramters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger Workflows for this operation (default: `true`)              |
 
 <Tabs defaultValue="curl">
 
