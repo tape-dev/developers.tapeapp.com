@@ -3,6 +3,29 @@ module.exports = {
   mainSidebar: [
     {
       type: 'category',
+      label: 'Workflow Automations',
+      collapsed: true,
+      items: ['automations/introduction'],
+    },
+    {
+      type: 'category',
+      label: 'Calculation Field',
+      collapsed: true,
+      items: [
+        'calculation/introduction',
+        'calculation/libraries',
+        'calculation/markdown',
+        'calculation/html',
+        {
+          type: 'category',
+          label: 'Components',
+          collapsed: false,
+          items: ['calculation/component/link', 'calculation/component/button'],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Developer API',
       collapsed: true,
       items: [
@@ -16,7 +39,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Resources',
-          collapsed: false,
+          collapsed: true,
           items: [
             'api/resource/record',
             {
@@ -52,23 +75,6 @@ module.exports = {
             'api/resource/webhook',
             'api/resource/email',
           ],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Calculation Field',
-      collapsed: true,
-      items: [
-        'calculation/introduction',
-        'calculation/libraries',
-        'calculation/markdown',
-        'calculation/html',
-        {
-          type: 'category',
-          label: 'Components',
-          collapsed: false,
-          items: ['calculation/component/link', 'calculation/component/button'],
         },
       ],
     },

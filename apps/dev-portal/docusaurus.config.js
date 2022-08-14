@@ -53,6 +53,10 @@ module.exports = {
               to: 'docs/calculation/introduction',
             },
             {
+              label: 'Workflow Automations',
+              to: 'docs/automations',
+            },
+            {
               label: 'Contribute',
               to: 'docs/contribute',
             },
