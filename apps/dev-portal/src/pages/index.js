@@ -37,15 +37,17 @@ const features = [
     link: 'docs/api/resource/app',
   },
   {
-    title: 'Fields',
+    title: 'Workflow Automations',
     description: (
       <>
-        Shape and connect your data to your needs by leveraging one of the many
-        field types of Tape. The relation field allows you to stay organized by
-        connecting records across apps and workspaces.
+        Automate your work using Tape's customizable low-code workflow editor.
+        Connect with external systems and APIs and leverage different triggers
+        inside Tape.
       </>
     ),
-    badge: 'not-available',
+    badge: 'private-beta',
+    linkLabel: 'Learn more',
+    link: 'docs/automations/introduction',
   },
   {
     title: 'Workspaces',
