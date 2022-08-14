@@ -5,7 +5,7 @@ module.exports = {
       type: 'category',
       label: 'Workflow Automations',
       collapsed: true,
-      items: ['automations/introduction'],
+      items: ['automations/introduction', 'automations/code-editor'],
     },
     {
       type: 'category',
