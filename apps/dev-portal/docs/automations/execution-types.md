@@ -14,8 +14,12 @@ The following three run types exist:
 
 ## Regular / triggered
 
-The configured trigger started a workflow execution. This would be the case, if a workflow uses the "Record created" trigger and a record is created in Tape, either by a user or via the API. Filters are evaluated here, and runs will only appear in Tape if the record matched the configured filters of that workflow.
+The configured trigger started a workflow execution. This would be the case, if a workflow uses the "Record created" trigger and a record is created in Tape, either by a user inside the web or mobile app, or via the API. Filters are evaluated here, and runs will only appear in Tape if the record matched the configured filters of that workflow.
 
 ## Manual run
 
-A user started a manual run for a workflow
+A user started a manual run for a workflow and either selected a dedicated set of records, provided a number of records to run on, or triggered the manual run on all records inside an app. Filters apply here, so only matching records will lead to runs showing up.
+
+## Simulation run
+
+Simulation runs are triggered inside the workflow center by a user, just like manual runs. Filters are skipped here, and all mutating action blocks provide a dummy behavior. This includes record updates, creations or comment creations but also more actions. There is a runtime variable available to check whether a run is a simulation, this way developers can also mock calls to external APIs to avoid any corrupt data during simulation runs and enable quick debugging.

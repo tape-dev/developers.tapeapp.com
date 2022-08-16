@@ -5,7 +5,11 @@ module.exports = {
       type: 'category',
       label: 'Workflow Automations',
       collapsed: true,
-      items: ['automations/introduction', 'automations/code-editor'],
+      items: [
+        'automations/introduction',
+        'automations/code-editor',
+        'automations/execution-types',
+      ],
     },
     {
       type: 'category',
