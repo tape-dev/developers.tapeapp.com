@@ -54,7 +54,7 @@ module.exports = {
             },
             {
               label: 'Workflow Automations',
-              to: 'docs/automations',
+              to: 'docs/automations/introduction',
             },
             {
               label: 'Contribute',
