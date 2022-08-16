@@ -9,6 +9,7 @@ module.exports = {
         'automations/introduction',
         'automations/code-editor',
         'automations/execution-types',
+        'automations/libraries',
       ],
     },
     {
