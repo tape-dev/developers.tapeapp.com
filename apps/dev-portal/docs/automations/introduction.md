@@ -92,6 +92,18 @@ You may introduce custom variables that can be used globally by using one of the
 
 Variables will become available inside the flow, but only after that action inside the execution order. No block scope applies, and variables will be reassigned and overwritten if you give them an equal name.
 
+## Silent actions
+
+Use the "silent" settings option for mutating action blocks to skip notifications for this change. This can be useful when migrating large data sets, where notifications would bloat the inbox of the involved users.
+
+## Triggering other flows & webhooks
+
+Every mutating action block provides options to specify whether this action will trigger other flows, and/or trigger webhooks in Tape. Both options can be checked individually and need to be set for each action explicitly.
+
+If the option "Trigger other automations" is not set, a potential mutation performed inside this action will not yield another workflow run. Let's say the flow updates a record and the option is set to false, other flows with the "Record updated" trigger will not be run.
+
+The Tape SDK also provides respective options when used directly inside an "execute script" action block, check the typing info inside the editor to configure your requests properly.
+
 ## Useful execution variables
 
 Some variables are provided by the system when a worklow is executed. A list of some of them (but not limited to):

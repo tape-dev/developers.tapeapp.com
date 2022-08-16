@@ -23,3 +23,5 @@ A user started a manual run for a workflow and either selected a dedicated set o
 ## Simulation run
 
 Simulation runs are triggered inside the workflow center by a user, just like manual runs. Filters are skipped here, and all mutating action blocks provide a dummy behavior. This includes record updates, creations or comment creations but also more actions. There is a runtime variable available to check whether a run is a simulation, this way developers can also mock calls to external APIs to avoid any corrupt data during simulation runs and enable quick debugging.
+
+The Tape client SDK also provides a dummy behavior in this scenario, so when using the Tape client inside an "execute script" action and a simulation run is performed, mock data will be returned for mutating API calls such as record update or create.
