@@ -20,7 +20,7 @@ More details on the file object and the two-step file upload process can be foun
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A attachment field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Letter of recommendation" field with ID 2, type `single_attachment` and external ID `letter_of_recommendation` and a value for the "HR documents" field with ID 3, type `multi_attachment` and external ID `hr_documents`:
+A attachment field value can be created as part of a record creation. Files can be specified as temporary file IDs (strings), existing file IDs of the same field (integers) and existing file IDs of different Attachment or Image fields (integers). Here is an example request body for creating a record with a value for the "Letter of recommendation" field with ID 2, type `single_attachment` and external ID `letter_of_recommendation` and a value for the "HR documents" field with ID 3, type `multi_attachment` and external ID `hr_documents`:
 
 <Tabs defaultValue="curl">
 
@@ -164,7 +164,7 @@ A attachment field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more attachment field values can be updated as part of a record update. Both existing IDs (integers) as well as temporary file IDs (strings) can be provided as input.
+One or more attachment field values can be updated as part of a record update. Existing IDs of the same field (integers), existing IDs of different Attachment or Image fields (integers) as well as temporary file IDs (strings) can be provided as input.
 Here is an example request body for updating multiple attachment field values of a record:
 
 <Tabs defaultValue="curl">

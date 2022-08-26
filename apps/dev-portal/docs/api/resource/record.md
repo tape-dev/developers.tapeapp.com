@@ -22,6 +22,7 @@ The following query paramters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
 
 <Tabs defaultValue="curl">
 
@@ -137,6 +138,7 @@ The following query paramters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger Workflows for this operation (default: `true`)              |
 
 <Tabs defaultValue="curl">
 
@@ -363,3 +365,129 @@ Retrieve records for the app with the specified `app_id`:
 | `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
 | `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
+
+## Retrieve related records for a set of records
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/ref/{ref_app_id}" />
+
+Retrieve related records for the app with the specified `app_id` and the records with IDs `100` and `101` provided via the `recordIds` array inside the request body.:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/app/1/ref/2?limit=10 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{ "recordIds": [100, 101], "direction": "forward" }' 
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "records": [
+    {
+      "record_id": 2,
+      "title": "Adam Smith",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 2,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 1,
+      "title": "Andrea Lim",
+      "created_on": "2022-03-23 08:43:03",
+      "app": {
+        "app_id": 2,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Andrea Lim"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+**Query Parameters**
+
+| Parameter | Type      | ** Type**                                    | Min | Max |
+| --------- | --------- | -------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to 50. | 0   | 500 |
+
+**Request Body Parameters**
+
+| Parameter          | Type        | ** Type**                                                                                                                            |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `direction`        | `string`    | Direction of the returned relations. Possible values are `forward`, `reverse` and `both`.                                            |
+| `recordIds`        | `integer[]` | IDs of the records for which related records should be returned. All IDs need to belong to records of the same App with ID `app_id`. |
+| `relationFieldIds` | `integer[]` | IDs of the relation fields, for which related records should be returned. Optional.                                                  |
+
+## Find relatable records for a relation field
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/field/{field_id}/find" />
+
+Find records that can be related for the relation field (single or multi) with the specified `field_id`, in this case there is an app relation for that field to the app Contacts with `app_id` 1.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/field/1/find?text=adam \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
+  "records": [
+    {
+      "record_id": 2,
+      "title": "Adam Smith",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      }
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+**Query Parameters**
+
+| Parameter | Type     | ** Type**              | Min | Max |
+| --------- | -------- | ---------------------- | --- | --- |
+| `text`    | `string` | The text to search for | -   | -   |
