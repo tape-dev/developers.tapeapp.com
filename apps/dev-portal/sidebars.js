@@ -3,17 +3,6 @@ module.exports = {
   mainSidebar: [
     {
       type: 'category',
-      label: 'Workflow Automations',
-      collapsed: true,
-      items: [
-        'automations/introduction',
-        'automations/code-editor',
-        'automations/execution-types',
-        'automations/libraries',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Calculation Field',
       collapsed: true,
       items: [
@@ -81,6 +70,17 @@ module.exports = {
             'api/resource/email',
           ],
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Workflow Automations',
+      collapsed: true,
+      items: [
+        'automations/introduction',
+        'automations/code-editor',
+        'automations/execution-types',
+        'automations/libraries',
       ],
     },
     'contribute',
