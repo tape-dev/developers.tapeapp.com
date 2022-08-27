@@ -3,12 +3,15 @@ id: convert-pdf-to-text
 title: Convert a PDF file to text
 ---
 
-import AutomationPng from '@site/static/img/guide/automations/convert-pdf-to-text.png';
-import ImageFrame from '@site/src/components/image-frame/image-frame.component';
+import AutomationPng from '@site/static/guide/automations/convert-pdf-to-text.png';
+import AutomationMp4 from '@site/static/guide/automations/convert-pdf-to-text-record.mp4';
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
-## Automation
+Working with files is important.
+Tape allows you to work with files with ease
+The `http.upload` function can upload a file (specified by its URL) to the given endpoint.
 
-<ImageFrame><img src={AutomationPng}  /></ImageFrame>
+<MediaFrame><img src={AutomationPng} /></MediaFrame>
 
 ## Code Action
 
@@ -20,3 +23,10 @@ const { data } = await http.upload(
 
 var_pdf_plaintext = Buffer.from(data.Files[0].FileData, 'base64');
 ```
+
+# Example video
+
+<MediaFrame>
+<video width="100%" controls muted preload="metadata"  src={AutomationMp4}>
+</video>
+</MediaFrame>
