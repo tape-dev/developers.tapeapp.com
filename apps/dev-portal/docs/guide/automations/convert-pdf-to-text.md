@@ -3,8 +3,8 @@ id: convert-pdf-to-text
 title: Convert a PDF file to text
 ---
 
-import AutomationPng from '@site/static/guide/automations/convert-pdf-to-text.png';
-import AutomationMp4 from '@site/static/guide/automations/convert-pdf-to-text-record.mp4';
+import AutomationPng from '@site/static/guide/automations/convert-pdf-to-text/convert-pdf-to-text.png';
+import AutomationMp4 from '@site/static/guide/automations/convert-pdf-to-text/convert-pdf-to-text-record.mp4';
 import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
 A lot of business processes involve the processing of files. Instead of manually looking through a file and copying out the text content, we can automate this task using Tape automations. In this guide, we will create an automation that extracts the text of an attached PDF file and saves it inside the description field of the record.
@@ -35,7 +35,7 @@ The final automation looks like this:
 <MediaFrame><img src={AutomationPng} /></MediaFrame>
 
 <br />
-This simple example using PDF files also works for various other file formats like Word documents or PowerPoint presentations. The extracted text can be further processed e.g., by a using conditional action to assign a user based on a keyword ("When the PDF contains the word 'legal', assign John").
+This simple example using PDF files also works for various other file formats like Word documents or PowerPoint presentations. The extracted text can be further processed e.g., by using a conditional action to assign a user based on a keyword ("When the PDF contains the word 'legal', assign John").
 
 ## Demo Record Video
 

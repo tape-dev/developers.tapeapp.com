@@ -101,7 +101,10 @@ module.exports = {
       type: 'category',
       label: 'Automations',
       collapsed: false,
-      items: ['guide/automations/convert-pdf-to-text'],
+      items: [
+        'guide/automations/convert-pdf-to-text',
+        'guide/automations/save-google-form-responses-to-tape',
+      ],
     },
     'contribute',
     {
