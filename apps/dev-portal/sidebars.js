@@ -74,7 +74,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Workflow Automations',
+      label: 'Automations',
       collapsed: true,
       items: [
         'automations/introduction',
@@ -95,6 +95,12 @@ module.exports = {
       type: 'doc',
       label: 'Getting Started',
       id: 'guide/getting-started',
+    },
+    {
+      type: 'category',
+      label: 'Automations',
+      collapsed: false,
+      items: ['guide/automations/convert-pdf-to-text'],
     },
     'contribute',
     {
