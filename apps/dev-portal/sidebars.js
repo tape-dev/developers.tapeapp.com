@@ -92,9 +92,10 @@ module.exports = {
   ],
   guidesSidebar: [
     {
-      type: 'doc',
-      label: 'Getting Started',
-      id: 'guide/getting-started',
+      type: 'category',
+      label: 'Developer API',
+      collapsed: false,
+      items: ['guide/api/getting-started'],
     },
     {
       type: 'category',

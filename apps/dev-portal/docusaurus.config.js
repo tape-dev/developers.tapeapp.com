@@ -21,7 +21,7 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/guide/getting-started',
+          to: 'docs/guide/api/getting-started',
           label: 'Guides',
           position: 'left',
         },
