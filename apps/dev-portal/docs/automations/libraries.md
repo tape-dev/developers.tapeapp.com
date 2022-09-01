@@ -10,8 +10,8 @@ Tape makes several Node.js libraries available for you to reference inside workf
 | :---------------------------------------------------------- | :------------ | :------ | :---------------------------------------------------------------------------------------- |
 | [Lodash](https://lodash.com/)                               | `lodash`, `_` | 4.17.21 | A modern JavaScript utility library delivering modularity, performance & extras.          |
 | [Moment.js](https://momentjs.com/)                          | `moment`      | 2.29.1  | Parse, validate, manipulate, and display dates and times in JavaScript.                   |
-| [date-fns](https://date-fns.org/)                           | `dateFns`     | 2.28.0  | Modern JavaScript date utility library.                                                   |
-| [date-fns-tz](https://date-fns.org/v2.28.0/docs/Time-Zones) | `dateFnsTz`   | 1.3.0   | Time zone support for date-fns using the Intl API.                                        |
+| [date-fns](https://date-fns.org/)                           | `date_fns`    | 2.28.0  | Modern JavaScript date utility library.                                                   |
+| [date-fns-tz](https://date-fns.org/v2.28.0/docs/Time-Zones) | `date_fns_tz` | 1.3.0   | Time zone support for date-fns using the Intl API.                                        |
 | [uuid](https://github.com/uuidjs/uuid#readme)               | `uuid`        | 8.3.2   | For the creation of RFC4122 UUIDs                                                         |
 | [cheerio](https://cheerio.js.org/)                          | `cheerio`     | 0.22.30 | Fast, flexible & lean implementation of core jQuery designed specifically for the server. |
 | [striptags](https://github.com/ericnorris/striptags)        | `striptags`   | 3.2.0   | An implementation of PHP's strip_tags in Node.js.                                         |
