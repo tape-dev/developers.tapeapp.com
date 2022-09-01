@@ -104,6 +104,7 @@ module.exports = {
       items: [
         'guide/automations/convert-pdf-to-text',
         'guide/automations/save-google-form-responses-to-tape',
+        'guide/automations/save-jotform-responses-to-tape',
       ],
     },
     'contribute',
