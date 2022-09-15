@@ -3,17 +3,6 @@ module.exports = {
   mainSidebar: [
     {
       type: 'category',
-      label: 'Workflow Automations',
-      collapsed: true,
-      items: [
-        'automations/introduction',
-        'automations/code-editor',
-        'automations/execution-types',
-        'automations/libraries',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Calculation Field',
       collapsed: true,
       items: [
@@ -83,6 +72,17 @@ module.exports = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Automations',
+      collapsed: true,
+      items: [
+        'automations/introduction',
+        'automations/code-editor',
+        'automations/execution-types',
+        'automations/libraries',
+      ],
+    },
     'contribute',
     {
       type: 'link',
@@ -92,9 +92,20 @@ module.exports = {
   ],
   guidesSidebar: [
     {
-      type: 'doc',
-      label: 'Getting Started',
-      id: 'guide/getting-started',
+      type: 'category',
+      label: 'Developer API',
+      collapsed: false,
+      items: ['guide/api/getting-started'],
+    },
+    {
+      type: 'category',
+      label: 'Automations',
+      collapsed: false,
+      items: [
+        'guide/automations/convert-pdf-to-text',
+        'guide/automations/save-google-form-responses-to-tape',
+        'guide/automations/save-jotform-responses-to-tape',
+      ],
     },
     'contribute',
     {

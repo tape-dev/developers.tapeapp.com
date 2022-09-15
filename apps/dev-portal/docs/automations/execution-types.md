@@ -1,7 +1,7 @@
 ---
 id: execution-types
-title: Workflow execution types
-sidebar_label: Workflow execution types
+title: Execution types
+sidebar_label: Execution types
 ---
 
 When a worfklow is executed, there are different types of execution that may affect how the workflow behaves, if and how filters are evaluated and whether actual data mutations are being performed.

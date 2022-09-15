@@ -131,7 +131,8 @@ console.log('result of calculation was:' + var_calculation_result)
 
 Tape applies limits to all executed workflows regarding utilized computation power and time.
 
-- The maximum time a flow can run is 2 minutes
+- The maximum time a flow can run is currently 3 minutes
+- Maximum number of actions consumed for a single run: 1000 (One thousand)
 - Memory & CPU limitations apply
 - There is a limit for parallel async operations
 

@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 ## Retrieve Organization
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/workspace/org" />
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org" />
 
 Retrieve your current organization (e.g. the organization with ID `1337`):
 
