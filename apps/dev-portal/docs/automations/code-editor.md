@@ -10,8 +10,6 @@ The code editor in Tape's workflow automations is used inside custom script filt
 
 The editor will provide typing information on which variables and APIs are available. You can fuzzy search by just starting to type and hit the "ENTER" key to apply a suggestion from the suggestion overlay.
 
-## Tips & Tricks
-
 ## Full screen mode
 
 Enter and exit full screen mode in any Tape workflow code editor by using "CTRL+ENTER" ("CMD+ENTER" on Mac).
