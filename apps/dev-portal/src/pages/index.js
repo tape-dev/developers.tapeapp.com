@@ -45,7 +45,7 @@ const features = [
         inside Tape.
       </>
     ),
-    badge: 'private-beta',
+    badge: 'private-alpha',
     linkLabel: 'Learn more',
     link: 'docs/automations/introduction',
   },
@@ -97,6 +97,10 @@ function Feature({ title, description, badge, link, linkLabel }) {
   ) : badge === 'private-beta' ? (
     <span type="primary" className={styles.badge}>
       PRIVATE BETA
+    </span>
+  ) : badge === 'private-alpha' ? (
+    <span type="primary" className={styles.badge}>
+      PRIVATE ALPHA
     </span>
   ) : badge === 'released' ? (
     <span type="primary" className={styles.badge}>
