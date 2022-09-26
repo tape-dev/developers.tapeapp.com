@@ -111,7 +111,7 @@ Some variables are provided by the system when a worklow is executed. A list of 
 - `current_workflow_is_simulation`: useful to execute or skip certain logic when the current execution is a simulation (that should ideally not affect data inside Tape or external systems)
 - `current_workflow_id`: the ID of the current workflow, may be included when hitting external systems for debugging purposes
 - `current_workflow_name`: the name of the current workflow, may be included when hitting external systems for debugging purposes
-- `current_workflow_timezone`: the timezone the current workflow is executed in. Can be configured in the workflow editor.
+- `current_workflow_timezone`: the timezone the current workflow is executed in. Can be configured in the automation editor.
 - `current_date`
 - `current_datetime`
 - `current_time`

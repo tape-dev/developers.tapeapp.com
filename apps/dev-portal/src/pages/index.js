@@ -40,7 +40,7 @@ const features = [
     title: 'Workflow Automations',
     description: (
       <>
-        Automate your work using Tape's customizable low-code workflow editor.
+        Automate your work using Tape's customizable low-code automation editor.
         Connect with external systems and APIs and leverage different triggers
         inside Tape.
       </>
