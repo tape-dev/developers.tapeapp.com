@@ -81,6 +81,12 @@ module.exports = {
         'automations/code-editor',
         'automations/execution-types',
         'automations/libraries',
+        {
+          type: 'category',
+          label: 'Troubleshooting',
+          collapsed: true,
+          items: ['automations/ip-addresses'],
+        },
       ],
     },
     'contribute',
