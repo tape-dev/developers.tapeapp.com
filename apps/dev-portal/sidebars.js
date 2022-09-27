@@ -90,6 +90,7 @@ module.exports = {
             'automations/troubleshooting/automations-troubleshooting-errors',
           ],
         },
+        'automations/limitations',
       ],
     },
     'contribute',

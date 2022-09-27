@@ -126,14 +126,3 @@ Use regular console log statements to log any variable during worklow execution.
 console.log('initial field value was: ' + task_field_estimation_days_value)
 console.log('result of calculation was:' + var_calculation_result)
 ```
-
-## Limitations
-
-Tape applies limits to all executed workflows regarding utilized computation power and time.
-
-- The maximum time a flow can run is currently 3 minutes
-- Maximum number of actions consumed for a single run: 1000 (One thousand)
-- Memory & CPU limitations apply
-- There is a limit for parallel async operations
-
-Flows that exceed any of the above limits fail with a proper error message. Split your work into multiple flows or avoid heavy computations, e.g. for large amounts of records.
