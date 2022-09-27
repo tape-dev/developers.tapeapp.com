@@ -12,4 +12,4 @@ When dispatching remote HTTP operations inside a Tape workflow automation, the w
 | :---------- | :------ |
 | 3.72.82.107 | -       |
 
-Some functionality may not work be available without whitelisting.
+Some functionality may not be available without whitelisting.
