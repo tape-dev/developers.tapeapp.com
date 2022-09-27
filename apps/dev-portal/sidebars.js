@@ -85,7 +85,10 @@ module.exports = {
           type: 'category',
           label: 'Troubleshooting',
           collapsed: true,
-          items: ['automations/troubleshooting/ip-addresses'],
+          items: [
+            'automations/troubleshooting/ip-addresses',
+            'automations/troubleshooting/automations-troubleshooting-errors',
+          ],
         },
       ],
     },

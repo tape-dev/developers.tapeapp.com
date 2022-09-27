@@ -4,11 +4,11 @@ title: Workflow Automations
 sidebar_label: Introduction
 ---
 
-### Execution environment
+## Execution environment
 
 All custom scripts inside Tape's workflow automations are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
 
-## Synchronous execution environment
+### Synchronous execution environment
 
 Insite filters and the "perform calculation" action, use synchronous code to perform your filter assertions or assign your variable.
 
@@ -54,13 +54,13 @@ Hint: If you need a more complex syntax or would like to declare functions that 
 })();
 ```
 
-## Asynchronous execution environment
+### Asynchronous execution environment
 
 When using the "execute script" action block, developers are free to run their own asynchronous JavaScript code. While it is possible to use the classic Promise syntax, we recommend using [Async/Await](https://nodejs.dev/learn/modern-asynchronous-javascript-with-async-and-await).
 
 Inside this context, more APIs, modules and functions are exposed. The [code editor](/docs/automations/code-editor) provides auto-completion and typing info to assist developers, some more details are described in the next sections.
 
-### Tape API client
+#### Tape API client
 
 The editor exposes the client side Tape SDK that allows to consume the [developer API](/docs/api/introduction). Use it to perform operations that are not available (yet) as dedicated graphical action blocks, or if you need more control over the behavior.
 
@@ -70,7 +70,7 @@ const { data, headers } = await tape.Record.get(1234);
 console.log({ record: data.record });
 ```
 
-### HTTP client
+#### HTTP client
 
 Similar to the "HTTP call" action block, it is also possible to perform HTTP requests using the provided HTTP client inside the "execute script" action.
 The following code sample could be used to extract the response body and header for a request to an external API, logging them to the console afterwards:
@@ -82,7 +82,7 @@ console.log({ data });
 console.log({ headers });
 ```
 
-## Custom Variables
+### Custom Variables
 
 You may introduce custom variables that can be used globally by using one of the following action blocks:
 
