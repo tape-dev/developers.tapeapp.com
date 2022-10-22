@@ -28,8 +28,9 @@ Retrieve your current organization (e.g. the organization with ID `1337`):
     "description": "One shall dogfood all day all night",
     "website": "https://tapeapp.com",
     "location": "Munich, Germany",
-    "created_at": "2019-05-01 10:00",
-    "plan": "pro"
+    "created_on": "2019-05-01 10:00",
+    "plan": "pro",
+    "activity_count": 345
 }`}
 </ContextCodeBlock>
 
