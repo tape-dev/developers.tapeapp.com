@@ -19,7 +19,7 @@ const features = [
         full control over the data you receive.
       </>
     ),
-    badge: 'private-beta',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/record',
   },
@@ -32,7 +32,7 @@ const features = [
         move an app from one workspace to another.
       </>
     ),
-    badge: 'private-beta',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/app',
   },
@@ -45,7 +45,7 @@ const features = [
         inside Tape.
       </>
     ),
-    badge: 'private-alpha',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/automations/introduction',
   },
@@ -58,7 +58,7 @@ const features = [
         workspace from the same or another organization.
       </>
     ),
-    badge: 'private-beta',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/workspace',
   },
@@ -72,7 +72,7 @@ const features = [
         resources.
       </>
     ),
-    badge: 'private-beta',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/api/resource/webhook',
   },
@@ -85,7 +85,7 @@ const features = [
         code. Furthermore, the output rendering supports Markdown, HTML and CSS.
       </>
     ),
-    badge: 'released',
+    badge: '',
     linkLabel: 'Learn more',
     link: 'docs/calculation/introduction',
   },
