@@ -261,7 +261,7 @@ The following `match_type` values are supported for `STATUS` fields:
     {
       "field_id": "1",
       "field_type": "NUMBER",
-      "match_type": "any",
+      "match_type": "smaller",
       "values": [
         {
           "value": 12.34
@@ -286,3 +286,58 @@ The following `match_type` values are supported for `STATUS` fields:
 |    `not_equal`     | Matches all records whose field value does not reference the status specified by the match value. Comparison is case insensitive and spaces are ignored. |
 |      `empty`       | Matches all records whose field value is empty                                                                                                           |
 |    `not_empty`     | Matches all records whose field value is not empty                                                                                                       |
+
+## Single Date
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Single Date Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "SINGLE_DATE",
+      "match_type": "is_before",
+      "relative_date_type": "exact_date",
+      "values": [
+        {
+          "value": "2020-01-01"
+        }
+      ],
+      "type": "number",
+      "numDays": 1
+    },
+    {
+      "field_id": "1",
+      "field_type": "SINGLE_DATE",
+      "match_type": "is_after",
+      "relative_date_type": "num_weeks_before",
+      "values": [
+        {
+          "value": "2020-01-01",
+          "offset_amount": 1
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+In addition to the match type, a relative date type needs to be provided when filtering for a Single Date Field:
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+
+|   Match type   | Description                                                                                                                         |
+| :------------: | ----------------------------------------------------------------------------------------------------------------------------------- |
+|    `equal`     | Matches all records whose field value is equal to the the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose field value is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `before`    | Matches all records whose field value is before the date of the provided match value + offset_amount + relative_date_type           |
+| `on_or_before` | Matches all records whose field value is before the date of the provided match value + offset_amount + relative_date_type           |
+|    `after`     | Matches all records whose field value is after the date of the provided match value + offset_amount + relative_date_type            |
+| `on_or_after`  | Matches all records whose field value is after the date of the provided match value + offset_amount + relative_date_type            |
+|    `empty`     | Matches all records whose field value is empty                                                                                      |
+|  `not_empty`   | Matches all records whose field value is not empty                                                                                  |
