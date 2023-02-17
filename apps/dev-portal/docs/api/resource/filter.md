@@ -249,3 +249,40 @@ The following `match_type` values are supported for `STATUS` fields:
 | `not_empty`  | Matches all records whose field value is not empty                                                                                                                        |
 | `completed`  | Matches all records whose referenced option is set to `completed`                                                                                                         |
 | `incomplete` | Matches all records whose referenced option is set to `incomplete`                                                                                                        |
+
+## Number
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Number Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "NUMBER",
+      "match_type": "any",
+      "values": [
+        {
+          "value": 12.34
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+|     Match type     | Description                                                                                                                                              |
+| :----------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `equal`       | Matches all records whose field value is equal to the provided match value                                                                               |
+|     `smaller`      | Matches all records whose field value is smaller than the provided match value                                                                           |
+| `smaller_or_equal` | Matches all records whose field value is smaller or equal to the provided match value                                                                    |
+|      `larger`      | Matches all records whose field value is larger than the provided match value                                                                            |
+| `larger_or_equal`  | Matches all records whose field value is larger or equal to the provided match value                                                                     |
+|    `not_equal`     | Matches all records whose field value does not reference the status specified by the match value. Comparison is case insensitive and spaces are ignored. |
+|      `empty`       | Matches all records whose field value is empty                                                                                                           |
+|    `not_empty`     | Matches all records whose field value is not empty                                                                                                       |
