@@ -305,8 +305,7 @@ The following `match_type` values are supported for `STATUS` fields:
           "value": "2020-01-01"
         }
       ],
-      "type": "number",
-      "numDays": 1
+      "type": "number"
     },
     {
       "field_id": "1",
@@ -341,3 +340,143 @@ In addition to the match type, a relative date type needs to be provided when fi
 | `on_or_after`  | Matches all records whose field value is after the date of the provided match value + offset_amount + relative_date_type            |
 |    `empty`     | Matches all records whose field value is empty                                                                                      |
 |  `not_empty`   | Matches all records whose field value is not empty                                                                                  |
+
+## Created At
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Created At Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "CREATED_AT",
+      "match_type": "is_before",
+      "relative_date_type": "exact_date",
+      "values": [
+        {
+          "value": "2020-01-01"
+        }
+      ],
+      "type": "number"
+    },
+    {
+      "field_id": "1",
+      "field_type": "CREATED_AT",
+      "match_type": "is_after",
+      "relative_date_type": "num_weeks_before",
+      "values": [
+        {
+          "value": "2020-01-01",
+          "offset_amount": 1
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+In addition to the match type, a relative date type needs to be provided when filtering for a Created At Field:
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+
+|   Match type   | Description                                                                                                                           |
+| :------------: | ------------------------------------------------------------------------------------------------------------------------------------- |
+|    `equal`     | Matches all records whose creation date is equal to the the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose creation date is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `before`    | Matches all records whose creation date is before the date of the provided match value + offset_amount + relative_date_type           |
+| `on_or_before` | Matches all records whose creation date is before the date of the provided match value + offset_amount + relative_date_type           |
+|    `after`     | Matches all records whose creation date is after the date of the provided match value + offset_amount + relative_date_type            |
+| `on_or_after`  | Matches all records whose creation date is after the date of the provided match value + offset_amount + relative_date_type            |
+
+## Last Modified At
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Last Modified At Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "LAST_MODIFIED_AT",
+      "match_type": "is_before",
+      "relative_date_type": "exact_date",
+      "values": [
+        {
+          "value": "2020-01-01"
+        }
+      ],
+      "type": "number"
+    },
+    {
+      "field_id": "1",
+      "field_type": "LAST_MODIFIED_AT",
+      "match_type": "is_after",
+      "relative_date_type": "num_weeks_before",
+      "values": [
+        {
+          "value": "2020-01-01",
+          "offset_amount": 1
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+In addition to the match type, a relative date type needs to be provided when filtering for a Last Modified At Field:
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+
+|   Match type   | Description                                                                                                                                       |
+| :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    `equal`     | Matches all records whose date of last modification is equal to the the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose date of last modification is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `before`    | Matches all records whose date of last modification is before the date of the provided match value + offset_amount + relative_date_type           |
+| `on_or_before` | Matches all records whose date of last modification is before the date of the provided match value + offset_amount + relative_date_type           |
+|    `after`     | Matches all records whose date of last modification is after the date of the provided match value + offset_amount + relative_date_type            |
+| `on_or_after`  | Matches all records whose date of last modification is after the date of the provided match value + offset_amount + relative_date_type            |
+
+## MULTI EMAIL
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Multi Email Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "MULTI_EMAIL",
+      "match_type": "is_before",
+      "values": [
+        {
+          "value": "2020-01-01"
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+|    Match type    | Description                                                                                                                                                                              |
+| :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fully_includes` | Matches all records whose field value includes at least one email entry containing the full address specified by the match value. Comparison is case insensitive and spaces are ignored. |
+|  `starts_with`   | Matches all records whose field value includes at least one email entry that starts with the match value. Comparison is case insensitive and spaces are ignored.                         |
+|   `ends_with`    | Matches all records whose field value includes at least one email entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                           |
+|    `contains`    | Matches all records whose field value includes at least one email entry that contains the match value. Comparison is case insensitive and spaces are ignored.                            |
+|  `not_contains`  | Matches all records whose field value includes at least one email entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
+|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any email entry                                                                                                    |
+|   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one email entry                                                                                               |
