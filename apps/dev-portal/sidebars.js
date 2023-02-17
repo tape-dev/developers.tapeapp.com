@@ -68,6 +68,7 @@ module.exports = {
             'api/resource/link-preview',
             'api/resource/webhook',
             'api/resource/email',
+            'api/resource/filter',
           ],
         },
       ],

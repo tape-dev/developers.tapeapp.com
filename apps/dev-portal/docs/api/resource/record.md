@@ -373,21 +373,23 @@ Retrieve records for the app with the specified `app_id`:
 Retrieve records for the app with the specified `app_id` with filters:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1 \\
+{`curl -X POST #BASE_URL/v1/filter/app/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
-    "filters": {
-      "field_id": "1"
-      "field_type": "SINGLE_TEXT",
-      "match_type": "contains",
-      "values": [
-        {
-          "value": "John"
-        }
-      ]
-      type: "text"
-    }
+    "filters": [
+      {
+        "field_id": "1"
+        "field_type": "SINGLE_TEXT",
+        "match_type": "contains",
+        "values": [
+          {
+            "value": "John"
+          }
+        ]
+        type: "text"
+      }
+    ]
   }' 
   
 `}
@@ -487,6 +489,12 @@ Retrieve records for the app with the specified `app_id` with filters:
 | `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
 | `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
+
+**Request Body Parameters**
+
+| Parameter | Type    | ** Type**                                                                                                                                                                                                                                                                                         |
+| --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter/overview) documentation section for examples of all supported field types. |
 
 ## Retrieve related records for a set of records
 
