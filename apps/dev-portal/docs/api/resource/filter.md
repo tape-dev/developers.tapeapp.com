@@ -456,10 +456,46 @@ In addition to the match type, a relative date type needs to be provided when fi
     {
       "field_id": "1",
       "field_type": "MULTI_EMAIL",
-      "match_type": "is_before",
+      "match_type": "fully_includes",
       "values": [
         {
-          "value": "2020-01-01"
+          "value": "john.doe@gmail.com"
+        }
+      ],
+      "type": "number"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+|    Match type    | Description                                                                                                                                                                             |
+| :--------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fully_includes` | Matches all records whose field value includes at least one email entry containing the full number specified by the match value. Comparison is case insensitive and spaces are ignored. |
+|  `starts_with`   | Matches all records whose field value includes at least one email entry that starts with the match value. Comparison is case insensitive and spaces are ignored.                        |
+|   `ends_with`    | Matches all records whose field value includes at least one email entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                          |
+|    `contains`    | Matches all records whose field value includes at least one email entry that contains the match value. Comparison is case insensitive and spaces are ignored.                           |
+|  `not_contains`  | Matches all records whose field value includes at least one email entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                   |
+|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any email entry                                                                                                   |
+|   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one email entry                                                                                              |
+
+# MULTI PHONE
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Multi Phone Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "MULTI_PHONE",
+      "match_type": "starts_with",
+      "values": [
+        {
+          "value": "+49"
         }
       ],
       "type": "number"
@@ -473,10 +509,10 @@ In addition to the match type, a relative date type needs to be provided when fi
 
 |    Match type    | Description                                                                                                                                                                              |
 | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fully_includes` | Matches all records whose field value includes at least one email entry containing the full address specified by the match value. Comparison is case insensitive and spaces are ignored. |
-|  `starts_with`   | Matches all records whose field value includes at least one email entry that starts with the match value. Comparison is case insensitive and spaces are ignored.                         |
-|   `ends_with`    | Matches all records whose field value includes at least one email entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                           |
-|    `contains`    | Matches all records whose field value includes at least one email entry that contains the match value. Comparison is case insensitive and spaces are ignored.                            |
-|  `not_contains`  | Matches all records whose field value includes at least one email entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
-|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any email entry                                                                                                    |
-|   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one email entry                                                                                               |
+| `fully_includes` | Matches all records whose field value includes at least one phone entry containing the full address specified by the match value. Comparison is case insensitive and spaces are ignored. |
+|  `starts_with`   | Matches all records whose field value includes at least one phone entry that starts with the match value. Comparison is case insensitive and spaces are ignored.                         |
+|   `ends_with`    | Matches all records whose field value includes at least one phone entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                           |
+|    `contains`    | Matches all records whose field value includes at least one phone entry that contains the match value. Comparison is case insensitive and spaces are ignored.                            |
+|  `not_contains`  | Matches all records whose field value includes at least one phone entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
+|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                    |
+|   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one phone entry                                                                                               |
