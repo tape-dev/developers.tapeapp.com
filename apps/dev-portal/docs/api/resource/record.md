@@ -366,6 +366,128 @@ Retrieve records for the app with the specified `app_id`:
 | `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
 | `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
 
+## Retrieve filtered records for an app
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/filter/app/{app_id}" />
+
+Retrieve records for the app with the specified `app_id` with filters:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "filters": {
+      "field_id": "1"
+      "field_type": "SINGLE_TEXT",
+      "match_type": "contains",
+      "values": [
+        {
+          "value": "John"
+        }
+      ]
+      type: "text"
+    }
+  }' 
+  
+`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
+  "records": [
+    {
+      "record_id": 3,
+      "title": "John Doe",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "John Doe"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 2,
+      "title": "Alison Johnsson",
+      "created_on": "2022-03-23 08:43:03",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Alison Johnsson"
+            }
+          ]
+        }
+      ]
+    },
+     {
+      "record_id": 1,
+      "title": "Karl John III",
+      "created_on": "2022-03-23 08:43:03",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Karl John III"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+**Query Parameters**
+
+| Parameter | Type      | ** Type**                                          | Min | Max |
+| --------- | --------- | -------------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to 50.       | 0   | 500 |
+| `cursor`  | `string`  | Cursor for pagination                              | -   | -   |
+| `sort_by` | `string`  | External ID of the field that should be sorted by. | -   | -   |
+
 ## Retrieve related records for a set of records
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/ref/{ref_app_id}" />
