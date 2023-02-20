@@ -368,26 +368,26 @@ Retrieve records for the app with the specified `app_id`:
 
 ## Retrieve filtered records for an app
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/filter/app/{app_id}" />
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/filter/app/{app_id}" />
 
 Retrieve records for the app with the specified `app_id` with filters:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/filter/app/1 \\
+{`curl -X POST #BASE_URL/v1/record/filter/app/1 \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
     "filters": [
       {
-        "field_id": "1"
+        "field_id": "1",
         "field_type": "SINGLE_TEXT",
         "match_type": "contains",
         "values": [
           {
             "value": "John"
           }
-        ]
-        type: "text"
+        ],
+        "type": "text"
       }
     ]
   }' 

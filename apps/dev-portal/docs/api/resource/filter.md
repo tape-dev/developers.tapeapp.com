@@ -514,5 +514,5 @@ In addition to the match type, a relative date type needs to be provided when fi
 |   `ends_with`    | Matches all records whose field value includes at least one phone entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                           |
 |    `contains`    | Matches all records whose field value includes at least one phone entry that contains the match value. Comparison is case insensitive and spaces are ignored.                            |
 |  `not_contains`  | Matches all records whose field value includes at least one phone entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
-|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                    |
+|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                      |
 |   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one phone entry                                                                                               |
