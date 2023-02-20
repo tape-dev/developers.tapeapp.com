@@ -492,9 +492,9 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 **Request Body Parameters**
 
-| Parameter | Type    | ** Type**                                                                                                                                                                                                                                                                                         |
-| --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter/overview) documentation section for examples of all supported field types. |
+| Parameter | Type    | ** Type**                                                                                                                                                                                                                                                                                |
+| --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter) documentation section for examples of all supported field types. |
 
 ## Retrieve related records for a set of records
 

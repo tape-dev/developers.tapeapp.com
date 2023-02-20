@@ -9,13 +9,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-Filters are used to filter Records in an App. They can be provided when retrieving Records with one of the following endpoints:
+Filter inputs are used to retrieve Records with one or more filter criterions from an App. They can be provided when retrieving Records with one of the following endpoints:
 
-Retrieve filtered Records for an App: [Get filtered Records](record#retrieve-filtered-Records-for-an-app)
+Retrieve filtered Records for an App: [Get filtered Records](record#retrieve-filtered-records-for-an-app)
 
-For every supported endpoints, multiple filters can be provided which get concatenated with the boolean `AND`operator.
+For every supported endpoint, multiple filters can be provided which get concatenated with the boolean `AND` operator.
 
-The following example matches all records that have a field value for field with ID 1 containing the text `John` and a field value for field with ID 2 equal to `123`:
+The following example matches all records that have a field value for field with ID 1 containing the text `"John"` and a field value for field with ID 2 equal to `123`:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -24,7 +25,7 @@ The following example matches all records that have a field value for field with
   "filters": [
     {
       "field_id": "1",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "match_type": "contains",
       "values": [
         {
@@ -35,7 +36,7 @@ The following example matches all records that have a field value for field with
     },
     {
       "field_id": "2",
-      "field_type": "NUMBER",
+      "field_type": "status",
       "match_type": "equal",
       "values": [
         {
@@ -53,6 +54,8 @@ The following example matches all records that have a field value for field with
 
 ## Single Text
 
+This is an example on how to filter records by a `single_text` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -61,7 +64,7 @@ The following example matches all records that have a field value for field with
   "filters": [
     {
       "field_id": "1",
-      "field_type": "SINGLE_TEXT",
+      "field_type": "single_text",
       "match_type": "contains",
       "values": [
         {
@@ -77,7 +80,7 @@ The following example matches all records that have a field value for field with
 </TabItem>
 </Tabs>
 
-The following `match_type` values are supported for `SINGLE_TEXT` fields:
+The following `match_type` values are supported for `single_text` fields:
 
 |   Match type   | Description                                                                                                                                                                                                                 |
 | :------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,6 +93,8 @@ The following `match_type` values are supported for `SINGLE_TEXT` fields:
 
 ## Multi Text
 
+This is an example on how to filter records by a `multi_text` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -98,7 +103,7 @@ The following `match_type` values are supported for `SINGLE_TEXT` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "MULTI_TEXT",
+      "field_type": "multi_text",
       "match_type": "contains",
       "values": [
         {
@@ -114,7 +119,7 @@ The following `match_type` values are supported for `SINGLE_TEXT` fields:
 </TabItem>
 </Tabs>
 
-The following `match_type` values are supported for `MULTI_TEXT` fields:
+The following `match_type` values are supported for `multi_text` fields:
 
 |   Match type   | Description                                                                                                                                                                                                                             |
 | :------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -127,6 +132,8 @@ The following `match_type` values are supported for `MULTI_TEXT` fields:
 
 ## Single Category
 
+This is an example on how to filter records by a `single_category` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -135,7 +142,7 @@ The following `match_type` values are supported for `MULTI_TEXT` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "SINGLE_CATEGORY",
+      "field_type": "single_category",
       "match_type": "any",
       "values": [
         {
@@ -155,7 +162,7 @@ The following `match_type` values are supported for `MULTI_TEXT` fields:
 </Tabs>
 
 Either the id of the respective category option or the label of the option can be provided as match value.
-The following `match_type` values are supported for `SINGLE_CATEGORY` fields:
+The following `match_type` values are supported for `single_category` fields:
 
 | Match type  | Description                                                                                                                                                               |
 | :---------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -168,6 +175,8 @@ The following `match_type` values are supported for `SINGLE_CATEGORY` fields:
 
 ## Multi Category
 
+This is an example on how to filter records by a `multi_category` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -176,7 +185,7 @@ The following `match_type` values are supported for `SINGLE_CATEGORY` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "MULTI_CATEGORY",
+      "field_type": "multi_category",
       "match_type": "any",
       "values": [
         {
@@ -196,7 +205,7 @@ The following `match_type` values are supported for `SINGLE_CATEGORY` fields:
 </Tabs>
 
 Either the id of the respective category option or the label of the option can be provided as match value.
-The following `match_type` values are supported for `MULTI_CATEGORY` fields:
+The following `match_type` values are supported for `multi_category` fields:
 
 | Match type  | Description                                                                                                                                                                                                          |
 | :---------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -209,6 +218,8 @@ The following `match_type` values are supported for `MULTI_CATEGORY` fields:
 
 ## Status
 
+This is an example on how to filter records by a `status` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -217,7 +228,7 @@ The following `match_type` values are supported for `MULTI_CATEGORY` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "STATUS",
+      "field_type": "status",
       "match_type": "any",
       "values": [
         {
@@ -237,7 +248,7 @@ The following `match_type` values are supported for `MULTI_CATEGORY` fields:
 </Tabs>
 
 Either the id of the respective status option or the label of the option can be provided as match value.
-The following `match_type` values are supported for `STATUS` fields:
+The following `match_type` values are supported for `status` fields:
 
 |  Match type  | Description                                                                                                                                                               |
 | :----------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -252,6 +263,8 @@ The following `match_type` values are supported for `STATUS` fields:
 
 ## Number
 
+This is an example on how to filter records by a `number` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -260,7 +273,7 @@ The following `match_type` values are supported for `STATUS` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "NUMBER",
+      "field_type": "number",
       "match_type": "smaller",
       "values": [
         {
@@ -289,6 +302,8 @@ The following `match_type` values are supported for `STATUS` fields:
 
 ## Single Date
 
+This is an example on how to filter records by a `single_date` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -297,7 +312,7 @@ The following `match_type` values are supported for `STATUS` fields:
   "filters": [
     {
       "field_id": "1",
-      "field_type": "SINGLE_DATE",
+      "field_type": "single_date",
       "match_type": "is_before",
       "relative_date_type": "exact_date",
       "values": [
@@ -305,11 +320,11 @@ The following `match_type` values are supported for `STATUS` fields:
           "value": "2020-01-01"
         }
       ],
-      "type": "number"
+      "type": "date"
     },
     {
       "field_id": "1",
-      "field_type": "SINGLE_DATE",
+      "field_type": "single_date",
       "match_type": "is_after",
       "relative_date_type": "num_weeks_before",
       "values": [
@@ -318,7 +333,7 @@ The following `match_type` values are supported for `STATUS` fields:
           "offset_amount": 1
         }
       ],
-      "type": "number"
+      "type": "date"
     }
   ]
 }
@@ -328,7 +343,10 @@ The following `match_type` values are supported for `STATUS` fields:
 </Tabs>
 
 In addition to the match type, a relative date type needs to be provided when filtering for a Single Date Field:
-`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`.
+
+The combination of the provided match value, the offset amount and the relative date type will be used to calculate the date to match against.
+E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relative date type is `num_days_before`, the date to match against will be `2019-12-31`.
 
 |   Match type   | Description                                                                                                                         |
 | :------------: | ----------------------------------------------------------------------------------------------------------------------------------- |
@@ -343,6 +361,8 @@ In addition to the match type, a relative date type needs to be provided when fi
 
 ## Created At
 
+This is an example on how to filter records by a `created_at` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -351,7 +371,7 @@ In addition to the match type, a relative date type needs to be provided when fi
   "filters": [
     {
       "field_id": "1",
-      "field_type": "CREATED_AT",
+      "field_type": "created_at",
       "match_type": "is_before",
       "relative_date_type": "exact_date",
       "values": [
@@ -359,11 +379,11 @@ In addition to the match type, a relative date type needs to be provided when fi
           "value": "2020-01-01"
         }
       ],
-      "type": "number"
+      "type": "date"
     },
     {
       "field_id": "1",
-      "field_type": "CREATED_AT",
+      "field_type": "created_at",
       "match_type": "is_after",
       "relative_date_type": "num_weeks_before",
       "values": [
@@ -372,7 +392,7 @@ In addition to the match type, a relative date type needs to be provided when fi
           "offset_amount": 1
         }
       ],
-      "type": "number"
+      "type": "date"
     }
   ]
 }
@@ -382,7 +402,10 @@ In addition to the match type, a relative date type needs to be provided when fi
 </Tabs>
 
 In addition to the match type, a relative date type needs to be provided when filtering for a Created At Field:
-`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`.
+
+The combination of the provided match value, the offset amount and the relative date type will be used to calculate the date to match against.
+E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relative date type is `num_days_before`, the date to match against will be `2019-12-31`.
 
 |   Match type   | Description                                                                                                                           |
 | :------------: | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -395,6 +418,8 @@ In addition to the match type, a relative date type needs to be provided when fi
 
 ## Last Modified At
 
+This is an example on how to filter records by a `last_modified_at` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -403,7 +428,7 @@ In addition to the match type, a relative date type needs to be provided when fi
   "filters": [
     {
       "field_id": "1",
-      "field_type": "LAST_MODIFIED_AT",
+      "field_type": "last_modified_at",
       "match_type": "is_before",
       "relative_date_type": "exact_date",
       "values": [
@@ -411,11 +436,11 @@ In addition to the match type, a relative date type needs to be provided when fi
           "value": "2020-01-01"
         }
       ],
-      "type": "number"
+      "type": "date"
     },
     {
       "field_id": "1",
-      "field_type": "LAST_MODIFIED_AT",
+      "field_type": "last_modified_at",
       "match_type": "is_after",
       "relative_date_type": "num_weeks_before",
       "values": [
@@ -424,7 +449,7 @@ In addition to the match type, a relative date type needs to be provided when fi
           "offset_amount": 1
         }
       ],
-      "type": "number"
+      "type": "date"
     }
   ]
 }
@@ -434,7 +459,10 @@ In addition to the match type, a relative date type needs to be provided when fi
 </Tabs>
 
 In addition to the match type, a relative date type needs to be provided when filtering for a Last Modified At Field:
-`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`
+`num_days_after`, `num_days_before`, `num_weeks_after`, `num_months_before`, `num_months_after`, `exact_date`.
+
+The combination of the provided match value, the offset amount and the relative date type will be used to calculate the date to match against.
+E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relative date type is `num_days_before`, the date to match against will be `2019-12-31`.
 
 |   Match type   | Description                                                                                                                                       |
 | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -447,6 +475,8 @@ In addition to the match type, a relative date type needs to be provided when fi
 
 ## MULTI EMAIL
 
+This is an example on how to filter records by a `multi_email` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -455,14 +485,14 @@ In addition to the match type, a relative date type needs to be provided when fi
   "filters": [
     {
       "field_id": "1",
-      "field_type": "MULTI_EMAIL",
+      "field_type": "multi_email",
       "match_type": "fully_includes",
       "values": [
         {
           "value": "john.doe@gmail.com"
         }
       ],
-      "type": "number"
+      "type": "email"
     }
   ]
 }
@@ -483,6 +513,8 @@ In addition to the match type, a relative date type needs to be provided when fi
 
 # MULTI PHONE
 
+This is an example on how to filter records by a `multi_phone` field:
+
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
@@ -491,14 +523,14 @@ In addition to the match type, a relative date type needs to be provided when fi
   "filters": [
     {
       "field_id": "1",
-      "field_type": "MULTI_PHONE",
+      "field_type": "multi_phone",
       "match_type": "starts_with",
       "values": [
         {
           "value": "+49"
         }
       ],
-      "type": "number"
+      "type": "phone"
     }
   ]
 }
@@ -514,5 +546,5 @@ In addition to the match type, a relative date type needs to be provided when fi
 |   `ends_with`    | Matches all records whose field value includes at least one phone entry that ends with the match value. Comparison is case insensitive and spaces are ignored.                           |
 |    `contains`    | Matches all records whose field value includes at least one phone entry that contains the match value. Comparison is case insensitive and spaces are ignored.                            |
 |  `not_contains`  | Matches all records whose field value includes at least one phone entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
-|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                      |
+|     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                    |
 |   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one phone entry                                                                                               |
