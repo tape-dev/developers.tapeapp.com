@@ -18,4 +18,8 @@ npm install
 
 # Start the documentation webserver
 npm run start
+
+# Publish the documentation
+npm run publish
+
 ```
