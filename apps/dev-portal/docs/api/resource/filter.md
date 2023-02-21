@@ -473,7 +473,7 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 |    `after`     | Matches all records whose date of last modification is after the date of the provided match value + offset_amount + relative_date_type            |
 | `on_or_after`  | Matches all records whose date of last modification is after the date of the provided match value + offset_amount + relative_date_type            |
 
-## MULTI EMAIL
+## Multi Email
 
 This is an example on how to filter records by a `multi_email` field:
 
@@ -511,7 +511,7 @@ This is an example on how to filter records by a `multi_email` field:
 |     `empty`      | Matches all records whose field value is empty. I.e. does not contain any email entry                                                                                                   |
 |   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one email entry                                                                                              |
 
-# MULTI PHONE
+## Multi Phone
 
 This is an example on how to filter records by a `multi_phone` field:
 
