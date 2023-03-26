@@ -82,6 +82,7 @@ module.exports = {
         'automations/code-editor',
         'automations/execution-types',
         'automations/libraries',
+        'automations/date-timezone',
         {
           type: 'category',
           label: 'Troubleshooting',
