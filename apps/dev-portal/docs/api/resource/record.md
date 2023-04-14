@@ -362,7 +362,7 @@ Retrieve records for the app with the specified `app_id`:
 
 | Parameter   | Type      | ** Type**                                                                                               | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
-| `limit`     | `integer` | Number of records to return. Defaults to 50.                                                            | 0   | 500 |
+| `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
 | `sort_by`   | `string`  | External ID of the field that should be sorted by.                                                      | -   | -   |
 | `sort_desc` | `boolean` | Whether to sort in descending order. If false, sorting will be in ascending order. Defaults to _false_. | -   | -   |
@@ -487,7 +487,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 | Parameter   | Type      | ** Type**                                                                                               | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
-| `limit`     | `integer` | Number of records to return. Defaults to 50.                                                            | 0   | 500 |
+| `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
 | `sort_by`   | `string`  | External ID of the field that should be sorted by.                                                      | -   | -   |
 | `sort_desc` | `boolean` | Whether to sort in descending order. If false, sorting will be in ascending order. Defaults to _false_. | -   | -   |
@@ -574,9 +574,9 @@ Retrieve related records for the app with the specified `app_id` and the records
 
 **Query Parameters**
 
-| Parameter | Type      | ** Type**                                    | Min | Max |
-| --------- | --------- | -------------------------------------------- | --- | --- |
-| `limit`   | `integer` | Number of records to return. Defaults to 50. | 0   | 500 |
+| Parameter | Type      | ** Type**                                      | Min | Max |
+| --------- | --------- | ---------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to _50_. | 0   | 500 |
 
 **Request Body Parameters**
 
