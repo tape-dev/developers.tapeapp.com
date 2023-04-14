@@ -9,7 +9,7 @@
     "serve": "runtime=DEV nx serve dev-portal",
     "build": "nx build dev-portal",
     "test": "nx test dev-portal",
-    "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME"
+    "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME && git commit -m 'publish'"
   },
   "private": true,
   "devDependencies": {
