@@ -8,7 +8,7 @@ Calculated fields can be used to easily manipulate data added to an app. With th
 
 ### Execution environment
 
-The script of a calculation field is written in JavaScript. In order to calculate the value of a record's calculation field, the Tape server gathers all the script's variables values from the database and executes the script on the server. The script is executed inside a Node.js version 12 environment, so you can use [ES6](https://www.javascripttutorial.net/es6/) syntax with all its cool features :tada:
+The script of a calculation field is written in JavaScript. In order to calculate the value of a record's calculation field, the Tape server gathers all the script's variables values from the database and executes the script on the server. The script is executed inside a Node.js version 18 environment, so you can use [ES6](https://www.javascripttutorial.net/es6/) (indeed up to ES2021) syntax with all its cool features :tada:
 
 ### Client-side JavaScript
 
