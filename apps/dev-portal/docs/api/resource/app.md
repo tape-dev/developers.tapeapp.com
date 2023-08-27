@@ -31,6 +31,7 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
       "slug": "tasks",
       "config": {
         "item_name": "Task",
+        "name": "Tasks",
         "description": ""
       }
     },
@@ -41,6 +42,7 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
       "slug": "projects",
       "config": { 
         "item_name": "Project",
+        "name": "Projects",
         "description": ""
       }
     }
@@ -70,6 +72,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "slug": "tasks",
       "config": {
         "item_name": "Task",
+        "name": "Tasks",
         "description": ""
       }
     },
@@ -80,6 +83,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "slug": "projects",
       "config": { 
         "item_name": "Project",
+        "name": "Projects",
         "description": ""
       },
     },
@@ -90,6 +94,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
     "slug": "contacts",
     "config": { 
       "item_name": "Contact",
+      "name": "Contacts",
       "description": ""
     }
   }
@@ -109,39 +114,37 @@ Retrieve an app with fields by its ID `1`:
 </ContextCodeBlock>
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
-{`{
-  "total": 2,
-  "apps": [
-    {
-      "app_id": 1,
-      "workspace_id": 200,
+{`
+  {
+    "app_id": 1,
+    "workspace_id": 200,
+    "name": "Tasks",
+    "slug": "tasks",
+    "config": {
+      "item_name": "Task",
       "name": "Tasks",
-      "slug": "tasks",
-      "config": {
-        "item_name": "Task",
-        "description": ""
-      },
-      "fields": [
-        {
-          "field_id": 1,
-          "external_id": "full_name",
-          "label": "Full Name",
-          "type": "text",
-          "field_type": "single_text",
-          "config": {
-            "description": null,
-            "required": false,
-            "label": "FST",
-            "settings": {
-              "format": "plain",
-              "size": "small"
-            }
-          },
-        }
-      ]
+      "description": ""
     },
-  ]
-}`}
+    "fields": [
+      {
+        "field_id": 1,
+        "external_id": "full_name",
+        "label": "Full Name",
+        "type": "text",
+        "field_type": "single_text",
+        "config": {
+          "description": null,
+          "required": false,
+          "label": "FST",
+          "settings": {
+            "format": "plain",
+            "size": "small"
+          }
+        },
+      }
+    ]
+  }
+`}
 </ContextCodeBlock>
 
 ## Create, delete or update Apps
