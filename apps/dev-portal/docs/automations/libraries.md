@@ -1,6 +1,6 @@
 ---
 id: libraries
-title: Available Libraries
+title: Available Libraries (Automations)
 sidebar_label: Libraries
 ---
 
@@ -16,6 +16,7 @@ Tape makes several Node.js libraries available for you to reference inside workf
 | [cheerio](https://cheerio.js.org/)                          | `cheerio`     | 1.0.0_rc.10 | Fast, flexible & lean implementation of core jQuery designed specifically for the server. |
 | [striptags](https://github.com/ericnorris/striptags)        | `striptags`   | 3.2.0       | An implementation of PHP's strip_tags in Node.js.                                         |
 | [minimatch](https://github.com/isaacs/minimatch)            | `minimatch`   | 7.4.2       | A minimal matching utility, e.g. for glob patterns                                        |
+| [jsonata](https://github.com/jsonata-js/jsonata)            | `jsonata`     | 1.8.6       | JSON query and transformation language, see [documentation](https://jsonata.org/).        |
 
 <br />
 
