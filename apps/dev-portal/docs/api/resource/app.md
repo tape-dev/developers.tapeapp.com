@@ -151,6 +151,6 @@ Retrieve an app with fields by its ID `1`:
 
 :::caution Not available
 
-Mutating **App** endpoints are not available yet. Contact us if those are important for your integrations.
+Mutating **App** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 
 :::

@@ -46,6 +46,6 @@ Retrieve all workspaces that you have access to (inside the active user organiza
 
 :::caution Not available
 
-Modifying **Workspace** endpoints are not available yet. Contact us if those are important for your integrations.
+Modifying **Workspace** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 
 :::

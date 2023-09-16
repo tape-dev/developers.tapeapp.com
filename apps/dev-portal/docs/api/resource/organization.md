@@ -38,6 +38,6 @@ Retrieve your current organization (e.g. the organization with ID `1337`):
 
 :::caution Not available
 
-Modifying **Organization** endpoints are not available yet. Contact us if those are important for your integrations.
+Modifying **Organization** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 
 :::
