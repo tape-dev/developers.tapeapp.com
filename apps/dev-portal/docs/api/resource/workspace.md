@@ -42,10 +42,99 @@ Retrieve all workspaces that you have access to (inside the active user organiza
 }`}
 </ContextCodeBlock>
 
-## Create, delete or update workspaces
+## Create a workspace
 
-:::caution Not available
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/workspace" />
 
-Modifying **Workspace** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
+Create a new workspace:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/workspace \\
+  -u #USER_API_KEY:
+  -H "Content-Type: application/json" \\
+  --data '{
+    "name": "Task management",
+    "description": "Manage all tasks and projects inside this workspace."
+  }' 
+  `}
+</ContextCodeBlock>
+
+The created workspace will be returned in the response:
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`
+  {
+    "workspace_id": 1,
+    "name": "Task management",
+    "slug": "task-management",
+    "description": "Manage all tasks and projects inside this workspace.",
+    "org_id": 1337
+  }
+`}
+</ContextCodeBlock>
+
+## Update a workspace
+
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/workspace/{workspaceId}" />
+
+Update an existing workspace via its ID:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X PUT #BASE_URL/v1/workspace/1 \\
+  -u #USER_API_KEY:
+  -H "Content-Type: application/json" \\
+  --data '{
+    "name": "Task management (NEW)",
+    "description": "Manage all tasks and projects inside this NEW workspace."
+  }' 
+  `}
+</ContextCodeBlock>
+
+The updated workspace will be returned in the response:
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`
+  {
+    "workspace_id": 1,
+    "name": "Task management (NEW)",
+    "slug": "task-management-new",
+    "description": "Manage all tasks and projects inside this NEW workspace.",
+    "org_id": 1337
+  }
+`}
+</ContextCodeBlock>
+
+## Delete a workspace
+
+<EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/workspace/{workspaceId}" />
+
+Delete a workspace via its ID:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X DELETE #BASE_URL/v1/workspace/1 \\
+  -u #USER_API_KEY:
+  -H "Content-Type: application/json" 
+  `}
+</ContextCodeBlock>
+
+The deleted workspace will be returned in the response:
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`
+  {
+    "workspace_id": 1,
+    "name": "Task management (NEW)",
+    "slug": "task-management-new",
+    "description": "Manage all tasks and projects inside this NEW workspace.",
+    "org_id": 1337
+  }
+`}
+</ContextCodeBlock>
+
+## Notes
+
+:::caution Note
+
+Currently it is not possible to change the type of a workspace via the API. Be sure to properly create workspaces with the desired type.
 
 :::
