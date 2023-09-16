@@ -64,6 +64,7 @@ module.exports = {
             'api/resource/app',
             'api/resource/workspace',
             'api/resource/organization',
+            'api/resource/user',
             'api/resource/file',
             'api/resource/link-preview',
             'api/resource/webhook',
