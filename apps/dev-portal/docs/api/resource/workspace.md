@@ -28,6 +28,7 @@ Retrieve all workspaces that you have access to (inside the active user organiza
       "workspace_id": 1,
       "name": "Task management",
       "slug": "task-management",
+      "type": "closed",
       "description": "Manage all tasks and projects inside this workspace.",
       "org_id": 1337
     },
@@ -35,6 +36,7 @@ Retrieve all workspaces that you have access to (inside the active user organiza
       "workspace_id": 2,
       "name": "Contact directory",
       "slug": "contact-directory",
+      "type": "default",
       "description": "Keep track of our contacts here.",
       "org_id": 1337
     }
