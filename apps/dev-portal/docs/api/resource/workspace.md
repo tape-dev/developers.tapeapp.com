@@ -50,10 +50,11 @@ Create a new workspace:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/workspace \\
-  -u #USER_API_KEY:
+  -u #USER_API_KEY:\\
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Task management",
+    "type": "closed",
     "description": "Manage all tasks and projects inside this workspace."
   }' 
   `}
@@ -67,11 +68,18 @@ The created workspace will be returned in the response:
     "workspace_id": 1,
     "name": "Task management",
     "slug": "task-management",
+    "type": "closed",
     "description": "Manage all tasks and projects inside this workspace.",
     "org_id": 1337
   }
 `}
 </ContextCodeBlock>
+
+:::info Workspace type
+
+The `type` property to create workspaces needs to be one of `"closed"`, `"open"`, `"default"` and `"private"`. This corresponds to the workspace types [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces).
+
+:::
 
 ## Update a workspace
 
@@ -81,10 +89,11 @@ Update an existing workspace via its ID:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X PUT #BASE_URL/v1/workspace/1 \\
-  -u #USER_API_KEY:
+  -u #USER_API_KEY:\\
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Task management (NEW)",
+    "type": "closed",
     "description": "Manage all tasks and projects inside this NEW workspace."
   }' 
   `}
@@ -98,6 +107,7 @@ The updated workspace will be returned in the response:
     "workspace_id": 1,
     "name": "Task management (NEW)",
     "slug": "task-management-new",
+    "type": "closed",
     "description": "Manage all tasks and projects inside this NEW workspace.",
     "org_id": 1337
   }
@@ -112,7 +122,7 @@ Delete a workspace via its ID:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X DELETE #BASE_URL/v1/workspace/1 \\
-  -u #USER_API_KEY:
+  -u #USER_API_KEY:\\
   -H "Content-Type: application/json" 
   `}
 </ContextCodeBlock>
@@ -125,6 +135,7 @@ The deleted workspace will be returned in the response:
     "workspace_id": 1,
     "name": "Task management (NEW)",
     "slug": "task-management-new",
+    "type": "closed",
     "description": "Manage all tasks and projects inside this NEW workspace.",
     "org_id": 1337
   }
