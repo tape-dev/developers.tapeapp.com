@@ -34,7 +34,7 @@ The app contains a `single_category` field "Pipeline Stage". Other useful fields
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X POST http://localhost:3000/v1/app/ \\
+curl -X POST #BASE_URL/v1/app/ \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
@@ -194,7 +194,7 @@ Just add the options you want to delete to the `options_to_delete` array. The op
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X PUT http://localhost:3000/v1/app/1 \\
+curl -X PUT #BASE_URL/v1/app/1 \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{

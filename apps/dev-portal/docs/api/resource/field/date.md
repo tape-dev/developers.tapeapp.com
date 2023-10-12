@@ -37,7 +37,7 @@ The app contains a `single_date` field "Event date", and a `range_date` field "P
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X POST http://localhost:3000/v1/app/ \\
+curl -X POST #BASE_URL/v1/app/ \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
@@ -190,7 +190,7 @@ The update sets the `calendar` property of the "Event date" field to `true` sets
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X PUT http://localhost:3000/v1/app/1 \\
+curl -X PUT #BASE_URL/v1/app/1 \\
    -u #USERAPI_KEY: \\
    --data '{
     "app_id": 1,

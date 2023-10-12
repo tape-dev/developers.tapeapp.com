@@ -36,7 +36,7 @@ The app contains a `single_relation` field "Belongs to Epic" with a reference to
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X POST http://localhost:3000/v1/app/ \\
+curl -X POST #BASE_URL/v1/app/ \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
@@ -165,7 +165,7 @@ When updating a relation field, you need to specify all referenced apps again, n
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X PUT http://localhost:3000/v1/app/1 \\
+curl -X PUT #BASE_URL/v1/app/1 \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{

@@ -169,7 +169,7 @@ The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X POST http://localhost:3000/v1/app/ \\
+curl -X POST #BASE_URL/v1/app/ \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
@@ -345,7 +345,7 @@ The Notes field is neither provided within the fields array nor the fields_to_de
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X PUT http://localhost:3000/v1/app/1 \\
+curl -X PUT #BASE_URL/v1/app/1 \\
    -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
@@ -500,7 +500,7 @@ Deleting an existing app. ATTENTION: This action cannot be undone. All records a
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X DELETE http://localhost:3000/v1/app/1 \\
+curl -X DELETE #BASE_URL/v1/app/1 \\
    -u #USER_API_KEY: `}
 </ContextCodeBlock>
 </TabItem>
