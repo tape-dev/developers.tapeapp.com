@@ -15,7 +15,7 @@ There is only type of location field: `single_location`.
 
 In addition to the common field properties, a location field has the following settings:
 
-- has_map: boolean flag, whether the google maps embed should be shown in the location field values of this field. (default: false)
+- `has_map` (optional): boolean flag, whether the google maps embed should be shown in the location field values of this field. (default: false)
 
 ## App creation
 
@@ -121,7 +121,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 A location field can be created or updated as part of an App update. Here is an example request body for updating the previously created meetings app with ID 1.
-The update sets the show_map flag to false.
+The update sets the `has_map` flag to false.
 
 <Tabs defaultValue="curl">
 
