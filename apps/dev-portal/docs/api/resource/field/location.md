@@ -9,7 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There are is only type of location field: `single_location`
+There is only type of location field: `single_location`.
+
 `single_location` fields can only hold a single location, including the address properties and a map preview.
 
 In addition to the common field properties, a location field has the following settings:
@@ -20,7 +21,7 @@ In addition to the common field properties, a location field has the following s
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A location field can be created as part of an App creation. Here is an example request body for creating an excerp for a meetings app within a workspace with ID 1.
+A location field can be created as part of an App creation. Here is an example request body for creating an excerpt for a meetings app within a workspace with ID 1.
 The app contains a `single_location` field "Location". Other useful fields for a meetings app, like "Date", "Participants" or "Notes" are omitted for brevity.
 
 <Tabs defaultValue="curl">

@@ -18,7 +18,7 @@ A user field definition consists only of the common field properties and has no 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A user field can be created as part of an App creation. Here is an example request body for creating an excerp for a meetings app within a workspace with ID 1.
+A user field can be created as part of an App creation. Here is an example request body for creating an excerpt for a meetings app within a workspace with ID 1.
 The app contains a `single_user` field "Note taker", and a `multi_user` field "Participants". Other useful fields for a meetings app, like "Date", "Location" or "Notes" are omitted for brevity.
 
 <Tabs defaultValue="curl">

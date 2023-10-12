@@ -24,7 +24,7 @@ The `options` property is an array of objects with the following properties:
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A category field can be created as part of an App creation. Here is an example request body for creating an excerp of a leads app within a workspace with ID 1.
+A category field can be created as part of an App creation. Here is an example request body for creating an excerpt of a leads app within a workspace with ID 1.
 
 The app contains a `single_category` field "Pipeline Stage". Other useful fields for a leads app, like "Name", "Company" or "Notes" are omitted for brevity.
 `multi_category` fields are created in the same way as `single_category` fields.

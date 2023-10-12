@@ -25,7 +25,7 @@ The `referenced_apps` property is an array of objects with the following propert
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A relation field can be created as part of an App creation. Here is an example request body for creating an excerp of a Development-Issues app within a workspace with ID 1.
+A relation field can be created as part of an App creation. Here is an example request body for creating an excerpt of a Development-Issues app within a workspace with ID 1.
 
 The app contains a `single_relation` field "Belongs to Epic" with a reference to the "Epics" app with ID 2.
 

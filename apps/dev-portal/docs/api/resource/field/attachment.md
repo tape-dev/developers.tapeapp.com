@@ -18,7 +18,7 @@ A attachment field definition consists only of the common field properties and h
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A attachment field can be created as part of an App creation. Here is an example request body for creating an excerp for a bug-report app within a workspace with ID 1.
+A attachment field can be created as part of an App creation. Here is an example request body for creating an excerpt for a bug-report app within a workspace with ID 1.
 The app contains a `multi_attachment` field "Screenshots". Other useful fields for a bug-report app, like "Title", "Description" or "Priority" are omitted for brevity.
 
 `single_attachment` fields are created in the same way as `multi_attachment` fields.

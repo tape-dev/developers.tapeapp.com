@@ -44,7 +44,7 @@ The `options` property is an array of objects with the following properties:
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A status field can be created as part of an App creation. Here is an example request body for creating an excerp of a Tasks app within a workspace with ID 1.
+A status field can be created as part of an App creation. Here is an example request body for creating an excerpt of a Tasks app within a workspace with ID 1.
 
 The app contains a `status` field "Status". Other useful fields for a Tasks app, like "Title", "Due Date" or "Description" are omitted for brevity.
 

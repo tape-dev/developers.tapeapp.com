@@ -29,7 +29,7 @@ In addition to the common field properties, a `range_date` field definition has 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A date field can be created as part of an App creation. Here is an example request body for creating an excerp for a Event app within a workspace with ID 1.
+A date field can be created as part of an App creation. Here is an example request body for creating an excerpt for a Event app within a workspace with ID 1.
 The app contains a `single_date` field "Event date", and a `range_date` field "Preparation period". Other useful fields for an event app, like "Name" or "Location" are omitted for brevity.
 
 <Tabs defaultValue="curl">
