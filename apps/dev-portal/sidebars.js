@@ -62,6 +62,12 @@ module.exports = {
             'api/resource/record-comment',
             'api/resource/record-revision',
             'api/resource/app',
+            {
+              type: 'category',
+              label: 'Field',
+              collapsed: true,
+              items: ['api/resource/field/overview', 'api/resource/field/text'],
+            },
             'api/resource/workspace',
             'api/resource/organization',
             'api/resource/user',
