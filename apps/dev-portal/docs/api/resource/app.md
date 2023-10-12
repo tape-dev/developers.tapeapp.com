@@ -157,9 +157,9 @@ Create a new app within a workspace. The request body contains the following fie
 - name (required): Name of the app.
 - item_name (required): Name of the records within the app.
 - description (optional): Description of the app.
-- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field) for more information. The provided fields will be created with the same order as provided in the array.
-- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
-- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array.
+- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
+- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
 
 Here is an example request body for creating a contacts app within a workspace with ID 1.
 The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
@@ -330,10 +330,10 @@ Update an existing app. The request body contains the following fields:
 - name (optional): Name of the app.
 - item_name (optional): Name of the records within the app.
 - description (optional): Description of the app.
-- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field) for more information. The provided fields will be created with the same order as provided in the array.
+- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array.
 - fields_to_delete (optional): An array of fields to delete within the request. Existing elements from the fields property can be added to this array to delete them. The field_id of the field to delete needs to be provided.
-- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
-- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
+- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
 
 Here is an example request body for updating the previously created contacts app.
 
