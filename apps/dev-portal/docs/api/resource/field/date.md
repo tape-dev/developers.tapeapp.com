@@ -180,7 +180,7 @@ curl -X POST http://localhost:3000/v1/app/ \\
 
 ## App update
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app/{appId}" />
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 A date field can be created or updated as part of an App update. Here is an example request body for updating the previously created events app with ID 1.
 The update sets the `calendar` property of the "Event date" field to `true` sets the `end` property of the "Preparation period" field to `enabled`.

@@ -144,7 +144,7 @@ curl -X POST http://localhost:3000/v1/app/ \\
 
 ## App update
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app/{appId}" />
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 A text field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update splits the "name" field into "First name" and "Last name" fields. Therefore, the "name" field is being renamed (updated) to "First name" and a new field "Last name" is being created.

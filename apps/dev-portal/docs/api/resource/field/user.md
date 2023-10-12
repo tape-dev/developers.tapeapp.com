@@ -144,7 +144,7 @@ curl -X POST http://localhost:3000/v1/app/ \\
 
 ## App update
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app/{appId}" />
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 A user field can be created or updated as part of an App update. Here is an example request body for updating the previously created meetings app with ID 1.
 The update splits the "Participants" field into "Internal Participants" and "External Participants" fields. Therefore, the "Participants" field with ID 2 is being renamed (updated) to "Internal Participants" and a new field "External Participants" is being created.
