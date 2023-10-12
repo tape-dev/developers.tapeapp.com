@@ -80,6 +80,7 @@ module.exports = {
                 'api/resource/field/phone',
                 'api/resource/field/number',
                 'api/resource/field/link',
+                'api/resource/field/missing-types',
               ],
             },
             'api/resource/workspace',
