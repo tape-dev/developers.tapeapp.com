@@ -15,7 +15,7 @@ There is only type of email field: `multi_email`.
 
 In addition to the common field properties, a email field has the following settings:
 
-- `only_allow_single_entry`: boolean flag, whether only a single email entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the email field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
+- `only_allow_single_entry` (optional): boolean flag, whether only a single email entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the email field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
 
 ## App creation
 

@@ -15,8 +15,8 @@ There is only type of phone field: `multi_phone`.
 
 In addition to the common field properties, a phone field has the following settings:
 
-- `only_allow_single_entry`: boolean flag, whether only a single phone entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the phone field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
-- `call_link_scheme`: the scheme that should be used for the call links in the web-client. Can be one of ["tel", "callto"]. (default: "tel")
+- `only_allow_single_entry` (optional): boolean flag, whether only a single phone entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the phone field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
+- `call_link_scheme` (optional): the scheme that should be used for the call links in the web-client. Can be one of ["tel", "callto"]. (default: "tel")
 
 ## App creation
 
