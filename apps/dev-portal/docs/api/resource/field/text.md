@@ -27,11 +27,11 @@ The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
 <TabItem value="curl" label="cURL">
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
-curl -X POST https://api.tapeapp.com/v1/app/ \
-   -u user_key_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiLvv73vv71bRu-_vVROXGJdLiIsInNjb3BlIjoidWtfdjEiLCJ0eXBlIjoiVVNFUl9BUElfS0VZIn0.OLtPIKQbwTTc4aKF2IKL3Pc3Y3wtTr7-P5L_oE-Rnjc: 
-  -H "Content-Type: application/json" \
-  --data '{
-    "workspace_id": 9011,
+curl -X POST http://localhost:3000/v1/app/ \\
+   -u #USER_API_KEY: \\
+   -H "Content-Type: application/json" \\
+   --data '{
+    "workspace_id": 1,
     "name": "Contacts",
     "item_name": "Contact",
     "fields": [
@@ -45,7 +45,7 @@ curl -X POST https://api.tapeapp.com/v1/app/ \
       },
       {
         "field_type": "multi_text",
-        "config: {
+        "config": {
           "label": "Notes",
           "description": "Notes about the contact.",
           "required": false
@@ -62,20 +62,24 @@ curl -X POST https://api.tapeapp.com/v1/app/ \
 ```json title="➡️      Request">
 {
   "workspace_id": 1,
-  "label": "Contacts",
-  "record_name": "Contact",
+  "name": "Contacts",
+  "item_name": "Contact",
   "fields": [
     {
-      "label": "Name",
-      "description": "The full name of the contact.",
       "field_type": "single_text",
-      "required": true
+      "config": {
+        "label": "Name",
+        "description": "The full name of the contact.",
+        "required": true
+      }
     },
     {
-      "label": "Notes",
-      "description": "Notes about the contact.",
       "field_type": "multi_text",
-      "required": false
+      "config": {
+        "label": "Notes",
+        "description": "Notes about the contact.",
+        "required": false
+      }
     }
   ]
 }
@@ -87,28 +91,52 @@ curl -X POST https://api.tapeapp.com/v1/app/ \
 ```json title="⬅️      Response"
 {
   "app_id": 1,
-  "label": "Contacts",
-  "external_id": "contacts",
+  "workspace_id": 1,
+  "slug": "contacts",
+  "name": "Contacts",
+  "record_name": "Contact",
+  "item_name": "Contact",
+  "config": {
+    "item_name": "Contact",
+    "name": "Contacts"
+  },
   "fields": [
     {
       "field_id": 1,
       "external_id": "name",
+      "slug": "name",
       "label": "Name",
-      "description": "The full name of the contact.",
+      "type": "text",
       "field_type": "single_text",
-      "required": true,
-      "hidden_if_empty": false,
-      "always_hidden": false
+      "config": {
+        "label": "Name",
+        "slug": "name",
+        "description": "The full name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
     },
     {
       "field_id": 2,
-      "external_id": "notes",
+      "slug": "notes",
       "label": "Notes",
-      "description": "Notes about the contact.",
+      "type": "text",
       "field_type": "multi_text",
-      "required": false,
-      "hidden_if_empty": false,
-      "always_hidden": false
+      "config": {
+        "label": "Notes",
+        "slug": "notes",
+        "description": "Notes about the contact.",
+        "required": false,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": true
+        }
+      }
     }
   ]
 }
