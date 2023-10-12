@@ -147,10 +147,362 @@ Retrieve an app with fields by its ID `1`:
 `}
 </ContextCodeBlock>
 
-## Create, delete or update Apps
+## Create an App
 
-:::caution Not available
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-Mutating **App** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
+Create a new app within a workspace. The request body contains the following fields:
 
-:::
+- workspace_id: The ID of the workspace to create the app in. The requesting user needs to have permission to "create and edit" apps in this workspace.
+- name (required): Name of the app.
+- item_name (required): Name of the records within the app.
+- description (optional): Description of the app.
+- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field) for more information. The provided fields will be created with the same order as provided in the array.
+- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+
+Here is an example request body for creating a contacts app within a workspace with ID 1.
+The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`
+curl -X POST http://localhost:3000/v1/app/ \\
+   -u #USER_API_KEY: \\
+   -H "Content-Type: application/json" \\
+   --data '{
+    "workspace_id": 1,
+    "name": "Contacts",
+    "item_name": "Contact",
+    "description": "A simple contact app.",
+    "icon": {
+      "id": "person",
+      "type": "graphic"
+    },
+    "item_icon": {
+      "emoji": "🧑",
+      "type": "emoji"
+    },
+    "fields": [
+      {
+        "field_type": "single_text",
+        "config": {
+          "label": "Name",
+          "description": "The full name of the contact.",
+          "required": true
+        }
+      },
+      {
+        "field_type": "multi_text",
+        "config": {
+          "label": "Notes",
+          "description": "Notes about the contact.",
+          "required": false
+        }
+      }
+    ] 
+  }'
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "workspace_id": 1,
+  "name": "Contacts",
+  "item_name": "Contact",
+  "description": "A simple contact app.",
+  "icon": {
+    "id": "person",
+    "type": "graphic"
+  },
+  "item_icon": {
+    "emoji": "🧑",
+    "type": "emoji"
+  },
+  "fields": [
+    {
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "description": "The full name of the contact.",
+        "required": true
+      }
+    },
+    {
+      "field_type": "multi_text",
+      "config": {
+        "label": "Notes",
+        "description": "Notes about the contact.",
+        "required": false
+      }
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title="⬅️      Response"
+{
+  "app_id": 1,
+  "workspace_id": 1,
+  "slug": "contacts",
+  "external_id": "contacts",
+  "name": "Contacts",
+  "record_name": "Contact",
+  "item_name": "Contact",
+  "description": "A simple contact app.",
+  "position": 0,
+  "config": {
+    "description": "A simple contact app.",
+    "item_name": "Contact",
+    "name": "Contacts",
+    "icon": {
+      "type": "graphic",
+      "id": "person"
+    },
+    "item_icon": {
+      "emoji": "🧑",
+      "type": "emoji"
+    }
+  },
+  "fields": [
+    {
+      "field_id": 10,
+      "external_id": "name",
+      "slug": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "slug": "name",
+        "external_id": "name",
+        "delta": "O1",
+        "position": "O1",
+        "description": "The full name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    },
+    {
+      "field_id": 20,
+      "external_id": "notes",
+      "slug": "notes",
+      "label": "Notes",
+      "type": "text",
+      "field_type": "multi_text",
+      "config": {
+        "label": "Notes",
+        "slug": "notes",
+        "external_id": "notes",
+        "delta": "f{",
+        "position": "f{",
+        "description": "Notes about the contact.",
+        "required": false,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": true
+        }
+      }
+    }
+  ]
+}
+```
+
+## Update an App
+
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
+
+Update an existing app. The request body contains the following fields:
+
+- name (optional): Name of the app.
+- item_name (optional): Name of the records within the app.
+- description (optional): Description of the app.
+- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field) for more information. The provided fields will be created with the same order as provided in the array.
+- fields_to_delete (optional): An array of fields to delete within the request. Existing elements from the fields property can be added to this array to delete them. The field_id of the field to delete needs to be provided.
+- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) (coming soon) for more information.
+
+Here is an example request body for updating the previously created contacts app.
+
+The request removes the "Name" field and adds a new `single_text` field "First Name" and a `single_text` field "Last Name".
+The Notes field is neither provided within the fields array nor the fields_to_delete array, so it will not be changed.
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`
+curl -X PUT http://localhost:3000/v1/app/1 \\
+   -u #USER_API_KEY: \\
+   -H "Content-Type: application/json" \\
+   --data '{
+    "fields": [
+      {
+        "field_type": "single_text",
+        "config": {
+          "label": "First Name",
+          "description": "The first name of the contact.",
+          "required": true
+        }
+      },
+      {
+        "field_type": "single_text",
+        "config": {
+          "label": "Last Name",
+          "description": "The last name of the contact.",
+          "required": true
+        }
+      }
+    ], 
+    "fields_to_delete": [
+      {
+        "field_id": 10
+      }
+    ]
+  }'
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "fields": [
+    {
+      "field_type": "single_text",
+      "config": {
+        "label": "First Name",
+        "description": "The first name of the contact.",
+        "required": true
+      }
+    },
+    {
+      "field_type": "single_text",
+      "config": {
+        "label": "Last Name",
+        "description": "The last name of the contact.",
+        "required": true
+      }
+    }
+  ],
+  "fields_to_delete": [
+    {
+      "field_id": 10
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title="⬅️      Response"
+{
+  "app_id": 1,
+  "workspace_id": 1,
+  "slug": "contacts",
+  "name": "Contacts",
+  "item_name": "Contact",
+  "description": "A simple contact app.",
+  "position": 0,
+  "config": {
+    "description": "A simple contact app.",
+    "item_name": "Contact",
+    "name": "Contacts",
+    "icon": {
+      "type": "graphic",
+      "id": "person"
+    }
+  },
+  "fields": [
+    {
+      "field_id": 3,
+      "slug": "first_name",
+      "label": "First Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "First Name",
+        "slug": "first_name",
+        "description": "The first name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    },
+    {
+      "field_id": 4,
+      "external_id": "last_name",
+      "slug": "last_name",
+      "label": "Last Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Last Name",
+        "slug": "last_name",
+        "description": "The last name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    },
+    {
+      "field_id": 20,
+      "external_id": "notes",
+      "slug": "notes",
+      "label": "Notes",
+      "type": "text",
+      "field_type": "multi_text",
+      "config": {
+        "label": "Notes",
+        "slug": "notes",
+        "description": "Notes about the contact.",
+        "required": false,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": true
+        }
+      }
+    }
+  ]
+}
+```
+
+## Delete an App
+
+<EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/app/{appId}" />
+
+Deleting an existing app. ATTENTION: This action cannot be undone. All records and fields will be deleted as well.
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`
+curl -X DELETE http://localhost:3000/v1/app/1 \\
+   -u #USER_API_KEY: `}
+</ContextCodeBlock>
+</TabItem>
+
+</Tabs>

@@ -73,6 +73,8 @@ module.exports = {
                 'api/resource/field/category',
                 'api/resource/field/status',
                 'api/resource/field/relation',
+                'api/resource/field/attachment',
+                'api/resource/field/date',
               ],
             },
             'api/resource/workspace',
