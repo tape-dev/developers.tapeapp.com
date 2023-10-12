@@ -37,7 +37,7 @@ The app contains a `single_relation` field "Belongs to Epic" with a reference to
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
 curl -X POST http://localhost:3000/v1/app/ \\
-   -u user_key_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiLvv73vv71pRFx1MDAxZO-_vVx1MDAxOVx1MDAxMO-_ve-_vSIsInNjb3BlIjoidWtfdjEifQ.Ha7x9lzDY05K_-CtKjc92RKP6XlofiU1dhgWHAiUr_4: \\
+   -u #USER_API_KEY: \\
    -H "Content-Type: application/json" \\
    --data '{
     "workspace_id": 1,
