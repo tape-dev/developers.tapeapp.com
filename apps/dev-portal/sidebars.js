@@ -79,6 +79,7 @@ module.exports = {
                 'api/resource/field/email',
                 'api/resource/field/phone',
                 'api/resource/field/number',
+                'api/resource/field/link',
               ],
             },
             'api/resource/workspace',
