@@ -17,7 +17,7 @@ In addition to the common field properties, a category field definition has a `s
 The `options` property is an array of objects with the following properties:
 
 - `id`: Once an option has been created, the id property can be used to update the option. This is also the id of the option that is used to specify an option within record update or creation.
-- `text` (required): The text (= lebl) of the option. This is the name of the option that is displayed to the user.
+- `text` (required): The text (= label) of the option. This is the name of the option that is displayed to the user.
 - `color` (optional): The color of the option. This is the color of the option that is displayed to the user. The color can be one of ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
 
 ## App creation
@@ -204,6 +204,7 @@ curl -X PUT http://localhost:3000/v1/app/1 \\
         "field_id": 1,
         "config": {
           "settings": {
+            "label": "Pipeline Stage",
             "options": [
               {
                 "id": 1,
