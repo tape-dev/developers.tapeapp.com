@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of checklist field: `checklist`.
+There is only type of checklist fields: `checklist`.
 
 `checklist` fields can only hold one or more checklist entries.
 
