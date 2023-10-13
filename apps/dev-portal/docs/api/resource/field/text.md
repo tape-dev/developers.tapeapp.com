@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There are two types of text fields: `single_text` and `multi_text`.
 For both types, the respective field value consists of its `value` property which holds the text value of the field.
-`single_text` fields can only hold plain text values with up to 500 characters while `multi_text` fields can hold rich-text (HTML) values with up to 150000 characters.
+`single_text` field-values can only hold plain text values with up to 500 characters while `multi_text` fields can hold rich-text (HTML) values with up to 150000 characters.
 
 A text field definition consists only of the common field properties and has no settings.
 

@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 There are two types of user fields: `single_user` and `multi_user`.
-`single_user` fields can only hold a reference to a single user while `multi_user` fields can hold references to multiple users.
+`single_user` field-values can only hold a reference to a single user while `multi_user` fields can hold references to multiple users.
 
 A user field definition consists only of the common field properties and has no settings.
 

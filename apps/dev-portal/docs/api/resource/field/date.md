@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 There are two types of date fields: `single_date` and `range_date`.
-`single_date` fields can only hold a single date, while `range_date` fields can hold a both, single dates as well as date ranges consisting of a start and end date.
+`single_date` field-values can only hold a single date, while `range_date` fields can hold a both, single dates as well as date ranges consisting of a start and end date.
 
 In addition to the common field properties, a `single_date` field definition has a `settings` property containing the following properties:
 

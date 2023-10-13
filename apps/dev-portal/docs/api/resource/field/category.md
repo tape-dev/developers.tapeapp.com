@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There are two types of category fields: `single_category` and `multi_category`.
 
-`single_category` fields can only hold a single selected option while `multi_category` fields can hold multiple selected options.
+`single_category` field-values can only hold a single selected option while `multi_category` fields can hold multiple selected options.
 
 In addition to the common field properties, a category field definition has a `settings` property containing the selectable `options` of the field.
 The `options` property is an array of objects with the following properties:

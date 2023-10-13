@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only type of location field: `single_location`.
 
-`single_location` fields can only hold a single location, including the address properties and a map preview.
+`single_location` field-values can only hold a single location, including the address properties and a map preview.
 
 In addition to the common field properties, a location field has the following settings:
 

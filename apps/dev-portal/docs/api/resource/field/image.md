@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only type of image fields: `multi_image`.
 
-`multi_image` fields can only hold one or more multi_image entries.
+`multi_image` field-values can only hold one or more multi_image entries.
 
 A `multi_image` field definition consists only of the common field properties and has no settings.
 

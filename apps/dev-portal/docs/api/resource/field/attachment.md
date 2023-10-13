@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 There are two types of attachment fields: `single_attachment` and `multi_attachment`.
-`single_attachment` fields can only a single file while `multi_attachment` fields can hold multiple files.
+`single_attachment` field-values can only a single file while `multi_attachment` fields can hold multiple files.
 
 A attachment field definition consists only of the common field properties and has no settings.
 

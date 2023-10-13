@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There are two types of relation fields: `single_relation` and `multi_relation`.
 
-`single_relation` fields can only hold a single record reference while `multi_relation` fields can hold multiple record references.
+`single_relation` field-values can only hold a single record reference while `multi_relation` fields can hold multiple record references.
 
 In addition to the common field properties, a relation field definition has a `settings` property `referenced_apps` containing the IDs of the apps that can be referenced by the field.
 When creating a record with a relation field value, only records of apps specified in the field definitions `referenced_apps` can be referenced.

@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only type of checklist fields: `checklist`.
 
-`checklist` fields can only hold one or more checklist entries.
+`checklist` field-values can only hold one or more checklist entries.
 
 In addition to the common field properties, a checklist field has the following settings:
 
