@@ -21,7 +21,8 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
 </ContextCodeBlock>
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
-{`{
+{
+  `{
   "total": 2,
   "apps": [
     {
@@ -46,8 +47,9 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
         "description": ""
       }
     }
-]
-}`}
+  ]
+}`
+}
 </ContextCodeBlock>
 
 ## Retrieve all available apps
@@ -62,7 +64,8 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
 </ContextCodeBlock>
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
-{`{
+{
+  `{
   "total": 3,
   "apps": [
     {
