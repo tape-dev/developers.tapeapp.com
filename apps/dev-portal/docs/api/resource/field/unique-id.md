@@ -1,7 +1,7 @@
 ---
 id: unique-id
-title: Unique-id Field
-sidebar_label: Unique-id
+title: Unique-Id Field
+sidebar_label: Unique-Id
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
