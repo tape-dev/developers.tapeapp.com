@@ -82,6 +82,7 @@ module.exports = {
                 'api/resource/field/number',
                 'api/resource/field/link',
                 'api/resource/field/checklist',
+                'api/resource/field/unique-id',
                 'api/resource/field/missing-types',
               ],
             },

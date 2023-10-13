@@ -1,5 +1,5 @@
 ---
-id: unique_id
+id: unique-id
 title: Unique-id Field
 sidebar_label: Unique-id
 ---
