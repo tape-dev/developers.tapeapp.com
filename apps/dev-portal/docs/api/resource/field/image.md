@@ -121,7 +121,7 @@ The changes the description of the "Portraits" field to "Photos of the contact".
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #USERAPI_KEY: \\
+   -u #USER_API_KEY: \\
    --data '{
     "app_id": 1,
     "name": "Contacts",

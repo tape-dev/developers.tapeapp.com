@@ -191,7 +191,7 @@ The update sets the `calendar` property of the "Event date" field to `true` sets
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #USERAPI_KEY: \\
+   -u #USER_API_KEY: \\
    --data '{
     "app_id": 1,
     "fields": [

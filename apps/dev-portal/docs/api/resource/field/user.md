@@ -156,7 +156,7 @@ The "Responsible for note taking" field is not provided in the request body and 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #USERAPI_KEY: \\
+   -u #USER_API_KEY: \\
    --data '{
     "app_id": 1,
     "fields": [
