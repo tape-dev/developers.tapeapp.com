@@ -492,6 +492,141 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 }
 ```
 
+## Update an App's field order
+
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}/fields/order" />
+
+Update an existing app's field order. The request body contains the following fields:
+
+- fields (optional): An array of fields to update the position for within the request. The field_id of the fields to be reordered needs to be provided. Specify a full list of all fields to set a dedicated field order.
+
+Here is an example request body for updating the fields of the previously created contacts app, moving the `notes` field to the first position.
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`
+curl -X PUT #BASE_URL/v1/app/1/fields/order \\
+   -u #USER_API_KEY: \\
+   -H "Content-Type: application/json" \\
+   --data '{
+    "fields": [
+      {
+        "field_id": 20
+      },
+      {
+        "field_id": 3
+      },
+      {
+        "field_id": 4
+      }
+    ]
+  }'
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "fields": [
+    {
+      "field_id": 20
+    },
+    {
+      "field_id": 3
+    },
+    {
+      "field_id": 4
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title="⬅️      Response"
+{
+  "app_id": 1,
+  "workspace_id": 1,
+  "slug": "contacts",
+  "name": "Contacts",
+  "item_name": "Contact",
+  "description": "A simple contact app.",
+  "position": 0,
+  "config": {
+    "description": "A simple contact app.",
+    "item_name": "Contact",
+    "name": "Contacts",
+    "icon": {
+      "type": "graphic",
+      "id": "person"
+    }
+  },
+  "fields": [
+    {
+      "field_id": 20,
+      "external_id": "notes",
+      "slug": "notes",
+      "label": "Notes",
+      "type": "text",
+      "field_type": "multi_text",
+      "config": {
+        "label": "Notes",
+        "slug": "notes",
+        "description": "Notes about the contact.",
+        "required": false,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": true
+        }
+      }
+    },
+    {
+      "field_id": 3,
+      "slug": "first_name",
+      "label": "First Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "First Name",
+        "slug": "first_name",
+        "description": "The first name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    },
+    {
+      "field_id": 4,
+      "external_id": "last_name",
+      "slug": "last_name",
+      "label": "Last Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Last Name",
+        "slug": "last_name",
+        "description": "The last name of the contact.",
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    }
+  ]
+}
+```
+
 ## Delete an App
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/app/{appId}" />
