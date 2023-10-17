@@ -498,6 +498,85 @@ Retrieve records for the app with the specified `app_id` with filters:
 | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter) documentation section for examples of all supported field types. |
 
+## Retrieve records for a view
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/view/{view_id}" />
+
+Retrieve records for the view with the specified `view_id`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/record/view/1?limit=2 \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
+  "records": [
+    {
+      "record_id": 2,
+      "title": "Adam Smith",
+      "created_on": "2022-03-23 08:48:42",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 1,
+      "title": "Andrea Lim",
+      "created_on": "2022-03-23 08:43:03",
+      "app": {
+        "app_id": 1,
+        "icon": "event_available",
+        "name": "Contacts",
+        "record_name": "Contact",
+        "workspace_id": 1
+      },
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Andrea Lim"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+**Query Parameters**
+
+| Parameter | Type      | ** Type**                                      | Min | Max |
+| --------- | --------- | ---------------------------------------------- | --- | --- |
+| `limit`   | `integer` | Number of records to return. Defaults to _50_. | 0   | 500 |
+| `cursor`  | `string`  | Cursor for pagination                          | -   | -   |
+
 ## Retrieve related records for a set of records
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/ref/{ref_app_id}" />
