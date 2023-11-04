@@ -178,7 +178,7 @@ Retrieve all workspace members for a given workspace:
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/workspace/{workspaceId}/member" />
 
-Add an existing organization user to a given workspace.
+Add an existing organization user to a given workspace. If the user is already a member, the role will be updated according to the provided input.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/workspace/{workspaceId}/member \\
