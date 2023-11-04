@@ -51,7 +51,7 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
 
-Add a new user to your current organization (e.g. the organization with ID `1337`):
+Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending invitation email upon user creation. 
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/org/user \\
@@ -61,6 +61,7 @@ Add a new user to your current organization (e.g. the organization with ID `1337
     "name": "Roger Sterling",
     "email": "rsterling-sc@me.com",
     "role": "admin",
+    "skip_invitation": true
   }' 
   `}
 </ContextCodeBlock>
@@ -106,6 +107,24 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 
 The `role` property to create users needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
 :::
+
+
+## Resend User invitation email
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user/{userId}/resend-invitation" />
+
+Resend an invitation email for an organization user. This will be important when skipping invitations during user creation, and allows sending the invitation email at a dedicated point in time later or repetitively.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/org/user/resend-invitation \\
+  -u #USER_API_KEY:
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+}`}
+</ContextCodeBlock>
 
 ## Update or delete users
 
