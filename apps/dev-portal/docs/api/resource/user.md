@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-## Retrieve Users
+## Retrieve Organization Users
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org/user" />
 
@@ -47,10 +47,71 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 }`}
 </ContextCodeBlock>
 
-## Create, update or delete users
+## Add User to Organization
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
+
+Add a new user to your current organization (e.g. the organization with ID `1337`):
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/org/user \\
+  -u #USER_API_KEY:
+  -H "Content-Type: application/json" \\
+  --data '{
+    "name": "Roger Sterling",
+    "email": "rsterling-sc@me.com",
+    "role": "closed",
+  }' 
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "users": [
+    {
+      "user_id": 10000,
+      "name": "John Doe",
+      "org_id": 1337,
+      "status": "active",
+      "email": "john@doe.com",
+      "phone": "555 123 456",
+      "role": "owner",
+      "job_description": "Founder & CEO"
+    },
+    {
+      "user_id": 10001,
+      "name": "Zoe Maxwell",
+      "org_id": 1337,
+      "status": "active",
+      "email": "zoemaxwell10001@me.com",
+      "phone": "555 123 457",
+      "role": "member",
+      "job_description": "Executive"
+    },
+    {
+      "user_id": 10002,
+      "name": "Roger Sterling",
+      "org_id": 1337,
+      "status": "active",
+      "email": "rsterling-sc@me.com",
+      "phone": "555 123 458",
+      "role": "admin",
+      "job_description": "VP"
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+:::info User Role
+
+The `role` property to create users needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
+
+:::
+
+## Update or delete users
 
 :::caution Not available
 
-Modifying **User** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
+Modifying existing **User** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 
 :::
