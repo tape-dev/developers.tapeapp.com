@@ -60,7 +60,7 @@ Add a new user to your current organization (e.g. the organization with ID `1337
   --data '{
     "name": "Roger Sterling",
     "email": "rsterling-sc@me.com",
-    "role": "closed",
+    "role": "admin",
   }' 
   `}
 </ContextCodeBlock>
@@ -102,10 +102,9 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 }`}
 </ContextCodeBlock>
 
-:::info User Role
+:::info User Organization Role
 
 The `role` property to create users needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
-
 :::
 
 ## Update or delete users
@@ -113,5 +112,4 @@ The `role` property to create users needs to be one of `"admin"`, `"member"` and
 :::caution Not available
 
 Modifying existing **User** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
-
 :::

@@ -144,6 +144,86 @@ The deleted workspace will be returned in the response:
 `}
 </ContextCodeBlock>
 
+
+## Retrieve workspace members
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/workspace/{workspaceId}/member" />
+
+Retrieve all workspace members for a given workspace:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/workspace/1/member \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 2,
+  "workspace_members": [
+    {
+      "workspace_id": 1,
+      "user_id": 10000,
+      "role": "'admin",
+    },
+    {
+      "workspace_id": 1,
+      "user_id": 10001,
+      "role": "'member",
+    }
+  ]
+}`}
+</ContextCodeBlock>
+
+## Add a workspace member
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/workspace/{workspaceId}/member" />
+
+Add an existing organization user to a given workspace.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/workspace/{workspaceId}/member \\
+  -u #USER_API_KEY:
+  -H "Content-Type: application/json" \\
+  --data '{
+    "user_id": 10002,
+    "role": "admin",
+  }' 
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+    "workspace_id": 1,
+    "user_id": 10002,
+    "role": "'admin",
+}`}
+</ContextCodeBlock>
+
+:::info User Workspace Role
+
+The `role` property to add members needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the workspace organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces).
+:::
+
+## Remove a workspace member
+
+<EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/workspace/{workspaceId}/member/{userId}" />
+
+Remove a workspace member from a given workspace. Note that the user will continue to exist in the organization.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X DELETE #BASE_URL/v1/workspace/{workspaceId}/member/{userId} \\
+  -u #USER_API_KEY:
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+    "workspace_id": 1,
+    "user_id": 10002,
+    "role": "'admin",
+}`}
+</ContextCodeBlock>
+
 ## Notes
 
 :::caution Note
