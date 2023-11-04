@@ -55,7 +55,7 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/org/user \\
-  -u #USER_API_KEY:
+  -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Roger Sterling",
@@ -116,7 +116,7 @@ The `role` property to create users needs to be one of `"admin"`, `"member"` and
 Resend an invitation email for an organization user. This will be important when skipping invitations during user creation, and allows sending the invitation email at a dedicated point in time later or repetitively.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/org/user/resend-invitation \\
+{`curl -X POST #BASE_URL/v1/org/user/10000/resend-invitation \\
   -u #USER_API_KEY:
   `}
 </ContextCodeBlock>

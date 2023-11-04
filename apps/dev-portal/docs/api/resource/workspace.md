@@ -181,8 +181,8 @@ Retrieve all workspace members for a given workspace:
 Add an existing organization user to a given workspace. If the user is already a member, the role will be updated according to the provided input.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/workspace/{workspaceId}/member \\
-  -u #USER_API_KEY:
+{`curl -X POST #BASE_URL/v1/workspace/1/member \\
+  -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
     "user_id": 10002,
@@ -211,14 +211,14 @@ The `role` property to add members needs to be one of `"admin"`, `"member"` and`
 Remove a workspace member from a given workspace. Note that the user will continue to exist in the organization.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X DELETE #BASE_URL/v1/workspace/{workspaceId}/member/{userId} \\
+{`curl -X DELETE #BASE_URL/v1/workspace/100/member/{userId} \\
   -u #USER_API_KEY:
   `}
 </ContextCodeBlock>
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-    "workspace_id": 1,
+    "workspace_id": 100,
     "user_id": 10002,
     "role": "'admin"
 }`}
