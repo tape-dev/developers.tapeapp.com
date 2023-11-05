@@ -68,38 +68,14 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "users": [
-    {
-      "user_id": 10000,
-      "name": "John Doe",
-      "org_id": 1337,
-      "status": "active",
-      "email": "john@doe.com",
-      "phone": "555 123 456",
-      "role": "owner",
-      "job_description": "Founder & CEO"
-    },
-    {
-      "user_id": 10001,
-      "name": "Zoe Maxwell",
-      "org_id": 1337,
-      "status": "active",
-      "email": "zoemaxwell10001@me.com",
-      "phone": "555 123 457",
-      "role": "member",
-      "job_description": "Executive"
-    },
-    {
-      "user_id": 10002,
-      "name": "Roger Sterling",
-      "org_id": 1337,
-      "status": "active",
-      "email": "rsterling-sc@me.com",
-      "phone": "555 123 458",
-      "role": "admin",
-      "job_description": "VP"
-    }
-  ]
+    "user_id": 10002,
+    "name": "Roger Sterling",
+    "org_id": 1337,
+    "status": "active",
+    "email": "rsterling-sc@me.com",
+    "phone": "555 123 458",
+    "role": "admin",
+    "job_description": "VP"
 }`}
 </ContextCodeBlock>
 

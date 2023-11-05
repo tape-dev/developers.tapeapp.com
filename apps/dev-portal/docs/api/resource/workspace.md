@@ -158,7 +158,6 @@ Retrieve all workspace members for a given workspace:
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "total": 2,
   "workspace_members": [
     {
       "workspace_id": 1,
