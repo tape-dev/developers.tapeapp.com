@@ -10,15 +10,20 @@ import TabItem from '@theme/TabItem';
 
 Requests use the HTTP `Authorization` header to both authenticate and authorize operations. The Tape API accepts bearer tokens in this header. Each Tape user has an user API key associated with it that acts as a bearer token to authentciate with the API.
 
+
+:::info Where does one find the user API key?
+The user API key can be found inside the user settings after logging into Tape. Click the user avatar on the top right, and navigate to "Preferences". After opening the user preferences you will find the API key inside the "API" section (accessible via the left navigation bar). Here, you can copy the key and also rotate the key should you want a new one. Note that the existing one will not work anymore after rotating to a new key.
+:::
+
+## Additional notes and limitations
+
 Note that your API key carries the same privileges as your user account, so be sure to keep it secret! However, if your API key gets leaked, you can always deactivate it and generate a new one inside your user settings.
 
 :::note User API key implications and limitations
 It is also notable that as each API key belongs to a user, all changes made using that API key will show the respective user as author, e.g. inside the record's activity stream. This also leads to the fact that you will not receive notifications, if you follow a record and make a change using your own API key. A workaround is to have a dedicated user, e.g. called "API User" that will then act as a host to yield the key that will then be utilized.
 :::
 
-:::info Authentication via OAuth
-In the future, Tape plans to support authentication flows via OAuth. For now, the user API key is the only way of authentication.
-:::
+## Usage example
 
 Here's an example of how to correctly set the `Authorization` header:
 
@@ -40,6 +45,10 @@ Authorization: Bearer #USER_API_KEY
 </ContextCodeBlock>
 </TabItem>
 </Tabs>
+
+:::info Authentication via OAuth
+In the future, Tape plans to support authentication flows via OAuth. For now, the user API key is the only way of authentication.
+:::
 
 ## Authentication errors
 
