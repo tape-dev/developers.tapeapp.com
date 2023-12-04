@@ -333,7 +333,7 @@ Update an existing app. The request body contains the following fields:
 - name (optional): Name of the app.
 - item_name (optional): Name of the records within the app.
 - description (optional): Description of the app.
-- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array.
+- fields (optional): An array of fields to create/update. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array. Existing fields that specify a `field_id` will be updated.
 - fields_to_delete (optional): An array of fields to delete within the request. Existing elements from the fields property can be added to this array to delete them. The field_id of the field to delete needs to be provided.
 - icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
 - item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
