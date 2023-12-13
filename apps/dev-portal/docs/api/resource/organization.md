@@ -23,6 +23,7 @@ Retrieve your current organization (e.g. the organization with ID `1337`):
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
     "org_id": 1337,
+    "active_user_id": 2000,
     "name": "Tape Technologies",
     "slug": "tape",
     "description": "One shall dogfood all day all night",
