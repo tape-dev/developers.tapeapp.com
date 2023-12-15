@@ -125,6 +125,31 @@ Validates the hook using the code received from the verify call. On successful v
 }
 ```
 
+## Retrieve app webhooks
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/hook/app/{app_id}" />
+
+All existing webhooks for an app can be retrieved via the API by providing the ID of the app.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X GET #BASE_URL/v1/hook/app/1 \\
+  -u #USER_API_KEY:
+`}
+</ContextCodeBlock>
+
+```json title='⬅️      Response'
+{
+  "webhooks": [
+    {
+      "hook_id": 1,
+      "status": "active",
+      "type": "record.create",
+      "url": "https://webhook.example.org/example-webhook-endpoint"
+    }
+  ]
+}
+```
+
 ## Delete a webhook
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/hook/{hook_id}" />
