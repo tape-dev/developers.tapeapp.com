@@ -6,6 +6,10 @@ sidebar_label: Introduction
 
 Calculated fields can be used to easily manipulate data added to an app. With this very powerful tool, you can not only do math on numbers in your app, but also concatenate values ​​in specific fields. Use variables to add values ​​to calculated fields. Use the "@" symbol to search for variables in your app. You can reference any field in your app, and any field in the referenced app.
 
+:::info Community Examples
+The [Tape community](https://community.tapeapp.com/tag/calculation-field) is full of countless examples, questions and use cases from users, partners and Tape team members. Be sure to check out these examples to get started 🎉
+:::
+
 ### Execution environment
 
 The script of a calculation field is written in JavaScript. In order to calculate the value of a record's calculation field, the Tape server gathers all the script's variables values from the database and executes the script on the server. The script is executed inside a Node.js version 18 environment, so you can use [ES6](https://www.javascripttutorial.net/es6/) (indeed up to ES2021) syntax with all its cool features :tada:
