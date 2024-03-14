@@ -36,6 +36,11 @@ module.exports = {
           position: 'left',
         },
         {
+          href: 'https://help.tapeapp.com/',
+          label: 'Help Center',
+          position: 'left',
+        },
+        {
           href: 'https://tapeapp.com',
           label: 'Go to Tape',
           position: 'right',
