@@ -30,7 +30,11 @@ module.exports = {
           label: 'Docs',
           position: 'left',
         },
-        // { to: 'blog', label: 'Blog', position: 'left' },
+        {
+          href: 'https://community.tapeapp.com',
+          label: 'Community',
+          position: 'left',
+        },
         {
           href: 'https://tapeapp.com',
           label: 'Go to Tape',
