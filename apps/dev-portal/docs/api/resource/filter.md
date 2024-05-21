@@ -238,7 +238,7 @@ This is an example on how to filter records by a `status` field:
           "value": "Not Started"
         }
       ],
-      "type": "category"
+      "type": "status"
     }
   ]
 }
