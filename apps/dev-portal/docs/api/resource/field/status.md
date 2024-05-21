@@ -154,7 +154,7 @@ curl -X POST #BASE_URL/v1/app/ \\
       "slug": "status",
       "label": "Status",
       "field_type": "status",
-      "type": "category",
+      "type": "status",
       "config": {
         "label": "Status",
         "slug": "status",
@@ -320,7 +320,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       "slug": "status",
       "label": "Status",
       "field_type": "status",
-      "type": "category",
+      "type": "status",
       "config": {
         "label": "Status",
         "slug": "status",
