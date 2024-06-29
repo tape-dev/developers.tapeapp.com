@@ -46,6 +46,20 @@ A date field named `Date` in Tape, with time and without an end date, produces t
 
 Users are free to compose those above variable to yield different results, based on requirements. Be sure to use the UTC values when setting / updating field values, and also check below information on timezone handling
 
+## Formatting dates
+
+Tape exposed several ways of formatting dates, the preferred option is using the integrated `date_fns` library.
+
+Use the `format` for your custom date variables:
+
+```
+date_fns.format(your_app_field_value, 'y') // yields the year
+```
+
+### Interactive playground
+
+The most convenient way to test your date formatting is [the interactive date_fns playground](https://date-fns-interactive.netlify.app/).
+
 ## Timezones
 
 Tape workflows run in UTC to be universally applicable and non-opinionated. When using the built in Tape actions, all date and time data will thereby yield the expected results, e.g. when a record is updated and set to another record's date field value, that value will match the date and time the user sees when opening the record in Tape.
