@@ -150,6 +150,39 @@ Retrieve an app with fields by its ID `1`:
 `}
 </ContextCodeBlock>
 
+## Retrieve views for an app
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}/views" />
+
+Retrieve an app's views via its app ID `1`:
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/app/1/views \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  views: [
+    {
+      "id": 500,
+      "view_id": 500,
+      "app_id": 1,
+      "name": "Open Tasks",
+      "is_default": true
+    },
+        {
+      "id": 501,
+      "view_id": 501,
+      "app_id": 1,
+      "name": "Completed Tasks",
+      "is_default": false
+    },
+  ],
+  total: 2
+}`}
+</ContextCodeBlock>
+
 ## Create an App
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
