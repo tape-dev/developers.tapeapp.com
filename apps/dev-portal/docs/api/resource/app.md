@@ -154,7 +154,7 @@ Retrieve an app with fields by its ID `1`:
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}/views" />
 
-Retrieve an app's views via its app ID `1`:
+Retrieve all team views of an app via the app ID `1`:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/app/1/views \\
