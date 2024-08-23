@@ -11,6 +11,9 @@ When dispatching remote HTTP operations inside a Tape workflow automation, the w
 | IP Address     | Aliases |
 | :------------- | :------ |
 | 18.157.160.124 | -       |
+| 18.157.184.187 | -       |
+| 3.69.151.60    | -       |
+| 3.123.27.97    | -       |
 
 Some functionality may not be available without whitelisting.
 
