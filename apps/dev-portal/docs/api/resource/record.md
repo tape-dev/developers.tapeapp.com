@@ -83,6 +83,8 @@ The example above only specifies a `single_text` field value as part of the reco
 
 To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record creation endpoint.
 
+Currently, only a maximum of **10 records** can be created at the same time. An error will be thrown, if the `inputs` array exceeds that limit.
+
 The following query paramters are available:
 
 | Query param | Type      | Description                                                         |
