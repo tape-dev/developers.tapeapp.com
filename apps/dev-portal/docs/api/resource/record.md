@@ -77,6 +77,116 @@ The following query paramters are available:
 
 The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/overview) documentation section for examples of all supported field types.
 
+## Batch create multiple records
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
+
+To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record creation endpoint.
+
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/app/batch/1 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "inputs": [
+      {
+        "fields": {
+          "first_name": "Adam Smith"
+        } 
+      },
+      {
+        "fields": {
+          "first_name": "Pete Miller"
+        } 
+      }
+    ]
+  }' 
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "input": [
+    {
+      "fields": {
+        "first_name": "Adam Smith"
+      }
+    },
+    {
+      "fields": {
+        "first_name": "Pete Miller"
+      }
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title='⬅️      Response'
+{
+  "records": [
+    {
+      "record_id": 1,
+      "title": "Adam Smith",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 2,
+      "title": "Pete Miller",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Pete Miller"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+The example above only specifies a `single_text` field value as part of the record creations. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+
+Note that if one input is invalid and yields an error, all record creations will fail (the whole transaction).
+
 ## Retrieve a record
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
