@@ -77,118 +77,6 @@ The following query paramters are available:
 
 The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/overview) documentation section for examples of all supported field types.
 
-## Batch create multiple records
-
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
-
-To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record creation endpoint.
-
-Currently, only a maximum of **50 records** can be batch created at the same time. An error will be thrown if the `inputs` array exceeds that limit.
-
-The following query paramters are available:
-
-| Query param | Type      | Description                                                         |
-| :---------- | :-------- | :------------------------------------------------------------------ |
-| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
-| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
-
-<Tabs defaultValue="curl">
-
-<TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/batch/1 \\
-  -u #USER_API_KEY: \\
-  -H "Content-Type: application/json" \\
-  --data '{
-    "inputs": [
-      {
-        "fields": {
-          "first_name": "Adam Smith"
-        } 
-      },
-      {
-        "fields": {
-          "first_name": "Pete Miller"
-        } 
-      }
-    ]
-  }' 
-`}
-</ContextCodeBlock>
-</TabItem>
-
-<TabItem value="json" label="JSON">
-
-```json title="➡️      Request">
-{
-  "input": [
-    {
-      "fields": {
-        "first_name": "Adam Smith"
-      }
-    },
-    {
-      "fields": {
-        "first_name": "Pete Miller"
-      }
-    }
-  ]
-}
-```
-
-</TabItem>
-</Tabs>
-
-```json title='⬅️      Response'
-{
-  "records": [
-    {
-      "record_id": 1,
-      "title": "Adam Smith",
-      "created_on": "2022-03-01 12:00:00",
-      "fields": [
-        {
-          "field_id": 1,
-          "external_id": "full_name",
-          "label": "Full Name",
-          "type": "text",
-          "field_type": "single_text",
-          "values": [
-            {
-              "value": "Adam Smith"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "record_id": 2,
-      "title": "Pete Miller",
-      "created_on": "2022-03-01 12:00:00",
-      "fields": [
-        {
-          "field_id": 1,
-          "external_id": "full_name",
-          "label": "Full Name",
-          "type": "text",
-          "field_type": "single_text",
-          "values": [
-            {
-              "value": "Pete Miller"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
-
-The example above only specifies a `single_text` field value as part of the record creations. See the [field value](field-value/overview) documentation section for examples of all supported field types.
-
-Note that if one input is invalid and yields an error, all record creations will fail (the whole transaction).
-
 ## Retrieve a record
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
@@ -304,122 +192,6 @@ The following query paramters are available:
 ```
 
 The example above only specifies a `single_text` field value as part of the record update. See the [field value](field-value/overview) documentation section for examples of all supported field types.
-
-## Batch update multiple records
-
-<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
-
-To update records of an app with the specified `app_id`, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record update endpoint. In additional, for each individual input object a `record_id` property needs to be specified.
-
-Currently, only a maximum of **50 records** can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit.
-
-The following query paramters are available:
-
-| Query param | Type      | Description                                                         |
-| :---------- | :-------- | :------------------------------------------------------------------ |
-| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
-| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
-
-<Tabs defaultValue="curl">
-
-<TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X PUT #BASE_URL/v1/record/app/batch/1 \\
-  -u #USER_API_KEY: \\
-  -H "Content-Type: application/json" \\
-  --data '{
-    "inputs": [
-      {
-        "record_id": 1,
-        "fields": {
-          "first_name": "Adam Smith"
-        } 
-      },
-      {
-        "record_id": 2,
-        "fields": {
-          "first_name": "Pete Miller"
-        } 
-      }
-    ]
-  }' 
-`}
-</ContextCodeBlock>
-</TabItem>
-
-<TabItem value="json" label="JSON">
-
-```json title="➡️      Request">
-{
-  "input": [
-    {
-      "record_id": 1,
-      "fields": {
-        "first_name": "Adam Smith"
-      }
-    },
-    {
-      "record_id": 2,
-      "fields": {
-        "first_name": "Pete Miller"
-      }
-    }
-  ]
-}
-```
-
-</TabItem>
-</Tabs>
-
-```json title='⬅️      Response'
-{
-  "records": [
-    {
-      "record_id": 1,
-      "title": "Adam Smith",
-      "created_on": "2022-03-01 12:00:00",
-      "fields": [
-        {
-          "field_id": 1,
-          "external_id": "full_name",
-          "label": "Full Name",
-          "type": "text",
-          "field_type": "single_text",
-          "values": [
-            {
-              "value": "Adam Smith"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "record_id": 2,
-      "title": "Pete Miller",
-      "created_on": "2022-03-01 12:00:00",
-      "fields": [
-        {
-          "field_id": 1,
-          "external_id": "full_name",
-          "label": "Full Name",
-          "type": "text",
-          "field_type": "single_text",
-          "values": [
-            {
-              "value": "Pete Miller"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
-
-The example above only specifies a `single_text` field value as part of the record updates. See the [field value](field-value/overview) documentation section for examples of all supported field types.
-
-Note that if one input is invalid and yields an error, all record updates will fail (the whole transaction).
 
 ## Delete a record
 
@@ -930,3 +702,231 @@ Find records that can be related for the relation field (single or multi) with t
 | Parameter | Type     | ** Type**              | Min | Max |
 | --------- | -------- | ---------------------- | --- | --- |
 | `text`    | `string` | The text to search for | -   | -   |
+
+## Batch create multiple records
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
+
+To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record creation endpoint.
+
+Currently, only a maximum of **50 records** can be batch created at the same time. An error will be thrown if the `inputs` array exceeds that limit.
+
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/record/app/batch/1 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "inputs": [
+      {
+        "fields": {
+          "first_name": "Adam Smith"
+        } 
+      },
+      {
+        "fields": {
+          "first_name": "Pete Miller"
+        } 
+      }
+    ]
+  }' 
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "input": [
+    {
+      "fields": {
+        "first_name": "Adam Smith"
+      }
+    },
+    {
+      "fields": {
+        "first_name": "Pete Miller"
+      }
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title='⬅️      Response'
+{
+  "records": [
+    {
+      "record_id": 1,
+      "title": "Adam Smith",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 2,
+      "title": "Pete Miller",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Pete Miller"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+The example above only specifies a `single_text` field value as part of the record creations. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+
+Note that if one input is invalid and yields an error, all record creations will fail (the whole transaction).
+
+## Batch update multiple records
+
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
+
+To update records of an app with the specified `app_id`, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record update endpoint. In additional, for each individual input object a `record_id` property needs to be specified.
+
+Currently, only a maximum of **50 records** can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit.
+
+The following query paramters are available:
+
+| Query param | Type      | Description                                                         |
+| :---------- | :-------- | :------------------------------------------------------------------ |
+| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
+| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
+| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+
+<Tabs defaultValue="curl">
+
+<TabItem value="curl" label="cURL">
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X PUT #BASE_URL/v1/record/app/batch/1 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "inputs": [
+      {
+        "record_id": 1,
+        "fields": {
+          "first_name": "Adam Smith"
+        } 
+      },
+      {
+        "record_id": 2,
+        "fields": {
+          "first_name": "Pete Miller"
+        } 
+      }
+    ]
+  }' 
+`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Request">
+{
+  "input": [
+    {
+      "record_id": 1,
+      "fields": {
+        "first_name": "Adam Smith"
+      }
+    },
+    {
+      "record_id": 2,
+      "fields": {
+        "first_name": "Pete Miller"
+      }
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+```json title='⬅️      Response'
+{
+  "records": [
+    {
+      "record_id": 1,
+      "title": "Adam Smith",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Adam Smith"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "record_id": 2,
+      "title": "Pete Miller",
+      "created_on": "2022-03-01 12:00:00",
+      "fields": [
+        {
+          "field_id": 1,
+          "external_id": "full_name",
+          "label": "Full Name",
+          "type": "text",
+          "field_type": "single_text",
+          "values": [
+            {
+              "value": "Pete Miller"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+The example above only specifies a `single_text` field value as part of the record updates. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+
+Note that if one input is invalid and yields an error, all record updates will fail (the whole transaction).
