@@ -131,7 +131,7 @@ The following query paramters are available:
 Retrieve comments for the record with the specified `record_id`. Note that results are [paginated](/docs/api/pagination).
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/record/app/1?limit=2 \\
+{`curl #BASE_URL/v1/comment/record/1?limit=2 \\
   -u #USER_API_KEY:`}
 </ContextCodeBlock>
 
