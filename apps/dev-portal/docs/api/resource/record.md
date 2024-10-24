@@ -825,11 +825,12 @@ Currently, only a maximum of **50 records** can be batch updated at the same tim
 
 The following query paramters are available:
 
-| Query param | Type      | Description                                                         |
-| :---------- | :-------- | :------------------------------------------------------------------ |
-| `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
-| `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+| Query param      | Type      | Description                                                                                                                 |
+| :--------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| `silent`         | `boolean` | Do not generate notifications for this operation (default: `false`)                                                         |
+| `hook`           | `boolean` | Execute webhooks for this operation (default: `true`)                                                                       |
+| `workflow`       | `boolean` | Trigger workflows for this operation (default: `true`)                                                                      |
+| `empty_response` | `boolean` | Skip returning the updated records (default: `false`). Use to increase performance in cases where the result is not needed. |
 
 <Tabs defaultValue="curl">
 
