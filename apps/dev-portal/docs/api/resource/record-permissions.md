@@ -10,7 +10,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 Records are the place where work gets done inside a Tape organization. Records permissions can be changed via the developer API.
 
-## Batch update multiple records
+## Batch update multiple records' permissions
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/permission/batch" isNew="true" />
 
