@@ -1,6 +1,7 @@
 ---
 id: record-permissions
 title: Record Permissions
+sidebar_label: Record Permissions
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

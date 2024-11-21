@@ -61,6 +61,7 @@ module.exports = {
             },
             'api/resource/record-comment',
             'api/resource/record-revision',
+            'api/resource/record-permissions',
             'api/resource/app',
             {
               type: 'category',
