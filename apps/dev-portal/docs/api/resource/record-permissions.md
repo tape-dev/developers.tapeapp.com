@@ -21,8 +21,12 @@ Optionally specifying `add_permissions`, each entry must contain either a `user_
 
 Valid permission levels to be specified for the `permission_level` property are:
 
-- 4 / (can edit)
 - 5 / (full access)
+- 4 / (can share)
+- 3 / (can edit)
+- 2 / (can comment)
+- 1 / (can view)
+- 0 / (no access)
 
 Optionally specifying `remove_permissions`, each entry must be either a user ID or an email. Access for the respective user will be removed, if it was added prior. This does not affect access that a user might have via workspace memberships or app permissions.
 
