@@ -51,7 +51,7 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
 
-Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending invitation email upon user creation. 
+Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending invitation email upon user creation.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/org/user \\
@@ -84,7 +84,6 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 The `role` property to create users needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
 :::
 
-
 ## Resend User invitation email
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user/{userId}/resend-invitation" />
@@ -108,3 +107,20 @@ Resend an invitation email for an organization user. This will be important when
 
 Modifying existing **User** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 :::
+
+## Resend pending invitations
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/invitation/resend-pending" />
+
+Resend all pending invitation emails for an organization. Needs the active user's organization role to be owner or admin.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/org/invitation/resend-pending \\
+  -u #USER_API_KEY:
+  `}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+}`}
+</ContextCodeBlock>
