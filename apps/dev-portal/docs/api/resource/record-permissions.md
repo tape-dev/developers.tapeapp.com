@@ -1,7 +1,7 @@
 ---
 id: record-permissions
-title: Record Permissions
-sidebar_label: Record Permissions
+title: Record Sharing & Permissions
+sidebar_label: Record Sharing & Permissions
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
@@ -9,15 +9,17 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-Records are the place where work gets done inside a Tape organization. Records permissions can be changed via the developer API.
+Records are the place where work gets done inside a Tape organization. Records can be shared and permissions can be changed (removed, added, elevated and restricted) via the developer API.
 
 ## Batch update multiple records' permissions
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/permission/batch" isNew="true" />
 
-To update record permissions, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `record_id` property to specify for which record permissions should be alterered, and two arrays `add_permissions` and `remove_permissions`.
+To share a record to individual users or update record permissions, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `record_id` property to specify for which record permissions should be alterered, and arrays `add_permissions`, `update_permissions` and `remove_permissions`.
 
 Optionally specifying `add_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, a new one will be created and an invitation to join Tape will be sent. Additionally, a numeric `permission_level` needs to be specified.
+
+Optionally specifying `update_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, nothing will happen. A numeric `permission_level` needs to be specified and will update existing permissions for that user. As opposed to `add_permissions`, no new invite email will be send, so this is useful to silently update user's permissions.
 
 Valid permission levels to be specified for the `permission_level` property are:
 
