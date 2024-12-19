@@ -77,7 +77,7 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
 
 ```json title="➡️      Request">
 {
-  "input": [
+  "inputs": [
     {
       "record_id": 1,
       "add_permissions": [
