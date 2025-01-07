@@ -32,7 +32,9 @@ A location field value can be created as part of a record creation. Here is an e
         "value": "Hessstr. 6, 80799 Munich, Germany",
         "state": "Bavaria",
         "postal_code": "80799",
-        "street_address": "Hessstr. 6"
+        "street_address": "Hessstr. 6",
+        "latitude": 48.15397,
+        "longitude": 11.55993
       }
     }
   }' 
