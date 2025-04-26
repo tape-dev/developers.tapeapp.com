@@ -125,7 +125,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Web Forms',
+      label: 'Forms',
       collapsed: true,
       items: ['forms/custom-css'],
     },
