@@ -123,12 +123,12 @@ module.exports = {
         'automations/limitations',
       ],
     },
-    {
-      type: 'category',
-      label: 'Forms',
-      collapsed: true,
-      items: ['forms/custom-css'],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Forms',
+    //   collapsed: true,
+    //   items: ['forms/custom-css'],
+    // },
     'contribute',
     {
       type: 'link',
