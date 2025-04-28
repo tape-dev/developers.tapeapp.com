@@ -48,12 +48,12 @@ Avoid using class names that are not listed below. Class names like `css-3e5684a
 | Description              | CSS Class                                                                          |
 | ------------------------ | ---------------------------------------------------------------------------------- |
 | Form page                | `.tape-form-page`                                                                  |
-| Field Label              | `.tape-field-block-label`                                                          |
-| Field top description    | `.tape-field-block-top-description`                                                |
-| Field bottom description | `.tape-field-block-bottom-description`                                             |
-| Field error message      | `.tape-field-block-error-message`                                                  |
-| Single line Text input   | `.tape-single-text-field-block-input`                                              |
-| Multi line Text input    | `.tape-multi-text-field-block-input`                                               |
+| Field Label              | `.tape-block-field-label`                                                          |
+| Field top description    | `.tape-block-field-top-description`                                                |
+| Field bottom description | `.tape-block-field-bottom-description`                                             |
+| Field error message      | `.tape-block-field-error-message`                                                  |
+| Single line Text input   | `.tape-block-field-single-text-input`                                              |
+| Multi line Text input    | `.tape-block-field-multi-text-input`                                               |
 | Tape block by UUID       | `.tape-block-[UUID]` (example: `.tape-block-2e9cd30c-28e1-4c56-a1ef-d8e945ac103e`) |
 
 ---
@@ -65,7 +65,7 @@ Avoid using class names that are not listed below. Class names like `css-3e5684a
 **Change label color**
 
 ```css
-.tape-field-block-label {
+.tape-block-field-label {
   color: #e00;
 }
 ```
