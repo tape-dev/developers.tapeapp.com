@@ -748,7 +748,7 @@ The following query paramters are available:
 
 ```json title="➡️      Request">
 {
-  "input": [
+  "inputs": [
     {
       "fields": {
         "first_name": "Adam Smith"
@@ -863,7 +863,7 @@ The following query paramters are available:
 
 ```json title="➡️      Request">
 {
-  "input": [
+  "inputs": [
     {
       "record_id": 1,
       "fields": {
