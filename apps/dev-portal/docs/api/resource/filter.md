@@ -712,3 +712,44 @@ This is an example on how to filter records by a `multi_phone` field:
 |  `not_contains`  | Matches all records whose field value includes at least one phone entry that does not contain the match value. Comparison is case insensitive and spaces are ignored.                    |
 |     `empty`      | Matches all records whose field value is empty. I.e. does not contain any phone entry                                                                                                    |
 |   `not_empty`    | Matches all records whose field value is not empty. I.e. contains at least one phone entry                                                                                               |
+
+## Calculation
+
+This is an example on how to filter records by a `calculation` field:
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      calculation Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "calculation",
+      "match_type": "smaller",
+      "values": [
+        {
+          "value": 12.34
+        }
+      ],
+      "type": "calculation"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+Note that the calculation field is polymorphic, and may contain textual, numeric or date results (with or without time). Refer to the individual field types as the calculation field expects the same filtering format for these different types.
+
+|     Match type     | Description                                                                                                                                              |
+| :----------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `equal`       | Matches all records whose field value is equal to the provided match value                                                                               |
+|     `smaller`      | Matches all records whose field value is smaller than the provided match value                                                                           |
+| `smaller_or_equal` | Matches all records whose field value is smaller or equal to the provided match value                                                                    |
+|      `larger`      | Matches all records whose field value is larger than the provided match value                                                                            |
+| `larger_or_equal`  | Matches all records whose field value is larger or equal to the provided match value                                                                     |
+|    `not_equal`     | Matches all records whose field value does not reference the status specified by the match value. Comparison is case insensitive and spaces are ignored. |
+|      `empty`       | Matches all records whose field value is empty                                                                                                           |
+|    `not_empty`     | Matches all records whose field value is not empty                                                                                                       |
