@@ -43,7 +43,7 @@ The following example matches all records that have a field value for field with
           "value": 123
         }
       ],
-      "type": "number"
+      "type": "status"
     }
   ]
 }
@@ -215,6 +215,88 @@ The following `match_type` values are supported for `multi_category` fields:
 |   `none`    | Matches all records whose field value references no category option of those provided by the match value. Comparison is case insensitive and spaces are ignored                                                      |
 |   `empty`   | Matches all records whose field value is empty                                                                                                                                                                       |
 | `not_empty` | Matches all records whose field value is not empty                                                                                                                                                                   |
+
+## Single Relation
+
+This is an example on how to filter records by a `single_relation` field:
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Single Relation Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "single_relation",
+      "match_type": "any",
+      "values": [
+        {
+          "value": 1
+        }
+      ],
+      "type": "app"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+Provide the related record IDs to filter by.
+
+The following `match_type` values are supported for `single_relation` fields:
+
+| Match type  | Description                                                                                               |
+| :---------: | --------------------------------------------------------------------------------------------------------- |
+|   `equal`   | Matches all records whose field value references the records specified by the match value.                |
+| `not_equal` | Matches all records whose field value does not reference the records specified by the match value.        |
+|    `any`    | Matches all records whose field value references any of the records specified by the match value.         |
+|   `none`    | Matches all records whose field value does not reference any of the records specified by the match value. |
+|   `empty`   | Matches all records whose field value is empty                                                            |
+| `not_empty` | Matches all records whose field value is not empty                                                        |
+
+## Multi Relation
+
+This is an example on how to filter records by a `multi_relation` field:
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Multi Relation Filter">
+{
+  "filters": [
+    {
+      "field_id": "1",
+      "field_type": "multi_relation",
+      "match_type": "any",
+      "values": [
+        {
+          "value": 1
+        }
+      ],
+      "type": "app"
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+Provide the related record IDs to filter by.
+
+The following `match_type` values are supported for `multi_relation` fields:
+
+| Match type  | Description                                                                                                |
+| :---------: | ---------------------------------------------------------------------------------------------------------- |
+|   `equal`   | Matches all records whose field value exactly references records specified by the match value and no more. |
+| `not_equal` | Matches all records whose field value exactly references records specified by the match value and no more. |
+|    `any`    | Matches all records whose field value references any category option of those provided by the match value. |
+|   `none`    | Matches all records whose field value references no category option of those provided by the match value.  |
+|   `empty`   | Matches all records whose field value is empty                                                             |
+| `not_empty` | Matches all records whose field value is not empty                                                         |
 
 ## Status
 
