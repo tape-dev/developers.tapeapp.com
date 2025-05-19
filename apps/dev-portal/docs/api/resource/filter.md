@@ -367,7 +367,7 @@ This is an example on how to filter records by a `multi_user` field:
 </TabItem>
 </Tabs>
 
-Provide the related record IDs to filter by.
+Provide the user IDs to filter by.
 
 The following `match_type` values are supported for `multi_user` fields:
 
