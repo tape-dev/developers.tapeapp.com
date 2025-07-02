@@ -54,7 +54,7 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
 
 ## Retrieve all available apps
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspaceId}" />
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app" />
 
 Retrieve all apps inside the workspaces that you have access to (Note that the response does not contain the fields):
 
@@ -71,6 +71,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
     {
       "app_id": 1,
       "workspace_id": 200,
+      "workspace_name": "Task management",
       "name": "Tasks",
       "slug": "tasks",
       "config": {
@@ -82,6 +83,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
     {
       "app_id": 2,
       "workspace_id": 200,
+      "workspace_name": "Task management",
       "name": "Projects",
       "slug": "projects",
       "config": { 
@@ -93,6 +95,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
     {
     "app_id": 3,
     "workspace_id": 300,
+    "workspace_name": "CRM",
     "name": "Contacts",
     "slug": "contacts",
     "config": { 
