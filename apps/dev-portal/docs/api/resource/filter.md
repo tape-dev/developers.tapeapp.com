@@ -477,7 +477,7 @@ This is an example on how to filter records by a `single_date` field:
     {
       "field_id": "1",
       "field_type": "single_date",
-      "match_type": "is_before",
+      "match_type": "before",
       "relative_date_type": "exact_date",
       "values": [
         {
@@ -489,7 +489,7 @@ This is an example on how to filter records by a `single_date` field:
     {
       "field_id": "1",
       "field_type": "single_date",
-      "match_type": "is_after",
+      "match_type": "after",
       "relative_date_type": "num_weeks_before",
       "values": [
         {
@@ -536,7 +536,7 @@ This is an example on how to filter records by a `created_at` field:
     {
       "field_id": "1",
       "field_type": "created_at",
-      "match_type": "is_before",
+      "match_type": "before",
       "relative_date_type": "exact_date",
       "values": [
         {
@@ -548,7 +548,7 @@ This is an example on how to filter records by a `created_at` field:
     {
       "field_id": "1",
       "field_type": "created_at",
-      "match_type": "is_after",
+      "match_type": "after",
       "relative_date_type": "num_weeks_before",
       "values": [
         {
@@ -593,7 +593,7 @@ This is an example on how to filter records by a `last_modified_at` field:
     {
       "field_id": "1",
       "field_type": "last_modified_at",
-      "match_type": "is_before",
+      "match_type": "before",
       "relative_date_type": "exact_date",
       "values": [
         {
@@ -605,7 +605,7 @@ This is an example on how to filter records by a `last_modified_at` field:
     {
       "field_id": "1",
       "field_type": "last_modified_at",
-      "match_type": "is_after",
+      "match_type": "after",
       "relative_date_type": "num_weeks_before",
       "values": [
         {
