@@ -4,16 +4,16 @@ title: IP Addresses
 sidebar_label: IP Addresses
 ---
 
-For security reasons it could be neccessary to whitelist the IP addresses of the Tape workflow automation servers when making network connections to your infrastrure or service provider. Make sure to whitelist the IP addresses listed below to avoid network or firewall issues.
+For security reasons it could be necessary to whitelist the IP addresses of the Tape workflow automation servers when making network connections to your infrastructure or service provider. Make sure to whitelist the IP addresses listed below to avoid network or firewall issues.
 
 When dispatching remote HTTP operations inside a Tape workflow automation, the worker node will use one of the following IP addresses:
 
 | IP Address     | Aliases |
 | :------------- | :------ |
-| 54.93.244.238  | -       |
-| 3.79.255.139   | -       |
-| 63.180.201.194 | -       |
-| 3.76.208.56    | -       |
+| 18.185.193.172 | -       |
+| 52.29.64.182   | -       |
+| 18.153.113.19  | -       |
+| 52.29.124.7    | -       |
 
 Some functionality may not be available without whitelisting.
 
