@@ -37,11 +37,11 @@ Here is an example request body for creating a record with a value for the "Subt
             {
                 "title": "Clean the kitchen",
                 "description": "Please do not forget the sink.",
-                "due": "2022-03-15"
+                "due_at": "2022-03-15"
             },
             {
                 "title": "Tidy up the living room",
-                "due": "2022-03-15 15:00"
+                "due_at": "2022-03-15 15:00"
             }
         ]
     }
@@ -59,12 +59,12 @@ Here is an example request body for creating a record with a value for the "Subt
       {
         "title": "Clean the kitchen",
         "description": "Please do not forget the sink.",
-        "due": "2022-03-15",
+        "due_at": "2022-03-15",
         "assignee": 600
       },
       {
         "title": "Tidy up the living room",
-        "due": "2022-03-15 15:00"
+        "due_at": "2022-03-15 15:00"
       }
     ]
   }
@@ -90,7 +90,7 @@ Here is an example request body for creating a record with a value for the "Subt
           "id": 300,
           "title": "Clean the kitchen",
           "description": "Please do not forget the sink.",
-          "due": "2022-03-15",
+          "due_at": "2022-03-15",
           "completed": false,
           "completed_at": null,
           "assignee": {
@@ -106,7 +106,7 @@ Here is an example request body for creating a record with a value for the "Subt
           "id": 301,
           "title": "Tidy up the living room",
           "description": "",
-          "due": "2022-03-15 15:00",
+          "due_at": "2022-03-15 15:00",
           "completed": false,
           "completed_at": null,
           "assignee": null
@@ -146,7 +146,7 @@ A checklist field value can be retrieved as part of a record retrieval:
           "id": 300,
           "title": "Clean the kitchen",
           "description": "Please do not forget the sink.",
-          "due": "2022-03-15",
+          "due_at": "2022-03-15",
           "completed": false,
           "completed_at": null,
           "assignee": {
@@ -162,7 +162,7 @@ A checklist field value can be retrieved as part of a record retrieval:
           "id": 301,
           "title": "Tidy up the living room",
           "description": "",
-          "due": "2022-03-15 15:00",
+          "due_at": "2022-03-15 15:00",
           "completed": false,
           "completed_at": null,
           "assigne": null
@@ -194,7 +194,7 @@ One or more checklist field values can be updated as part of a record update, an
           "id": 300,
           "title": "Clean the kitchen",
           "description": "Please do not forget the sink.",
-          "due": "2022-03-15",
+          "due_at": "2022-03-15",
           "completed": false,
           "assignee": 601
         },
@@ -202,7 +202,7 @@ One or more checklist field values can be updated as part of a record update, an
           "id": 301,
           "title": "Tidy up the living room",
           "description": "",
-          "due": "2022-03-15 15:00",
+          "due_at": "2022-03-15 15:00",
           "completed": true
         }
       ]
@@ -222,7 +222,7 @@ One or more checklist field values can be updated as part of a record update, an
         "id": 300,
         "title": "Clean the kitchen",
         "description": "Please do not forget the sink.",
-        "due": "2022-03-15",
+        "due_at": "2022-03-15",
         "completed": false,
         "assignee": 601
       },
@@ -230,7 +230,7 @@ One or more checklist field values can be updated as part of a record update, an
         "id": 301,
         "title": "Tidy up the living room",
         "description": "",
-        "due": "2022-03-15 15:00",
+        "due_at": "2022-03-15 15:00",
         "completed": true
       }
     ]
@@ -257,7 +257,7 @@ One or more checklist field values can be updated as part of a record update, an
           "id": 300,
           "title": "Clean the kitchen",
           "description": "Please do not forget the sink.",
-          "due": "2022-03-15",
+          "due_at": "2022-03-15",
           "completed": false,
           "completed_at": null,
           "assignee": {
@@ -273,7 +273,7 @@ One or more checklist field values can be updated as part of a record update, an
           "id": 301,
           "title": "Tidy up the living room",
           "description": "",
-          "due": "2022-03-15 15:00",
+          "due_at": "2022-03-15 15:00",
           "completed": true,
           "completed_at": "2022-03-15 14:55",
           "assigne": null
