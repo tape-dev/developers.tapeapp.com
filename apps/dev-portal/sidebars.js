@@ -7,6 +7,7 @@ module.exports = {
       collapsed: true,
       items: [
         'calculation/introduction',
+        'calculation/editors',
         'calculation/libraries',
         'calculation/markdown',
         'calculation/html',
