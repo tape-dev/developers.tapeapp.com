@@ -17,18 +17,18 @@ For more details on what changed and how to migrate, see: [Community: New Calcul
 
 The new editor changes how you write field references and aggregations. The data model is the same, but the syntax differs. Use this as a translation table when you migrate scripts or read the examples below.
 
-| What you write | Classic editor | New editor |
-|---|---|---|
-| Reference a field | `@First name` | `First_name` |
-| Reference a field with a multi-word name | `@Hourly Rate` | `Hourly_Rate` |
-| Trigger autocomplete | `@` | type the field name (or `@` to search) |
-| Aggregate a related field | `@Sum of Amount` | `Invoices.Amount.sum` |
-| All values across related records | `@All of Title` | `Tasks.Title.all` |
-| Same, with empty positions | `@All of Title with nulls` | `Tasks.Title.allWithNull` |
-| Average / min / max | `@Average of Amount` etc. | `Invoices.Amount.avg` / `.min` / `.max` |
-| End of a Date Range field | not accessible | `Sprint.end` |
-| Start of a Date Range field | `@Sprint` (start only) | `Sprint.start` |
-| Tape built-ins | n/a | `Record_ID` (more coming) |
+| What you write                           | Classic editor             | New editor                              |
+| ---------------------------------------- | -------------------------- | --------------------------------------- |
+| Reference a field                        | `@First name`              | `First_name`                            |
+| Reference a field with a multi-word name | `@Hourly Rate`             | `Hourly_Rate`                           |
+| Trigger autocomplete                     | `@`                        | type the field name (or `@` to search)  |
+| Aggregate a related field                | `@Sum of Amount`           | `Invoices.Amount.sum`                   |
+| All values across related records        | `@All of Title`            | `Tasks.Title.all`                       |
+| Same, with empty positions               | `@All of Title with nulls` | `Tasks.Title.allWithNull`               |
+| Average / min / max                      | `@Average of Amount` etc.  | `Invoices.Amount.avg` / `.min` / `.max` |
+| End of a Date Range field                | not accessible             | `Sprint.end`                            |
+| Start of a Date Range field              | `@Sprint` (start only)     | `Sprint.start`                          |
+| Tape built-ins                           | n/a                        | `Record_ID` (more coming)               |
 
 ## New Editor
 
@@ -47,9 +47,11 @@ For more information and recipes, see:
 
 → [Cheat Sheet Part 1: Syntax & Field References](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-1-syntax-field-references/2430)
 
-→ [Cheat Sheet Part 2: Functions & HTML Output](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-2-functions-html-output/2431/5)
+→ [Cheat Sheet Part 2: Functions & HTML Output](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-2-functions-html-output/2431)
 
 → [Cheat Sheet Part 3: Dates, Markdown & Recipes](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-3-dates-markdown-recipes/2432)
+
+→ [Cheat Sheet Part 4: Best practices & Trouble shooting](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-4-best-practices-troubleshooting/2433)
 
 ## Classic Editor
 
