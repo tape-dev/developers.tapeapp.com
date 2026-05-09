@@ -1,0 +1,35 @@
+{
+  "companies": [
+    {
+      "name": "Acme Inc.",
+      "contacts": [
+        {
+          "name": "John Doe",
+          "email": "john@acme.com"
+        },
+        {
+          "name": "Adam Dawes",
+          "email": "adam@acme.com"
+        }
+      ]
+    },
+    {
+      "name": "Global Media Inc.",
+      "contacts": [
+        {
+          "name": "Marc Milly",
+          "email": "marc@globalmediainc.com"
+        }
+      ]
+    },
+    {
+      "name": "Rakes that never break Inc.",
+      "contacts": [
+        {
+          "name": "Glenna Reichert",
+          "email": "glenna@rakesthatneverbreak.com"
+        }
+      ]
+    }
+  ]
+}
