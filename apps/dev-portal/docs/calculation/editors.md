@@ -51,7 +51,7 @@ For more information and recipes, see:
 
 → [Cheat Sheet Part 3: Dates, Markdown & Recipes](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-3-dates-markdown-recipes/2432)
 
-→ [Cheat Sheet Part 4: Best practices & Trouble shooting](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-4-best-practices-troubleshooting/2433)
+→ [Cheat Sheet Part 4: Best practices & troubleshooting](https://community.tapeapp.com/t/new-calculation-field-cheat-sheet-part-4-best-practices-troubleshooting/2433)
 
 ## Classic Editor
 
