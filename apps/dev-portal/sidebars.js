@@ -15,7 +15,7 @@ module.exports = {
           type: 'category',
           label: 'Components',
           collapsed: false,
-          items: ['calculation/component/link', 'calculation/component/button'],
+          items: ['calculation/component/link', 'calculation/component/button', 'calculation/component/collapsible'],
         },
       ],
     },
