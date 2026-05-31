@@ -99,6 +99,7 @@ module.exports = {
             'api/resource/webhook',
             'api/resource/email',
             'api/resource/filter',
+            'api/resource/workflow-usage-report',
           ],
         },
       ],
