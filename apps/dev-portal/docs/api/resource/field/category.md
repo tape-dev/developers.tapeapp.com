@@ -127,6 +127,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "external_id": "leads",
   "name": "Leads",
   "item_name": "Lead",
+  "type": "database",
   "config": {
     "item_name": "Lead",
     "name": "Leads"
@@ -298,6 +299,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "name": "Leads",
   "record_name": "Lead",
   "item_name": "Lead",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Lead",

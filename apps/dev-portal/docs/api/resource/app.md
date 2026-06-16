@@ -30,6 +30,7 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
       "workspace_id": 200,
       "name": "Tasks",
       "slug": "tasks",
+      "type": "database",
       "config": {
         "item_name": "Task",
         "name": "Tasks",
@@ -41,6 +42,7 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
       "workspace_id": 200,
       "name": "Projects",
       "slug": "projects",
+      "type": "database",
       "config": { 
         "item_name": "Project",
         "name": "Projects",
@@ -51,6 +53,12 @@ Retrieve all apps for the workspace with ID `200` (Note that the response does n
 }`
 }
 </ContextCodeBlock>
+
+:::info App type
+
+The read-only `type` property reports the kind of app — one of `"database"`, `"dashboard"`, or `"form"`. Untyped/legacy apps are reported as `"database"`.
+
+:::
 
 ## Retrieve all available apps
 
@@ -74,6 +82,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "workspace_name": "Task management",
       "name": "Tasks",
       "slug": "tasks",
+      "type": "database",
       "config": {
         "item_name": "Task",
         "name": "Tasks",
@@ -86,6 +95,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "workspace_name": "Task management",
       "name": "Projects",
       "slug": "projects",
+      "type": "database",
       "config": { 
         "item_name": "Project",
         "name": "Projects",
@@ -98,6 +108,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
     "workspace_name": "CRM",
     "name": "Contacts",
     "slug": "contacts",
+    "type": "database",
     "config": { 
       "item_name": "Contact",
       "name": "Contacts",
@@ -126,6 +137,7 @@ Retrieve an app with fields by its ID `1`:
     "workspace_id": 200,
     "name": "Tasks",
     "slug": "tasks",
+    "type": "database",
     "config": {
       "item_name": "Task",
       "name": "Tasks",
@@ -296,6 +308,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "name": "Contacts",
   "record_name": "Contact",
   "item_name": "Contact",
+  "type": "database",
   "description": "A simple contact app.",
   "position": 0,
   "config": {
@@ -456,6 +469,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "slug": "contacts",
   "name": "Contacts",
   "item_name": "Contact",
+  "type": "database",
   "description": "A simple contact app.",
   "position": 0,
   "config": {
@@ -591,6 +605,7 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
   "slug": "contacts",
   "name": "Contacts",
   "item_name": "Contact",
+  "type": "database",
   "description": "A simple contact app.",
   "position": 0,
   "config": {

@@ -80,6 +80,7 @@ The app contains a `multi_attachment` field "Screenshots". Other useful fields f
   "name": "Bug Reports",
   "record_name": "Report",
   "item_name": "Report",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Report",
@@ -184,6 +185,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "name": "Bug Reports",
   "record_name": "Report",
   "item_name": "Report",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Report",

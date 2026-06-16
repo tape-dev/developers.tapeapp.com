@@ -144,6 +144,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "external_id": "tasks",
   "name": "Tasks",
   "item_name": "Task",
+  "type": "database",
   "config": {
     "item_name": "Task",
     "name": "Tasks"
@@ -310,6 +311,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "external_id": "tasks",
   "name": "Tasks",
   "item_name": "Task",
+  "type": "database",
   "config": {
     "item_name": "Task",
     "name": "Tasks"

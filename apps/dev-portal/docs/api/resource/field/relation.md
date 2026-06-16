@@ -103,6 +103,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "name": "Development-Issues",
   "record_name": "Issue",
   "item_name": "Issue",
+  "type": "database",
   "config": {
     "item_name": "Issue",
     "name": "Development-Issues"
@@ -234,6 +235,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "name": "Development-Issues",
   "record_name": "Issue",
   "item_name": "Issue",
+  "type": "database",
   "config": {
     "item_name": "Issue",
     "name": "Development-Issues"

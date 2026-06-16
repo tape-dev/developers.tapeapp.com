@@ -88,6 +88,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "name": "Tasks",
   "record_name": "Task",
   "item_name": "Task",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Task",
@@ -186,6 +187,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "slug": "tasks",
   "name": "Tasks",
   "item_name": "Task",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Task",

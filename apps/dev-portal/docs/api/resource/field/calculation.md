@@ -258,6 +258,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "slug": "meetings",
   "name": "Meetings",
   "item_name": "Meeting",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Meeting",

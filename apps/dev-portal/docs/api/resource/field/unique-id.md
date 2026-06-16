@@ -90,6 +90,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "slug": "tickets",
   "name": "Tickets",
   "item_name": "Ticket",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Ticket",
@@ -185,6 +186,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "slug": "tickets",
   "name": "Tickets",
   "item_name": "Ticket",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Ticket",

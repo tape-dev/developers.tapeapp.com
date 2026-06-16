@@ -88,6 +88,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "name": "Meetings",
   "record_name": "Meeting",
   "item_name": "Meeting",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Meeting",
@@ -187,6 +188,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
     "name": "Meetings",
     "record_name": "Meeting",
     "item_name": "Meeting",
+    "type": "database",
     "position": 0,
     "config": {
       "item_name": "Meeting",

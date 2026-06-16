@@ -127,6 +127,7 @@ curl -X POST #BASE_URL/v1/app/ \\
   "slug": "events",
   "name": "Events",
   "item_name": "Event",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Event",
@@ -275,6 +276,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "slug": "events",
   "name": "Events",
   "item_name": "Event",
+  "type": "database",
   "position": 0,
   "config": {
     "item_name": "Event",
