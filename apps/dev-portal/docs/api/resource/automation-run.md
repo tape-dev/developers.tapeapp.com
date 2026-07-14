@@ -41,6 +41,8 @@ every run you may see.
 | `workflow_ids`  | `integer[]` | Only runs of these automations. Max 100 ids.                                                                   |
 | `workspace_ids` | `integer[]` | Only runs of automations in these workspaces. Max 100 ids.                                                     |
 | `status`        | `string[]`  | Only runs in these statuses. One or more of `pending`, `running`, `completed`, `failed`, `cancelled`.          |
+| `created_at_from` | `string`  | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).            |
+| `created_at_to` | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).           |
 
 Every id you name must be one you may see: an app, automation or workspace you do not administrate is rejected with
 a `401` rather than silently dropped from the filter.
@@ -82,7 +84,11 @@ The example below requests the 2 most recent failed runs of the automations in t
     {
       "id": 9001,
       "workflow_automation_id": 88,
+      "workflow_automation_name": "Notify on new lead",
       "workflow_automation_revision_id": 3,
+      "app_id": 42,
+      "app_name": "Leads",
+      "workspace_id": 7,
       "status": "failed",
       "created_at": "2024-01-18 08:12:04",
       "completed_at": "2024-01-18 08:12:09",
@@ -94,7 +100,11 @@ The example below requests the 2 most recent failed runs of the automations in t
     {
       "id": 8974,
       "workflow_automation_id": 88,
+      "workflow_automation_name": "Notify on new lead",
       "workflow_automation_revision_id": 3,
+      "app_id": 42,
+      "app_name": "Leads",
+      "workspace_id": 7,
       "status": "failed",
       "created_at": "2024-01-17 22:47:51",
       "completed_at": "2024-01-17 22:47:55",
@@ -124,7 +134,11 @@ Each entry in `workflow_runs` — and the `workflow_run` returned when retrievin
 | --------------------------------- | --------- | ------------------------------------------------------------------------------------------------- |
 | `id`                              | `integer` | ID of the run.                                                                                  |
 | `workflow_automation_id`          | `integer` | The automation this run executed.                                                               |
+| `workflow_automation_name`        | `string`  | Name of the automation.                                                                         |
 | `workflow_automation_revision_id` | `integer` | The revision of the automation this run executed.                                               |
+| `app_id`                          | `integer` | The app the automation belongs to.                                                              |
+| `app_name`                        | `string`  | Name of that app.                                                                               |
+| `workspace_id`                    | `integer` | The workspace the app belongs to.                                                               |
 | `status`                          | `string`  | See [Statuses](#statuses).                                                                      |
 | `created_at`                      | `string`  | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                       |
 | `completed_at`                    | `string`  | When the run finished, in UTC. `null` while the run is still `pending` or `running`.            |
@@ -146,6 +160,27 @@ UTC, with no `T` separator, no `Z` suffix and no milliseconds.
 | `failed`    | The run finished with an error.                                |
 | `cancelled` | The run was cancelled before it could finish.                  |
 
+### Filtering by date
+
+`created_at_from` and `created_at_to` restrict the listing to runs whose `created_at` falls within a window. Both
+use the Tape API datetime format — `YYYY-MM-DD HH:mm:ss`, always UTC, no `T` separator and no `Z` suffix (see
+[Date & Timezone](/docs/api/date-timezone)) — and both bounds are **inclusive**. Either may be given on its own.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/automation-run \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "created_at_from": "2024-01-18 00:00:00",
+    "created_at_to": "2024-01-18 23:59:59"
+  }'`}
+</ContextCodeBlock>
+
+- `created_at_from` never reaches past retention: a value older than the retained window is treated as the start of
+  the window, so you can safely pass an open-ended lower bound.
+- `created_at_to` has no such bound.
+- `created_at_from` must be at or before `created_at_to`; otherwise the request is rejected with a `400`.
+
 ### Pagination
 
 Results are [paginated](/docs/api/pagination) with a cursor. To fetch the next page, send the `cursor` from the
@@ -161,8 +196,8 @@ previous response **on its own** — optionally alongside `limit`:
 </ContextCodeBlock>
 
 The filters that produced a page are carried inside the cursor, so you must not re-send them with it. A request
-containing both a `cursor` and any of `app_ids`, `workflow_ids`, `workspace_ids` or `status` is rejected with a
-`400` rather than one silently winning over the other.
+containing both a `cursor` and any of `app_ids`, `workflow_ids`, `workspace_ids`, `status`, `created_at_from` or
+`created_at_to` is rejected with a `400` rather than one silently winning over the other.
 
 Runs are returned **newest first** (descending by run ID). You have reached the end of the list when `cursor` is
 `null`.
@@ -195,7 +230,11 @@ as in a listing (see [The run object](#the-run-object)), plus a `logs` array.
   "workflow_run": {
     "id": 9001,
     "workflow_automation_id": 88,
+    "workflow_automation_name": "Notify on new lead",
     "workflow_automation_revision_id": 3,
+    "app_id": 42,
+    "app_name": "Leads",
+    "workspace_id": 7,
     "status": "failed",
     "created_at": "2024-01-18 08:12:04",
     "completed_at": "2024-01-18 08:12:09",
@@ -301,9 +340,22 @@ A malformed body returns a `400` validation error. For example, sending a `curso
 }`}
 </ContextCodeBlock>
 
-The same applies to a `limit` outside `1`–`500`, a filter array with more than 100 ids, an unknown `status`, an
-unknown body property, or a run ID that is not an integer. See [Errors](/docs/api/errors) for the full list of
-error codes.
+The same applies to a `limit` outside `1`–`500`, a filter array with more than 100 ids, an unknown `status`, a
+`created_at_from` or `created_at_to` that is not a valid `YYYY-MM-DD HH:mm:ss` datetime, an unknown body property,
+or a run ID that is not an integer.
+
+A `created_at_from` later than `created_at_to` is likewise a `400`:
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "status_code": 400,
+  "endpoint": "/v1/automation-run",
+  "error_code": "validation_error",
+  "error_message": "\\"created_at_from\\" must be before or equal to \\"created_at_to\\"."
+}`}
+</ContextCodeBlock>
+
+See [Errors](/docs/api/errors) for the full list of error codes.
 
 ## Rate limit credits
 
