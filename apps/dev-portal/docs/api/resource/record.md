@@ -651,15 +651,20 @@ Retrieve related records for the app with the specified `app_id` and the records
 }`}
 </ContextCodeBlock>
 
+`total` is the number of records returned in this response (the length of `records`), not a count of all
+matching related records. This endpoint returns at most **1000** records and is not paginated. Because `limit` is
+applied before access checks, records you cannot view are removed afterwards — so `total` may be lower than both
+`limit` and the number of related records that actually exist.
+
 **Query Parameters**
 
-| Parameter | Type      | ** Type**                                      | Min | Max |
-| --------- | --------- | ---------------------------------------------- | --- | --- |
-| `limit`   | `integer` | Number of records to return. Defaults to _50_. | 0   | 500 |
+| Parameter | Type      | Description                                      | Min | Max  |
+| --------- | --------- | ------------------------------------------------ | --- | ---- |
+| `limit`   | `integer` | Number of records to return. Defaults to _1000_. | 0   | 1000 |
 
 **Request Body Parameters**
 
-| Parameter          | Type        | ** Type**                                                                                                                            |
+| Parameter          | Type        | Description                                                                                                                           |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `direction`        | `string`    | Direction of the returned relations. Possible values are `forward`, `reverse` and `both`.                                            |
 | `recordIds`        | `integer[]` | IDs of the records for which related records should be returned. All IDs need to belong to records of the same App with ID `app_id`. |
