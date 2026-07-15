@@ -23,7 +23,7 @@ All fields share the following properties:
 - `required`: Whether the field is required or not. If a field is required, it must have a value when creating or updating a record.
 - `hidden_if_empty`: Whether the field is hidden if it has no value. If a field is hidden if empty, it is not displayed in the record if it has no value.
 - `always_hidden`: Whether the field is always hidden. If a field is always hidden, it is not displayed in the record, even if it has a value.
-- `field` type: See below.
+- `field_type`: See below.
 - `settings`: The field-type specific settings of a field. The structure of this object depends on the field type.
 
 ## Field type

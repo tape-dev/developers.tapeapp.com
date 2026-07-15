@@ -62,7 +62,7 @@ This scheme starts with an `@` symbol followed by the string `All of` and the na
 The name of the referenced app is followed by the prefix `out_` and the field id of the relation field that references the app.
 The field id of the relation field is followed by an underscore and the field id of the relation field itself.
 
-This is the equivalend of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 123 of the records that are referenced by the relation field.
+This is the equivalent of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 123 of the records that are referenced by the relation field.
 In case a record has no value for a field, the record is ignored.
 
 #### Referencing a single field of all related records with nulls
@@ -79,7 +79,7 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title with nulls](outn_123_654)
 ```
 
-This is the equivalend of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
 In case a record has no value for a field, the record is included with a null value for the field.
 
 #### Referencing a single field of all relating records (incoming relations from relation fields that reference the app of the calculation field)
@@ -96,7 +96,7 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title](in_123_654)
 ```
 
-This is the equivalend of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+This is the equivalent of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
 In case a record has no value for a field, the record is ignored.
 
 #### Referencing a single field of all relating records with nulls (incoming relations from relation fields that reference the app of the calculation field)
@@ -113,7 +113,7 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title with nulls](inn_123_654)
 ```
 
-This is the equivalend of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
 In case a record has no value for a field, the record is included with a null value for the field.
 
 #### Referencing a number field of all related records (incoming or outgoing)

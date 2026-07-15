@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A location field value consists of its `value` property, an object containing the properties describe a location. The value is a geographic location. A `location` field value holds at most one location value.
+A location field value consists of its `value` property, an object containing the properties that describe a location. The value is a geographic location. A `location` field value holds at most one location value.
 
 ## Record creation
 
@@ -67,7 +67,7 @@ A location field value can be created as part of a record creation. Here is an e
   "title": "Hessstr. 6, 80799 Munich, Germany",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "company_address",
       "type": "location",
       "field_type": "single_location",
@@ -106,7 +106,7 @@ A location field value can be retrieved as part of a record retrieval:
   "title": "Hessstr. 6, 80799 Munich, Germany",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "company_address",
       "type": "location",
       "field_type": "single_location",
@@ -188,7 +188,7 @@ One or more location field values can be updated as part of a record update. Her
   "title": "Hessstr. 6, 80799 Munich, Germany",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "company_address",
       "type": "location",
       "field_type": "single_location",

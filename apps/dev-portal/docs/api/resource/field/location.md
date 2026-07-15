@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of location field: `single_location`.
+There is only one type of location field: `single_location`.
 
 `single_location` field-values can only hold a single location, including the address properties and a map preview.
 

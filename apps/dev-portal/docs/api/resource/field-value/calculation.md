@@ -30,7 +30,7 @@ A calculation field value can be retrieved as part of a record retrieval:
   "title": "12 days",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "vacation_days",
       "type": "calculation",
       "field_type": "calculation",
@@ -38,7 +38,7 @@ A calculation field value can be retrieved as part of a record retrieval:
       "values": [{ "value": 12 }]
     },
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "linkedin_profile",
       "type": "calculation",
       "field_type": "calculation",

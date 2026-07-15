@@ -23,7 +23,7 @@ Apart from plain text, the comment `value` property supports limited formatting 
 - Forcing newlines using `\n`
 - Adding a user mention using the proper syntax, e.g. for this user with ID 123 and name "Dan Jacob": `@[Dan Jacob](user:123)`
 
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |
@@ -107,7 +107,7 @@ Retrieve the comment with the specified `comment_id`:
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/comment/{comment_id}" />
 
 Delete the comment with the specified `comment_id`.
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |

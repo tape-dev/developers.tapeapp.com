@@ -182,7 +182,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 A category field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
-The update adds an option "Negoatiating" to the "Pipeline Stage" field and updates the color of the "Lost" option to "orange".
+The update adds an option "Negotiating" to the "Pipeline Stage" field and updates the color of the "Lost" option to "orange".
 When updating a category field, the order of the options in the input is preserved in case you specify all existing options.
 
 In case you want to remove one or multiple options from a `category` field, you can specify the property `options_to_delete` within the `settings` property of the field.
@@ -218,7 +218,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
                 "color": "blue"
               },
               {
-                "text": "Negoatiating",
+                "text": "Negotiating",
                 "color": "yellow"
               },
               {
@@ -265,7 +265,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
               "color": "blue"
             },
             {
-              "text": "Negoatiating",
+              "text": "Negotiating",
               "color": "yellow"
             },
             {
@@ -335,7 +335,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
             },
             {
               "id": 3,
-              "text": "Negoatiating",
+              "text": "Negotiating",
               "color": "YELLOW"
             },
             {

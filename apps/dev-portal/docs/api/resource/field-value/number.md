@@ -52,7 +52,7 @@ A number field value can be created as part of a record creation. Here is an exa
   "title": "2000$",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "salary",
       "type": "number",
       "field_type": "number",
@@ -80,7 +80,7 @@ A number field value can be retrieved as part of a record retrieval:
   "title": "2000$",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "salary",
       "type": "number",
       "field_type": "number",
@@ -132,7 +132,7 @@ One or more number field values can be updated as part of a record update. Here 
   "title": "4000$",
   "fields": [
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "salary",
       "type": "number",
       "field_type": "number",

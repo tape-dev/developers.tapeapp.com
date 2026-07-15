@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of email field: `multi_email`.
+There is only one type of email field: `multi_email`.
 
 `multi_email` fields can hold a one or more email entries.
 

@@ -19,7 +19,7 @@ More details on the file object and the two-step file upload process can be foun
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A image field value can be created as part of a record creation. Files can be specified as temporary file IDs (strings), existing file IDs of the same field (integers) and existing file IDs of different Attachment or Image fields (integers). Existing files of Attachment fields can only be used as inputs to the image field, in case the files are of type `jpeg`, `jpg`, `png`, `gif`, `tiff`, `svg`, `bmp` or `webp`.
+An image field value can be created as part of a record creation. Files can be specified as temporary file IDs (strings), existing file IDs of the same field (integers) and existing file IDs of different Attachment or Image fields (integers). Existing files of Attachment fields can only be used as inputs to the image field, in case the files are of type `jpeg`, `jpg`, `png`, `gif`, `tiff`, `svg`, `bmp` or `webp`.
 Here is an example request body for creating a record with a value for the "Recruting Photos" field with ID 3, type `multi_image` and external ID `recruiting_photos`:
 
 <Tabs defaultValue="curl">
@@ -87,7 +87,7 @@ Here is an example request body for creating a record with a value for the "Recr
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-A image field value can be retrieved as part of a record retrieval:
+An image field value can be retrieved as part of a record retrieval:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/record/1 \\

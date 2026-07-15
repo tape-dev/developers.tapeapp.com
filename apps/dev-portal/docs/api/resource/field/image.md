@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of image fields: `multi_image`.
+There is only one type of image fields: `multi_image`.
 
 `multi_image` field-values can only hold one or more multi_image entries.
 

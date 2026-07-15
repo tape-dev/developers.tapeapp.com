@@ -45,7 +45,7 @@ X-Retry-Cost: 2
 X-Retry-Reset: 2022-03-01 12:00:00
 ```
 
-In case the rate limit is exceeded, the error response body will also include alle rate limit information:
+In case the rate limit is exceeded, the error response body will also include all rate limit information:
 
 ```json
 {

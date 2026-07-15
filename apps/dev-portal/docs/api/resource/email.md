@@ -79,7 +79,7 @@ If your organization has configured its own SMTP server in the organization sett
 <br/>
 <br/>
 The next example sends an email with subject, and body to "recipient-one@example.com" and "recipient-two@example.com" with the sender address "sender@example.com".
-The addresses "carbon-copy-one@example.com" and "carbon-copy-two@example.com" recieve a copy of the email.
+The addresses "carbon-copy-one@example.com" and "carbon-copy-two@example.com" receive a copy of the email.
 In addition, the email contains an attachment with file ID 42, which is present in an attachment or image field-value in a record in your organization.
 
 <Tabs defaultValue="curl">

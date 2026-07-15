@@ -514,8 +514,8 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 
 |   Match type   | Description                                                                                                                         |
 | :------------: | ----------------------------------------------------------------------------------------------------------------------------------- |
-|    `equal`     | Matches all records whose field value is equal to the the date of the provided match value + offset_amount + relative_date_type     |
-|  `not_equal`   | Matches all records whose field value is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `equal`     | Matches all records whose field value is equal to the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose field value is not equal to the date of the provided match value + offset_amount + relative_date_type |
 |    `before`    | Matches all records whose field value is before the date of the provided match value + offset_amount + relative_date_type           |
 | `on_or_before` | Matches all records whose field value is before the date of the provided match value + offset_amount + relative_date_type           |
 |    `after`     | Matches all records whose field value is after the date of the provided match value + offset_amount + relative_date_type            |
@@ -573,8 +573,8 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 
 |   Match type   | Description                                                                                                                           |
 | :------------: | ------------------------------------------------------------------------------------------------------------------------------------- |
-|    `equal`     | Matches all records whose creation date is equal to the the date of the provided match value + offset_amount + relative_date_type     |
-|  `not_equal`   | Matches all records whose creation date is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `equal`     | Matches all records whose creation date is equal to the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose creation date is not equal to the date of the provided match value + offset_amount + relative_date_type |
 |    `before`    | Matches all records whose creation date is before the date of the provided match value + offset_amount + relative_date_type           |
 | `on_or_before` | Matches all records whose creation date is before the date of the provided match value + offset_amount + relative_date_type           |
 |    `after`     | Matches all records whose creation date is after the date of the provided match value + offset_amount + relative_date_type            |
@@ -630,8 +630,8 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 
 |   Match type   | Description                                                                                                                                       |
 | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `equal`     | Matches all records whose date of last modification is equal to the the date of the provided match value + offset_amount + relative_date_type     |
-|  `not_equal`   | Matches all records whose date of last modification is not equal to the the date of the provided match value + offset_amount + relative_date_type |
+|    `equal`     | Matches all records whose date of last modification is equal to the date of the provided match value + offset_amount + relative_date_type     |
+|  `not_equal`   | Matches all records whose date of last modification is not equal to the date of the provided match value + offset_amount + relative_date_type |
 |    `before`    | Matches all records whose date of last modification is before the date of the provided match value + offset_amount + relative_date_type           |
 | `on_or_before` | Matches all records whose date of last modification is before the date of the provided match value + offset_amount + relative_date_type           |
 |    `after`     | Matches all records whose date of last modification is after the date of the provided match value + offset_amount + relative_date_type            |

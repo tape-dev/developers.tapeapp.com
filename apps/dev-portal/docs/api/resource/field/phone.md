@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of phone field: `multi_phone`.
+There is only one type of phone field: `multi_phone`.
 
 `multi_phone` fields can hold a one or more phone entries.
 

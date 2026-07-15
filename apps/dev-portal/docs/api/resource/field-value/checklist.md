@@ -165,7 +165,7 @@ A checklist field value can be retrieved as part of a record retrieval:
           "due_at": "2022-03-15 15:00",
           "completed": false,
           "completed_at": null,
-          "assigne": null
+          "assignee": null
         }
       ]
     }
@@ -276,7 +276,7 @@ One or more checklist field values can be updated as part of a record update, an
           "due_at": "2022-03-15 15:00",
           "completed": true,
           "completed_at": "2022-03-15 14:55",
-          "assigne": null
+          "assignee": null
         }
       ]
     }

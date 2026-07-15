@@ -15,8 +15,8 @@ Records are the place where work gets done inside a Tape organization. Records c
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-To create a new record for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body specifies has to contain the `fields` property with the key-value pairs of the field values to create for this record.
-The following query paramters are available:
+To create a new record for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `fields` property with the key-value pairs of the field values to create for this record.
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |
@@ -132,7 +132,7 @@ Attempting to retrieve a deleted record returns the following error:
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
 Updates the record with the specified `record_id` and returns the updated record.
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |
@@ -198,7 +198,7 @@ The example above only specifies a `single_text` field value as part of the reco
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
 Delete the record with the specified `record_id`.
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param  | Type      | Description                                                                                        |
 | :----------- | :-------- | :------------------------------------------------------------------------------------------------- |
@@ -251,7 +251,7 @@ If the record has already been deleted, the following error is returned:
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/{record_id}/restore" />
 
 Restore the record with the specified `record_id`. This is only allowed if the record is in a trash you have access to.
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |
@@ -360,7 +360,7 @@ Retrieve records for the app with the specified `app_id`:
 
 **Query Parameters**
 
-| Parameter   | Type      | ** Type**                                                                                               | Min | Max |
+| Parameter   | Type      | Description                                                                                               | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
 | `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
@@ -485,7 +485,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 **Query Parameters**
 
-| Parameter   | Type      | ** Type**                                                                                               | Min | Max |
+| Parameter   | Type      | Description                                                                                               | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
 | `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
@@ -494,7 +494,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 **Request Body Parameters**
 
-| Parameter | Type    | ** Type**                                                                                                                                                                                                                                                                                |
+| Parameter | Type    | Description                                                                                                                                                                                                                                                                                |
 | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter) documentation section for examples of all supported field types. |
 
@@ -572,7 +572,7 @@ Retrieve records for the view with the specified `view_id`:
 
 **Query Parameters**
 
-| Parameter | Type      | ** Type**                                      | Min | Max |
+| Parameter | Type      | Description                                      | Min | Max |
 | --------- | --------- | ---------------------------------------------- | --- | --- |
 | `limit`   | `integer` | Number of records to return. Defaults to _50_. | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                          | -   | -   |
@@ -705,7 +705,7 @@ This endpoint is not paginated: it returns at most 10 matching records, and acce
 
 **Query Parameters**
 
-| Parameter | Type     | ** Type**              | Min | Max |
+| Parameter | Type     | Description              | Min | Max |
 | --------- | -------- | ---------------------- | --- | --- |
 | `text`    | `string` | The text to search for | -   | -   |
 
@@ -717,7 +717,7 @@ To create new records for the app with the specified `app_id`, issue a POST requ
 
 Currently, only a maximum of **50 records** can be batch created at the same time. An error will be thrown if the `inputs` array exceeds that limit.
 
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param | Type      | Description                                                         |
 | :---------- | :-------- | :------------------------------------------------------------------ |
@@ -829,7 +829,7 @@ To update records of an app with the specified `app_id`, issue a PUT request to 
 
 Currently, only a maximum of **50 records** can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit.
 
-The following query paramters are available:
+The following query parameters are available:
 
 | Query param      | Type      | Description                                                                                                                 |
 | :--------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------- |

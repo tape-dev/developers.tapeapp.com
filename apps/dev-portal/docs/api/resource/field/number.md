@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of number field: `number`.
+There is only one type of number field: `number`.
 
 `number` fields can hold a single number value.
 

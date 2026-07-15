@@ -83,4 +83,4 @@ Now that we have set up the Google forms webhook, we can submit a response to ou
 
 <br />
 
-That's it! You can use this guide to connect pretty much any online form provider that offers webhooks (and hofepully makes them easier to set up...).
+That's it! You can use this guide to connect pretty much any online form provider that offers webhooks (and hopefully makes them easier to set up...).

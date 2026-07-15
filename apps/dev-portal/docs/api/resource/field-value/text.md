@@ -54,7 +54,7 @@ A text field value can be created as part of a record creation. Here is an examp
   "title": "Adam Smith",
   "fields": [
     {
-      "field_Id": 1,
+      "field_id": 1,
       "external_id": "first_name",
       "type": "text",
       "field_type": "single_text",
@@ -62,7 +62,7 @@ A text field value can be created as part of a record creation. Here is an examp
       "values": [{ "value": "Adam Smith" }]
     },
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "notes",
       "type": "text",
       "field_type": "multi_text",
@@ -90,7 +90,7 @@ A text field value can be retrieved as part of a record retrieval:
   "title": "Adam Smith",
   "fields": [
     {
-      "field_Id": 1,
+      "field_id": 1,
       "external_id": "first_name",
       "type": "text",
       "field_type": "single_text",
@@ -98,7 +98,7 @@ A text field value can be retrieved as part of a record retrieval:
       "values": [{ "value": "Adam Smith" }]
     },
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "notes",
       "type": "text",
       "field_type": "multi_text",
@@ -152,7 +152,7 @@ One or more text field values can be updated as part of a record update. Here is
   "title": "Andrea Lim",
   "fields": [
     {
-      "field_Id": 1,
+      "field_id": 1,
       "external_id": "first_name",
       "type": "text",
       "field_type": "single_text",
@@ -160,7 +160,7 @@ One or more text field values can be updated as part of a record update. Here is
       "values": [{ "value": "Andrea Lim" }]
     },
     {
-      "field_Id": 2,
+      "field_id": 2,
       "external_id": "notes",
       "type": "text",
       "field_type": "multi_text",

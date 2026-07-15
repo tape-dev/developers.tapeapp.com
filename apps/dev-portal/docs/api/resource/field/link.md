@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only type of link field: `multi_link`.
+There is only one type of link field: `multi_link`.
 
 `multi_link` fields-values can hold a one or more link entries.
 
