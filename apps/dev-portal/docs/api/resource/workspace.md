@@ -162,12 +162,12 @@ Retrieve all workspace members for a given workspace:
     {
       "workspace_id": 1,
       "user_id": 10000,
-      "role": "'admin",
+      "role": "admin"
     },
     {
       "workspace_id": 1,
       "user_id": 10001,
-      "role": "'member",
+      "role": "member"
     }
   ]
 }`}

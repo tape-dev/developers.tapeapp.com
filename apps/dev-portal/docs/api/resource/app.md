@@ -100,7 +100,7 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
         "item_name": "Project",
         "name": "Projects",
         "description": ""
-      },
+      }
     },
     {
     "app_id": 3,
@@ -158,7 +158,7 @@ Retrieve an app with fields by its ID `1`:
             "format": "plain",
             "size": "small"
           }
-        },
+        }
       }
     ]
   }

@@ -34,7 +34,7 @@ Following object shows an example of a graphic icon, that could be used as an in
 
 ```
 {
-    "id": "hourglass_empty"
+    "id": "hourglass_empty",
     "type": "graphic"
 }
 ```
@@ -48,7 +48,7 @@ Following object shows an example of an emoji icon, that could be used as an inp
 
 ```
 {
-    "unicode": "📞"
+    "emoji": "📞",
     "type": "emoji"
 }
 ```

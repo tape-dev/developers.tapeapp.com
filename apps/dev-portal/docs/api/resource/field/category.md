@@ -69,7 +69,7 @@ curl -X POST #BASE_URL/v1/app/ \\
             ]
           }
         }
-      },
+      }
     ] 
   }'
 `}
@@ -230,7 +230,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
                 "id": 4,
                 "text": "Lost",
                 "color": "orange"
-              },
+              }
             ],
             "options_to_delete": []
           }

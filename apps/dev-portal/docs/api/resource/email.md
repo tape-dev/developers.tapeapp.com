@@ -44,7 +44,7 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
     "to": "recipient@example.com",
     "subject": "Hello World",
     "html": "<p> Today we show you how to use the reply_to property in emails. </p>",
-    "reply_to": "reply-to@example.com",
+    "reply_to": "reply-to@example.com"
 }'
 `}
 </ContextCodeBlock>

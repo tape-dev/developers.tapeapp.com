@@ -63,7 +63,7 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
           {
             "email": "john@doe.com",
             "permission_level": 4
-          },
+          }
         ],
         "remove_permissions": [101]
       }
