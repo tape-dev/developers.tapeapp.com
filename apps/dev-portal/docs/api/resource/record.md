@@ -398,7 +398,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "total": 2,
+  "total": 3,
   "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
   "records": [
     {
@@ -683,7 +683,7 @@ Find records that can be related for the relation field (single or multi) with t
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "total": 2,
+  "total": 1,
   "records": [
     {
       "record_id": 2,

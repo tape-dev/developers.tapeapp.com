@@ -258,8 +258,6 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "label": "Last Name",
         "slug": "last_name",
         "external_id": "last_name",
-        "delta": "OB",
-        "position": "OB",
         "description": "The last name of the contact.",
         "required": true,
         "always_hidden": false,

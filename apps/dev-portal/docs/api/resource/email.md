@@ -54,7 +54,6 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
 
 ```json title="➡️      Request"
 {
-  "value": "This is a comment on record with ID 1.",
   "to": "recipient@example.com",
   "subject": "Hello World",
   "html": "<p> This is the email body. </p>",
