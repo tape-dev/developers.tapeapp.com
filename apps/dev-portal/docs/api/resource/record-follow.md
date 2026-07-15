@@ -31,7 +31,7 @@ Unfollow all users from all records inside the app with the specified `app_id`. 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {}
 ```
 

@@ -20,7 +20,7 @@ The following example matches all records that have a field value for field with
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Text Filter">
+```json title="➡️      Single Text Filter"
 {
   "filters": [
     {
@@ -59,7 +59,7 @@ This is an example on how to filter records by a `single_text` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Text Filter">
+```json title="➡️      Single Text Filter"
 {
   "filters": [
     {
@@ -98,7 +98,7 @@ This is an example on how to filter records by a `multi_text` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Text Filter">
+```json title="➡️      Multi Text Filter"
 {
   "filters": [
     {
@@ -137,7 +137,7 @@ This is an example on how to filter records by a `single_category` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Category Filter">
+```json title="➡️      Single Category Filter"
 {
   "filters": [
     {
@@ -180,7 +180,7 @@ This is an example on how to filter records by a `multi_category` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Category Filter">
+```json title="➡️      Multi Category Filter"
 {
   "filters": [
     {
@@ -223,7 +223,7 @@ This is an example on how to filter records by a `single_relation` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Relation Filter">
+```json title="➡️      Single Relation Filter"
 {
   "filters": [
     {
@@ -264,7 +264,7 @@ This is an example on how to filter records by a `multi_relation` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Relation Filter">
+```json title="➡️      Multi Relation Filter"
 {
   "filters": [
     {
@@ -305,7 +305,7 @@ This is an example on how to filter records by a `single_user` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single User Filter">
+```json title="➡️      Single User Filter"
 {
   "filters": [
     {
@@ -346,7 +346,7 @@ This is an example on how to filter records by a `multi_user` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi User Filter">
+```json title="➡️      Multi User Filter"
 {
   "filters": [
     {
@@ -387,7 +387,7 @@ This is an example on how to filter records by a `status` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Status Filter">
+```json title="➡️      Status Filter"
 {
   "filters": [
     {
@@ -432,7 +432,7 @@ This is an example on how to filter records by a `number` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Number Filter">
+```json title="➡️      Number Filter"
 {
   "filters": [
     {
@@ -471,7 +471,7 @@ This is an example on how to filter records by a `single_date` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Date Filter">
+```json title="➡️      Single Date Filter"
 {
   "filters": [
     {
@@ -530,7 +530,7 @@ This is an example on how to filter records by a `created_at` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Created At Filter">
+```json title="➡️      Created At Filter"
 {
   "filters": [
     {
@@ -587,7 +587,7 @@ This is an example on how to filter records by a `last_modified_at` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Last Modified At Filter">
+```json title="➡️      Last Modified At Filter"
 {
   "filters": [
     {
@@ -644,7 +644,7 @@ This is an example on how to filter records by a `multi_email` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Email Filter">
+```json title="➡️      Multi Email Filter"
 {
   "filters": [
     {
@@ -682,7 +682,7 @@ This is an example on how to filter records by a `multi_phone` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Phone Filter">
+```json title="➡️      Multi Phone Filter"
 {
   "filters": [
     {
@@ -720,7 +720,7 @@ This is an example on how to filter records by a `calculation` field:
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      calculation Filter">
+```json title="➡️      calculation Filter"
 {
   "filters": [
     {

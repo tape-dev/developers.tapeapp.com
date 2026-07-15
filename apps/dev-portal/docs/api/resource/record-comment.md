@@ -48,7 +48,7 @@ The following example creates a plain text comment on the record with ID 1:
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "value": "This is a comment on record with ID 1."
 }

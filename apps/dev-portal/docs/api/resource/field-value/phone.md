@@ -43,7 +43,7 @@ Here is an example request body for creating a record with a value for the "Cust
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "customer_phone": [
@@ -154,7 +154,7 @@ One or more phone field values can be updated as part of a record update, and in
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "customer_phone": [

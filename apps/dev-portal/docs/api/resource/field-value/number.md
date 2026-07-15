@@ -35,7 +35,7 @@ A number field value can be created as part of a record creation. Here is an exa
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "salary": 2000
@@ -115,7 +115,7 @@ One or more number field values can be updated as part of a record update. Here 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "salary": 4000

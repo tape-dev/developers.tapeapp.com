@@ -34,7 +34,7 @@ A webhook can be created via the API by providing a URL and the type of events y
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
@@ -107,7 +107,7 @@ Validates the hook using the code received from the verify call. On successful v
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "code": "f43d05e6"
 }

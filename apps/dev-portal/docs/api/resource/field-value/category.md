@@ -36,7 +36,7 @@ A category field value can be created as part of a record creation. Here is an e
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "salutation": 1,
@@ -180,7 +180,7 @@ One or more category field values can be updated as part of a record update. Her
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "salutation": 2,

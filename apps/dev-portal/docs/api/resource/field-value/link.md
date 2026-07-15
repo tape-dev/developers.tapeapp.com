@@ -40,7 +40,7 @@ Here is an example request body for creating a record with a value for the "Cust
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "customer_website": [{ "url": "https://somecustomerwebsite.com" }]
@@ -171,7 +171,7 @@ One or more link field values can be updated as part of a record update, while o
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "customer_website": [

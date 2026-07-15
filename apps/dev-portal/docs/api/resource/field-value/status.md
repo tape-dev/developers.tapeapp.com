@@ -35,7 +35,7 @@ A status field value can be created as part of a record creation. Here is an exa
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "onboarding_status": 1
@@ -133,7 +133,7 @@ One or more status field values can be updated as part of a record update. Here 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "onboarding_status": 2

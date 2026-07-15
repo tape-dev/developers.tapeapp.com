@@ -41,7 +41,7 @@ A attachment field value can be created as part of a record creation. Files can 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "letter_of_recommendation": "temporary-file-1",
@@ -186,7 +186,7 @@ Here is an example request body for updating multiple attachment field values of
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "letter_of_recommendation": "temporary-file-2",

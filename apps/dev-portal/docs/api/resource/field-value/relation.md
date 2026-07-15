@@ -37,7 +37,7 @@ A relation field value can be created as part of a record creation. Here is an e
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "belongs_to_company": 100,
@@ -181,7 +181,7 @@ One or more relation field values can be updated as part of a record update. Her
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "belongs_to_company": 101,

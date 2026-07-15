@@ -40,7 +40,7 @@ Here is an example request body for creating a record with a value for the "Recr
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "recruiting_photos": ["temporary-file-2", "temporary-file-3"]
@@ -152,7 +152,7 @@ Here is an example request body for updating multiple image field values of a re
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "recruiting_photos": ["temporary-file-6", 102]

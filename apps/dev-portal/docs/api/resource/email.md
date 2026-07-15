@@ -52,7 +52,7 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "value": "This is a comment on record with ID 1.",
   "to": "recipient@example.com",
@@ -103,7 +103,7 @@ In addition, the email contains an attachment with file ID 42, which is present 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "from": "sender@example.com",
   "to": ["recipient-one@example.com", "recipient-two@example.com"],

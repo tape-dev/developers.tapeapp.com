@@ -66,7 +66,7 @@ The example below requests the 2 most recent failed runs of the automations in t
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "app_ids": [42],
   "status": ["failed"],

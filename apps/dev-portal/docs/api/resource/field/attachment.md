@@ -51,7 +51,7 @@ The app contains a `multi_attachment` field "Screenshots". Other useful fields f
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "workspace_id": 1,
   "name": "Bug Reports",
@@ -150,7 +150,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "app_id": 1,
   "fields": [

@@ -42,7 +42,7 @@ A location field value can be created as part of a record creation. Here is an e
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "company_address": {
@@ -161,7 +161,7 @@ One or more location field values can be updated as part of a record update. Her
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "company_address": {

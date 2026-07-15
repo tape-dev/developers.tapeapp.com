@@ -52,7 +52,7 @@ Here is an example request body for creating a record with a value for the "Subt
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "subtasks": [
@@ -214,7 +214,7 @@ One or more checklist field values can be updated as part of a record update, an
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "subtasks": [

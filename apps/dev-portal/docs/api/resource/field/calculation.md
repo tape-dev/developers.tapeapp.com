@@ -210,7 +210,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "app_id": 1,
   "fields": [

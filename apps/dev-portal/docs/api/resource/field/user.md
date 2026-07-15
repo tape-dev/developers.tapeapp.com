@@ -58,7 +58,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "workspace_id": 1,
   "name": "Meetings",
@@ -185,7 +185,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "app_id": 1,
   "fields": [

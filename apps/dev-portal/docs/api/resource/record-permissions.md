@@ -75,7 +75,7 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "inputs": [
     {

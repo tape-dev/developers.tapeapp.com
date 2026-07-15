@@ -38,7 +38,7 @@ A date field value can be created as part of a record creation. Here is an examp
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "date_of_employment": "2022-03-01",
@@ -184,7 +184,7 @@ One or more date field values can be updated as part of a record update. Here is
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "date_of_employment": "2022-03-02",

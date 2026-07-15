@@ -37,7 +37,7 @@ A user field value can be created as part of a record creation. Here is an examp
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "supervisor": 1,
@@ -199,7 +199,7 @@ One or more user field values can be updated as part of a record update. Here is
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request">
+```json title="➡️      Request"
 {
   "fields": {
     "supervisor": 2,
