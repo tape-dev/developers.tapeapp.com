@@ -119,7 +119,7 @@ The update changes the name of the "Social Media" field to "Social Media Profile
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #BASE_URL: \\
+   -u #USER_API_KEY: \\
    --data '{
     "app_id": 1,
     "fields": [

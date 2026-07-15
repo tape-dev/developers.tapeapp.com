@@ -26,7 +26,7 @@ In addition to the common field properties, a calculation field definition has a
 - `unit` (optional): The unit of the calculated value. Only applicable if the return type is "number".
 - `unit_location` (optional): The location of the unit of the calculated value. Can be one of ["prefix", "suffix"]. Only applicable if the return type is "number".
 - `calendar` (optional): Boolean flag wether the records of the field-values should be displayed in the calendar sidebar and included to the iCal export. Only applicable if the return type is "date".
-- `time` (optional): The time of the calculated value. Can be one of ["start", "end"]. Only applicable if the return type is "date".
+- `time` (optional): Controls whether a time-of-day component is included with the date value. Can be one of ["disabled", "enabled", "required"]. Only applicable if the return type is "date".
 
 ## Writing Scripts for Calculation fields via the API
 
@@ -176,28 +176,24 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "field_id": 1,
         "config": {
           "label": "First Name",
-          "settings": {
-            "description": "The first name of the contact.",
-            "required": true
-          }
+          "description": "The first name of the contact.",
+          "required": true
         }
       },
       {
         "field_id": 2,
         "config": {
           "label": "Last Name",
-          "settings": {
-            "description": "The last name of the contact.",
-            "required": true
-          }
+          "description": "The last name of the contact.",
+          "required": true
         }
       },
       {
         "field_type": "calculation",
         "config": {
           "label": "Full Name",
+          "description": "The full name of the contact.",
           "settings": {
-            "description": "The full name of the contact.",
             "script": "@[First Name](field_1) +\" \"+ @[Last Name](field_2)"
           }
         }
@@ -218,28 +214,24 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       "field_id": 1,
       "config": {
         "label": "First Name",
-        "settings": {
-          "description": "The first name of the contact.",
-          "required": true
-        }
+        "description": "The first name of the contact.",
+        "required": true
       }
     },
     {
       "field_id": 2,
       "config": {
         "label": "Last Name",
-        "settings": {
-          "description": "The last name of the contact.",
-          "required": true
-        }
+        "description": "The last name of the contact.",
+        "required": true
       }
     },
     {
       "field_type": "calculation",
       "config": {
         "label": "Full Name",
+        "description": "The full name of the contact.",
         "settings": {
-          "description": "The full name of the contact.",
           "script": "@[First Name](field_1) +\" \"+ @[Last Name](field_2)"
         }
       }

@@ -63,7 +63,16 @@ The following example creates a plain text comment on the record with ID 1:
   "value": "This is a comment on record with ID 1.",
   "created_on": "2022-03-01 12:00:00",
   "ref": { "type": "record", "id": 1 },
+  "files": [],
   "created_by": {
+    "user_id": 600,
+    "mail": ["dan@tapeapp.com"],
+    "image": null,
+    "name": "Dan Jacob",
+    "org_id": 1,
+    "type": "user"
+  },
+  "user": {
     "user_id": 600,
     "mail": ["dan@tapeapp.com"],
     "image": null,
@@ -91,7 +100,16 @@ Retrieve the comment with the specified `comment_id`:
   "value": "This is a comment on record with ID 1.",
   "created_on": "2022-03-01 12:00:00",
   "ref": { "type": "record", "id": 1 },
+  "files": [],
   "created_by": {
+    "user_id": 600,
+    "mail": ["dan@tapeapp.com"],
+    "image": null,
+    "name": "Dan Jacob",
+    "org_id": 1,
+    "type": "user"
+  },
+  "user": {
     "user_id": 600,
     "mail": ["dan@tapeapp.com"],
     "image": null,
@@ -144,8 +162,17 @@ Retrieve comments for the record with the specified `record_id`. Note that resul
       "comment_id": 1000,
       "value": "This is a comment on record with ID 1.",
       "created_on": "2022-03-01 12:00:00",
+      "files": [],
       "ref": { "type": "record", "id": 1 },
       "created_by": {
+        "user_id": 600,
+        "mail": ["dan@tapeapp.com"],
+        "image": null,
+        "name": "Dan Jacob",
+        "org_id": 1,
+        "type": "user"
+      },
+      "user": {
         "user_id": 600,
         "mail": ["dan@tapeapp.com"],
         "image": null,
@@ -158,8 +185,17 @@ Retrieve comments for the record with the specified `record_id`. Note that resul
       "comment_id": 1001,
       "value": "This is another comment on record with ID 1.",
       "created_on": "2022-03-01 13:00:00",
+      "files": [],
       "ref": { "type": "record", "id": 1 },
       "created_by": {
+        "user_id": 600,
+        "mail": ["dan@tapeapp.com"],
+        "image": null,
+        "name": "Dan Jacob",
+        "org_id": 1,
+        "type": "user"
+      },
+      "user": {
         "user_id": 600,
         "mail": ["dan@tapeapp.com"],
         "image": null,

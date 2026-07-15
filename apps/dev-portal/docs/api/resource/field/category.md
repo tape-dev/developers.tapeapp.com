@@ -204,8 +204,8 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       {
         "field_id": 1,
         "config": {
+          "label": "Pipeline Stage",
           "settings": {
-            "label": "Pipeline Stage",
             "options": [
               {
                 "id": 1,

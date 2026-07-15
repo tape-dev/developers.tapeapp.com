@@ -220,8 +220,8 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       {
         "field_id": 1,
         "config": {
+          "label": "Status",
           "settings": {
-            "label": "Status",
             "options": [
               {
                 "id": 1,

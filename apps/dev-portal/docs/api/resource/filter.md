@@ -493,8 +493,10 @@ This is an example on how to filter records by a `single_date` field:
       "relative_date_type": "num_weeks_before",
       "values": [
         {
-          "value": "2020-01-01",
-          "offset_amount": 1
+          "value": {
+            "date": "2020-01-01",
+            "offset_amount": 1
+          }
         }
       ],
       "type": "date"
@@ -552,8 +554,10 @@ This is an example on how to filter records by a `created_at` field:
       "relative_date_type": "num_weeks_before",
       "values": [
         {
-          "value": "2020-01-01",
-          "offset_amount": 1
+          "value": {
+            "date": "2020-01-01",
+            "offset_amount": 1
+          }
         }
       ],
       "type": "date"
@@ -609,8 +613,10 @@ This is an example on how to filter records by a `last_modified_at` field:
       "relative_date_type": "num_weeks_before",
       "values": [
         {
-          "value": "2020-01-01",
-          "offset_amount": 1
+          "value": {
+            "date": "2020-01-01",
+            "offset_amount": 1
+          }
         }
       ],
       "type": "date"

@@ -86,7 +86,9 @@ The following example fetches the revision delta of revision number `1` of recor
 
 ```json title='⬅️      Response'
 {
-  "total": 2,
+  "record_id": 1,
+  "from_revision_id": 0,
+  "to_revision_id": 1,
   "revision_deltas": [
     {
       "from": [],
@@ -98,7 +100,8 @@ The following example fetches the revision delta of revision number `1` of recor
           "value": "Some important notes"
         }
       ],
-      "type": "contact",
+      "type": "text",
+      "field_type": "single_text",
       "config": {
         "description": null,
         "required": false,

@@ -26,7 +26,7 @@ The base URL to send all API requests is `https://api.tapeapp.com`.
 
 ## Retrieve your first Record
 
-Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/records/{record_id}`. Let's go ahead and retrieve a record:
+Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/record/{record_id}`. Let's go ahead and retrieve a record:
 
 <Tabs>
 <TabItem value="curl" label="cURL">

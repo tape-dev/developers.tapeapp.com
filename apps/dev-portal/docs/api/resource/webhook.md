@@ -49,6 +49,7 @@ A webhook can be created via the API by providing a URL and the type of events y
   "hook_id": 1,
   "app_id": 1,
   "status": "inactive",
+  "num_failed_executions": 0,
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
 }
@@ -70,6 +71,7 @@ To avoid potential abuse of webhooks and increase security, every webhook URL mu
 {
   "hook_id": 1,
   "status": "inactive",
+  "num_failed_executions": 0,
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
 }
@@ -120,6 +122,7 @@ Validates the hook using the code received from the verify call. On successful v
 {
   "hook_id": 1,
   "status": "active",
+  "num_failed_executions": 0,
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
 }
@@ -169,6 +172,7 @@ A webhook can be deleted via the API by providing the ID of the webhook.
 {
   "hook_id": 1,
   "status": "inactive",
+  "num_failed_executions": 0,
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
 }

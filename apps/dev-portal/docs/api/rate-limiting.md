@@ -18,7 +18,7 @@ In the future, Tape plans to adjust rate limits to balance for demand and reliab
 
 ### Rate limit credits
 
-Tape uses a credit-based system to enforce rate limits. Each API key has a certain amount of credits per time interval (currently 50 credits per minute). After the time interval, the credits are replenished. By default, each request costs 1 credit. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
+Tape uses a credit-based system to enforce rate limits. Each API key has a certain amount of credits per time interval (currently 2,000 credits per minute). After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
 
 You can see how many credits your API key has left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
 

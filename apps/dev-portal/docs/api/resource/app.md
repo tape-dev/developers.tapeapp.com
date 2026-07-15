@@ -204,9 +204,9 @@ Retrieve all team views of an app via the app ID `1`:
 
 Create a new app within a workspace. The request body contains the following fields:
 
-- workspace_id: The ID of the workspace to create the app in. The requesting user needs to have permission to "create and edit" apps in this workspace.
+- workspace_id (required): The ID of the workspace to create the app in. The requesting user needs to have permission to "create and edit" apps in this workspace.
 - name (required): Name of the app.
-- item_name (required): Name of the records within the app.
+- item_name (optional): Name of the records within the app. Defaults to the app `name` if omitted.
 - description (optional): Description of the app.
 - fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array.
 - icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
