@@ -178,7 +178,7 @@ Retrieve all team views of an app via the app ID `1`:
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  views: [
+  "views": [
     {
       "id": 500,
       "view_id": 500,
@@ -186,15 +186,15 @@ Retrieve all team views of an app via the app ID `1`:
       "name": "Open Tasks",
       "is_default": true
     },
-        {
+    {
       "id": 501,
       "view_id": 501,
       "app_id": 1,
       "name": "Completed Tasks",
       "is_default": false
-    },
+    }
   ],
-  total: 2
+  "total": 2
 }`}
 </ContextCodeBlock>
 

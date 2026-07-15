@@ -174,7 +174,7 @@ Retrieve comments for the record with the specified `record_id`. Note that resul
 
 **Query Parameters**
 
-| Parameter | Type      | ** Type**                                      | Min | Max |
+| Parameter | Type      | Description                                    | Min | Max |
 | --------- | --------- | ---------------------------------------------- | --- | --- |
-| `limit`   | `integer` | Number of comments to return. Defaults to 100. | 0   | 100 |
+| `limit`   | `integer` | Number of comments to return. Defaults to 50.  | 0   | 100 |
 | `cursor`  | `string`  | Cursor for pagination                          | -   | -   |

@@ -142,11 +142,14 @@ All existing webhooks for an app can be retrieved via the API by providing the I
   "webhooks": [
     {
       "hook_id": 1,
+      "app_id": 1,
       "status": "active",
+      "num_failed_executions": 0,
       "type": "record.create",
       "url": "https://webhook.example.org/example-webhook-endpoint"
     }
-  ]
+  ],
+  "total": 1
 }
 ```
 

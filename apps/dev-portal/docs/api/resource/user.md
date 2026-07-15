@@ -43,7 +43,8 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
       "role": "member",
       "job_description": "Executive"
     }
-  ]
+  ],
+  "total": 2
 }`}
 </ContextCodeBlock>
 

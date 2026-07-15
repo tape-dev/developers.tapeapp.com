@@ -679,7 +679,6 @@ Find records that can be related for the relation field (single or multi) with t
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
   "total": 2,
-  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJibGFiRGVmSWQiOjgsInZhbHVlcyI6WzE1OV0sImV4cCI6MTY1MDYxODc3OH0.iY5TnLSBDGCnFXbStcrLPTmP6MATnS_JKywbvC4tx3g",
   "records": [
     {
       "record_id": 2,
@@ -696,6 +695,8 @@ Find records that can be related for the relation field (single or multi) with t
   ]
 }`}
 </ContextCodeBlock>
+
+This endpoint is not paginated: it returns at most 10 matching records, and accepts no `cursor` or `limit`.
 
 **Query Parameters**
 
