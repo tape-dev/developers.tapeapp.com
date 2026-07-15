@@ -213,6 +213,99 @@ Only runs from the last **30 days** are available. Beyond that they are neither 
 deleted automations, and simulation runs from the automation editor, are never returned.
 :::
 
+## List runs for an app
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation-run/app/{app_id}" />
+
+List the runs of the automations belonging to the app with the specified `app_id`, newest first. This is a
+scope-locked variant of [List automation runs](#list-automation-runs): the app is fixed by the path, so the body
+carries pagination only — `cursor` and `limit`, exactly as [described above](#pagination). The filters and date
+bounds of the general list are **not** accepted here; sending any other property returns a `400`. Simulation runs
+are excluded, as in the general list. You must administrate the workspace the app lives in, and the app must be a
+database app.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/automation-run/app/42 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "limit": 2
+  }'`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "total": 37,
+  "workflow_runs": [
+    {
+      "id": 9001,
+      "workflow_automation_id": 88,
+      "workflow_automation_name": "Notify on new lead",
+      "workflow_automation_revision_id": 3,
+      "app_id": 42,
+      "app_name": "Leads",
+      "workspace_id": 7,
+      "status": "completed",
+      "created_at": "2024-01-18 08:12:04",
+      "completed_at": "2024-01-18 08:12:09",
+      "num_consumed_actions": 2,
+      "triggered_on_record_id": 5001,
+      "triggered_on_record_revision_id": 4,
+      "triggered_by_automation_id": null
+    }
+  ],
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}`}
+</ContextCodeBlock>
+
+Each entry is a [run object](#the-run-object). An `app_id` that is not available to you returns a `401`, never a
+`404` — the same [existence-oracle protection](#retrieve-an-automation-run) as the other endpoints — and an id that
+refers to an app which is not a database app returns a `400`, since only database apps can have automations.
+
+## List runs for a workspace
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation-run/workspace/{workspace_id}" />
+
+List the runs of the automations belonging to the workspace with the specified `workspace_id`, newest first. As with
+[List runs for an app](#list-runs-for-an-app), the body carries pagination only (`cursor`, `limit`), simulation runs
+are excluded, and the response shape is identical. You must administrate the workspace.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/automation-run/workspace/7 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "limit": 2
+  }'`}
+</ContextCodeBlock>
+
+A `workspace_id` that is not available to you returns a `401`, never a `404`.
+
+## List runs for an automation
+
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation-run/automation/{automation_id}" />
+
+List the runs of the automation with the specified `automation_id`, newest first. The body carries pagination only
+(`cursor`, `limit`) and the response shape is identical to [List runs for an app](#list-runs-for-an-app). You must
+administrate the workspace the automation lives in.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl -X POST #BASE_URL/v1/automation-run/automation/88 \\
+  -u #USER_API_KEY: \\
+  -H "Content-Type: application/json" \\
+  --data '{
+    "limit": 2
+  }'`}
+</ContextCodeBlock>
+
+:::info This endpoint includes simulation runs
+Unlike every other listing, this one mirrors the per-automation run history you see in the product, so it includes
+**simulation (preview) runs** — the ones produced by testing the automation in the editor — in both `total` and
+`workflow_runs`. The general list and the per-app and per-workspace endpoints all exclude them.
+:::
+
+An `automation_id` that is missing, deleted, or not one you administrate returns a `401`, never a `404`.
+
 ## Retrieve an automation run
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation-run/{workflow_run_id}" />
@@ -359,5 +452,6 @@ See [Errors](/docs/api/errors) for the full list of error codes.
 
 ## Rate limit credits
 
-Listing automation runs costs `2x` the base credits; retrieving a single run costs `1x`. See
+Any of the listing endpoints — the general list and the per-app, per-workspace and per-automation variants — costs
+`2x` the base credits; retrieving a single run costs `1x`. See
 [Request limits](/docs/api/request-limits) for details on how rate limiting works.
