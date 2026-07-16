@@ -15,8 +15,9 @@ optionally filtered by app, automation, workspace and status — and retrieve an
 logs.
 
 You see the runs of automations that belong to apps in a workspace you **administrate**. Only the last **30 days**
-of runs are retained, and simulation runs (the ones produced by testing an automation in the editor) are never
-returned.
+of runs are retained. Simulation runs — the ones produced by testing an automation in the editor — are excluded
+from the listings, except the [per-automation listing](#list-runs-for-an-automation); they can still be retrieved
+individually by id.
 
 :::info Requires a user API key
 Both endpoints require a **user API key**. An automation API key authenticates an automation, not a person, and
@@ -38,16 +39,16 @@ every run you may see.
 | `cursor`        | `string`    | Cursor of the previous page. Mutually exclusive with the filters below — see [Pagination](#pagination).        |
 | `limit`         | `integer`   | Page size. Between `1` and `500`. Defaults to `50`.                                                            |
 | `app_ids`       | `integer[]` | Only runs of automations belonging to these apps. Max 100 ids. Only database apps can have automations.        |
-| `workflow_ids`  | `integer[]` | Only runs of these automations. Max 100 ids.                                                                   |
+| `automation_ids`| `integer[]` | Only runs of these automations. Max 100 ids.                                                                   |
 | `workspace_ids` | `integer[]` | Only runs of automations in these workspaces. Max 100 ids.                                                     |
 | `status`        | `string[]`  | Only runs in these statuses. One or more of `pending`, `running`, `completed`, `failed`, `cancelled`.          |
 | `created_at_from` | `string`  | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).            |
 | `created_at_to` | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).           |
 
 Every id you name must be one you may see: an app, automation or workspace you do not administrate is rejected with
-a `401` rather than silently dropped from the filter.
+a `404` rather than silently dropped from the filter.
 
-The example below requests the 2 most recent failed runs of the automations in the app with ID 42.
+The example below requests the 2 most recent successful runs you may see.
 
 <Tabs defaultValue="curl">
 
@@ -57,8 +58,7 @@ The example below requests the 2 most recent failed runs of the automations in t
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
   --data '{
-    "app_ids": [42],
-    "status": ["failed"],
+    "status": ["completed"],
     "limit": 2
   }'`}
 </ContextCodeBlock>
@@ -68,8 +68,7 @@ The example below requests the 2 most recent failed runs of the automations in t
 
 ```json title="➡️      Request"
 {
-  "app_ids": [42],
-  "status": ["failed"],
+  "status": ["completed"],
   "limit": 2
 }
 ```
@@ -80,16 +79,16 @@ The example below requests the 2 most recent failed runs of the automations in t
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
   "total": 37,
-  "workflow_runs": [
+  "automation_runs": [
     {
-      "id": 9001,
-      "workflow_automation_id": 88,
-      "workflow_automation_name": "Notify on new lead",
-      "workflow_automation_revision_id": 3,
+      "id": "9001",
+      "automation_id": 88,
+      "automation_name": "Notify on new lead",
+      "automation_revision_id": "3",
       "app_id": 42,
       "app_name": "Leads",
       "workspace_id": 7,
-      "status": "failed",
+      "status": "completed",
       "created_at": "2024-01-18 08:12:04",
       "completed_at": "2024-01-18 08:12:09",
       "num_consumed_actions": 2,
@@ -98,14 +97,14 @@ The example below requests the 2 most recent failed runs of the automations in t
       "triggered_by_automation_id": null
     },
     {
-      "id": 8974,
-      "workflow_automation_id": 88,
-      "workflow_automation_name": "Notify on new lead",
-      "workflow_automation_revision_id": 3,
+      "id": "8974",
+      "automation_id": 88,
+      "automation_name": "Notify on new lead",
+      "automation_revision_id": "3",
       "app_id": 42,
       "app_name": "Leads",
       "workspace_id": 7,
-      "status": "failed",
+      "status": "completed",
       "created_at": "2024-01-17 22:47:51",
       "completed_at": "2024-01-17 22:47:55",
       "num_consumed_actions": 1,
@@ -120,32 +119,32 @@ The example below requests the 2 most recent failed runs of the automations in t
 
 **Response fields**
 
-| Field           | Type      | Description                                                                                              |
-| --------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
-| `total`         | `integer` | Number of runs matching the filters, across all pages. See [Pagination](#pagination).                    |
-| `workflow_runs` | `array`   | The page itself. Each entry is a run — see [The run object](#the-run-object).                            |
-| `cursor`        | `string`  | Cursor of the last run on this page. Pass it back to fetch the next one. `null` on the last page.        |
+| Field            | Type      | Description                                                                                              |
+| ---------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `total`          | `integer` | Number of runs matching the filters, across all pages. See [Pagination](#pagination).                    |
+| `automation_runs`| `array`   | The page itself. Each entry is a run — see [The run object](#the-run-object).                            |
+| `cursor`         | `string`  | Cursor of the last run on this page. Pass it back to fetch the next one. `null` on the last page.        |
 
 ### The run object
 
-Each entry in `workflow_runs` — and the `workflow_run` returned when retrieving a single run — has these fields:
+Each entry in `automation_runs` — and the `automation_run` returned when retrieving a single run — has these fields:
 
-| Field                             | Type      | Description                                                                                     |
-| --------------------------------- | --------- | ------------------------------------------------------------------------------------------------- |
-| `id`                              | `integer` | ID of the run.                                                                                  |
-| `workflow_automation_id`          | `integer` | The automation this run executed.                                                               |
-| `workflow_automation_name`        | `string`  | Name of the automation.                                                                         |
-| `workflow_automation_revision_id` | `integer` | The revision of the automation this run executed.                                               |
-| `app_id`                          | `integer` | The app the automation belongs to.                                                              |
-| `app_name`                        | `string`  | Name of that app.                                                                               |
-| `workspace_id`                    | `integer` | The workspace the app belongs to.                                                               |
-| `status`                          | `string`  | See [Statuses](#statuses).                                                                      |
-| `created_at`                      | `string`  | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                       |
-| `completed_at`                    | `string`  | When the run finished, in UTC. `null` while the run is still `pending` or `running`.            |
-| `num_consumed_actions`            | `integer` | Number of action credits this run consumed.                                                     |
-| `triggered_on_record_id`          | `integer` | The record this run executed on. `null` if the run was not triggered by a record.               |
-| `triggered_on_record_revision_id` | `integer` | The revision of that record. `null` if the run was not triggered by a record.                   |
-| `triggered_by_automation_id`      | `integer` | The automation that started this run, if it was called by another automation. `null` otherwise. |
+| Field                            | Type      | Description                                                                                     |
+| -------------------------------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `id`                             | `string`  | ID of the run. A 64-bit integer, returned as a string so it is safe to handle in any language.  |
+| `automation_id`                  | `integer` | The automation this run executed.                                                               |
+| `automation_name`                | `string`  | Name of the automation.                                                                         |
+| `automation_revision_id`         | `string`  | The revision of the automation this run executed. A 64-bit integer, returned as a string.       |
+| `app_id`                         | `integer` | The app the automation belongs to.                                                              |
+| `app_name`                       | `string`  | Name of that app.                                                                               |
+| `workspace_id`                   | `integer` | The workspace the app belongs to.                                                               |
+| `status`                         | `string`  | See [Statuses](#statuses).                                                                      |
+| `created_at`                     | `string`  | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                       |
+| `completed_at`                   | `string`  | When the run finished, in UTC. `null` while the run is still `pending` or `running`.            |
+| `num_consumed_actions`           | `integer` | Number of action credits this run consumed.                                                     |
+| `triggered_on_record_id`         | `integer` | The record this run executed on. `null` if the run was not triggered by a record.               |
+| `triggered_on_record_revision_id`| `integer` | The revision of that record. `null` if the run was not triggered by a record.                   |
+| `triggered_by_automation_id`     | `integer` | The automation that started this run, if it was called by another automation. `null` otherwise. |
 
 Timestamps use the Tape API datetime format described under [Date & Timezone](/docs/api/date-timezone) — always
 UTC, with no `T` separator, no `Z` suffix and no milliseconds.
@@ -196,7 +195,7 @@ previous response **on its own** — optionally alongside `limit`:
 </ContextCodeBlock>
 
 The filters that produced a page are carried inside the cursor, so you must not re-send them with it. A request
-containing both a `cursor` and any of `app_ids`, `workflow_ids`, `workspace_ids`, `status`, `created_at_from` or
+containing both a `cursor` and any of `app_ids`, `automation_ids`, `workspace_ids`, `status`, `created_at_from` or
 `created_at_to` is rejected with a `400` rather than one silently winning over the other.
 
 Runs are returned **newest first** (descending by run ID). You have reached the end of the list when `cursor` is
@@ -210,7 +209,8 @@ runs you actually receive may differ slightly from it.
 
 :::info Retention
 Only runs from the last **30 days** are available. Beyond that they are neither listable nor retrievable. Runs of
-deleted automations, and simulation runs from the automation editor, are never returned.
+deleted automations are not returned, and simulation runs from the automation editor are excluded from this listing
+(the [per-automation listing](#list-runs-for-an-automation) is the one exception).
 :::
 
 ## List runs for an app
@@ -236,12 +236,12 @@ database app.
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
   "total": 37,
-  "workflow_runs": [
+  "automation_runs": [
     {
-      "id": 9001,
-      "workflow_automation_id": 88,
-      "workflow_automation_name": "Notify on new lead",
-      "workflow_automation_revision_id": 3,
+      "id": "9001",
+      "automation_id": 88,
+      "automation_name": "Notify on new lead",
+      "automation_revision_id": "3",
       "app_id": 42,
       "app_name": "Leads",
       "workspace_id": 7,
@@ -258,9 +258,10 @@ database app.
 }`}
 </ContextCodeBlock>
 
-Each entry is a [run object](#the-run-object). An `app_id` that is not available to you returns a `401`, never a
-`404` — the same [existence-oracle protection](#retrieve-an-automation-run) as the other endpoints — and an id that
-refers to an app which is not a database app returns a `400`, since only database apps can have automations.
+Each entry is a [run object](#the-run-object). An `app_id` that is not available to you returns a `404`,
+indistinguishable from a missing id — the same [existence-oracle protection](#retrieve-an-automation-run) as the
+other endpoints — and an id that refers to an app which is not a database app returns a `400`, since only database
+apps can have automations.
 
 ## List runs for a workspace
 
@@ -279,7 +280,7 @@ are excluded, and the response shape is identical. You must administrate the wor
   }'`}
 </ContextCodeBlock>
 
-A `workspace_id` that is not available to you returns a `401`, never a `404`.
+A `workspace_id` that is not available to you returns a `404`, indistinguishable from a missing one.
 
 ## List runs for an automation
 
@@ -301,17 +302,18 @@ administrate the workspace the automation lives in.
 :::info This endpoint includes simulation runs
 Unlike every other listing, this one mirrors the per-automation run history you see in the product, so it includes
 **simulation (preview) runs** — the ones produced by testing the automation in the editor — in both `total` and
-`workflow_runs`. The general list and the per-app and per-workspace endpoints all exclude them.
+`automation_runs`. The general list and the per-app and per-workspace endpoints all exclude them.
 :::
 
-An `automation_id` that is missing, deleted, or not one you administrate returns a `401`, never a `404`.
+An `automation_id` that is missing, deleted, or not one you administrate returns the same `404`.
 
 ## Retrieve an automation run
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation-run/{workflow_run_id}" />
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation-run/{automation_run_id}" />
 
-Retrieve the run with the specified `workflow_run_id`, including its logs. The run itself carries the same fields
-as in a listing (see [The run object](#the-run-object)), plus a `logs` array.
+Retrieve the run with the specified `automation_run_id`, including its logs. The run itself carries the same fields
+as in a listing (see [The run object](#the-run-object)), plus a `logs` array. Simulation runs can be retrieved
+here too, even though they are excluded from most listings.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/automation-run/9001 \\
@@ -320,11 +322,11 @@ as in a listing (see [The run object](#the-run-object)), plus a `logs` array.
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "workflow_run": {
-    "id": 9001,
-    "workflow_automation_id": 88,
-    "workflow_automation_name": "Notify on new lead",
-    "workflow_automation_revision_id": 3,
+  "automation_run": {
+    "id": "9001",
+    "automation_id": 88,
+    "automation_name": "Notify on new lead",
+    "automation_revision_id": "3",
     "app_id": 42,
     "app_name": "Leads",
     "workspace_id": 7,
@@ -413,11 +415,12 @@ prose, and this endpoint always renders them in English, regardless of the langu
 used.
 :::
 
-:::info Unavailable runs return `401`, never `404`
+:::info Unavailable runs return `404`, never a distinguishable error
 Tape IDs are globally unique, so a run ID belonging to another organization is still a perfectly well-formed ID.
 To avoid turning this endpoint into a way of probing which run IDs exist, every run that is not available to you
-answers the same `401` — whether it does not exist, was deleted, was a simulation, has aged out of the retention
-window, or lives in a workspace you do not administrate.
+answers the same `404` — whether it does not exist, was deleted, has aged out of the retention window, or lives in
+a workspace you do not administrate. A run authenticated with the wrong kind of key (not a user API key) still
+returns `401`, and a run ID that is not an integer returns `400`.
 :::
 
 ## Validation errors

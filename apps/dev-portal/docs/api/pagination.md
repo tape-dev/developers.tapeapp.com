@@ -42,7 +42,7 @@ A cursor-paginated response contains the following properties:
 | :------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `total`        | `integer` | The number of items matching the request across all pages. Measured when the first page is requested; treat it as an approximate snapshot, not a live count.   |
 | `cursor`       | `string`  | An opaque cursor pointing at the last item on this page. Pass it back as the `cursor` parameter to fetch the next page. Some endpoints return `null` at the end. |
-| _`collection`_ | `array`   | The page of results. The property is named for the resource — `records`, `comments`, `workflow_runs`, and so on — **not** a generic `results`.                  |
+| _`collection`_ | `array`   | The page of results. The property is named for the resource — `records`, `comments`, `automation_runs`, and so on — **not** a generic `results`.                  |
 
 A response looks like this (here the collection is `records`):
 
