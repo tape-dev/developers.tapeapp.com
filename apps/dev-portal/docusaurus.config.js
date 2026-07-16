@@ -17,7 +17,7 @@ module.exports = {
       title: 'Tape Developers',
       logo: {
         alt: 'Tape Developers Logo',
-        src: 'img/logo.jpeg',
+        src: 'img/logo.svg',
       },
       items: [
         {
