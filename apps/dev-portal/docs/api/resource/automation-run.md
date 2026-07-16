@@ -46,7 +46,7 @@ every run you may see.
 | `created_at_to` | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).           |
 
 Every id you name must be one you may see: an app, automation or workspace you do not administrate is rejected with
-a `404` rather than silently dropped from the filter.
+a `404`.
 
 The example below requests the 2 most recent successful runs you may see.
 
@@ -431,7 +431,7 @@ A malformed body returns a `400` validation error. For example, sending a `curso
 {`{
   "status_code": 400,
   "endpoint": "/v1/automation-run",
-  "error_code": "validation_error",
+  "error_code": "input_validation",
   "error_message": "Body must match exactly one schema in oneOf."
 }`}
 </ContextCodeBlock>
@@ -446,7 +446,7 @@ A `created_at_from` later than `created_at_to` is likewise a `400`:
 {`{
   "status_code": 400,
   "endpoint": "/v1/automation-run",
-  "error_code": "validation_error",
+  "error_code": "validation",
   "error_message": "\\"created_at_from\\" must be before or equal to \\"created_at_to\\"."
 }`}
 </ContextCodeBlock>
