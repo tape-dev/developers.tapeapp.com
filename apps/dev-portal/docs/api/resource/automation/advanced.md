@@ -29,7 +29,10 @@ Because they are the sandbox execution backends, they don't follow the resource-
 - They accept **either** a user API key **or** an automation API key (the rest of the resource is user-key only).
 - They report problems as a **`400`** (validation error), **not** the [`404` collapse](/docs/api/resource/automation/reference/errors#the-404-collapse) the CRUD endpoints use.
 
-Both are asynchronous and cost `1x` base credits.
+Both cost `1x` base credits. Only the call-automation endpoint is **asynchronous** — it answers `202` with an empty
+body and no run ID, so you poll the [Automation Run](/docs/api/resource/automation-run) API. The weblink-generate
+endpoint is **synchronous**: it answers `201` with the minted weblink inline; only the eventual click-triggered run
+is asynchronous.
 :::
 
 ## Call an automation
@@ -61,7 +64,12 @@ have an [`automation_called`](/docs/api/resource/automation/reference/triggers) 
 Answers **`202`** with an empty body `{}` — like [manual-run](/docs/api/resource/automation/execution), it is
 asynchronous and returns **no run ID**; poll the [Automation Run](/docs/api/resource/automation-run) API for the
 result. A `400` is returned if the body is malformed, the automation or record does not exist or you can't access it,
-the automation is not an `automation_called` automation, or the record does not belong to the automation's app.
+or the record does not belong to the automation's app.
+
+A `202` means the call was **accepted**, not that a run was created. The call still answers `202` while silently
+producing **no run** when the target does not fire: its trigger is not `automation_called`, its trigger filter rejects
+the record, or it is **paused or broken** (automations are created paused — [activate](/docs/api/resource/automation/manage)
+the target first). Confirm the run through the [Automation Run](/docs/api/resource/automation-run) API.
 
 :::info Deprecated alias
 The legacy path `POST /v1/workflow/{automation_id}/trigger` is kept as a **deprecated** alias for older integrations.

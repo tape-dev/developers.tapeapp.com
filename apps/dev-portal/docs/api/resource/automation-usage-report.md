@@ -118,7 +118,7 @@ A missing, out-of-range or non-integer `limit`, or an unknown `interval_resoluti
 {`{
   "status_code": 400,
   "endpoint": "/v1/automation-usage-report",
-  "error_code": "validation_error",
+  "error_code": "validation",
   "error_message": "Query param \\"limit\\" must be between 0 and 100, got 250."
 }`}
 </ContextCodeBlock>

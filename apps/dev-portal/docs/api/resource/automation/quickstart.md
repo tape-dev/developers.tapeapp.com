@@ -22,8 +22,9 @@ Learn what triggers, actions and filter operators exist — never hard-code them
 {`curl #BASE_URL/v1/automation/meta/trigger -u #USER_API_KEY:`}
 </ContextCodeBlock>
 
-Do the same for `/meta/action` and `/meta/filter?field_type=number`. Each entry carries a `config_schema` you build
-against. See [Discovery](/docs/api/resource/automation/discovery).
+Do the same for `/meta/action` and `/meta/filter?field_type=number`. Trigger and action entries each carry a
+`config_schema` you build against; a `/meta/filter` entry is an operator — `{ operator, label, description?, value_arity }`,
+with no `config_schema`. See [Discovery](/docs/api/resource/automation/discovery).
 
 ## 2. Create the automation
 

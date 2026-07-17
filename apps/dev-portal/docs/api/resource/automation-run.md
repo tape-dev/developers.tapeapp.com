@@ -89,9 +89,12 @@ The example below requests the 2 most recent successful runs you may see.
       "app_name": "Leads",
       "workspace_id": 7,
       "status": "completed",
+      "type": "regular",
       "created_at": "2024-01-18 08:12:04",
       "completed_at": "2024-01-18 08:12:09",
       "num_consumed_actions": 2,
+      "failure_reason": null,
+      "error_message": null,
       "triggered_on_record_id": 5001,
       "triggered_on_record_revision_id": 4,
       "triggered_by_automation_id": null
@@ -105,9 +108,12 @@ The example below requests the 2 most recent successful runs you may see.
       "app_name": "Leads",
       "workspace_id": 7,
       "status": "completed",
+      "type": "regular",
       "created_at": "2024-01-17 22:47:51",
       "completed_at": "2024-01-17 22:47:55",
       "num_consumed_actions": 1,
+      "failure_reason": null,
+      "error_message": null,
       "triggered_on_record_id": 4987,
       "triggered_on_record_revision_id": 1,
       "triggered_by_automation_id": 71
@@ -139,9 +145,12 @@ Each entry in `automation_runs` — and the `automation_run` returned when retri
 | `app_name`                       | `string`  | Name of that app.                                                                               |
 | `workspace_id`                   | `integer` | The workspace the app belongs to.                                                               |
 | `status`                         | `string`  | See [Statuses](#statuses).                                                                      |
+| `type`                           | `string`  | Execution kind of the run — one of `regular`, `manual`, `simulation`.                           |
 | `created_at`                     | `string`  | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                       |
 | `completed_at`                   | `string`  | When the run finished, in UTC. `null` while the run is still `pending` or `running`.            |
 | `num_consumed_actions`           | `integer` | Number of action credits this run consumed.                                                     |
+| `failure_reason`                 | `string` \| `null` | Why the run failed, if it did — one of `filters_setup_failed`, `filters_failed`, `actions_setup_failed`, `actions_failed`, `actions_timeout`, `actions_resource_limit_exceeded`, `exit_on_purpose`. `null` for any run that has not failed. |
+| `error_message`                  | `string` \| `null` | Human-readable error detail for a failed run. `null` otherwise.                        |
 | `triggered_on_record_id`         | `integer` | The record this run executed on. `null` if the run was not triggered by a record.               |
 | `triggered_on_record_revision_id`| `integer` | The revision of that record. `null` if the run was not triggered by a record.                   |
 | `triggered_by_automation_id`     | `integer` | The automation that started this run, if it was called by another automation. `null` otherwise. |
@@ -246,9 +255,12 @@ database app.
       "app_name": "Leads",
       "workspace_id": 7,
       "status": "completed",
+      "type": "regular",
       "created_at": "2024-01-18 08:12:04",
       "completed_at": "2024-01-18 08:12:09",
       "num_consumed_actions": 2,
+      "failure_reason": null,
+      "error_message": null,
       "triggered_on_record_id": 5001,
       "triggered_on_record_revision_id": 4,
       "triggered_by_automation_id": null
@@ -331,9 +343,12 @@ here too, even though they are excluded from most listings.
     "app_name": "Leads",
     "workspace_id": 7,
     "status": "failed",
+    "type": "regular",
     "created_at": "2024-01-18 08:12:04",
     "completed_at": "2024-01-18 08:12:09",
     "num_consumed_actions": 2,
+    "failure_reason": "actions_failed",
+    "error_message": "Required field \\"Name\\" is missing.",
     "triggered_on_record_id": 5001,
     "triggered_on_record_revision_id": 4,
     "triggered_by_automation_id": null,

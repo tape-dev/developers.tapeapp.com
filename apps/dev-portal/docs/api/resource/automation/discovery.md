@@ -36,7 +36,7 @@ cacheable for an hour. Each costs `1x` base credits.
     {
       "type": "record_created",
       "label": "Record created",
-      "description": "Runs when a record is created in the app.",
+      "description": "Triggers when a record is created in the app.",
       "config_schema": {
         "type": "object",
         "properties": { "app_id": { "type": "integer" } },
