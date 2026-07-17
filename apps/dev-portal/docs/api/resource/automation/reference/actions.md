@@ -50,7 +50,9 @@ depend on internal encodings yet.
 
 ## Control-flow actions
 
-Both nest actions under `action_rows`. Disabled or empty optional branches are simply **absent** from the response.
+Both nest actions under `action_rows`. A **disabled** optional branch is **absent** from the response; an **enabled**
+one is always present — even when empty (an enabled-but-empty conditional `else` reads as `else_action_rows: []`, and
+an enabled-but-empty `for_loop` `break_condition` / `continue_condition` reads as `null`).
 
 **`conditional`**
 

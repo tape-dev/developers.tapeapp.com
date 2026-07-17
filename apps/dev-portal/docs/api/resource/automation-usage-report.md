@@ -86,7 +86,7 @@ Each entry in `usage_reports` describes a single time bucket:
 | `from`                        | `string`  | Earliest underlying record time in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). May be later than the nominal start of the calendar bucket. |
 | `to`                          | `string`  | Latest underlying record time in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). May be earlier than the nominal end of the calendar bucket.   |
 | `num_consumed_actions`        | `integer` | Total action credits consumed in the bucket.                                                                                               |
-| `num_succeeded_runs`          | `integer` | Number of automation runs that finished with a succeeded status.                                                                           |
+| `num_succeeded_runs`          | `integer` | Number of automation runs that finished successfully (`completed` status).                                                                 |
 | `num_failed_runs`             | `integer` | Number of automation runs that finished with a failed status.                                                                              |
 | `num_cancelled_runs`          | `integer` | Number of automation runs that finished with a cancelled status.                                                                           |
 

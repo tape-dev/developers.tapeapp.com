@@ -17,8 +17,8 @@ The Automation endpoints use the standard Tape [error](/docs/api/errors) envelop
 | --- | --- |
 | `400` | Malformed body, a path ID that is not an integer, or a run body that doesn't match the automation's trigger. |
 | `401` | Not authenticated with a user API key (where one is required). |
-| `404` | The automation, app, workspace or revision is not available to you — see the collapse below. |
-| `409` | A lifecycle conflict — activating a broken automation. |
+| `404` | The automation, app, workspace, revision or **record** is not available to you — see the collapse below. (Manual-run and simulate also `404` when the target record is missing or you can't view it.) |
+| `409` | A lifecycle/state conflict — activating, running or simulating a broken automation. |
 
 ### The 404 collapse
 
@@ -38,9 +38,12 @@ Each error entry:
 | --- | --- | --- |
 | `code` | `string` | Machine-readable reason (below). |
 | `message` | `string` | English description. Not localized. |
-| `deactivated` | `boolean` | `true` when the fault is inside a deactivated block (doesn't itself break the automation). |
-| `block_id` / `action_id` | `string` | The node at fault. |
+| `deactivated` | `boolean` | Optional — `true` when the fault is inside a deactivated block (doesn't itself break the automation). **Absent when not deactivated**; treat a missing value as `false` (test `!entry.deactivated`, not `=== false`). |
+| `block_id` / `action_id` | `string` \| `null` | The node at fault. `action_id` is `null` for a top-level fault (e.g. a filter or field-assignment reason). |
 | `app_id` / `field_id` / `view_id` / `automation_id` / `user_id` / `record_id` / `option_id` | `integer` | The referenced entity at fault, depending on `code`. |
+| `match_type` | `string` | Present for `filter_match_type_invalid` — the invalid filter match type. |
+| `assignment_type` | `string` | Present for `field_assignment_type_invalid` — the invalid field-assignment type. |
+| `call_argument` | `string` | Present for `action_call_argument_invalid` — the id of the invalid call argument. |
 
 ## Broken-reason codes
 

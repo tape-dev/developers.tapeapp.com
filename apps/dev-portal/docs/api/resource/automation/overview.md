@@ -70,9 +70,11 @@ also collected in the [reference](/docs/api/resource/automation/reference/trigge
 ## Authentication and permissions
 
 :::info Requires a user API key
-Every endpoint on this resource — except the [discovery endpoints](#discovery-is-the-exception) — requires a
-**user API key**. An automation API key authenticates an automation, not a person, and therefore carries no workspace
-role to check; using one here returns a `401`. See [Authentication](/docs/api/authentication).
+Every endpoint on this resource requires a **user API key**, with two exceptions: the
+[discovery endpoints](#discovery-is-the-exception) and the two [Advanced / Sandbox](/docs/api/resource/automation/advanced)
+endpoints (call-automation and generate-weblink) each accept **either** a user or an automation API key. Everywhere
+else, an automation API key authenticates an automation, not a person, and therefore carries no workspace role to
+check; using one there returns a `401`. See [Authentication](/docs/api/authentication).
 :::
 
 You may work with the automations of any app in a workspace you **administrate**. Concretely, for every
@@ -120,7 +122,7 @@ return the automation in the same envelope, so the shape below is the one you wi
         "type": "send_email",
         "group": "action",
         "config": {
-          "subject": "A new lead was created",
+          "subject": ["A new lead was created"],
           "smtp_account_id": 5
         }
       }
@@ -210,7 +212,7 @@ Each entry in `actions` is one step. Leaf actions do work (`group: "action"`); c
 
 :::note Control-flow shapes
 See [actions](/docs/api/resource/automation/reference/actions) for the full `conditional` / `for_loop` structure.
-A branch that is disabled or empty is simply absent from the response.
+A **disabled** branch is absent; an **enabled** branch is present even when empty (`else_action_rows: []`, or a `null` break/continue condition).
 :::
 
 ### Broken reasons

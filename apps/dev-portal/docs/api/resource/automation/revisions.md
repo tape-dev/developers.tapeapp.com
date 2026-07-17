@@ -16,6 +16,14 @@ Every change to an automation appends an immutable **revision** — a frozen sna
 "active version" pointer; to roll back, retrieve a revision and [`PUT`](/docs/api/resource/automation/manage) its
 definition back. Both endpoints require a **user API key** and workspace-admin access, and cost `1x` base credits.
 
+:::note Rolling back is not always a verbatim re-`PUT`
+A revision is a **read** snapshot, so its `trigger` / `filter` can carry output-only fields — a `webhook_received`
+trigger's server-assigned `webhook_url`, or read-only filter subjects and change-tracking conditions (see
+[triggers](/docs/api/resource/automation/reference/triggers) and
+[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Strip those before re-submitting; a
+verbatim `PUT` of such a revision is rejected with a `400`.
+:::
+
 ## List revisions
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/{automation_id}/revision" />

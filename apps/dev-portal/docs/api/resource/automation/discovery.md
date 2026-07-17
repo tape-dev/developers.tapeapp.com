@@ -18,8 +18,9 @@ new types appear here without a change to this API.
 
 :::info No workspace scope
 Unlike the rest of the resource, the discovery endpoints accept a valid API key of **either** kind (user or
-automation) and carry no workspace scope — the catalog is the same for everyone. Trigger and action responses are
-cacheable for an hour. Each costs `1x` base credits.
+automation) and carry no workspace scope — the catalog is the same for everyone. All three responses (trigger, action
+and filter) are cacheable for an hour (`Cache-Control: public, max-age=3600`, set on the successful `200`). Each costs
+`1x` base credits.
 :::
 
 ## List trigger types

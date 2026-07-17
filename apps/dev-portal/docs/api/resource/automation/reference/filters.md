@@ -83,6 +83,15 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `boolean` | `boolean` | Boolean comparison. **Read-only** (see limitations). |
 | `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. **Read-only**. |
 
+:::caution On write, the `type` tag must match the field
+Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value
+channel from the subject **field's type** — number / unique-id → `number`; date fields → `date`; category / status /
+relation / user → `ids`; text → `text` — and reads **only** that tag. A value whose `type` doesn't match the field's
+channel is **silently dropped**: the condition is stored with an empty comparison and **no `400`**. The valid tag for
+a field type is not served by [`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only),
+so match the tag to the field yourself.
+:::
+
 ## v1 limitations
 
 - **Input accepts field subjects only.** On create/update, a structured condition's `subject` must be a **field**

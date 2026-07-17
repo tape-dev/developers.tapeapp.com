@@ -328,14 +328,14 @@ as in a listing (see [The run object](#the-run-object)), plus a `logs` array. Si
 here too, even though they are excluded from most listings.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/automation-run/9001 \\
+{`curl #BASE_URL/v1/automation-run/9042 \\
   -u #USER_API_KEY:`}
 </ContextCodeBlock>
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
   "automation_run": {
-    "id": "9001",
+    "id": "9042",
     "automation_id": 88,
     "automation_name": "Notify on new lead",
     "automation_revision_id": "3",
@@ -354,7 +354,7 @@ here too, even though they are excluded from most listings.
     "triggered_by_automation_id": null,
     "logs": [
       {
-        "id": "9001-trigger",
+        "id": "9042-trigger",
         "type": "trigger",
         "status": "success",
         "label": "Trigger",
@@ -364,7 +364,7 @@ here too, even though they are excluded from most listings.
         "logged_at": "2024-01-18 08:12:04"
       },
       {
-        "id": "9001-filter",
+        "id": "9042-filter",
         "type": "filter",
         "status": "success",
         "label": "Filter",
@@ -374,7 +374,7 @@ here too, even though they are excluded from most listings.
         "logged_at": "2024-01-18 08:12:05"
       },
       {
-        "id": "9001-action-a1b2c3-1",
+        "id": "9042-action-a1b2c3-1",
         "type": "action",
         "status": "success",
         "label": "Send email",
@@ -386,7 +386,7 @@ here too, even though they are excluded from most listings.
         "logged_at": "2024-01-18 08:12:07"
       },
       {
-        "id": "9001-action-d4e5f6-1",
+        "id": "9042-action-d4e5f6-1",
         "type": "action",
         "status": "failure",
         "label": "Create record",
@@ -447,7 +447,7 @@ A malformed body returns a `400` validation error. For example, sending a `curso
   "status_code": 400,
   "endpoint": "/v1/automation-run",
   "error_code": "input_validation",
-  "error_message": "Body must match exactly one schema in oneOf."
+  "error_message": "Invalid input: data must match exactly one schema in oneOf ([...])"
 }`}
 </ContextCodeBlock>
 
