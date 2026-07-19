@@ -147,6 +147,7 @@ module.exports = {
           label: 'Troubleshooting',
           collapsed: true,
           items: [
+            'automations/troubleshooting/filter-values',
             'automations/troubleshooting/ip-addresses',
             'automations/troubleshooting/automations-troubleshooting-errors',
           ],

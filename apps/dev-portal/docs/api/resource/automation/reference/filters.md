@@ -90,6 +90,10 @@ relation / user → `ids`; text → `text` — and reads **only** that tag. A va
 channel is **silently dropped**: the condition is stored with an empty comparison and **no `400`**. The valid tag for
 a field type is not served by [`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only),
 so match the tag to the field yourself.
+
+An empty comparison is a **valid** definition, so [`validate`](/docs/api/resource/automation/execution) stays green —
+but at run time a filter value that composes to empty is refused with a protective error rather than matching every
+record. See [Troubleshooting → Filter values](/docs/automations/troubleshooting/filter-values).
 :::
 
 ## v1 limitations
