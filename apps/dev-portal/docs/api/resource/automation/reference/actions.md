@@ -70,37 +70,37 @@ are the same ones that endpoint returns. The families are a reading aid — an a
 
 | Action | What it does |
 | --- | --- |
-| `custom_code` | **Run code** — runs custom code in the automation sandbox. |
-| `custom_variable` | **Set variable** — computes and stores a custom variable for later actions. |
+| [`custom_code`](/docs/api/resource/automation/reference/actions/custom-code) | **Run code** — runs custom code in the automation sandbox. |
+| [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable) | **Set variable** — computes and stores a custom variable for later actions. |
 
 ### Current record
 
 | Action | What it does |
 | --- | --- |
-| `record_create` | **Create record** — creates a record in an app. |
-| `current_record_update` | **Update record** — updates the current record. |
-| `current_record_delete` | **Delete record** — deletes the current record. |
-| `current_record_restore` | **Restore record** — restores the current (soft-deleted) record. |
-| `current_record_get_previous_revision` | **Get previous revision** — loads the previous revision of the current record. |
-| `current_record_comment_create` | **Add comment** — adds a comment to the current record. |
-| `current_record_comment_or_reply_reply_create` | **Add reply** — adds a reply to the current comment or reply. |
-| `current_record_comment_or_reply_delete` | **Delete comment or reply** — deletes the current comment or reply. |
+| [`record_create`](/docs/api/resource/automation/reference/actions/record-create) | **Create record** — creates a record in an app. |
+| [`current_record_update`](/docs/api/resource/automation/reference/actions/current-record-update) | **Update record** — updates the current record. |
+| [`current_record_delete`](/docs/api/resource/automation/reference/actions/current-record-delete) | **Delete record** — deletes the current record. |
+| [`current_record_restore`](/docs/api/resource/automation/reference/actions/current-record-restore) | **Restore record** — restores the current (soft-deleted) record. |
+| [`current_record_get_previous_revision`](/docs/api/resource/automation/reference/actions/current-record-get-previous-revision) | **Get previous revision** — loads the previous revision of the current record. |
+| [`current_record_comment_create`](/docs/api/resource/automation/reference/actions/current-record-comment-create) | **Add comment** — adds a comment to the current record. |
+| [`current_record_comment_or_reply_reply_create`](/docs/api/resource/automation/reference/actions/current-record-comment-or-reply-reply-create) | **Add reply** — adds a reply to the current comment or reply. |
+| [`current_record_comment_or_reply_delete`](/docs/api/resource/automation/reference/actions/current-record-comment-or-reply-delete) | **Delete comment or reply** — deletes the current comment or reply. |
 
 ### Record collections
 
 | Action | What it does |
 | --- | --- |
-| `collect_app_records` | **Collect app records** — collects records from an app, optionally filtered. |
-| `collect_app_view_records` | **Collect app view records** — collects records from an app view. |
-| `collect_referenced_records` | **Collect referenced records** — collects records referenced by the current record. |
-| `collected_records_collect_referenced_records` | **Collect referenced records (from collection)** — collects records referenced by a starting record collection. |
-| `filter_record_collection` | **Filter collection** — filters a record collection. |
-| `sort_record_collection` | **Sort collection** — sorts a record collection. |
-| `clear_record_collection` | **Clear collection** — empties a record collection. |
-| `collected_records_update` | **Update collected records** — updates every record in a collection. |
-| `referenced_records_update` | **Update referenced records** — updates records referenced by the current record. |
-| `collected_records_comment_create` | **Comment on collected records** — adds a comment to every record in a collection. |
-| `rollup_iterable_values` | **Roll up values** — aggregates the values of an iterable (count, sum, average, …). |
+| [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records) | **Collect app records** — collects records from an app, optionally filtered. |
+| [`collect_app_view_records`](/docs/api/resource/automation/reference/actions/collect-app-view-records) | **Collect app view records** — collects records from an app view. |
+| [`collect_referenced_records`](/docs/api/resource/automation/reference/actions/collect-referenced-records) | **Collect referenced records** — collects records referenced by the current record. |
+| [`collected_records_collect_referenced_records`](/docs/api/resource/automation/reference/actions/collected-records-collect-referenced-records) | **Collect referenced records (from collection)** — collects records referenced by a starting record collection. |
+| [`filter_record_collection`](/docs/api/resource/automation/reference/actions/filter-record-collection) | **Filter collection** — filters a record collection. |
+| [`sort_record_collection`](/docs/api/resource/automation/reference/actions/sort-record-collection) | **Sort collection** — sorts a record collection. |
+| [`clear_record_collection`](/docs/api/resource/automation/reference/actions/clear-record-collection) | **Clear collection** — empties a record collection. |
+| [`collected_records_update`](/docs/api/resource/automation/reference/actions/collected-records-update) | **Update collected records** — updates every record in a collection. |
+| [`referenced_records_update`](/docs/api/resource/automation/reference/actions/referenced-records-update) | **Update referenced records** — updates records referenced by the current record. |
+| [`collected_records_comment_create`](/docs/api/resource/automation/reference/actions/collected-records-comment-create) | **Comment on collected records** — adds a comment to every record in a collection. |
+| [`rollup_iterable_values`](/docs/api/resource/automation/reference/actions/rollup-iterable-values) | **Roll up values** — aggregates the values of an iterable (count, sum, average, …). |
 
 Most of these form **producer/consumer pairs**: a `collect_*` action publishes a `record_collection`, and a downstream
 action (`filter` / `sort` / `clear_record_collection`, the `collected_records_*` family, or a `for_loop` `iterable`)
@@ -113,11 +113,11 @@ validation. See [Action examples](/docs/api/resource/automation/action-examples)
 
 | Action | What it does |
 | --- | --- |
-| `current_record_call_automation` | **Call automation** — calls another automation with the current record. |
-| `collected_records_call_automation` | **Call automation for collected records** — calls another automation for every record in a collection. |
-| `current_record_generate_automation_weblink` | **Generate weblink** — generates a weblink that calls an automation with the current record. |
-| `display_webpage` | **Display webpage** — displays a webpage in a weblink flow. |
-| `redirect_user` | **Redirect user** — redirects the user to a URL in a weblink flow. |
+| [`current_record_call_automation`](/docs/api/resource/automation/reference/actions/current-record-call-automation) | **Call automation** — calls another automation with the current record. |
+| [`collected_records_call_automation`](/docs/api/resource/automation/reference/actions/collected-records-call-automation) | **Call automation for collected records** — calls another automation for every record in a collection. |
+| [`current_record_generate_automation_weblink`](/docs/api/resource/automation/reference/actions/current-record-generate-automation-weblink) | **Generate weblink** — generates a weblink that calls an automation with the current record. |
+| [`display_webpage`](/docs/api/resource/automation/reference/actions/display-webpage) | **Display webpage** — displays a webpage in a weblink flow. |
+| [`redirect_user`](/docs/api/resource/automation/reference/actions/redirect-user) | **Redirect user** — redirects the user to a URL in a weblink flow. |
 
 The call/weblink actions reference a target automation by id. The target must **exist**, live in the **same app**, and
 carry the matching trigger — `automation_called` for `current_record_call_automation` /
@@ -129,16 +129,16 @@ fires it — see [Advanced / Sandbox](/docs/api/resource/automation/advanced)).
 
 | Action | What it does |
 | --- | --- |
-| `send_email` | **Send email** — sends an email. |
-| `collected_records_send_email` | **Send email for collected records** — sends an email for every record in a collection. |
-| `create_pdf` | **Create PDF** — renders an HTML template to a PDF file. |
+| [`send_email`](/docs/api/resource/automation/reference/actions/send-email) | **Send email** — sends an email. |
+| [`collected_records_send_email`](/docs/api/resource/automation/reference/actions/collected-records-send-email) | **Send email for collected records** — sends an email for every record in a collection. |
+| [`create_pdf`](/docs/api/resource/automation/reference/actions/create-pdf) | **Create PDF** — renders an HTML template to a PDF file. |
 
 ### HTTP requests
 
 | Action | What it does |
 | --- | --- |
-| `http_call` | **HTTP request** — makes an outbound HTTP request. |
-| `authenticated_http_call` | **Authenticated HTTP request** — makes an outbound HTTP request signed by an authentication provider. |
+| [`http_call`](/docs/api/resource/automation/reference/actions/http-call) | **HTTP request** — makes an outbound HTTP request. |
+| [`authenticated_http_call`](/docs/api/resource/automation/reference/actions/authenticated-http-call) | **Authenticated HTTP request** — makes an outbound HTTP request signed by an authentication provider. |
 
 Outbound requests are subject to [SSRF protection](/docs/automations/troubleshooting/ip-addresses) — hosts resolving
 to private/internal addresses are refused. `authenticated_http_call` also needs an `authentication_provider_id`, but
@@ -149,10 +149,10 @@ the Tape app. So the action can be *defined* via the API, but without a valid pr
 
 | Action | What it does |
 | --- | --- |
-| `delay` | **Delay** — pauses the automation for a fixed duration. |
-| `exit` | **Exit** — ends the automation run. |
-| `for_loop` | **For loop** — runs nested actions for each item of an iterable. `group: "control_flow"`. |
-| `conditional` | **Condition** — runs nested actions only when a condition holds. `group: "control_flow"`. |
+| [`delay`](/docs/api/resource/automation/reference/actions/delay) | **Delay** — pauses the automation for a fixed duration. |
+| [`exit`](/docs/api/resource/automation/reference/actions/exit) | **Exit** — ends the automation run. |
+| [`for_loop`](/docs/api/resource/automation/reference/actions/for-loop) | **For loop** — runs nested actions for each item of an iterable. `group: "control_flow"`. |
+| [`conditional`](/docs/api/resource/automation/reference/actions/conditional) | **Condition** — runs nested actions only when a condition holds. `group: "control_flow"`. |
 
 ### Trigger context
 
