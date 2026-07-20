@@ -62,7 +62,7 @@ module.exports = {
               to: 'docs/calculation/introduction',
             },
             {
-              label: 'Workflow Automations',
+              label: 'Automations',
               to: 'docs/automations/introduction',
             },
             {

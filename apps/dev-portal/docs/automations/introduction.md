@@ -1,12 +1,12 @@
 ---
 id: introduction
-title: Workflow Automations
+title: Automations
 sidebar_label: Introduction
 ---
 
 ## Execution environment
 
-All custom scripts inside Tape's workflow automations (or short: "automations") are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
+All custom scripts inside Tape's automations are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
 
 ### Synchronous execution environment
 

@@ -37,7 +37,7 @@ const features = [
     link: 'docs/api/resource/app',
   },
   {
-    title: 'Workflow Automations',
+    title: 'Automations',
     description: (
       <>
         Automate your work using Tape's customizable low-code automation editor.
