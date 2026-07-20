@@ -22,7 +22,7 @@ The following query parameters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+| `workflow`  | `boolean` | Trigger automations for this operation (default: `true`)            |
 
 <Tabs defaultValue="curl">
 
@@ -138,7 +138,7 @@ The following query parameters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger Workflows for this operation (default: `true`)              |
+| `workflow`  | `boolean` | Trigger automations for this operation (default: `true`)            |
 
 <Tabs defaultValue="curl">
 
@@ -360,7 +360,7 @@ Retrieve records for the app with the specified `app_id`:
 
 **Query Parameters**
 
-| Parameter   | Type      | Description                                                                                               | Min | Max |
+| Parameter   | Type      | Description                                                                                             | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
 | `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
@@ -485,7 +485,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 **Query Parameters**
 
-| Parameter   | Type      | Description                                                                                               | Min | Max |
+| Parameter   | Type      | Description                                                                                             | Min | Max |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------- | --- | --- |
 | `limit`     | `integer` | Number of records to return. Defaults to _50_.                                                          | 0   | 500 |
 | `cursor`    | `string`  | Cursor for pagination                                                                                   | -   | -   |
@@ -494,7 +494,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 **Request Body Parameters**
 
-| Parameter | Type    | Description                                                                                                                                                                                                                                                                                |
+| Parameter | Type    | Description                                                                                                                                                                                                                                                                              |
 | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter) documentation section for examples of all supported field types. |
 
@@ -572,7 +572,7 @@ Retrieve records for the view with the specified `view_id`:
 
 **Query Parameters**
 
-| Parameter | Type      | Description                                      | Min | Max |
+| Parameter | Type      | Description                                    | Min | Max |
 | --------- | --------- | ---------------------------------------------- | --- | --- |
 | `limit`   | `integer` | Number of records to return. Defaults to _50_. | 0   | 500 |
 | `cursor`  | `string`  | Cursor for pagination                          | -   | -   |
@@ -664,7 +664,7 @@ applied before access checks, records you cannot view are removed afterwards —
 
 **Request Body Parameters**
 
-| Parameter          | Type        | Description                                                                                                                           |
+| Parameter          | Type        | Description                                                                                                                          |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `direction`        | `string`    | Direction of the returned relations. Possible values are `forward`, `reverse` and `both`.                                            |
 | `recordIds`        | `integer[]` | IDs of the records for which related records should be returned. All IDs need to belong to records of the same App with ID `app_id`. |
@@ -705,7 +705,7 @@ This endpoint is not paginated: it returns at most 10 matching records, and acce
 
 **Query Parameters**
 
-| Parameter | Type     | Description              | Min | Max |
+| Parameter | Type     | Description            | Min | Max |
 | --------- | -------- | ---------------------- | --- | --- |
 | `text`    | `string` | The text to search for | -   | -   |
 
@@ -723,7 +723,7 @@ The following query parameters are available:
 | :---------- | :-------- | :------------------------------------------------------------------ |
 | `silent`    | `boolean` | Do not generate notifications for this operation (default: `false`) |
 | `hook`      | `boolean` | Execute webhooks for this operation (default: `true`)               |
-| `workflow`  | `boolean` | Trigger workflows for this operation (default: `true`)              |
+| `workflow`  | `boolean` | Trigger automations for this operation (default: `true`)            |
 
 <Tabs defaultValue="curl">
 
@@ -835,7 +835,7 @@ The following query parameters are available:
 | :--------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------- |
 | `silent`         | `boolean` | Do not generate notifications for this operation (default: `false`)                                                         |
 | `hook`           | `boolean` | Execute webhooks for this operation (default: `true`)                                                                       |
-| `workflow`       | `boolean` | Trigger workflows for this operation (default: `true`)                                                                      |
+| `workflow`       | `boolean` | Trigger automations for this operation (default: `true`)                                                                    |
 | `empty_response` | `boolean` | Skip returning the updated records (default: `false`). Use to increase performance in cases where the result is not needed. |
 
 <Tabs defaultValue="curl">

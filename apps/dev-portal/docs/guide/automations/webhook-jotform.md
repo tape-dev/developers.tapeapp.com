@@ -9,7 +9,7 @@ import JotformStep1 from '@site/static/guide/automations/webhook-jotform/jotform
 import JotformStep2 from '@site/static/guide/automations/webhook-jotform/jotform-step-2.png';
 import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
-[Jotform](https://jotform.com) is a popular tool for creating online forms. Users can easily create their forms via a drag-and-drop editor. In this guide, we will build a simple workflow to save the responses of a Jotform in Tape using the **webhook trigger**.
+[Jotform](https://jotform.com) is a popular tool for creating online forms. Users can easily create their forms via a drag-and-drop editor. In this guide, we will build a simple automation to save the responses of a Jotform in Tape using the **webhook trigger**.
 
 ## Create a new automation
 

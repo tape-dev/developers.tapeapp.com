@@ -6,7 +6,7 @@ sidebar_label: Introduction
 
 ## Execution environment
 
-All custom scripts inside Tape's workflow automations are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
+All custom scripts inside Tape's workflow automations (or short: "automations") are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
 
 ### Synchronous execution environment
 
@@ -70,7 +70,7 @@ const { data, headers } = await tape.Record.get(1234);
 console.log({ record: data.record });
 ```
 
-**Note that you do not need to handle authentication when using the Tape API client inside an automation. The workflow will automatically configure its own authorization token that is valid during its execution.
+**Note that you do not need to handle authentication when using the Tape API client inside an automation. The automation will automatically configure its own authorization token that is valid during its execution.
 **
 
 However, you can set and change the used API key of the Tape client SDK. Be careful with that, as it may affect following actions (also graphical actions, as the use the client SDK under the hood).
@@ -105,27 +105,27 @@ Use the "silent" settings option for mutating action blocks to skip notification
 
 Every mutating action block provides options to specify whether this action will trigger other flows, and/or trigger webhooks in Tape. Both options can be checked individually and need to be set for each action explicitly.
 
-If the option "Trigger other automations" is not set, a potential mutation performed inside this action will not yield another workflow run. Let's say the flow updates a record and the option is set to false, other flows with the "Record updated" trigger will not be run.
+If the option "Trigger other automations" is not set, a potential mutation performed inside this action will not yield another automation run. Let's say the flow updates a record and the option is set to false, other flows with the "Record updated" trigger will not be run.
 
 The Tape SDK also provides respective options when used directly inside an "execute script" action block, check the typing info inside the editor to configure your requests properly.
 
 ## Useful execution variables
 
-Some variables are provided by the system when a worklow is executed. A list of some of them (but not limited to):
+Some variables are provided by the system when an automation is executed. A list of some of them (but not limited to):
 
 - `current_workflow_is_simulation`: useful to execute or skip certain logic when the current execution is a simulation (that should ideally not affect data inside Tape or external systems)
-- `current_workflow_id`: the ID of the current workflow, may be included when hitting external systems for debugging purposes
-- `current_workflow_name`: the name of the current workflow, may be included when hitting external systems for debugging purposes
-- `current_workflow_timezone`: the timezone the current workflow is executed in. Can be configured in the automation editor.
+- `current_workflow_id`: the ID of the current automation, may be included when hitting external systems for debugging purposes
+- `current_workflow_name`: the name of the current automation, may be included when hitting external systems for debugging purposes
+- `current_workflow_timezone`: the timezone the current automation is executed in. Can be configured in the automation editor.
 - `current_date`
 - `current_datetime`
 - `current_time`
 
-Note that some variables depend on the [execution type](/docs/automations/execution-types) of the current workflow.
+Note that some variables depend on the [execution type](/docs/automations/execution-types) of the current automation.
 
 ## Logging & Debugging
 
-Use regular console log statements to log any variable during worklow execution. Your logs will show up inside the workflow run logs, enabling quick debugging and live feedback.
+Use regular console log statements to log any variable during automation execution. Your logs will show up inside the run logs, enabling quick debugging and live feedback.
 
 ```
 console.log('initial field value was: ' + task_field_estimation_days_value)

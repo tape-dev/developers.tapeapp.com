@@ -8,7 +8,7 @@ If an automation fails, independent from its execution type, it will be logged a
 
 ## Common API errors
 
-Some errors may occur when building workflow automations in Tape. The API will yield a proper error message.
+Some errors may occur when building automations in Tape. The API will yield a proper error message.
 
 The following API errors can be expected:
 

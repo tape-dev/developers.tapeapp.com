@@ -11,7 +11,7 @@ import GoogleFormsStep3 from '@site/static/guide/automations/webhook-google-form
 import GoogleFormsStep4 from '@site/static/guide/automations/webhook-google-forms/google-forms-step-4.png';
 import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
-[Google Forms](https://www.google.com/forms/about/) is a popular tool for creating online forms and surveys. Users can easily create their forms via a drag-and-drop editor. In this guide, we will build a simple workflow to save the responses of a Google form in Tape using the **webhook trigger**.
+[Google Forms](https://www.google.com/forms/about/) is a popular tool for creating online forms and surveys. Users can easily create their forms via a drag-and-drop editor. In this guide, we will build a simple automation to save the responses of a Google form in Tape using the **webhook trigger**.
 
 ## Create a new automation
 

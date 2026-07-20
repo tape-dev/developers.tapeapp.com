@@ -62,11 +62,11 @@ The most convenient way to test your date formatting is [the interactive date_fn
 
 ## Timezones
 
-Tape workflows run in UTC to be universally applicable and non-opinionated. When using the built in Tape actions, all date and time data will thereby yield the expected results, e.g. when a record is updated and set to another record's date field value, that value will match the date and time the user sees when opening the record in Tape.
+Tape automations run in UTC to be universally applicable and non-opinionated. When using the built in Tape actions, all date and time data will thereby yield the expected results, e.g. when a record is updated and set to another record's date field value, that value will match the date and time the user sees when opening the record in Tape.
 
-Be careful when setting dates using code, e.g. via the "Perform Calculation" or "Execute script" workflow actions. Without futher steps, unexpected results may be encountered.
+Be careful when setting dates using code, e.g. via the "Perform Calculation" or "Execute script" automation actions. Without futher steps, unexpected results may be encountered.
 
-See this example below, where a user in Central European Time (UTC+1) utilized Tape workflows to set a record date field's date and time:
+See this example below, where a user in Central European Time (UTC+1) utilized Tape automations to set a record date field's date and time:
 
 ```
 var_target_datetime = new Date('2023-02-01 15:00');
@@ -78,7 +78,7 @@ When updating the record and setting the date / time to the variable's value, th
 2023-02-01 14:00
 ```
 
-This happens due to the fact that the execution environment of the worklow runs in UTC, and will interpret inputs in UTC respectively. While there are many solutions to this, the simplest is for you to transform the data first using the date-fns-timezone library's `zonedTimeToUtc` function and the respective timezone identifier:
+This happens due to the fact that the execution environment of the automation runs in UTC, and will interpret inputs in UTC respectively. While there are many solutions to this, the simplest is for you to transform the data first using the date-fns-timezone library's `zonedTimeToUtc` function and the respective timezone identifier:
 
 ```
 var_target_datetime = date_fns_tz.zonedTimeToUtc(new Date('2023-02-01 15:00'), 'Europe/Amsterdam');

@@ -4,7 +4,7 @@ title: Limitations & Throttling
 sidebar_label: Limitations & Throttling
 ---
 
-Tape applies limits to all executed workflow automations regarding utilized computation power and time.
+Tape applies limits to all executed automations regarding utilized computation power and time.
 
 # Limitations for individual worflow automation runs
 
@@ -19,6 +19,6 @@ Flows that exceed any of the above limits fail with a proper error message. Spli
 
 # Throttling
 
-Throttling per organization may be applied if an organization performs excessive action usage during a short period of time. The throttling will be lifted after 5 minutes and will be indicated by a yellow "THROTTLED" status for scheduled workflow automations in the runs overview and individual workflow runs sidebar.
+Throttling per organization may be applied if an organization performs excessive action usage during a short period of time. The throttling will be lifted after 5 minutes and will be indicated by a yellow "THROTTLED" status for scheduled automations in the runs overview and individual runs sidebar.
 
 Throttling affects the whole organization and will lead to temporary delays and scheduled flows.

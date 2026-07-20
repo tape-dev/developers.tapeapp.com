@@ -4,7 +4,7 @@ title: Available Libraries (Automations)
 sidebar_label: Libraries
 ---
 
-Tape makes several Node.js libraries available for you to reference inside workflow code actions:
+Tape makes several Node.js libraries available for you to reference inside automation code actions:
 
 | Library                                                     | Aliases       | Version     | Description                                                                               |
 | :---------------------------------------------------------- | :------------ | :---------- | :---------------------------------------------------------------------------------------- |
@@ -28,7 +28,7 @@ Encode with: https://www.urlencoder.org/
 
 Hey Tape Team 👋
 
-I would like to propose the following Node.js library to be included in the workflow automations:
+I would like to propose the following Node.js library to be included in the automations:
 
 Name:
 Version:

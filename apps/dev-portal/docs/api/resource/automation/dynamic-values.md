@@ -37,10 +37,10 @@ array. See [Action examples](/docs/api/resource/automation/action-examples) for 
 
 ## Two flavors
 
-| Flavor | Contains | Used for |
-| --- | --- | --- |
-| **Template** | literals + **any** reference (variable or value) | text / template fields, filter `text` values |
-| **Code** | literals + **variable** references only (no constant `value` references) | numeric / code expressions, filter `number` values, date offsets |
+| Flavor       | Contains                                                                 | Used for                                                         |
+| ------------ | ------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| **Template** | literals + **any** reference (variable or value)                         | text / template fields, filter `text` values                     |
+| **Code**     | literals + **variable** references only (no constant `value` references) | numeric / code expressions, filter `number` values, date offsets |
 
 ## References
 
@@ -49,14 +49,14 @@ Every reference has a `kind`, and an optional **`property`** (e.g. a user refere
 
 ### `kind: "variable"` — live data, by `source`
 
-| `source` | Extra fields | Points at |
-| --- | --- | --- |
-| `field` | `field_id`, `field_type`, `previous`, `collection`, `triggering` | A field's value on the record. |
-| `trigger` | `trigger_type` (+ `key_path`, `data_type` for `webhook_payload_property`) | The trigger's output. |
-| `action` | `action_type`, `app_id?` | A prior action's output. |
-| `global` | `global_type` | A workflow-wide value. |
-| `meta` | `meta_type`, `app_id?`, `previous`, `collection`, `triggering` | Record metadata. |
-| `custom` | `custom_type`, `label` | A user-declared variable. |
+| `source`  | Extra fields                                                              | Points at                      |
+| --------- | ------------------------------------------------------------------------- | ------------------------------ |
+| `field`   | `field_id`, `field_type`, `previous`, `collection`, `triggering`          | A field's value on the record. |
+| `trigger` | `trigger_type` (+ `key_path`, `data_type` for `webhook_payload_property`) | The trigger's output.          |
+| `action`  | `action_type`, `app_id?`                                                  | A prior action's output.       |
+| `global`  | `global_type`                                                             | An automation-wide value.      |
+| `meta`    | `meta_type`, `app_id?`, `previous`, `collection`, `triggering`            | Record metadata.               |
+| `custom`  | `custom_type`, `label`                                                    | A user-declared variable.      |
 
 **Vocabularies** (the exhaustive token sets):
 
@@ -73,14 +73,14 @@ Every reference has a `kind`, and an optional **`property`** (e.g. a user refere
 
 ### `kind: "value"` — a fixed entity or constant, by `value_type`
 
-| `value_type` | Extra fields | `property` |
-| --- | --- | --- |
-| `option` | `field_id`, `option_id` | optional |
-| `user` | `user_id` | optional |
-| `record` | `record_id` | optional |
-| `pdf` | — | required (`page_number` / `page_count`) |
-| `date` | — | required (`current_date` / `current_datetime`) |
-| `time` | — | required (`current_time`) |
+| `value_type` | Extra fields            | `property`                                     |
+| ------------ | ----------------------- | ---------------------------------------------- |
+| `option`     | `field_id`, `option_id` | optional                                       |
+| `user`       | `user_id`               | optional                                       |
+| `record`     | `record_id`             | optional                                       |
+| `pdf`        | —                       | required (`page_number` / `page_count`)        |
+| `date`       | —                       | required (`current_date` / `current_datetime`) |
+| `time`       | —                       | required (`current_time`)                      |
 
 ## Notes for writers
 
