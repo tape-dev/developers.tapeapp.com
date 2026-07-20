@@ -43,6 +43,15 @@ includes both real and simulation runs — and match on the record. Both endpoin
 additionally consumes automation **action credits**, reported as `num_consumed_actions` on the run.
 :::
 
+:::note Reading run logs — they arrive after the run turns terminal
+A run's per-action `logs` are buffered and land **asynchronously after** the run flips to a terminal status
+(`completed` / `failed`), a beat behind the always-present trigger and filter steps. Poll for the **specific** log entry
+you need rather than gating on `logs.length > 0`, which can return before an action's entry is in. And not every
+successful step yields a per-action `success` log: control-flow containers (`conditional`, `for_loop`),
+`collected_records_collect_referenced_records`, and `create_pdf` complete at the run level with no per-action entry —
+for those, treat a terminal `completed` without a setup failure as the success signal.
+:::
+
 ## Run an automation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation/{automation_id}/manual-run" />

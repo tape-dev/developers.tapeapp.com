@@ -34,7 +34,10 @@ written `config` does **not** read back byte-for-byte:
 - **Omitted members are server-defaulted on read.** An omitted `match_condition` / `attach_files_match_condition` reads
   back as an empty condition (`{ "boolean_expr_rows": [] }`), and omitted required arrays (`ref_collection_defs`,
   `field_assignments`, `call_arguments`, `http_call_headers`, `sorts`) read back as `[]`. A verbatim `GET` → `PUT`
-  still works (the defaults are idempotent) — but don't diff write against read.
+  still works (the defaults are idempotent) — but don't diff write against read. `field_assignments` — the payload of
+  every mutating action (`record_create`, `current_record_update`, `referenced_records_update`,
+  `collected_records_update`) — is **not yet writable** through the public API: only the empty `[]` is stable today (its
+  populated form is a raw internal shape — see [Action examples](/docs/api/resource/automation/action-examples)).
 - **Companion `_enabled` flags gate some values.** A value takes effect only when its sibling boolean is `true` —
   `limit` + `limit_enabled`, `triggering_app_ids` + `triggering_app_ids_enabled`, `custom_variable_defs` +
   `custom_variable_defs_enabled`. Send both members; with `limit_enabled: false`, `limit` is ignored (forced to the max).
@@ -44,9 +47,11 @@ written `config` does **not** read back byte-for-byte:
   `condition` uses.
 - **`config_schema` validity is structural only.** Passing the schema gets the action *stored*; per-action semantic
   constraints surface later at [validate](/docs/api/resource/automation/execution) / activate as
-  [broken-reason codes](/docs/api/resource/automation/reference/errors) — e.g. `rollup_iterable_values` requires
-  `rollup_variable_def`, `referenced_records_update.app_id` must be a relation-edge app of the trigger app, and a sort
-  key must be collection-scoped.
+  [broken-reason codes](/docs/api/resource/automation/reference/errors) — e.g. `referenced_records_update.app_id` must
+  be a relation-edge app of the trigger app, and a sort key must be collection-scoped.
+- **A few config enums round-trip UPPER-CASE.** Most tokens are lower-case (`http_call_type`, `exit_type`,
+  `weblink_expiration`), but `ref_collection_defs[].direction` (`INCOMING` / `OUTGOING` / `BOTH`) and `match_type`
+  (`ALL` / `FILTERED`) read back upper-case — send them exactly as `meta/action` gives them.
 
 Per-type config shapes are a future tightening — read the keys from `meta/action` and don't hard-code internal
 encodings yet.
@@ -96,6 +101,13 @@ are the same ones that endpoint returns. The families are a reading aid — an a
 | `referenced_records_update` | **Update referenced records** — updates records referenced by the current record. |
 | `collected_records_comment_create` | **Comment on collected records** — adds a comment to every record in a collection. |
 | `rollup_iterable_values` | **Roll up values** — aggregates the values of an iterable (count, sum, average, …). |
+
+Most of these form **producer/consumer pairs**: a `collect_*` action publishes a `record_collection`, and a downstream
+action (`filter` / `sort` / `clear_record_collection`, the `collected_records_*` family, or a `for_loop` `iterable`)
+consumes it. The producer must appear **first** in the automation, and the consumer references it by an object —
+`{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": … }` — that resolves to the
+**nearest upstream producer** (it never names the producer's `id`). A consumer with no matching upstream producer fails
+validation. See [Action examples](/docs/api/resource/automation/action-examples) for a complete payload.
 
 ### Automation calls & weblinks
 
