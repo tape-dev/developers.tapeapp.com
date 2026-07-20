@@ -41,7 +41,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "collected_records_update",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "action_id": 42 },
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 5 },
     "field_assignments": [],
     "silent": true
   }

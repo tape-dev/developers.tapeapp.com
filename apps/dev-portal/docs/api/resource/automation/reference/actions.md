@@ -25,33 +25,34 @@ Actions are **what** an automation does: an ordered list of steps. Most are leaf
 | `deactivate` | `boolean` | Whether the step is skipped. Absent when unset. |
 | `continue_on_error` | `boolean` | Whether the run continues when this step errors. Absent when unset. |
 | `config` | `object` | The step's settings — keys per the action's `config_schema`. [Dynamic values](/docs/api/resource/automation/dynamic-values) inside are normalized to the reference model. |
-| _control-flow fields_ | | Present only for `conditional` / `for_loop` — see below. |
+| _(control-flow `config`)_ | | For `conditional` / `for_loop`, `config` carries the branch/loop structure — see [Control-flow actions](#control-flow-actions). |
 
 :::note `config` is normalized, not echoed back verbatim
 `config` keys come from the action's `config_schema` on [`meta/action`](/docs/api/resource/automation/discovery), but a
 written `config` does **not** read back byte-for-byte:
 
 - **Omitted members are server-defaulted on read.** An omitted `match_condition` / `attach_files_match_condition` reads
-  back as an empty condition (`{ "boolean_expr_rows": [] }`), and omitted required arrays (`ref_collection_defs`,
-  `field_assignments`, `call_arguments`, `http_call_headers`, `sorts`) read back as `[]`. A verbatim `GET` → `PUT`
-  still works (the defaults are idempotent) — but don't diff write against read. `field_assignments` — the payload of
-  every mutating action (`record_create`, `current_record_update`, `referenced_records_update`,
-  `collected_records_update`) — is **not yet writable** through the public API: only the empty `[]` is stable today (its
-  populated form is a raw internal shape — see [Action examples](/docs/api/resource/automation/action-examples)).
-- **Companion `_enabled` flags gate some values.** A value takes effect only when its sibling boolean is `true` —
-  `limit` + `limit_enabled`, `triggering_app_ids` + `triggering_app_ids_enabled`, `custom_variable_defs` +
-  `custom_variable_defs_enabled`. Send both members; with `limit_enabled: false`, `limit` is ignored (forced to the max).
-- **A condition embedded in `config`** (e.g. a collect/filter action's `match_condition`) uses the **internal**
-  encoding — `{ "operator": "AND" | "OR", "boolean_expr_rows": [...] }`, uppercase — **not** the public
-  [filter tree](/docs/api/resource/automation/reference/filters) (`operator: "and"`, `rows`) that a `conditional`'s
-  `condition` uses.
+  back as an empty [filter group](/docs/api/resource/automation/reference/filters) (or `null`), and omitted required
+  arrays (`ref_collection_defs`, `field_assignments`, `call_arguments`, `http_call_headers`, `sorts`) read back as `[]`.
+  A verbatim `GET` → `PUT` still works (the defaults are idempotent) — but don't diff write against read.
+  `field_assignments` — the payload of every mutating action (`record_create`, `current_record_update`,
+  `referenced_records_update`, `collected_records_update`) — is a **typed, per-field-type union** discriminated by
+  `field_type`. The `meta/action` schema still advertises its array items opaquely, so read the shape from
+  [Action examples](/docs/api/resource/automation/action-examples). It is newly writable and still stabilizing (beta);
+  the empty `[]` is always accepted as a no-op.
+- **A companion `_enabled` flag gates `limit`.** In `collect_app_records` / `collect_app_view_records`, `limit` takes
+  effect only when `limit_enabled` is `true`; send both, and with `limit_enabled: false`, `limit` is ignored (forced to
+  the max). (The `triggering_app_ids` / `custom_variable_defs` `_enabled` flags belong to **trigger** config, not action
+  config; control-flow branches are gated by **presence**, not a flag.)
+- **A condition embedded in `config`** (e.g. a collect/filter action's `match_condition`) uses the **same public
+  [filter tree](/docs/api/resource/automation/reference/filters)** as a `conditional`'s `condition` — `operator: "and" |
+  "or"` (lower-case) with `rows` — not the internal encoding it used before the typed-config migration.
 - **`config_schema` validity is structural only.** Passing the schema gets the action *stored*; per-action semantic
   constraints surface later at [validate](/docs/api/resource/automation/execution) / activate as
   [broken-reason codes](/docs/api/resource/automation/reference/errors) — e.g. `referenced_records_update.app_id` must
   be a relation-edge app of the trigger app, and a sort key must be collection-scoped.
-- **A few config enums round-trip UPPER-CASE.** Most tokens are lower-case (`http_call_type`, `exit_type`,
-  `weblink_expiration`), but `ref_collection_defs[].direction` (`INCOMING` / `OUTGOING` / `BOTH`) and `match_type`
-  (`ALL` / `FILTERED`) read back upper-case — send them exactly as `meta/action` gives them.
+- **All config enum tokens are lower-case** — send them exactly as `meta/action` advertises them (e.g.
+  `http_call_type: "post"`, `exit_type: "success"`, `ref_collection_defs[].direction: "incoming"`, `match_type: "all"`).
 
 Per-type config shapes are a future tightening — read the keys from `meta/action` and don't hard-code internal
 encodings yet.
@@ -166,23 +167,25 @@ Some actions are only valid under a matching trigger — a wrong pairing fails v
 
 ## Control-flow actions
 
-Both nest actions under `action_rows`. A **disabled** optional branch is **absent** from the response; an **enabled**
-one is always present — even when empty (an enabled-but-empty conditional `else` reads as `else_action_rows: []`, and
-an enabled-but-empty `for_loop` `break_condition` / `continue_condition` reads as `null`).
+`conditional` and `for_loop` carry their whole structure **inside `config`** — like every other action; there are no
+top-level control-flow fields. Each branch/condition is enabled by **presence**: an omitted member is disabled. A
+nested body is an array of actions under `action_rows`.
 
-**`conditional`**
+**`conditional`** — `config` keys:
 
-| Field | Type | Description |
+| Key | Type | Description |
 | --- | --- | --- |
-| `condition` | `object` \| `null` | The branch [condition](/docs/api/resource/automation/reference/filters) (a filter group); `null` means always true. |
-| `action_rows` | `array` | The if/then branch. |
-| `else_action_rows` | `array` | The else branch — present only when enabled. |
+| `condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | The branch condition; `null` or omitted means always true. |
+| `action_rows` | array of [actions](/docs/api/resource/automation/reference/actions) | The if/then branch. |
+| `else_action_rows` | array of [actions](/docs/api/resource/automation/reference/actions) | The else branch — omit to disable it. |
 
-**`for_loop`**
+**`for_loop`** — `config` keys:
 
-| Field | Type | Description |
+| Key | Type | Description |
 | --- | --- | --- |
-| `iterable` | `object` | A [reference](/docs/api/resource/automation/dynamic-values) to the collection to loop over. |
-| `action_rows` | `array` | The loop body. |
-| `break_condition` | `object` \| `null` | A [filter group](/docs/api/resource/automation/reference/filters) — present only when enabled. |
-| `continue_condition` | `object` \| `null` | A filter group — present only when enabled. |
+| `iterable` | [reference](/docs/api/resource/automation/dynamic-values) | The collection to loop over (public name `iterable` — renamed from the internal `iterable_variable_def`). |
+| `action_rows` | array of [actions](/docs/api/resource/automation/reference/actions) | The loop body. |
+| `break_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | Stops the loop when it matches — omit to disable. |
+| `continue_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | Skips to the next item when it matches — omit to disable. |
+
+See [`conditional`](/docs/api/resource/automation/reference/actions/conditional) and [`for_loop`](/docs/api/resource/automation/reference/actions/for-loop) for full config examples.

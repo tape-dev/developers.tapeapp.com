@@ -49,7 +49,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "collected_records_send_email",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "variable_def_id": 4821 },
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 812 },
     "to_address": ["someone@example.com"],
     "subject": ["Record update: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
     "message_body": ["<p>One of the collected records changed.</p>"],

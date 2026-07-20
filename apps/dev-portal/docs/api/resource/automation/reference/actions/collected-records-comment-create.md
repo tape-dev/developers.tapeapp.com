@@ -37,7 +37,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "collected_records_comment_create",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "action_variable": "matched_records" },
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 123 },
     "comment_content": ["Reviewed by automation on record ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
     "silent": true
   }

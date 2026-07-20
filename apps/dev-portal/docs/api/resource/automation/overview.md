@@ -193,7 +193,8 @@ vocabularies.
 ### The action object
 
 Each entry in `actions` is one step. Leaf actions do work (`group: "action"`); control-flow actions
-(`group: "control_flow"` — a `for_loop` or a `conditional`) nest other actions under `action_rows`.
+(`group: "control_flow"` — a `for_loop` or a `conditional`) nest other actions under an `action_rows` array **inside
+their `config`**.
 
 | Field                | Type               | Description                                                                                                                                                                                   |
 | -------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -203,17 +204,12 @@ Each entry in `actions` is one step. Leaf actions do work (`group: "action"`); c
 | `custom_name`        | `string`           | Optional label for the step. Absent when unset.                                                                                                                                               |
 | `deactivate`         | `boolean`          | Whether the step is deactivated (skipped). Absent when unset.                                                                                                                                 |
 | `continue_on_error`  | `boolean`          | Whether the run continues when this step errors. Absent when unset.                                                                                                                           |
-| `config`             | `object`           | The action's settings, keyed as the action's `config_schema` from `GET /v1/automation/meta/action` describes. [Dynamic values](#dynamic-values) inside are normalized to the reference model. |
-| `action_rows`        | `array`            | Nested actions — the `conditional` if/then branch, or the `for_loop` body. Control-flow only.                                                                                                 |
-| `condition`          | `object` \| `null` | A `conditional`'s branch condition (a [filter group](#the-filter)); `null` means always.                                                                                                      |
-| `else_action_rows`   | `array`            | A `conditional`'s `else` branch — present only when the else branch is enabled.                                                                                                               |
-| `iterable`           | `object`           | A `for_loop`'s iterable — a [reference](#dynamic-values) to the collection to loop over.                                                                                                      |
-| `break_condition`    | `object` \| `null` | A `for_loop` break condition (a [filter group](#the-filter)) — present only when enabled.                                                                                                     |
-| `continue_condition` | `object` \| `null` | A `for_loop` continue condition — present only when enabled.                                                                                                                                  |
+| `config`             | `object`           | The action's settings, keyed as the action's `config_schema` from `GET /v1/automation/meta/action` describes. [Dynamic values](#dynamic-values) inside are normalized to the reference model. For `conditional` / `for_loop`, `config` also carries the branch/loop structure (`condition`, `action_rows`, `else_action_rows`, `iterable`, `break_condition`, `continue_condition`). |
 
 :::note Control-flow shapes
-See [actions](/docs/api/resource/automation/reference/actions) for the full `conditional` / `for_loop` structure.
-A **disabled** branch is absent; an **enabled** branch is present even when empty (`else_action_rows: []`, or a `null` break/continue condition).
+For `conditional` / `for_loop`, the branch/loop members live **inside `config`** — see
+[actions](/docs/api/resource/automation/reference/actions#control-flow-actions) for the full structure. Each branch is
+gated by **presence**: an omitted member is disabled.
 :::
 
 ### Broken reasons

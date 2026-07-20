@@ -44,7 +44,6 @@ An action entry inside an automation definition's `actions[]`:
       "source": "field",
       "field_id": 123,
       "field_type": "number",
-      "app_id": 45,
       "collection": true,
       "previous": false,
       "triggering": false

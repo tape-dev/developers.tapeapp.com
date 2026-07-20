@@ -38,8 +38,19 @@ An action entry inside an automation definition's `actions[]`:
     "app_id": 4821,
     "match_condition": {
       "operator": "and",
-      "children": [
-        { "field_id": 55012, "comparator": "is_not_empty" }
+      "rows": [
+        {
+          "subject": {
+            "kind": "variable",
+            "source": "field",
+            "field_id": 55012,
+            "field_type": "single_text",
+            "previous": false,
+            "collection": false,
+            "triggering": false
+          },
+          "operator": "is_not_empty"
+        }
       ]
     },
     "limit": 100,

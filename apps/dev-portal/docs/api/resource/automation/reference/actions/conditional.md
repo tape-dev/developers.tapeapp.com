@@ -39,8 +39,12 @@ An action entry inside an automation definition's `actions[]`:
   "config": {
     "condition": {
       "operator": "and",
-      "filters": [
-        { "field": "status", "comparator": "equals", "value": ["open"] }
+      "rows": [
+        {
+          "subject": { "kind": "variable", "source": "field", "field_id": 512, "field_type": "status", "previous": false, "collection": false, "triggering": false },
+          "operator": "is_any_of",
+          "value": { "type": "ids", "ids": [9001] }
+        }
       ]
     },
     "action_rows": [

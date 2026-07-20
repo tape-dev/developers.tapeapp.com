@@ -43,10 +43,10 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "sort_record_collection",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "variable_def_id": 4021 },
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 42 },
     "sorts": [
       {
-        "variable_def": { "kind": "variable", "source": "action", "variable_def_id": 4055 },
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 4055, "field_type": "single_text", "previous": false, "collection": true, "triggering": false },
         "direction": "asc"
       }
     ]

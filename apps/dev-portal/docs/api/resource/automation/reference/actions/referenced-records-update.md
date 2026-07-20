@@ -47,7 +47,7 @@ An action entry inside an automation definition's `actions[]`:
     "field_assignments": [
       {
         "field_type": "single_text",
-        "variable_def": { "kind": "variable", "source": "field", "field_id": 4021 },
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 4021, "field_type": "single_text", "previous": false, "collection": false, "triggering": false },
         "assignment_type": "set",
         "field_value": ["Processed by automation"]
       }

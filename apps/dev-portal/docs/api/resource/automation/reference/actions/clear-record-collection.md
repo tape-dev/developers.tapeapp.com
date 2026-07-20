@@ -32,7 +32,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "clear_record_collection",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "variable": "found_records" }
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 100 }
   }
 }
 ```

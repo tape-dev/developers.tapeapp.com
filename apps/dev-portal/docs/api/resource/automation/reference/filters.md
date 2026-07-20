@@ -17,11 +17,11 @@ match. An automation's `filter` is `null` when it has none (it always runs). The
 `conditional` action's `condition` and a `for_loop`'s break/continue conditions — see
 [actions](/docs/api/resource/automation/reference/actions).
 
-:::caution In-`config` conditions use a different, internal encoding
-This public tree (`operator: "and"`, `rows`) applies to an automation's `filter` and to a control-flow action's
-`condition` / `break_condition` / `continue_condition`. A condition embedded **inside an action's `config`** (e.g. a
-`collect_app_records` / `filter_record_collection` `match_condition`) currently round-trips in the raw internal shape
-instead — `{ "operator": "AND" | "OR", "boolean_expr_rows": [...] }`, uppercase. Don't assume the public tree there.
+:::note The same tree is used everywhere conditions appear
+This public tree (`operator: "and" | "or"`, `rows`) is used for an automation's `filter`, a control-flow action's
+`condition` / `break_condition` / `continue_condition`, **and** a condition embedded inside an action's `config` (e.g. a
+`collect_app_records` / `filter_record_collection` `match_condition`) — all with the same lower-case `operator` + `rows`
+shape.
 :::
 
 ## The tree: groups and conditions
@@ -87,9 +87,9 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `text` | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values) | Text / template comparison. |
 | `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
 | `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
-| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date; `base` omitted = now. |
-| `boolean` | `boolean` | Boolean comparison. **Read-only** (see limitations). |
-| `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. **Read-only**. |
+| `date` | `date`: `{ base, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **required** — omitting it currently makes the condition silently never-match (intended to become a `400`). |
+| `boolean` | `boolean` | Boolean comparison. **Output-only** — arises from a special subject; see limitations. |
+| `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. **Output-only** — see limitations. |
 
 :::caution On write, the `type` tag must match the field
 Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value

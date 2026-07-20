@@ -48,7 +48,7 @@ An action entry inside an automation definition's `actions[]`:
     "automation_id": 4021,
     "call_arguments": [
       {
-        "variable_def": { "custom_type": "text", "label": "Note" },
+        "variable_def": { "custom_type": "any", "label": "Note" },
         "assignment_type": "set",
         "value": ["Opened from ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }]
       }

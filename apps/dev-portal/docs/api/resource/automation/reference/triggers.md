@@ -43,8 +43,9 @@ They appear on read but are **rejected on input**. The input `config_schema` is 
 :::note Companion `_enabled` flags
 Some config values are gated by a sibling boolean `<field>_enabled` — the value takes effect only when its `_enabled`
 flag is `true`. The `automation_called` / `weblink_clicked` triggers pair `triggering_app_ids` with
-`triggering_app_ids_enabled` and `custom_variable_defs` with `custom_variable_defs_enabled`. A minimal `{ app_id }`
-config is accepted (the extra members are optional); send the paired `_enabled` flag whenever you set its value.
+`triggering_app_ids_enabled` and `custom_variable_defs` with `custom_variable_defs_enabled`. A minimal `{}` config is
+accepted — all members are optional, and `app_id` is **not** a config field (it is stamped from the automation's own
+app); send the paired `_enabled` flag whenever you set its value.
 :::
 
 To set or replace a trigger, use [`PUT /v1/automation/{automation_id}/trigger`](/docs/api/resource/automation/manage)

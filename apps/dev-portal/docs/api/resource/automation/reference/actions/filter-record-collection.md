@@ -34,11 +34,15 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "filter_record_collection",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "variable": "found_records" },
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 42 },
     "match_condition": {
       "operator": "and",
-      "conditions": [
-        { "field": "status", "comparison": "is", "value": ["open"] }
+      "rows": [
+        {
+          "subject": { "kind": "variable", "source": "field", "field_id": 512, "field_type": "status", "previous": false, "collection": false, "triggering": false },
+          "operator": "is",
+          "value": { "type": "ids", "ids": [9001] }
+        }
       ]
     }
   }
