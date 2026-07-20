@@ -81,4 +81,5 @@ So `broken_reason` on the object can differ from what `validate` returns.
 
 `id`, `app_id` and `workspace_id` are plain JSON **integers**. The only string-wrapped ID in this resource is a
 **[revision](/docs/api/resource/automation/revisions) ID** (a 64-bit value). Node IDs inside `filter` and `actions`
-are opaque **strings** (UUIDs) — treat them as handles, not numbers.
+are opaque **strings** — a caller-supplied id is preserved verbatim; server-minted ones (when you omit an id) are
+UUIDs. Treat them as handles, not numbers.

@@ -173,7 +173,7 @@ a condition tests a field against an operator. The root group has no `id`; neste
 | --- | --- | --- |
 | `operator` | `string` | `and` (match all) or `or` (match any) — on a group. |
 | `rows` | `array` | A group's children — nested groups or conditions. |
-| `subject` | `object` | On a condition: a [reference](#dynamic-values) to the field being tested. |
+| `subject` | `object` | On a condition: a [reference](#dynamic-values) to the field, record-metadata, trigger-output or action-output being tested. |
 | `operator` | `string` | On a condition: one of the [22 operators](/docs/api/resource/automation/reference/filters), e.g. `is`, `contains`, `is_any_of`. |
 | `value` | `object` | On a condition: the tagged comparison value. Absent for value-less operators such as `is_empty`. |
 

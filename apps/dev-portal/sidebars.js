@@ -3,24 +3,6 @@ module.exports = {
   mainSidebar: [
     {
       type: 'category',
-      label: 'Calculation Field',
-      collapsed: true,
-      items: [
-        'calculation/introduction',
-        'calculation/editors',
-        'calculation/libraries',
-        'calculation/markdown',
-        'calculation/html',
-        {
-          type: 'category',
-          label: 'Components',
-          collapsed: false,
-          items: ['calculation/component/link', 'calculation/component/button', 'calculation/component/collapsible'],
-        },
-      ],
-    },
-    {
-      type: 'category',
       label: 'Developer API',
       collapsed: true,
       items: [
@@ -130,6 +112,24 @@ module.exports = {
             'api/resource/automation-run',
             'api/resource/automation-usage-report',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Calculation Field',
+      collapsed: true,
+      items: [
+        'calculation/introduction',
+        'calculation/editors',
+        'calculation/libraries',
+        'calculation/markdown',
+        'calculation/html',
+        {
+          type: 'category',
+          label: 'Components',
+          collapsed: false,
+          items: ['calculation/component/link', 'calculation/component/button', 'calculation/component/collapsible'],
         },
       ],
     },

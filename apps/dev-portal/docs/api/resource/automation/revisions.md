@@ -18,10 +18,11 @@ definition back. Both endpoints require a **user API key** and workspace-admin a
 
 :::note Rolling back is not always a verbatim re-`PUT`
 A revision is a **read** snapshot, so its `trigger` / `filter` can carry output-only fields — a `webhook_received`
-trigger's server-assigned `webhook_url`, or read-only filter subjects and change-tracking conditions (see
+trigger's server-assigned `webhook_url`, or a **change-tracking condition** (see
 [triggers](/docs/api/resource/automation/reference/triggers) and
 [filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Strip those before re-submitting; a
-verbatim `PUT` of such a revision is rejected with a `400`.
+verbatim `PUT` of such a revision is rejected with a `400`. Ordinary field / metadata / trigger / action subjects
+round-trip fine.
 :::
 
 ## List revisions

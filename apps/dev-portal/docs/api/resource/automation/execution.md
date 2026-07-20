@@ -28,6 +28,13 @@ Manual run and simulate share one body. You send the payload the automation's **
 
 A well-formed body that doesn't match the automation's **actual** trigger is rejected with a `400`.
 
+:::note Manual-run and simulate ignore `paused`
+Both execute the automation's **stored definition regardless of its `paused` flag** — activation is **not** a
+precondition. Only a **broken** definition is refused (`409`). This is deliberately different from the
+[call-automation endpoint](/docs/api/resource/automation/advanced), which silently produces **no run** for a paused
+target. So `manual-run` is the way to test-fire an automation without taking it live; pausing does not protect against it.
+:::
+
 :::info Asynchronous — no run ID is returned
 Both answer `202` with a fixed message and **no run ID** (the run row is minted only after filtering, in the worker).
 To observe the result, poll the [Automation Run](/docs/api/resource/automation-run) API — its per-automation listing

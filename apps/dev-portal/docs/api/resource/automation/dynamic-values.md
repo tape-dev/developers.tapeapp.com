@@ -28,6 +28,12 @@ An email subject "Hi \{first name\}!" is:
 A literal-only value is just a one-element array — `["shipped"]`. A field typed as a plain scalar (a number, a
 boolean, an ID) is **not** wrapped in an array; only template/code-typed fields are.
 
+A reference can also stand **alone** as an unwrapped object at a config key — not every reference lives inside an
+interleaved array. Non-template config slots that carry a single reference hold it as a bare object: a `for_loop`'s
+`iterable`, a collection action's `record_collection`, or a sort key is one reference object (e.g.
+`{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 87 }`), not a one-element
+array. See [Action examples](/docs/api/resource/automation/action-examples) for the collect → consume pattern.
+
 ## Two flavors
 
 | Flavor | Contains | Used for |
@@ -48,7 +54,7 @@ Every reference has a `kind`, and an optional **`property`** (e.g. a user refere
 | `trigger` | `trigger_type` (+ `key_path`, `data_type` for `webhook_payload_property`) | The trigger's output. |
 | `action` | `action_type`, `app_id?` | A prior action's output. |
 | `global` | `global_type` | A workflow-wide value. |
-| `meta` | `meta_type`, `app_id?` | Record metadata. |
+| `meta` | `meta_type`, `app_id?`, `previous`, `collection`, `triggering` | Record metadata. |
 | `custom` | `custom_type`, `label` | A user-declared variable. |
 
 **Vocabularies** (the exhaustive token sets):
@@ -80,6 +86,20 @@ Every reference has a `kind`, and an optional **`property`** (e.g. a user refere
 - **`property` tokens are stored-value-derived**, so they can look unlike the UI label (a status option serializes as
   `completed`, a checklist assignee as `assign_user_formatted`).
 - **Referenced IDs aren't validated when you write** — a structurally valid but nonexistent/foreign ID passes here and
-  surfaces only at [validate](/docs/api/resource/automation/execution) / activate time.
-- **A few references are lossy in v1** — `meta` references don't preserve `previous`/`collection`/`triggering` on a
-  write, and `html_table_rows` custom variables don't round-trip their inner template.
+  surfaces at [validate](/docs/api/resource/automation/execution) / activate time. Even then, validation is **not
+  exhaustive**: some references (and some plain config ids) are only checked at run time, so `valid: true` does not
+  guarantee an executable run.
+- **`meta` references preserve `previous` / `collection` / `triggering` on write** — like `field` references. These
+  flags are emitted on read **only when `true`**, so a bare `meta` reference reads back without them. A
+  collection-scoped meta reference (`collection: true`, with `app_id`) is what collection actions consume — e.g. it is
+  required as a `sort_record_collection` sort key (a non-collection meta ref there fails validation).
+- **One reference is still lossy in v1** — `html_table_rows` custom variables don't round-trip their inner template.
+- **Template/code members accept a bare string on write** — shorthand for a one-element literal array
+  (`"application/json"` ≡ `["application/json"]`). The read path always returns them **array-wrapped**, and the
+  coercion applies **recursively** to nested template members (e.g. each `http_call_headers[].value`, and the
+  template/code strings inside `field_assignments`). So a written config never echoes back byte-for-byte for these
+  fields — don't diff write against read.
+- **On a `field` reference, `field_type` is required on write** — the input mapper rejects a reference without it. The
+  three boolean flags scope the value: `previous: true` reads the value **before** the triggering change;
+  `triggering: true` binds to the record that fired the trigger; `collection: true` selects the **per-collected-record**
+  value across an upstream collection (what collection actions consume), vs. the current record when `false`.

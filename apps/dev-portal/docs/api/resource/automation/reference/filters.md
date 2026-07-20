@@ -98,12 +98,16 @@ record. See [Troubleshooting → Filter values](/docs/automations/troubleshootin
 
 ## v1 limitations
 
-- **Input accepts field subjects only.** On create/update, a structured condition's `subject` must be a **field**
-  reference. Conditions whose subject is record metadata, a trigger output or a prior action's output are **read-only**
-  — they round-trip on read but are rejected with a `400` on write.
+- **A subject must have a boolean-expression leaf.** On create/update, a structured condition's `subject` may be a
+  **field** reference, most **record-metadata** references (`app_record_id`, `created_at`, `last_modified_at`,
+  `created_by`, `last_modified_by`), a **trigger-output** reference (e.g. `webhook_payload_property`) or a prior
+  action's **file collection** — all of these are writable and round-trip. Value-only tokens that have no filter leaf
+  (`meta_type` `record_id` / `record_url` / `revision` / `all_comments`, the raw `webhook_payload`) and `global` /
+  `custom` references are rejected with a `400` on write.
 - **Change-tracking conditions are read-only.** A "has changed" style condition has no public operator, so it reads as
   an operator-less `{ id, subject }` and **cannot be re-submitted** verbatim.
-- The `boolean` and `entity_type` value kinds only arise from those read-only subjects, so they too are output-only.
+- The `boolean` and `entity_type` value kinds arise from special subjects and are treated as output-only.
 
-Because of these, a verbatim `GET` → `PUT` of an automation that uses any of the above will fail. This is a known v1
-limitation, not a bug.
+A verbatim `GET` → `PUT` still fails only for an automation that carries a **change-tracking condition** or an
+output-only value kind — strip those first. Ordinary field / metadata / trigger / action-file subjects round-trip.
+This is a known v1 limitation, not a bug.
