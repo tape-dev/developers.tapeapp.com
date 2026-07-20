@@ -77,6 +77,11 @@ The created workspace will be returned in the response:
 `}
 </ContextCodeBlock>
 
+:::caution Limit — 500 workspaces per organization
+An organization can hold at most **500 workspaces**. Once an organization has reached this limit,
+further create requests are rejected with an error until you delete an existing workspace.
+:::
+
 :::info Workspace type
 
 The `type` property to create workspaces needs to be one of `"closed"`, `"open"`, `"default"` and `"private"`. This corresponds to the workspace types [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces).

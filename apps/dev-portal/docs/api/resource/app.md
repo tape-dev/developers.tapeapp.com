@@ -212,6 +212,11 @@ Create a new app within a workspace. The request body contains the following fie
 - icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
 - item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
 
+:::caution Limit — 500 apps per workspace
+A workspace can hold at most **500 apps**. Once a workspace has reached this limit, further create
+requests are rejected with an error until you delete an existing app.
+:::
+
 Here is an example request body for creating a contacts app within a workspace with ID 1.
 The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
 

@@ -71,6 +71,11 @@ Returns `201` with the created [automation](/docs/api/resource/automation/refere
 against a **closed schema** — any top-level property not in the table above is rejected with a `400` (as is an unknown
 key inside a trigger's `config`).
 
+:::caution Limit — 500 automations per app
+An app can hold at most **500 automations**. Once an app has reached this limit, further create
+requests are rejected with an error until you delete an existing automation.
+:::
+
 ## Retrieve an automation
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/{automation_id}" />
