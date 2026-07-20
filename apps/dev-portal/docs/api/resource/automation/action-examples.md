@@ -40,7 +40,7 @@ Creates a record in an app. With no `field_assignments`, it creates an **empty**
 ```
 
 - `app_id` (**required**) — the target app; it is not defaulted, so always send it.
-- `field_assignments` omitted → no field values. Add entries to set fields; each value is a [dynamic value](/docs/api/resource/automation/dynamic-values).
+- `field_assignments` omitted → an empty record. Only the empty `[]` case is documented today: the full field-assignment encoding is a raw internal shape (SCREAMING_SNAKE `field_type` / `assignment_type`) that is **not yet stable through the public API** — don't hand-write it (see **Update the current record**, below).
 - `trigger_other_flows: false` stops the new record from re-firing automations — set it to avoid a recursion when this automation triggers on the same app.
 - All three keys are plain scalars (no dynamic-value arrays here).
 
@@ -59,7 +59,7 @@ Updates the record the run is executing on, applying a list of `field_assignment
 }
 ```
 
-- `field_assignments` (**required**) — an empty `[]` is a valid **no-op** update (changes no fields, still logs success). Populate it with `{ field_type, … }` entries carrying [dynamic values](/docs/api/resource/automation/dynamic-values) to actually set fields.
+- `field_assignments` (**required**) — an empty `[]` is a valid **no-op** update (changes no fields, still logs success). **Only `[]` is documented today.** A populated field assignment is a raw internal object (SCREAMING_SNAKE `field_type` / `assignment_type`, nested match/search conditions) whose encoding is not final and not yet reliably writable through the public API — build against [`meta/action`](/docs/api/resource/automation/discovery) and treat non-empty assignments as experimental.
 - Targets the **current record** implicitly — no `app_id` (that's `referenced_records_update`) and no `record_collection` (that's `collected_records_update`).
 - `silent` / `trigger_webhooks` / `trigger_other_flows` / `author_id` are optional mutation flags; omitting `author_id` runs the update as the automation's default author.
 
@@ -80,6 +80,25 @@ Runs custom code in the automation sandbox. The most self-contained action — n
 - `code` (**required**) — a **code dynamic value**: an array of literal strings interleaved with variable/value reference tokens to embed record data. A plain string is accepted and coerced to array form.
 - `custom_variable_defs` omitted → the script declares no variables for later actions.
 
+## Declare a variable — `custom_variable`
+
+Computes a value and stores it under a declared variable that later actions can reference.
+
+```json
+{
+  "type": "custom_variable",
+  "group": "action",
+  "config": {
+    "custom_variable_defs": [{ "custom_type": "any", "label": "Result" }],
+    "assignment_code": ["return 1 + 1;"]
+  }
+}
+```
+
+- `custom_variable_defs` — the **declaration**: each entry is `{ "custom_type", "label" }` (`custom_type` ∈ `any` / `single_file` / `multi_file` / `single_link` / `html_table_rows`). Later actions reference the variable by `{ "kind": "variable", "source": "custom", "custom_type", "label" }`.
+- `assignment_code` — a **code dynamic value** (array) computing the value.
+- **Silent no-op trap:** with an empty/omitted `custom_variable_defs` this action still *validates and persists*, but at run time it silently skips — no per-action log. The same trap applies to a `for_loop` with no `iterable` and an `authenticated_http_call` with no `authentication_provider_id`.
+
 ## Send an email — `send_email`
 
 Sends one email through the organization's SMTP account.
@@ -96,7 +115,7 @@ Sends one email through the organization's SMTP account.
 }
 ```
 
-- `to_address` and `subject` are **required**; `message_body` isn't schema-required but is needed for a real send — provide it.
+- `to_address` and `subject` are **required**; `message_body` is **optional** — omit it and the email still sends, with an empty body. Provide it for a non-empty message.
 - All three are **template dynamic values** (arrays); the HTML body round-trips verbatim.
 - `smtp_account_id` omitted → the organization's **default** SMTP account. Pin an id only if you need a specific account.
 
@@ -205,3 +224,4 @@ The collection pattern: an upstream **collect** action publishes a `record_colle
 
 - `record_collection` is an **object reference**, never a string. It resolves by `action_type` + `app_id` to the nearest upstream producer, so it doesn't name the collect action's `id`.
 - The same reference shape feeds any collection consumer — `filter_record_collection`, `sort_record_collection`, `collected_records_comment_create`, a `for_loop`'s `iterable`, and so on.
+- **Enum casing:** most config enums use lower-case tokens (`http_call_type`, `weblink_expiration`, `exit_type`), but a few round-trip **UPPER-CASE** — notably `ref_collection_defs[].direction` (`OUTGOING` / `INCOMING` / `BOTH`, on `collect_referenced_records`) and `match_type` (`ALL` / `FILTERED`). Send them as the `config_schema` gives them.

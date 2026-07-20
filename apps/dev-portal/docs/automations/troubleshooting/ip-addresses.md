@@ -18,3 +18,7 @@ When dispatching remote HTTP operations inside a Tape workflow automation, the w
 Some functionality may not be available without whitelisting.
 
 Note: We do not recommend relying on static IP addresses currently; if you can, avoid it. These IP addresses may be subject to change over time and may break integrations if you rely on static IPs.
+
+## Outbound targets: SSRF protection
+
+For security, the `http_call` and `authenticated_http_call` actions **refuse** outbound requests whose target host resolves to a **private, internal, loopback or link-local address**. Tape resolves the hostname's DNS and rejects the request when it points at a non-public address. In practice this means automations can only call publicly reachable services — internal/localhost endpoints, private VPC hosts, and metadata endpoints are blocked. This is deliberate and not configurable.

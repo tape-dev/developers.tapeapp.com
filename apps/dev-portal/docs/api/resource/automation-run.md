@@ -29,21 +29,21 @@ therefore carries no workspace role to check — using one here returns a `401`.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation-run" />
 
-Returns a page of runs, newest first, without their logs. All body parameters are optional — an empty body lists
+Returns a page of runs, newest first, without logs. All body parameters are optional — an empty body lists
 every run you may see.
 
 **Body Parameters**
 
-| Parameter       | Type        | Description                                                                                                    |
-| --------------- | ----------- | -------------------------------------------------------------------------------------------------------------- |
-| `cursor`        | `string`    | Cursor of the previous page. Mutually exclusive with the filters below — see [Pagination](#pagination).        |
-| `limit`         | `integer`   | Page size. Between `1` and `500`. Defaults to `50`.                                                            |
-| `app_ids`       | `integer[]` | Only runs of automations belonging to these apps. Max 100 ids. Only database apps can have automations.        |
-| `automation_ids`| `integer[]` | Only runs of these automations. Max 100 ids.                                                                   |
-| `workspace_ids` | `integer[]` | Only runs of automations in these workspaces. Max 100 ids.                                                     |
-| `status`        | `string[]`  | Only runs in these statuses. One or more of `pending`, `running`, `completed`, `failed`, `cancelled`.          |
-| `created_at_from` | `string`  | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).            |
-| `created_at_to` | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).           |
+| Parameter         | Type        | Description                                                                                             |
+| ----------------- | ----------- | ------------------------------------------------------------------------------------------------------- |
+| `cursor`          | `string`    | Cursor of the previous page. Mutually exclusive with the filters below — see [Pagination](#pagination). |
+| `limit`           | `integer`   | Page size. Between `1` and `500`. Defaults to `50`.                                                     |
+| `app_ids`         | `integer[]` | Only runs of automations belonging to these apps. Max 100 ids. Only database apps can have automations. |
+| `automation_ids`  | `integer[]` | Only runs of these automations. Max 100 ids.                                                            |
+| `workspace_ids`   | `integer[]` | Only runs of automations in these workspaces. Max 100 ids.                                              |
+| `status`          | `string[]`  | Only runs in these statuses. One or more of `pending`, `running`, `completed`, `failed`, `cancelled`.   |
+| `created_at_from` | `string`    | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).     |
+| `created_at_to`   | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).    |
 
 Every id you name must be one you may see: an app, automation or workspace you do not administrate is rejected with
 a `404`.
@@ -125,48 +125,48 @@ The example below requests the 2 most recent successful runs you may see.
 
 **Response fields**
 
-| Field            | Type      | Description                                                                                              |
-| ---------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
-| `total`          | `integer` | Number of runs matching the filters, across all pages. See [Pagination](#pagination).                    |
-| `automation_runs`| `array`   | The page itself. Each entry is a run — see [The run object](#the-run-object).                            |
-| `cursor`         | `string`  | Cursor of the last run on this page. Pass it back to fetch the next one. `null` on the last page.        |
+| Field             | Type      | Description                                                                                       |
+| ----------------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `total`           | `integer` | Number of runs matching the filters, across all pages. See [Pagination](#pagination).             |
+| `automation_runs` | `array`   | The page itself. Each entry is a run — see [The run object](#the-run-object).                     |
+| `cursor`          | `string`  | Cursor of the last run on this page. Pass it back to fetch the next one. `null` on the last page. |
 
 ### The run object
 
 Each entry in `automation_runs` — and the `automation_run` returned when retrieving a single run — has these fields:
 
-| Field                            | Type      | Description                                                                                     |
-| -------------------------------- | --------- | ------------------------------------------------------------------------------------------------- |
-| `id`                             | `string`  | ID of the run. A 64-bit integer, returned as a string so it is safe to handle in any language.  |
-| `automation_id`                  | `integer` | The automation this run executed.                                                               |
-| `automation_name`                | `string`  | Name of the automation.                                                                         |
-| `automation_revision_id`         | `string`  | The revision of the automation this run executed. A 64-bit integer, returned as a string.       |
-| `app_id`                         | `integer` | The app the automation belongs to.                                                              |
-| `app_name`                       | `string`  | Name of that app.                                                                               |
-| `workspace_id`                   | `integer` | The workspace the app belongs to.                                                               |
-| `status`                         | `string`  | See [Statuses](#statuses).                                                                      |
-| `type`                           | `string`  | Execution kind of the run — one of `regular`, `manual`, `simulation`.                           |
-| `created_at`                     | `string`  | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                       |
-| `completed_at`                   | `string`  | When the run finished, in UTC. `null` while the run is still `pending` or `running`.            |
-| `num_consumed_actions`           | `integer` | Number of action credits this run consumed.                                                     |
-| `failure_reason`                 | `string` \| `null` | Why the run failed, if it did — one of `filters_setup_failed`, `filters_failed`, `actions_setup_failed`, `actions_failed`, `actions_timeout`, `actions_resource_limit_exceeded`, `exit_on_purpose`. `null` for any run that has not failed. |
-| `error_message`                  | `string` \| `null` | Human-readable error detail for a failed run. `null` otherwise.                        |
-| `triggered_on_record_id`         | `integer` | The record this run executed on. `null` if the run was not triggered by a record.               |
-| `triggered_on_record_revision_id`| `integer` | The revision of that record. `null` if the run was not triggered by a record.                   |
-| `triggered_by_automation_id`     | `integer` | The automation that started this run, if it was called by another automation. `null` otherwise. |
+| Field                             | Type               | Description                                                                                                                                                                                                                                 |
+| --------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                              | `string`           | ID of the run. A 64-bit integer, returned as a string so it is safe to handle in any language.                                                                                                                                              |
+| `automation_id`                   | `integer`          | The automation this run executed.                                                                                                                                                                                                           |
+| `automation_name`                 | `string`           | Name of the automation.                                                                                                                                                                                                                     |
+| `automation_revision_id`          | `string`           | The revision of the automation this run executed. A 64-bit integer, returned as a string.                                                                                                                                                   |
+| `app_id`                          | `integer`          | The app the automation belongs to.                                                                                                                                                                                                          |
+| `app_name`                        | `string`           | Name of that app.                                                                                                                                                                                                                           |
+| `workspace_id`                    | `integer`          | The workspace the app belongs to.                                                                                                                                                                                                           |
+| `status`                          | `string`           | See [Statuses](#statuses).                                                                                                                                                                                                                  |
+| `type`                            | `string`           | Execution kind of the run — one of `regular`, `manual`, `simulation`.                                                                                                                                                                       |
+| `created_at`                      | `string`           | When the run was created, in UTC (`YYYY-MM-DD HH:mm:ss`).                                                                                                                                                                                   |
+| `completed_at`                    | `string`           | When the run finished, in UTC. `null` while the run is still `pending` or `running`.                                                                                                                                                        |
+| `num_consumed_actions`            | `integer`          | Number of action credits this run consumed.                                                                                                                                                                                                 |
+| `failure_reason`                  | `string` \| `null` | Why the run failed, if it did — one of `filters_setup_failed`, `filters_failed`, `actions_setup_failed`, `actions_failed`, `actions_timeout`, `actions_resource_limit_exceeded`, `exit_on_purpose`. `null` for any run that has not failed. |
+| `error_message`                   | `string` \| `null` | Human-readable error detail for a failed run. `null` otherwise.                                                                                                                                                                             |
+| `triggered_on_record_id`          | `integer`          | The record this run executed on. `null` if the run was not triggered by a record.                                                                                                                                                           |
+| `triggered_on_record_revision_id` | `integer`          | The revision of that record. `null` if the run was not triggered by a record.                                                                                                                                                               |
+| `triggered_by_automation_id`      | `integer`          | The automation that started this run, if it was called by another automation. `null` otherwise.                                                                                                                                             |
 
 Timestamps use the Tape API datetime format described under [Date & Timezone](/docs/api/date-timezone) — always
 UTC, with no `T` separator, no `Z` suffix and no milliseconds.
 
 ### Statuses
 
-| Status      | Description                                                    |
-| ----------- | -------------------------------------------------------------- |
-| `pending`   | The run is scheduled and has not started executing yet.        |
-| `running`   | The run is currently executing.                                |
-| `completed` | The run finished successfully.                                 |
-| `failed`    | The run finished with an error.                                |
-| `cancelled` | The run was cancelled before it could finish.                  |
+| Status      | Description                                             |
+| ----------- | ------------------------------------------------------- |
+| `pending`   | The run is scheduled and has not started executing yet. |
+| `running`   | The run is currently executing.                         |
+| `completed` | The run finished successfully.                          |
+| `failed`    | The run finished with an error.                         |
+| `cancelled` | The run was cancelled before it could finish.           |
 
 ### Filtering by date
 
@@ -404,20 +404,34 @@ here too, even though they are excluded from most listings.
 
 ### The log object
 
-A run is a sequence of **steps**: the trigger that started it, the filter that decided whether to proceed, and one
-entry per action executed. This is the same view of a run you get in the Automation Center and in its CSV export —
+A run is a sequence of **steps**: the trigger that started it, the filter that decided whether to proceed, and an
+entry per executed action. This is the same view of a run you get in the Automation Center and in its CSV export —
 not the raw internal event stream.
 
-| Field       | Type      | Description                                                                                                             |
-| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `id`        | `string`  | Stable identifier of the step within its run — a durable handle, not a position. See below.                             |
-| `type`      | `string`  | `trigger`, `filter`, `action`, or `exception`.                                                                          |
-| `status`    | `string`  | Outcome of the step: `in_progress`, `success`, `failure`, `skipped` or `cancelled`.                                     |
-| `label`     | `string`  | Human-readable name of the step, e.g. `"Trigger"` or `"Send email"`.                                                    |
-| `messages`  | `array`   | The messages the step logged. Each has a `message` and a `level` (`info`, `warn`, `error`, `success`, or `null`).       |
-| `action_id` | `string`  | The automation action this step executed. `null` for `trigger`, `filter` and `exception` steps.                         |
-| `record_id` | `integer` | The record this step acted on, where it acted on one. `null` otherwise.                                                 |
-| `logged_at` | `string`  | When the step was logged, in UTC (`YYYY-MM-DD HH:mm:ss`).                                                               |
+:::caution Not every action emits its own step
+A `completed` run does **not** guarantee a per-action `success` step for every top-level action. Control-flow
+containers (`conditional`, `for_loop`) log their **nested** actions, not themselves; and some actions can reach a
+clean `completed` with no `success` step of their own id (e.g. a codegen-skipped `authenticated_http_call`,
+`collected_records_collect_referenced_records`, or a no-op update). Match on the specific `action_id` you expect — the
+absence of a step is not proof the run failed.
+:::
+
+:::info Logs arrive asynchronously
+Structured logs are buffered and land **after** the run flips to a terminal status — the trigger/filter steps first,
+an action's step a beat later. When polling, wait for the **specific** log you need (the step for your `action_id`),
+not merely for `logs.length > 0`, or you may read the run before its action steps are in.
+:::
+
+| Field       | Type      | Description                                                                                                       |
+| ----------- | --------- | ----------------------------------------------------------------------------------------------------------------- |
+| `id`        | `string`  | Stable identifier of the step within its run — a durable handle, not a position. See below.                       |
+| `type`      | `string`  | `trigger`, `filter`, `action`, or `exception`.                                                                    |
+| `status`    | `string`  | Outcome of the step: `in_progress`, `success`, `failure`, `skipped` or `cancelled`.                               |
+| `label`     | `string`  | Human-readable name of the step, e.g. `"Trigger"` or `"Send email"`.                                              |
+| `messages`  | `array`   | The messages the step logged. Each has a `message` and a `level` (`info`, `warn`, `error`, `success`, or `null`). |
+| `action_id` | `string`  | The automation action this step executed. `null` for `trigger`, `filter` and `exception` steps.                   |
+| `record_id` | `integer` | The record this step acted on, where it acted on one. `null` otherwise.                                           |
+| `logged_at` | `string`  | When the step was logged, in UTC (`YYYY-MM-DD HH:mm:ss`).                                                         |
 
 Step ids are `"{run_id}-trigger"` and `"{run_id}-filter"` for the trigger and filter. An action step also carries
 the execution it belongs to — `"{run_id}-action-{action_id}-{execution_id}"` — because an action inside a loop runs

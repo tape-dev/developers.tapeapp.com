@@ -229,7 +229,7 @@ An automation has no single `status` field. Its state is the pair of booleans `p
 | `paused` | `broken` | Meaning |
 | --- | --- | --- |
 | `false` | `false` | **Live** — the automation runs when its trigger fires. |
-| `true` | `false` | **Paused** — a valid automation that is not running. |
+| `true` | `false` | **Paused** — a valid automation that is not fired automatically by its trigger. It can still be [manually run or simulated](/docs/api/resource/automation/execution). |
 | any | `true` | **Broken** — the definition is not executable and will not run. |
 
 - A newly **created** automation lands **paused** and not broken — a valid draft you configure, then activate.
@@ -258,7 +258,9 @@ no milliseconds. See [Date & Timezone](/docs/api/date-timezone).
 
 This is separate from the automation **action credits** a real [run](/docs/api/resource/automation/execution)
 consumes as it executes (reported as `num_consumed_actions` on the resulting run). See
-[Request limits](/docs/api/request-limits) for how rate limiting works.
+[Request limits](/docs/api/request-limits) for how rate limiting works. Runtime limits — the per-run action cap, the
+1000-record collection cap, and the shared email send quota — are covered under
+[Automations → Limitations](/docs/automations/limitations).
 
 ## Errors
 

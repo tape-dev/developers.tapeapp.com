@@ -39,6 +39,13 @@ Some config fields are **server-assigned and read-only** — for example a `webh
 They appear on read but are **rejected on input**. The input `config_schema` is the read schema minus these fields.
 :::
 
+:::note Companion `_enabled` flags
+Some config values are gated by a sibling boolean `<field>_enabled` — the value takes effect only when its `_enabled`
+flag is `true`. The `automation_called` / `weblink_clicked` triggers pair `triggering_app_ids` with
+`triggering_app_ids_enabled` and `custom_variable_defs` with `custom_variable_defs_enabled`. A minimal `{ app_id }`
+config is accepted (the extra members are optional); send the paired `_enabled` flag whenever you set its value.
+:::
+
 To set or replace a trigger, use [`PUT /v1/automation/{automation_id}/trigger`](/docs/api/resource/automation/manage)
 (the whole body is the trigger), or include `trigger` in a [create or update](/docs/api/resource/automation/manage).
 To remove one, send `trigger: null` on update.

@@ -66,7 +66,9 @@ Creates an automation in the app. It lands **paused and not broken** — a valid
 </Tabs>
 
 Returns `201` with the created [automation](/docs/api/resource/automation/reference/object). `null` is not accepted for
-`description` or `trigger` here (unlike [update](#update-an-automation)).
+`description` or `trigger` here (unlike [update](#update-an-automation)). The create and update bodies are validated
+against a **closed schema** — any top-level property not in the table above is rejected with a `400` (as is an unknown
+key inside a trigger's `config`).
 
 ## Retrieve an automation
 
@@ -108,7 +110,10 @@ you administrate nothing.
 </ContextCodeBlock>
 
 Each entry is a full [automation object](/docs/api/resource/automation/reference/object). Results are ordered
-**oldest-first** (by ID). `total` is a snapshot taken on the first page. See [Pagination](/docs/api/pagination).
+**oldest-first** (by ID). `total` is a snapshot taken on the first page. See [Pagination](/docs/api/pagination). The
+`cursor` is **scope-pinned** — it is bound to the exact list scope that issued it (this app, this workspace, or your
+org). Replaying a cursor against a different scope is rejected with a `400`, not answered with an empty page; pass each
+cursor back only to the same list call that produced it.
 
 ## Update an automation
 
@@ -159,7 +164,9 @@ The **whole body is the trigger** `{ type, config }`. It replaces any existing t
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/automation/{automation_id}/activate" />
 
 Takes the automation live. Validity is **recomputed server-side** — a broken definition is refused with `409`
-(point users at [validate](/docs/api/resource/automation/execution) for the reasons). No request body.
+(point users at [validate](/docs/api/resource/automation/execution) for the reasons). No request body. **Idempotent**
+for a valid automation: re-activating an already-live one succeeds as a no-op. (Unlike pause, activate re-runs the
+broken-gate every call, so this holds only while the definition stays valid.)
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/automation/4021/activate -u #USER_API_KEY:`}

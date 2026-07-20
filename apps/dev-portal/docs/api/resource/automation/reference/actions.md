@@ -26,10 +26,29 @@ Actions are **what** an automation does: an ordered list of steps. Most are leaf
 | `config` | `object` | The step's settings — keys per the action's `config_schema`. [Dynamic values](/docs/api/resource/automation/dynamic-values) inside are normalized to the reference model. |
 | _control-flow fields_ | | Present only for `conditional` / `for_loop` — see below. |
 
-:::note `config` is an open bag
-Beyond its dynamic-value tokens, `config` is a raw passthrough keyed by the action's `config_schema`; per-type config
-shapes are a future tightening. Read the keys from [`meta/action`](/docs/api/resource/automation/discovery) and don't
-depend on internal encodings yet.
+:::note `config` is normalized, not echoed back verbatim
+`config` keys come from the action's `config_schema` on [`meta/action`](/docs/api/resource/automation/discovery), but a
+written `config` does **not** read back byte-for-byte:
+
+- **Omitted members are server-defaulted on read.** An omitted `match_condition` / `attach_files_match_condition` reads
+  back as an empty condition (`{ "boolean_expr_rows": [] }`), and omitted required arrays (`ref_collection_defs`,
+  `field_assignments`, `call_arguments`, `http_call_headers`, `sorts`) read back as `[]`. A verbatim `GET` → `PUT`
+  still works (the defaults are idempotent) — but don't diff write against read.
+- **Companion `_enabled` flags gate some values.** A value takes effect only when its sibling boolean is `true` —
+  `limit` + `limit_enabled`, `triggering_app_ids` + `triggering_app_ids_enabled`, `custom_variable_defs` +
+  `custom_variable_defs_enabled`. Send both members; with `limit_enabled: false`, `limit` is ignored (forced to the max).
+- **A condition embedded in `config`** (e.g. a collect/filter action's `match_condition`) uses the **internal**
+  encoding — `{ "operator": "AND" | "OR", "boolean_expr_rows": [...] }`, uppercase — **not** the public
+  [filter tree](/docs/api/resource/automation/reference/filters) (`operator: "and"`, `rows`) that a `conditional`'s
+  `condition` uses.
+- **`config_schema` validity is structural only.** Passing the schema gets the action *stored*; per-action semantic
+  constraints surface later at [validate](/docs/api/resource/automation/execution) / activate as
+  [broken-reason codes](/docs/api/resource/automation/reference/errors) — e.g. `rollup_iterable_values` requires
+  `rollup_variable_def`, `referenced_records_update.app_id` must be a relation-edge app of the trigger app, and a sort
+  key must be collection-scoped.
+
+Per-type config shapes are a future tightening — read the keys from `meta/action` and don't hard-code internal
+encodings yet.
 :::
 
 ## Action types
@@ -87,6 +106,12 @@ are the same ones that endpoint returns. The families are a reading aid — an a
 | `display_webpage` | **Display webpage** — displays a webpage in a weblink flow. |
 | `redirect_user` | **Redirect user** — redirects the user to a URL in a weblink flow. |
 
+The call/weblink actions reference a target automation by id. The target must **exist**, live in the **same app**, and
+carry the matching trigger — `automation_called` for `current_record_call_automation` /
+`collected_records_call_automation`, `weblink_clicked` for `current_record_generate_automation_weblink`. Otherwise the
+definition fails validation. A **paused** target is a valid reference (it just produces no run when the call endpoint
+fires it — see [Advanced / Sandbox](/docs/api/resource/automation/advanced)).
+
 ### Email & documents
 
 | Action | What it does |
@@ -102,6 +127,11 @@ are the same ones that endpoint returns. The families are a reading aid — an a
 | `http_call` | **HTTP request** — makes an outbound HTTP request. |
 | `authenticated_http_call` | **Authenticated HTTP request** — makes an outbound HTTP request signed by an authentication provider. |
 
+Outbound requests are subject to [SSRF protection](/docs/automations/troubleshooting/ip-addresses) — hosts resolving
+to private/internal addresses are refused. `authenticated_http_call` also needs an `authentication_provider_id`, but
+the public API exposes **no endpoint to create or list OAuth integrations** — they are provisioned by an org admin in
+the Tape app. So the action can be *defined* via the API, but without a valid provider id it is skipped at run time.
+
 ### Flow control
 
 | Action | What it does |
@@ -110,6 +140,16 @@ are the same ones that endpoint returns. The families are a reading aid — an a
 | `exit` | **Exit** — ends the automation run. |
 | `for_loop` | **For loop** — runs nested actions for each item of an iterable. `group: "control_flow"`. |
 | `conditional` | **Condition** — runs nested actions only when a condition holds. `group: "control_flow"`. |
+
+### Trigger context
+
+Some actions are only valid under a matching trigger — a wrong pairing fails validation with `action_invalid`:
+
+| Action(s) | Requires trigger |
+| --- | --- |
+| `display_webpage`, `redirect_user`, `current_record_generate_automation_weblink` | `weblink_clicked` |
+| `current_record_comment_or_reply_reply_create`, `current_record_comment_or_reply_delete` | `record_comment_or_reply_created` |
+| `current_record_*` (update / delete / restore / get_previous_revision / comment_create / call_automation) | any **record-context** trigger (not `periodic` / `webhook_received` without a record) |
 
 ## Control-flow actions
 

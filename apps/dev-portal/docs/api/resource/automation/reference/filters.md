@@ -16,6 +16,13 @@ match. An automation's `filter` is `null` when it has none (it always runs). The
 `conditional` action's `condition` and a `for_loop`'s break/continue conditions — see
 [actions](/docs/api/resource/automation/reference/actions).
 
+:::caution In-`config` conditions use a different, internal encoding
+This public tree (`operator: "and"`, `rows`) applies to an automation's `filter` and to a control-flow action's
+`condition` / `break_condition` / `continue_condition`. A condition embedded **inside an action's `config`** (e.g. a
+`collect_app_records` / `filter_record_collection` `match_condition`) currently round-trips in the raw internal shape
+instead — `{ "operator": "AND" | "OR", "boolean_expr_rows": [...] }`, uppercase. Don't assume the public tree there.
+:::
+
 ## The tree: groups and conditions
 
 A **group** combines its `rows` with `and` (match all) or `or` (match any); rows are nested groups or leaf conditions.

@@ -120,6 +120,13 @@ Answers **`201`**. A `400` is returned if the body is malformed or the target au
 automation. Always send `trigger_workflow_def_id` and `trigger_on_record_id` — the endpoint needs the automation to
 fire and the record to scope to.
 
+:::caution `expiration_type` here ≠ the action's config key
+The `expiration_type` param above (UPPER-CASE `NEVER` / `ONE_DAY` / …) is the shape of **this endpoint's** body. When
+you instead configure the backing `current_record_generate_automation_weblink` **action**, the config key is different
+— `weblink_expiration` — and its tokens are **lower-case** (`never`, `one_day`, `one_week`, `one_month`, `one_year`;
+the action also has `on_click`). Copying the endpoint's key/casing into an action config writes the wrong field.
+:::
+
 :::info Deprecated alias
 The legacy path `POST /v1/workflow/weblink/generate` is kept as a **deprecated** alias. Use `/v1/automation/…`.
 :::

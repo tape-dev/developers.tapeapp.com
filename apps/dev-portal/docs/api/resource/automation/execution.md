@@ -61,7 +61,16 @@ not match produces no run.
 </ContextCodeBlock>
 
 Errors: `404` (automation or record unavailable), `409` (the automation is broken), `401`, `400` (bad ID or a body
-that doesn't match the trigger).
+that doesn't match the trigger). `record_id` must resolve to a **live** record in the automation's app — a
+soft-deleted, foreign-app or non-existent id all `404` before the run is scheduled. (This is why
+`current_record_restore` can only be exercised by deleting the record *within* the run, via an upstream
+`current_record_delete`.)
+
+:::note Comment-trigger runs need an existing comment
+For a `record_comment_or_reply_created` automation, a manual run resolves the record's **most-recent** existing
+comment/reply as the trigger's current-comment context. A record that has **no** comment/reply produces **no run** —
+the endpoint still answers `202`, but nothing is created.
+:::
 
 ## Simulate an automation
 
@@ -100,6 +109,12 @@ stored `broken` flag (create and update don't re-validate). No request body.
 
 `valid` is `true` when there is no active (non-deactivated) error. Each entry uses the same shape and
 [broken-reason codes](/docs/api/resource/automation/reference/errors) as `broken_reason` on the automation object.
+
+:::caution `valid: true` is not a guarantee of an executable run
+Validation is **not exhaustive**. Some references are only checked for presence, not resolved — for example a
+`collect_app_view_records` `app_view_id` is checked only for being non-empty, so a bogus view id passes `validate` and
+fails only at **run** time. Treat `validate` as catching the *catalogued* faults, not as proof the run will succeed.
+:::
 
 :::note Calling another automation, or a weblink?
 The endpoints that let one automation call another, or mint a weblink, are the execution backends of those actions —
