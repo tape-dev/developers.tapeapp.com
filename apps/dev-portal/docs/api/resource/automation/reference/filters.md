@@ -2,6 +2,7 @@
 id: filters
 title: Filters
 sidebar_label: Filters
+description: The Tape automation filter model — the recursive and/or condition tree, 22 operators, and the tagged value union.
 ---
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';

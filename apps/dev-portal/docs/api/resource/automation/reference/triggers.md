@@ -2,6 +2,7 @@
 id: triggers
 title: Triggers
 sidebar_label: Triggers
+description: The nine Tape automation trigger types and how to configure them.
 ---
 
 :::caution Internal beta — not released yet

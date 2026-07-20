@@ -2,6 +2,7 @@
 id: overview
 title: Automation
 sidebar_label: Overview
+description: The Tape Automation API — discover the catalog, then create, version, validate, and run automations (a trigger, an optional filter, and ordered actions) scoped to an app.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

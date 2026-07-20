@@ -2,6 +2,7 @@
 id: advanced
 title: Advanced / Sandbox
 sidebar_label: Advanced / Sandbox
+description: The sandbox endpoints behind a Tape automation's call-automation and generate-weblink actions.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

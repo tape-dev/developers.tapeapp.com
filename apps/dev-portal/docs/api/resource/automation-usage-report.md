@@ -2,6 +2,7 @@
 id: automation-usage-report
 title: Automation Usage Report
 sidebar_label: Automation Usage Report
+description: Retrieve your organization's automation consumption — actions consumed and run outcomes — aggregated into time buckets.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

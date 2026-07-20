@@ -2,6 +2,7 @@
 id: discovery
 title: Discovery
 sidebar_label: Discovery
+description: Discover the live Automation catalog — trigger types, action types, and filter operators, each with the config schema to build against.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

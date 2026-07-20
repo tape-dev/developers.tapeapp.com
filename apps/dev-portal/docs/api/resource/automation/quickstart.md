@@ -2,6 +2,7 @@
 id: quickstart
 title: Quickstart
 sidebar_label: Quickstart
+description: Build a Tape automation end to end with copy-paste API calls — discover, create, configure, validate, activate, run, and observe.
 ---
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';

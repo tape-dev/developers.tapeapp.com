@@ -2,6 +2,7 @@
 id: execution
 title: Run & simulate
 sidebar_label: Execution
+description: Run and simulate a Tape automation against a record, and validate a definition — including the asynchronous run model.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

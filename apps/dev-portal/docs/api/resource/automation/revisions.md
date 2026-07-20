@@ -2,6 +2,7 @@
 id: revisions
 title: Revisions
 sidebar_label: Revisions
+description: Every automation edit appends an immutable revision — list and retrieve the version history, and roll a definition back.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

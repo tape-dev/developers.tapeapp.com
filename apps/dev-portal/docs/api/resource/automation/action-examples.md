@@ -2,6 +2,7 @@
 id: action-examples
 title: Action examples
 sidebar_label: Action examples
+description: Copy-paste config for the most common Tape automation actions — records, email, HTTP, code, control flow, and collections.
 ---
 
 :::caution Internal beta — not released yet

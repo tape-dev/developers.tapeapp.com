@@ -2,6 +2,7 @@
 id: manage
 title: Manage automations
 sidebar_label: Manage
+description: Create, retrieve, list, update, replace the trigger, activate, pause, and delete Tape automations through the Developer API.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

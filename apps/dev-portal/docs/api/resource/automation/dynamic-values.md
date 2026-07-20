@@ -2,6 +2,7 @@
 id: dynamic-values
 title: Dynamic values & references
 sidebar_label: Dynamic values
+description: How Tape automation values reference live record and run data — the dynamic-value array and reference model.
 ---
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';

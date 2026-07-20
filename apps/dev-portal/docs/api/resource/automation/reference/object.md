@@ -2,6 +2,7 @@
 id: object
 title: The automation object
 sidebar_label: Automation object
+description: The Tape automation object — its fields, the paused/broken status model, and identifiers.
 ---
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';

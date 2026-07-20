@@ -2,6 +2,7 @@
 id: actions
 title: Actions
 sidebar_label: Actions
+description: The 35 Tape automation action types, grouped by family, each with its label and where to read its config schema.
 ---
 
 :::caution Internal beta — not released yet

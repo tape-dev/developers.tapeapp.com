@@ -2,6 +2,7 @@
 id: automation-run
 title: Automation Run
 sidebar_label: Automation Run
+description: List and retrieve Tape automation runs and their step logs through the Developer API.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'

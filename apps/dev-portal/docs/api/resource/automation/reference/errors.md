@@ -2,6 +2,7 @@
 id: errors
 title: Errors & broken reasons
 sidebar_label: Errors & broken reasons
+description: HTTP status codes and the broken-reason codes returned across the Tape Automation API.
 ---
 
 :::caution Internal beta — not released yet
