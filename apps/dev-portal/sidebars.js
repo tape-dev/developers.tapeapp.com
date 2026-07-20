@@ -112,6 +112,7 @@ module.exports = {
                 'api/resource/automation/execution',
                 'api/resource/automation/advanced',
                 'api/resource/automation/dynamic-values',
+                'api/resource/automation/action-examples',
                 {
                   type: 'category',
                   label: 'Reference',
