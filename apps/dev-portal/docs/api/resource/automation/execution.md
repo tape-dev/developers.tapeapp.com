@@ -123,6 +123,18 @@ stored `broken` flag (create and update don't re-validate). No request body.
 `valid` is `true` when there is no active (non-deactivated) error. Each entry uses the same shape and
 [broken-reason codes](/docs/api/resource/automation/reference/errors) as `broken_reason` on the automation object.
 
+:::note `validate` checks **semantics**, not syntax
+`validate` re-checks whether a stored definition still refers to things that exist and are reachable — a deleted field
+or app, a removed authentication provider, an action that consumes a collection no upstream action produces. These can
+turn a definition non-executable **after** a successful write without the definition changing, which is why they are
+recomputed on demand. Payload **well-formedness** is not its job: a structurally malformed body (an unknown enum token,
+a broken dynamic-value reference, a tree past the maximum depth) is rejected earlier, at
+[create/update](/docs/api/resource/automation/manage) with a `400` — see
+[what returns 400 in a definition body](/docs/api/resource/automation/reference/errors#what-returns-400-in-a-definition-body).
+So a `valid: true` verdict confirms reachability; it does **not** re-affirm that the payload was well-formed (that was
+settled at write) or guarantee the run will succeed (below).
+:::
+
 :::caution `valid: true` is not a guarantee of an executable run
 Validation is **not exhaustive**. Some references are only checked for presence, not resolved — for example a
 `collect_app_view_records` `app_view_id` is checked only for being non-empty, so a bogus view id passes `validate` and
