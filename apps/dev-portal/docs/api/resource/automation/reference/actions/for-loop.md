@@ -55,6 +55,9 @@ An action entry inside an automation definition's `actions[]`:
 - Control-flow shape lives entirely in `config`; it was recently moved from the action's top level.
 - Enabled-ness is encoded by **presence**, not by a flag: an omitted `break_condition` or `continue_condition` disables that branch (the internal `*_enabled` members are derived).
 - `action_rows` holds nested [actions](/docs/api/resource/automation/reference/actions) that execute once per iteration; `break_condition` / `continue_condition` are evaluated as [filter groups](/docs/api/resource/automation/reference/filters).
+- **A non-iterable `iterable` is accepted on write and fails only at run time.** [`validate`](/docs/api/resource/automation/execution) checks that the reference *resolves* — one that doesn't (for example a `collect_*` producer placed **after** this loop) is reported as `action_variable_missing`. It does **not** check that the resolved variable is actually iterable: a **single-value** field, or an action output that isn't a `record_collection`, passes `validate` and then throws at **run** time. Use only a `record_collection`, a multi-value field, or a custom variable (the kinds in the table above).
+- **`continue_condition` is evaluated *before* the loop body; `break_condition` *after* it.** So an item that trips `break_condition` still runs the body **once** and *then* stops the loop; `continue_condition` skips the body for a matching item. Both are evaluated against the current item.
+- An `iterable` that resolves to nothing at run time — an empty collection, or a reference that comes back `null` — runs **zero** iterations rather than erroring.
 
 ## See also
 
