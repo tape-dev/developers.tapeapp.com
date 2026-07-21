@@ -49,7 +49,10 @@ A run's per-action `logs` are buffered and land **asynchronously after** the run
 you need rather than gating on `logs.length > 0`, which can return before an action's entry is in. And not every
 successful step yields a per-action `success` log: control-flow containers (`conditional`, `for_loop`),
 `collected_records_collect_referenced_records`, and `create_pdf` complete at the run level with no per-action entry —
-for those, treat a terminal `completed` without a setup failure as the success signal.
+for those, treat a terminal `completed` without a setup failure as the success signal. An action with `deactivate: true`
+likewise produces no entry: it is removed before the run executes, so it is **absent** from the log rather than present
+with a `skipped` status — see [Automation run → run logs](/docs/api/resource/automation-run) for how the two differ and
+when `skipped` does appear.
 :::
 
 ## Run an automation

@@ -145,7 +145,7 @@ return the automation in the same envelope, so the shape below is the one you wi
 | `description`   | `string`           | Optional description. Absent when the automation has none.                                                              |
 | `paused`        | `boolean`          | Whether the automation is paused. See [Status and lifecycle](#status-and-lifecycle).                                    |
 | `broken`        | `boolean`          | Whether the automation's definition is not executable.                                                                  |
-| `broken_reason` | `object` \| `null` | The reasons the automation is broken, or `null` when it is not. See [Broken reasons](#broken-reasons).                  |
+| `broken_reason` | `object` \| `null` | The reasons the automation is broken, or `null` when it is not — and `null` even when `broken` is `true` if the platform invalidated it at run time. See [Broken reasons](#broken-reasons). |
 | `trigger`       | `object` \| `null` | The single [trigger](#the-trigger-object), or `null` when none is configured.                                           |
 | `filter`        | `object` \| `null` | The root [filter group](#the-filter) — a recursive `and`/`or` condition tree. `null` when the automation has no filter. |
 | `actions`       | `array`            | The ordered list of [actions](#the-action-object). An empty array when the automation has none.                         |
@@ -214,10 +214,11 @@ gated by **presence**: an omitted member is disabled.
 
 ### Broken reasons
 
-When `broken` is `true`, `broken_reason` is an object with an `errors` array; each entry has a machine-readable
-`code`, an English `message`, and optional references to the app, field or action at fault. The full list of codes is
-on the [reference page](/docs/api/resource/automation/reference/errors). To check an automation on demand
-rather than reading the stored flag, use [validate](/docs/api/resource/automation/execution).
+When `broken` is `true`, `broken_reason` is usually an object with an `errors` array; each entry has a machine-readable
+`code`, an English `message`, and optional references to the app, field or action at fault. It can be `null` even when
+`broken` is `true` — a broken state the platform recorded by invalidating the automation at run time carries no stored
+`errors`. The full list of codes is on the [reference page](/docs/api/resource/automation/reference/errors). To check an
+automation on demand rather than reading the stored flag, use [validate](/docs/api/resource/automation/execution).
 
 ## Status and lifecycle
 

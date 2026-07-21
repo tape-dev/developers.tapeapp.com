@@ -152,8 +152,10 @@ Every update mints a new [revision](/docs/api/resource/automation/revisions).
 </ContextCodeBlock>
 
 :::note `broken` is not re-checked on write
-Create and update don't re-validate the definition, so `broken` reflects the last activation. Call
-[validate](/docs/api/resource/automation/execution) for a fresh verdict, or [activate](#activate-an-automation) it.
+`broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —
+a failed [`activate`](#activate-an-automation) returns `409` without changing the object, and `validate` is a read-only
+check. Call [`validate`](/docs/api/resource/automation/execution) for a current verdict. See
+[the automation object](/docs/api/resource/automation/reference/object) for the full `broken` model.
 :::
 
 ## Replace the trigger

@@ -57,7 +57,11 @@ An action entry inside an automation definition's `actions[]`:
 - `app_view_id` is only checked for presence at validate time — a syntactically valid but non-existent view passes
   validation and then fails at run time.
 - `limit` defaults to the editor default when omitted, and `limit_enabled` defaults to `false`, so an omitting caller
-  still yields a complete action (no cap applied unless `limit_enabled` is `true`).
+  still yields a complete action.
+- Every collect is capped at **1000 records** at run time **regardless of `limit_enabled`**. A configured `limit` above
+  1000 — or with `limit_enabled: false` — is stored and read back **unchanged** (there is no write-time or `validate`
+  warning); the collection is truncated to 1000 only when the run executes. See
+  [Limitations](/docs/automations/limitations).
 
 ## See also
 

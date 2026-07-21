@@ -91,7 +91,8 @@ Grouped by where the fault sits. Codes are worded in the public vocabulary; inte
 `action_call_argument_invalid`
 
 :::note `broken` can lag the current definition
-Create and update don't re-validate, so `broken` / `broken_reason` on the object reflect the **last activation-time**
-check. Call [`validate`](/docs/api/resource/automation/execution) for a verdict on the current definition, or
-[`activate`](/docs/api/resource/automation/manage) (which recomputes and refuses a broken automation with `409`).
+`broken` / `broken_reason` on the object reflect the last verdict the platform **stored**. Create, update,
+[`activate`](/docs/api/resource/automation/manage) and `validate` never write it — a failed `activate` returns `409`
+without changing the object, and `validate` is a read-only check. Call
+[`validate`](/docs/api/resource/automation/execution) for a verdict on the current definition.
 :::

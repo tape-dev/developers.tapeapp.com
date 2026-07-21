@@ -63,8 +63,8 @@ An action entry inside an automation definition's `actions[]`:
 
 - Every member is optional; an omitting caller still yields a complete internal action via the mapper's defaults.
 - `match_condition` defaults to the empty "match all" condition, so with no filter the whole app is collected.
-- `limit` defaults to `1` and only takes effect when `limit_enabled` is `true`; with `limit_enabled` `false` the collect is unbounded.
-- This action is a producer: it publishes a `record_collection`. An unbounded collect is capped at the server 1000-record limit.
+- `limit` defaults to `1` and only takes effect when `limit_enabled` is `true`; with `limit_enabled: false` the configured `limit` is ignored.
+- This action is a producer: it publishes a `record_collection`. Every collect is capped at **1000 records** at run time **regardless of `limit_enabled`**. A configured `limit` above 1000 is stored and read back **unchanged** (there is no write-time or `validate` warning), then truncated to 1000 when the run executes. See [Limitations](/docs/automations/limitations).
 
 ## See also
 

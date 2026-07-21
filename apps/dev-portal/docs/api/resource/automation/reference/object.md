@@ -60,7 +60,7 @@ substantive blocks — [trigger](/docs/api/resource/automation/reference/trigger
 | `name` | `string` | Name of the automation. |
 | `description` | `string` | Optional. Absent when the automation has none. |
 | `paused` | `boolean` | Whether the automation is paused. See [status](/docs/api/resource/automation/overview#status-and-lifecycle). |
-| `broken` | `boolean` | Whether the definition is not executable. Reflects the **last validation**, not the current edit — see the note below. |
+| `broken` | `boolean` | Whether the definition is not executable. Reflects the last verdict the platform **stored**, not the current edit — see the note below. |
 | `broken_reason` | `object` \| `null` | `{ errors: [...] }` when there are recorded reasons, else `null` — and it can be `null` even when `broken` is `true` (see the note below). Same entry shape as [validate](/docs/api/resource/automation/reference/errors). |
 | `trigger` | `object` \| `null` | The single [trigger](/docs/api/resource/automation/reference/triggers) `{ type, config }`, or `null`. |
 | `filter` | `object` \| `null` | The root [filter group](/docs/api/resource/automation/reference/filters), or `null` when there is no filter. |
