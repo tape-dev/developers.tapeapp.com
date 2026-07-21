@@ -45,7 +45,7 @@ the API is never an existence oracle. Cross-tenant access is `404`, **not `403`*
 
 ## The broken state
 
-An automation carries `broken` (boolean) and `broken_reason` (`{ errors: [...] }`, or `null` when not broken).
+An automation carries `broken` (boolean) and `broken_reason` (`{ errors: [...] }`, or `null` — including when `broken` is `true`, if the platform invalidated the automation at run time).
 [`GET /v1/automation/{id}/validate`](/docs/api/resource/automation/execution) returns `{ valid, errors }` with the
 same entry shape, recomputed fresh.
 
@@ -91,8 +91,8 @@ Grouped by where the fault sits. Codes are worded in the public vocabulary; inte
 `action_call_argument_invalid`
 
 :::note `broken` can lag the current definition
-`broken` / `broken_reason` on the object reflect the last verdict the platform **stored**. Create, update,
-[`activate`](/docs/api/resource/automation/manage) and `validate` never write it — a failed `activate` returns `409`
-without changing the object, and `validate` is a read-only check. Call
-[`validate`](/docs/api/resource/automation/execution) for a verdict on the current definition.
+`broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —
+a failed `activate` returns `409` without changing the object, and `validate` is a read-only check. Call
+[`validate`](/docs/api/resource/automation/execution) for a current verdict; see
+[the automation object](/docs/api/resource/automation/reference/object) for the full `broken` model.
 :::

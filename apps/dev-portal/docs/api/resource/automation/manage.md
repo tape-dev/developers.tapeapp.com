@@ -153,8 +153,8 @@ Every update mints a new [revision](/docs/api/resource/automation/revisions).
 
 :::note `broken` is not re-checked on write
 `broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —
-a failed [`activate`](#activate-an-automation) returns `409` without changing the object, and `validate` is a read-only
-check. Call [`validate`](/docs/api/resource/automation/execution) for a current verdict. See
+a failed `activate` returns `409` without changing the object, and `validate` is a read-only check. Call
+[`validate`](/docs/api/resource/automation/execution) for a current verdict; see
 [the automation object](/docs/api/resource/automation/reference/object) for the full `broken` model.
 :::
 

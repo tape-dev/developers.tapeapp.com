@@ -144,7 +144,7 @@ return the automation in the same envelope, so the shape below is the one you wi
 | `name`          | `string`           | Name of the automation.                                                                                                 |
 | `description`   | `string`           | Optional description. Absent when the automation has none.                                                              |
 | `paused`        | `boolean`          | Whether the automation is paused. See [Status and lifecycle](#status-and-lifecycle).                                    |
-| `broken`        | `boolean`          | Whether the automation's definition is not executable.                                                                  |
+| `broken`        | `boolean`          | Whether the definition is not executable. Reflects the last verdict the platform **stored**, not the current edit — see [Broken reasons](#broken-reasons). |
 | `broken_reason` | `object` \| `null` | The reasons the automation is broken, or `null` when it is not — and `null` even when `broken` is `true` if the platform invalidated it at run time. See [Broken reasons](#broken-reasons). |
 | `trigger`       | `object` \| `null` | The single [trigger](#the-trigger-object), or `null` when none is configured.                                           |
 | `filter`        | `object` \| `null` | The root [filter group](#the-filter) — a recursive `and`/`or` condition tree. `null` when the automation has no filter. |

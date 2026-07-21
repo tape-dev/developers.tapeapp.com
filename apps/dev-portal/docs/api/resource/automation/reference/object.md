@@ -72,11 +72,10 @@ There is **no `status` field** (state is the `paused` + `broken` pair) and **no 
 release.
 
 :::note `broken` reflects the last stored verdict, not the current definition
-`broken` reflects the **stored** verdict from the last time the platform evaluated the automation. Create and update do
-**not** re-validate, and **neither `activate` nor `validate` writes it**: a failed [`activate`](/docs/api/resource/automation/manage)
-returns `409` without changing the object, and [`validate`](/docs/api/resource/automation/execution) is a read-only
-check. So a freshly written, non-executable definition still reads `broken: false`, and `broken_reason` on the object
-can differ from what `validate` returns — always call `validate` for a current verdict.
+`broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —
+a failed `activate` returns `409` without changing the object, and `validate` is a read-only check. Call
+[`validate`](/docs/api/resource/automation/execution) for a current verdict. So a freshly written, non-executable
+definition still reads `broken: false`, and `broken_reason` on the object can differ from what `validate` returns.
 
 The platform **does** set `broken: true` when a previously-valid automation is later invalidated — for example its
 filter can no longer be built, a field it watches is deleted, or a connected authentication provider is removed. A
