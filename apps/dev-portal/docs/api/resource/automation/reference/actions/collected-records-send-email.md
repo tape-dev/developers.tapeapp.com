@@ -22,8 +22,8 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `to_address` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Recipient address(es). |
-| `subject` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Email subject. |
+| `to_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Recipient address(es). Empty when omitted. |
+| `subject` | [template value](/docs/api/resource/automation/dynamic-values) | no | Email subject. Empty when omitted. |
 | `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to send one email for each of — a prior action's `record_collection` output. Omitted → the enclosing for-loop's collection. |
 | `reply_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Reply-to address. Empty when omitted. |
 | `cc_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | CC address(es). Empty when omitted. |
@@ -35,7 +35,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `attach_files_variable_defs` | array of [references](/docs/api/resource/automation/dynamic-values) | no | File variables whose files are candidates for attachment. Empty when omitted. |
 | `attach_files_match_type` | enum | no | Which candidate files are attached. Default `all`. |
 | `attach_files_match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Restricts attached files for the `filtered` / `most_recent_filtered` modes. Empty condition ("match all") when omitted or `null`. |
-| `fields_expanded` | boolean | no | Editor-only UI flag: whether the address fields are expanded in the editor. **Omitted from the live discovery schema** (like `create_pdf`'s `*_expanded` flags); carried through on read when present. |
+| `fields_expanded` | boolean | no | Editor-only UI flag: whether the address fields are expanded in the editor. **Advertised in the live discovery schema** (like `create_pdf`'s `*_expanded` flags); round-trips on read and write. |
 
 **`attach_files_match_type` tokens** (lower-case): `all`, `filtered`, `most_recent`, `most_recent_filtered`. `all` and
 `most_recent` ignore the condition; `filtered` and `most_recent_filtered` restrict to files matching
@@ -61,7 +61,7 @@ An action entry inside an automation definition's `actions[]`:
 ## Validation & behavior
 
 - Structurally identical to [`send_email`](/docs/api/resource/automation/reference/actions/send-email), plus the optional `record_collection` reference: the action sends one email per record in the collection.
-- The discovery schema serves `to_address` and `subject` as required; the typed DTO carries every template field as optional and the mapper fills the empty template (`[]`) when omitted (beta — see meta/action).
+- Unlike top-level `send_email`, this action's `to_address` and `subject` are **not** marked required by the discovery schema — both are optional template fields, defaulting to the empty template (`[]`) when omitted (though a send needs them populated to be useful).
 - With `record_collection` omitted, the action consumes the record collection bound by the enclosing for-loop.
 - Every other address/name/body template defaults to empty; `attach_files_variable_defs` defaults to `[]`, `attach_files_match_type` to `all`, and `attach_files_match_condition` to the empty "match all" condition.
 - With `smtp_account_id` omitted, the send uses the organization's default SMTP account. Automation email sends draw down the organization's shared 24-hour send quota.

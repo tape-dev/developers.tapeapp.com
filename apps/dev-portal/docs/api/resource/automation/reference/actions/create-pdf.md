@@ -65,8 +65,8 @@ only under `custom_margins`.
 **`page_number_style` tokens** (lower-case): `decimal`, `decimal_leading_zero`, `lower_latin`, `upper_latin`,
 `lower_roman`, `upper_roman`.
 
-The four `*_expanded` members are editor-only UI flags and are omitted from the live discovery schema; they are
-documented here for completeness so a full-fidelity round-trip preserves them.
+The four `*_expanded` members are editor-only UI layout flags. They are **advertised in the live discovery
+`config_schema`** and round-trip on both read and write, so a read-modify-write preserves them.
 
 ## Example
 
@@ -96,8 +96,6 @@ An action entry inside an automation definition's `actions[]`:
   ignored otherwise.
 - The action renders an HTML template to a PDF and produces no reliable per-action success log — do not rely on a
   success log entry to confirm the render.
-- **Beta caveat:** a `GET`→`PUT` round-trip of a `create_pdf` action currently `400`s on dev (remediation pending);
-  treat it as a known beta limitation until fixed.
 
 ## See also
 

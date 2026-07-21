@@ -69,7 +69,8 @@ Creates an automation in the app. It lands **paused and not broken** — a valid
 Returns `201` with the created [automation](/docs/api/resource/automation/reference/object). `null` is not accepted for
 `description` or `trigger` here (unlike [update](#update-an-automation)). The create and update bodies are validated
 against a **closed schema** — any top-level property not in the table above is rejected with a `400` (as is an unknown
-key inside a trigger's `config`).
+key inside a trigger's `config`). Each action in `actions[]` must include both `type` and `config` (the `config` may be
+an empty `{}`); an action missing its `config` key is a `400`.
 
 :::caution Limit — 500 automations per app
 An app can hold at most **500 automations**. Once an app has reached this limit, further create

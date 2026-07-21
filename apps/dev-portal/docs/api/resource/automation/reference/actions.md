@@ -24,7 +24,7 @@ Actions are **what** an automation does: an ordered list of steps. Most are leaf
 | `custom_name` | `string` | Optional label. Absent when unset. |
 | `deactivate` | `boolean` | Whether the step is skipped. Absent when unset. |
 | `continue_on_error` | `boolean` | Whether the run continues when this step errors. Absent when unset. |
-| `config` | `object` | The step's settings — keys per the action's `config_schema`. [Dynamic values](/docs/api/resource/automation/dynamic-values) inside are normalized to the reference model. |
+| `config` | `object` | The step's settings — keys per the action's `config_schema`. **Required on every action written through the API** — an empty `{}` is valid for a not-yet-configured step, but omitting the `config` key is a `400`. [Dynamic values](/docs/api/resource/automation/dynamic-values) inside are normalized to the reference model. |
 | _(control-flow `config`)_ | | For `conditional` / `for_loop`, `config` carries the branch/loop structure — see [Control-flow actions](#control-flow-actions). |
 
 :::note `config` is normalized, not echoed back verbatim

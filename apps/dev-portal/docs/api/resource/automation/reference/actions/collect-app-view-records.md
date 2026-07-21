@@ -28,10 +28,10 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `limit` | integer | no | Maximum number of records to collect. Defaults to the editor default when omitted. |
 | `limit_enabled` | boolean | no | Whether `limit` is applied. `false` when omitted. |
 
-:::note Discovery requires `app_id` and `app_view_id`
-The typed DTO carries both ids as optional (a not-yet-configured action may have neither), but discovery serves them in
-`required` and validation reports `action_app_missing` / `action_app_view_missing` when either is absent — a usable
-action must supply both. Prefer the DTO shape, but treat `app_id` + `app_view_id` as effectively required.
+:::note `app_id` / `app_view_id` are effectively required
+Both ids are optional in the discovery schema and the typed DTO (a not-yet-configured action may have neither), but
+validation reports `action_app_missing` / `action_app_view_missing` when either is absent — a usable action must supply
+both. Treat `app_id` + `app_view_id` as effectively required, enforced at validate/activate rather than at write.
 :::
 
 ## Example

@@ -48,6 +48,12 @@ accepted — all members are optional, and `app_id` is **not** a config field (i
 app); send the paired `_enabled` flag whenever you set its value.
 :::
 
+:::note `record_updated`: which fields fire it
+The `record_updated` trigger's `trigger_on_changes_field_ids` is tri-state: `null` or omitted fires on **any** field
+change; a non-empty list restricts firing to those fields; an **empty `[]` never fires** (the definition validates as
+broken).
+:::
+
 To set or replace a trigger, use [`PUT /v1/automation/{automation_id}/trigger`](/docs/api/resource/automation/manage)
 (the whole body is the trigger), or include `trigger` in a [create or update](/docs/api/resource/automation/manage).
 To remove one, send `trigger: null` on update.

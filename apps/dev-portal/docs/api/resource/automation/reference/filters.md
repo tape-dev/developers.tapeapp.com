@@ -87,7 +87,7 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `text` | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values) | Text / template comparison. |
 | `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
 | `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
-| `date` | `date`: `{ base, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **required** — omitting it currently makes the condition silently never-match (intended to become a `400`). |
+| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialised at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. |
 | `boolean` | `boolean` | Boolean comparison — arises from a webhook-payload-property subject. Round-trips on write. |
 | `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. Round-trips on write. |
 
@@ -97,7 +97,9 @@ channel from the subject **field's type** — number / unique-id → `number`; d
 relation / user → `ids`; text → `text` — and reads **only** that tag. A value whose `type` doesn't match the field's
 channel is **silently dropped**: the condition is stored with an empty comparison and **no `400`**. The valid tag for
 a field type is not served by [`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only),
-so match the tag to the field yourself.
+so match the tag to the field yourself. Likewise, an **operator** outside the field type's channel (e.g. a text
+operator on a number field) is **not** rejected — it is accepted, passes `validate`, and silently never-matches at run
+time. Use only the operators [`meta/filter`](/docs/api/resource/automation/discovery) advertises for the field's type.
 
 An empty comparison is a **valid** definition, so [`validate`](/docs/api/resource/automation/execution) stays green —
 but at run time a filter value that composes to empty is refused with a protective error rather than matching every

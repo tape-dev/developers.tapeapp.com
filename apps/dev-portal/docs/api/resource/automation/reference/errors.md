@@ -21,6 +21,22 @@ The Automation endpoints use the standard Tape [error](/docs/api/errors) envelop
 | `404` | The automation, app, workspace, revision or **record** is not available to you — see the collapse below. (Manual-run and simulate also `404` when the target record is missing or you can't view it.) |
 | `409` | A lifecycle/state conflict — activating, running or simulating a broken automation. |
 
+### What returns `400` in a definition body
+
+Beyond a malformed envelope, the definition input schema and mappers reject these at the boundary (each was previously
+an unhandled `500`):
+
+- An action that **omits its `config` key** — an empty `config: {}` is fine, but the key must be present.
+- A **structurally malformed dynamic-value reference**: an unknown `source` on a `kind: "variable"` reference, an
+  unknown `value_type` on a `kind: "value"` reference, or a `field` reference missing its `field_type`.
+- An **unrecognized enum token** — nested inside a `field_assignments` / `call_arguments` entry (e.g. an invalid
+  `assignment_type`), or any config enum value that isn't one of the advertised lower-case tokens.
+- A `filter` / `actions` tree nested **beyond the maximum block depth**.
+
+Semantic problems — a member required only by validation, a non-existent referenced id, or an operator outside a
+field's channel — are **not** `400`s at write; they surface at [`validate`](/docs/api/resource/automation/execution) /
+activate as [broken-reason codes](#broken-reason-codes), or for some only at run time.
+
 ### The 404 collapse
 
 Tape IDs are globally unique, so existence and tenancy **collapse into a single `404`**. An automation that is missing,

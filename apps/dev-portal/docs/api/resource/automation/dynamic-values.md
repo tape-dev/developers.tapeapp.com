@@ -90,6 +90,10 @@ Every reference has a `kind`, and an optional **`property`** (e.g. a user refere
   surfaces at [validate](/docs/api/resource/automation/execution) / activate time. Even then, validation is **not
   exhaustive**: some references (and some plain config ids) are only checked at run time, so `valid: true` does not
   guarantee an executable run.
+- **A reference's *structure* is validated on write.** IDs aren't checked for existence, but a reference whose
+  discriminator is unrecognized — an unknown `source` on a `kind: "variable"` ref, an unknown `value_type` on a
+  `kind: "value"` ref, or a `field` ref missing its `field_type` — is rejected with a `400` (it used to persist and then
+  fail every read). `previous` / `collection` / `triggering` are optional on write and each default to `false` when omitted.
 - **`meta` references preserve `previous` / `collection` / `triggering` on write** — like `field` references. These
   flags are emitted on read **only when `true`**, so a bare `meta` reference reads back without them. A
   collection-scoped meta reference (`collection: true`, with `app_id`) is what collection actions consume — e.g. it is

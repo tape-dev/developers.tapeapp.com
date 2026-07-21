@@ -28,7 +28,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `webpage_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | HTML template string rendered as the webpage body. Empty when omitted. |
 
 **`join_type` tokens** (lower-case): `add_below`, `add_above`, `replace_previous`. Omitted → the editor seeds and the
-mapper fills `add_below`.
+mapper fills `add_below`. Any other value is rejected with a `400` (config enum tokens are now strictly validated).
 
 ## Example
 
