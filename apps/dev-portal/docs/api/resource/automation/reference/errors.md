@@ -71,7 +71,7 @@ Grouped by where the fault sits. Codes are worded in the public vocabulary; inte
 `trigger_periodic_week_days_empty` · `trigger_periodic_month_days_empty` · `trigger_updated_fields_empty`
 
 **Filter**
-`filter_match_type_invalid` · `filter_variable_missing` · `filter_value_missing` · `filter_value_variable_missing` ·
+`filter_match_type_invalid` · `filter_variable_missing` · `filter_value_variable_missing` ·
 `filter_value_value_missing` · `filter_user_missing` · `filter_app_missing` · `filter_record_missing` ·
 `filter_option_missing`
 
@@ -89,6 +89,17 @@ Grouped by where the fault sits. Codes are worded in the public vocabulary; inte
 `action_invalid` · `action_variable_missing` · `action_value_missing` · `action_user_missing` · `action_app_missing` ·
 `action_app_invalid` · `action_view_missing` · `action_automation_missing` · `action_automation_invalid` ·
 `action_call_argument_invalid`
+
+:::note `filter_value_missing` was retired
+A previously-listed `filter_value_missing` code has been **removed** from this catalogue. It was published but
+**never emitted** — no validation path produces it, and under the [semantic-only](/docs/api/resource/automation/execution)
+role of `validate` it never could: a value's own well-formedness is settled at the write boundary
+([create/update](/docs/api/resource/automation/manage) reject a malformed value with a `400`), not re-checked here. A
+condition whose **value** references a deleted field or variable is reported as `filter_value_variable_missing`
+(above); a value that composes to empty is not a `validate` fault at all — it
+[matches every record at run time](/docs/automations/troubleshooting/filter-values). This is a catalogue cleanup, not a
+behavioural change: no verdict you previously received stops being returned.
+:::
 
 :::note `broken` can lag the current definition
 `broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —

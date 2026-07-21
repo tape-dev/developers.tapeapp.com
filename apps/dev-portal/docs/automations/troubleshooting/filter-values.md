@@ -58,7 +58,8 @@ for that.
 `validate` does catch **dangling references**, which are a different problem from an empty value:
 
 - a condition whose **subject** references a field that no longer exists reports `filter_variable_missing`;
-- a **value** that references a deleted field or variable reports `filter_value_missing`.
+- a **value** that references a deleted field or variable reports `filter_value_variable_missing`.
 
-So `filter_value_missing` signals a *missing reference* (for example a deleted field), **not** a blank value — do not
-expect it for an empty comparison.
+So `filter_value_variable_missing` signals a *missing reference* (for example a deleted field), **not** a blank value —
+do not expect it for an empty comparison. (An earlier `filter_value_missing` code was never emitted and has been
+retired.)
