@@ -61,7 +61,7 @@ substantive blocks — [trigger](/docs/api/resource/automation/reference/trigger
 | `description` | `string` | Optional. Absent when the automation has none. |
 | `paused` | `boolean` | Whether the automation is paused. See [status](/docs/api/resource/automation/overview#status-and-lifecycle). |
 | `broken` | `boolean` | Whether the definition is not executable. Reflects the **last validation**, not the current edit — see the note below. |
-| `broken_reason` | `object` \| `null` | `{ errors: [...] }` when broken, else `null`. Same entry shape as [validate](/docs/api/resource/automation/reference/errors). |
+| `broken_reason` | `object` \| `null` | `{ errors: [...] }` when there are recorded reasons, else `null` — and it can be `null` even when `broken` is `true` (see the note below). Same entry shape as [validate](/docs/api/resource/automation/reference/errors). |
 | `trigger` | `object` \| `null` | The single [trigger](/docs/api/resource/automation/reference/triggers) `{ type, config }`, or `null`. |
 | `filter` | `object` \| `null` | The root [filter group](/docs/api/resource/automation/reference/filters), or `null` when there is no filter. |
 | `actions` | `array` | The ordered [action](/docs/api/resource/automation/reference/actions) list. `[]` when none. |
@@ -71,11 +71,17 @@ substantive blocks — [trigger](/docs/api/resource/automation/reference/trigger
 There is **no `status` field** (state is the `paused` + `broken` pair) and **no `owner`/author field** in this
 release.
 
-:::note `broken` reflects the last validation, not the current definition
-Create and update do **not** re-validate. A freshly written definition that references something invalid still reads
-`broken: false` until you [`activate`](/docs/api/resource/automation/manage) it (which recomputes validity and refuses
-a broken automation with `409`) or call [`validate`](/docs/api/resource/automation/execution) for a fresh verdict.
-So `broken_reason` on the object can differ from what `validate` returns.
+:::note `broken` reflects the last stored verdict, not the current definition
+`broken` reflects the **stored** verdict from the last time the platform evaluated the automation. Create and update do
+**not** re-validate, and **neither `activate` nor `validate` writes it**: a failed [`activate`](/docs/api/resource/automation/manage)
+returns `409` without changing the object, and [`validate`](/docs/api/resource/automation/execution) is a read-only
+check. So a freshly written, non-executable definition still reads `broken: false`, and `broken_reason` on the object
+can differ from what `validate` returns — always call `validate` for a current verdict.
+
+The platform **does** set `broken: true` when a previously-valid automation is later invalidated — for example its
+filter can no longer be built, a field it watches is deleted, or a connected authentication provider is removed. A
+broken automation is not fired by its trigger, and a manual run returns `409`. In that case `broken_reason` may be
+`null`.
 :::
 
 ## Identifiers

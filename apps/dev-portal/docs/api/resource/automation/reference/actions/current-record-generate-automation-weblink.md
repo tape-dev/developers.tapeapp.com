@@ -37,6 +37,14 @@ to `set` when omitted, and its tokens (lower-case) are `set` and `set_code`. A `
 
 **`weblink_expiration` tokens** (lower-case): `never`, `on_click`, `one_day`, `one_week`, `one_month`, `one_year`.
 
+:::note This config key ≠ the generate-weblink endpoint's parameter
+This action config uses `weblink_expiration` with **lower-case** tokens (and an extra `on_click` value). The
+[`POST /v1/automation/weblink/generate`](/docs/api/resource/automation/advanced#generate-a-weblink) endpoint is a
+different surface: its parameter is named `expiration_type` and its tokens are **upper-case** (`NEVER`, `ONE_DAY`,
+`ONE_WEEK`, `ONE_MONTH`, `ONE_YEAR`, with no `on_click`). Don't copy the endpoint's key or casing into this action's
+`config`.
+:::
+
 ## Example
 
 An action entry inside an automation definition's `actions[]`:

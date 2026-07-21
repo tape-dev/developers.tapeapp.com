@@ -44,6 +44,7 @@ An action entry inside an automation definition's `actions[]`:
 - `exit_type` is the only member and is **required** — it has no canonical default, since ending a run as a success is meaningfully different from ending it as a failure, so the caller must state which.
 - `exit_type` must be one of `success` or `failure`.
 - The action stops the current run at this point; subsequent actions in the definition do not execute.
+- **Resulting run status:** `exit_type: "success"` ends the run with status `completed`. `exit_type: "failure"` ends it with status `failed` and `failure_reason: "exit_on_purpose"` — a deliberate stop, distinguishable in the [run object](/docs/api/resource/automation-run#the-run-object) from an action error (which reports a different `failure_reason`).
 
 ## See also
 

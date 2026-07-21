@@ -18,12 +18,17 @@ Every change to an automation appends an immutable **revision** — a frozen sna
 definition back. Both endpoints require a **user API key** and workspace-admin access, and cost `1x` base credits.
 
 :::note Rolling back is not always a verbatim re-`PUT`
-A revision is a **read** snapshot, so its `trigger` / `filter` can carry output-only fields — a `webhook_received`
-trigger's server-assigned `webhook_url`, or a **change-tracking condition** (see
-[triggers](/docs/api/resource/automation/reference/triggers) and
-[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Strip those before re-submitting; a
-verbatim `PUT` of such a revision is rejected with a `400`. Ordinary field / metadata / trigger / action subjects
-round-trip fine.
+A revision is a **read** snapshot with a wider envelope than the [update](/docs/api/resource/automation/manage) body
+accepts. Two things make a whole-object `PUT` fail with a `400`: the envelope keys `id`, `automation_id`,
+`created_at`, `paused` and `broken` are not writable (the update body is closed to stray keys), and a `filter` (or
+action condition) that uses a **change-tracking condition** has no writable form (see
+[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Re-submit only the definition members —
+`name`, `description`, `trigger`, `filter` and `actions` — and strip any change-tracking condition first. Ordinary
+field / metadata / trigger / action subjects round-trip fine.
+
+Note that a `webhook_received` trigger's server-assigned `webhook_url` is present on the live
+[automation object](/docs/api/resource/automation/reference/object) but is **not** included in a revision snapshot, so
+it is never the cause of a rollback `400`.
 :::
 
 ## List revisions

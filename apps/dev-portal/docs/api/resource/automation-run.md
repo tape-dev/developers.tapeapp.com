@@ -46,8 +46,11 @@ every run you may see.
 | `created_at_from` | `string`    | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).     |
 | `created_at_to`   | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).    |
 
-Every id you name must be one you may see: an app, automation or workspace you do not administrate is rejected with
-a `404`.
+Every id you name must be one you may see: an **existing** app, automation or workspace you do not administrate is
+rejected with a `404`. Note that `automation_ids` is a **filter, not a lookup** — an id that does not resolve to a live
+automation (one that never existed, or one that has been deleted) simply matches no runs and returns `200` with an
+empty list rather than a `404`. Do not use this endpoint to test whether an automation exists; use
+`GET /v1/automation/{id}`, which returns `404` in those cases.
 
 The example below requests the 2 most recent successful runs you may see.
 
@@ -417,8 +420,10 @@ not the raw internal event stream.
 A `completed` run does **not** guarantee a per-action `success` step for every top-level action. Control-flow
 containers (`conditional`, `for_loop`) log their **nested** actions, not themselves; and some actions can reach a
 clean `completed` with no `success` step of their own id (e.g. a codegen-skipped `authenticated_http_call`,
-`collected_records_collect_referenced_records`, or a no-op update). Match on the specific `action_id` you expect — the
-absence of a step is not proof the run failed.
+`collected_records_collect_referenced_records`, or a no-op update). A **deactivated** action (`deactivate: true`) is
+dropped before the run executes, so it emits **no** log entry at all — it is absent from the log, **not** present with
+a `skipped` status. Match on the specific `action_id` you expect, and reconcile the log against the automation's action
+list rather than assuming one entry per action — the absence of a step is not proof the run failed.
 :::
 
 :::info Logs arrive asynchronously
@@ -442,6 +447,13 @@ Step ids are `"{run_id}-trigger"` and `"{run_id}-filter"` for the trigger and fi
 the execution it belongs to — `"{run_id}-action-{action_id}-{execution_id}"` — because an action inside a loop runs
 more than once, and each execution is its own step. An `exception` step is synthesized when a run failed without any
 individual step recording the failure.
+
+:::note When a step is `skipped`
+The `skipped` status marks a step the run deliberately did not execute: the **trigger** step of a manual or simulation
+run, the **filter** step of a simulation run, and **action** steps in a simulation run (a simulation performs no side
+effects). A regular run does not produce `skipped` steps. Note that a **deactivated** action does not appear as a
+`skipped` step — it produces no step at all (see the caution above).
+:::
 
 :::info Log labels and messages are always English
 `type`, `status` and `level` are stable, machine-readable values and are never translated. `label` and `message` are

@@ -91,13 +91,13 @@ Computes a value and stores it under a declared variable that later actions can 
   "group": "action",
   "config": {
     "custom_variable_defs": [{ "custom_type": "any", "label": "Result" }],
-    "assignment_code": ["return 1 + 1;"]
+    "assignment_code": ["1 + 1"]
   }
 }
 ```
 
 - `custom_variable_defs` — the **declaration**: each entry is `{ "custom_type", "label" }` (`custom_type` ∈ `any` / `single_file` / `multi_file` / `single_link` / `html_table_rows`). Later actions reference the variable by `{ "kind": "variable", "source": "custom", "custom_type", "label" }`.
-- `assignment_code` — a **code dynamic value** (array) computing the value.
+- `assignment_code` — a **code dynamic value** (array) computing the value. It is evaluated as a single **expression**, not a function body — write `1 + 1`, **not** `return 1 + 1;` (a top-level `return` throws at run time). This differs from [`custom_code`](/docs/api/resource/automation/reference/actions/custom-code), whose `code` is a statement block where `return` is legal. See [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable).
 - **Silent no-op trap:** with an empty/omitted `custom_variable_defs` this action still *validates and persists*, but at run time it silently skips — no per-action log. The same trap applies to a `for_loop` with no `iterable` and an `authenticated_http_call` with no `authentication_provider_id`.
 
 ## Send an email — `send_email`

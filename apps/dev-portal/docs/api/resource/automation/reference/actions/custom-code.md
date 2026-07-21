@@ -53,6 +53,7 @@ An action entry inside an automation definition's `actions[]`:
 
 - `code` is the only required member; it runs in the automation sandbox and carries the action's code envelope.
 - `code` is a code value — string literals interleaved with variable references only; it does not resolve template values.
+- `code` is a **statement block**: it is inlined into the generated program, so statements — including a top-level `return` — are legal (unlike [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable)'s `assignment_code`, which is a bare expression where `return` throws). The write path does not syntax-check it, so a malformed script still persists and passes `validate`; the error surfaces only in the run log.
 - `custom_variable_defs` defaults to `[]` when omitted, so an omitting caller still yields a complete internal action.
 - A `custom` variable reference (from this action's code or a later action) resolves only when its `custom_type` + `label` match a declaration in `custom_variable_defs`; otherwise the definition validates as `WORKFLOW_ACTION_VARIABLE_DEF_MISSING`.
 

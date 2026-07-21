@@ -72,6 +72,10 @@ against a **closed schema** — any top-level property not in the table above is
 key inside a trigger's `config`). Each action in `actions[]` must include both `type` and `config` (the `config` may be
 an empty `{}`); an action missing its `config` key is a `400`.
 
+The one exception to the closed trigger `config` is a legacy `app_id` key: it is **accepted and silently ignored**
+rather than rejected (an automation's app is always taken from the automation itself, never from its trigger config).
+It is tolerated only for older callers — new integrations should omit it.
+
 :::caution Limit — 500 automations per app
 An app can hold at most **500 automations**. Once an app has reached this limit, further create
 requests are rejected with an error until you delete an existing automation.

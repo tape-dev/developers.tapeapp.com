@@ -102,8 +102,12 @@ operator on a number field) is **not** rejected — it is accepted, passes `vali
 time. Use only the operators [`meta/filter`](/docs/api/resource/automation/discovery) advertises for the field's type.
 
 An empty comparison is a **valid** definition, so [`validate`](/docs/api/resource/automation/execution) stays green —
-but at run time a filter value that composes to empty is refused with a protective error rather than matching every
-record. See [Troubleshooting → Filter values](/docs/automations/troubleshooting/filter-values).
+**but at run time it matches every record.** A filter value that composes to empty does **not** raise an error and does
+**not** narrow the filter: the leaf compiles to a match-all short-circuit, so under the default `and` group the whole
+filter passes and the automation fires its actions on **every** record in scope. Because a mistyped `type` tag is
+dropped silently (above), a one-character error can turn a scoped automation into one that runs against your entire app.
+Always confirm a new filter with [`simulate`](/docs/api/resource/automation/execution) before activating it. See
+[Troubleshooting → Filter values](/docs/automations/troubleshooting/filter-values).
 :::
 
 ## v1 limitations

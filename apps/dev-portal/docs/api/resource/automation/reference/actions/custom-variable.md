@@ -36,7 +36,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "custom_variable",
   "config": {
-    "assignment_code": ["return { total: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }, " }"],
+    "assignment_code": ["({ total: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }, " })"],
     "custom_variable_defs": [
       { "custom_type": "any", "label": "Total" }
     ]
@@ -47,6 +47,7 @@ An action entry inside an automation definition's `actions[]`:
 ## Validation & behavior
 
 - `assignment_code` is the only required member — it has no canonical default. `custom_variable_defs` defaults to `[]` when omitted.
+- `assignment_code` is evaluated as a single **expression**, and its value is assigned to the declared variable — write `1 + 1`, **not** `return 1 + 1;`. A top-level `return` fails at run time with `Illegal return statement`. To assign an object literal, wrap it in parentheses so it is not parsed as a block: `["({ total: ", { … }, " })"]`. The write path does **not** syntax-check the code, so an invalid script still persists and passes `validate` — the error surfaces only in the run log. (Contrast [`custom_code`](/docs/api/resource/automation/reference/actions/custom-code), whose `code` is a statement block where `return` is legal.)
 - Each `custom_variable_defs` entry requires both `custom_type` (one of the tokens above) and `label`.
 - The declared variables become available to this action's own code and to later actions in the definition.
 - Beta caveat: with `custom_variable_defs` empty, the action still validates but has nothing to assign — it silently no-ops with no per-action log. Declare at least one entry for the action to do work. (beta — see [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery).)

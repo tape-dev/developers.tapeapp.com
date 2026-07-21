@@ -51,9 +51,26 @@ have an [`automation_called`](/docs/api/resource/automation/reference/triggers) 
 | `trigger_on_record_id` | `integer` | yes | The record to run the automation on. |
 | `triggered_by_record_id` | `integer` | no | The record that initiated the call. |
 | `triggered_by_workflow_def_id` | `integer` | no | The automation that initiated the call. |
-| `trigger_with_arguments` | `object` | no | Arguments passed into the run, per the automation's declared input variables. |
+| `trigger_with_arguments` | `object` | no | Values for the automation's custom input variables, keyed by **internal variable name** (see the note below). |
 | `is_manual_run` | `boolean` | no | Defaults to `false`. |
 | `is_simulation` | `boolean` | no | Defaults to `false`. |
+
+:::caution `trigger_with_arguments` keys are the internal variable name, not the label
+Each key is the automation's **internal variable name**, derived from the declared label: lower-case the label, replace
+every character outside `0-9`, `a-z`, `A-Z`, `_` and `$` with an underscore, and prefix `var_`. The label is **not
+trimmed**, so leading or trailing spaces become underscores; a **file**-typed variable appends `_<selected_property>`.
+
+| Declared label | Argument key |
+| --- | --- |
+| `note` | `var_note` |
+| `My Variable` | `var_my_variable` |
+| `My-Variable-2` | `var_my_variable_2` |
+| `My%Variable` | `var_my_variable` |
+| `' My variable '` (leading/trailing spaces) | `var__my_variable_` |
+
+A key that matches no declared variable is **accepted without an error** — the schema is open, so the variable simply
+resolves to `null` and the run proceeds. If an argument appears to have no effect, check the key derivation first.
+:::
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/automation/88/trigger \\
@@ -93,7 +110,7 @@ referenced record.
 | `trigger_on_record_id` | `integer` | yes | The record the weblink is scoped to. |
 | `triggered_by_record_id` | `integer` | no | The record that initiated generation. |
 | `triggered_by_workflow_def_id` | `integer` | no | The automation that initiated generation. |
-| `trigger_with_arguments` | `object` | no | Arguments carried by the weblink into the run. |
+| `trigger_with_arguments` | `object` | no | Arguments carried by the weblink into the run — keyed by **internal variable name**, exactly as for [Call an automation](#call-an-automation) above. |
 | `expiration_type` | `string` | no | One of `NEVER`, `ONE_DAY`, `ONE_WEEK`, `ONE_MONTH`, `ONE_YEAR`. |
 | `expire_after_first_click` | `boolean` | no | Invalidate the weblink after its first click. |
 | `is_manual_run` | `boolean` | no | Defaults to `false`. |
@@ -112,14 +129,18 @@ referenced record.
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
 {`{
-  "trigger_token": "wl_9f8c…",
-  "trigger_client_url": "https://app.tapeapp.com/weblink/wl_9f8c…"
+  "trigger_token": "3f2b1c94-7d6e-4a51-9b0f-2c8e5d41a7b3",
+  "trigger_client_url": "https://weblink.tapeapp.com/trigger/3f2b1c94-7d6e-4a51-9b0f-2c8e5d41a7b3"
 }`}
 </ContextCodeBlock>
 
 Answers **`201`**. A `400` is returned if the body is malformed or the target automation is not a `weblink_clicked`
 automation. Always send `trigger_workflow_def_id` and `trigger_on_record_id` — the endpoint needs the automation to
 fire and the record to scope to.
+
+The `trigger_token` is a UUID and `trigger_client_url` is `<weblink-client-base>/trigger/<trigger_token>` — the host is
+selected per runtime environment (on production, `https://weblink.tapeapp.com`). Treat the whole URL as **opaque**: hand
+it out as-is, and do not construct or parse it yourself.
 
 :::caution `expiration_type` here ≠ the action's config key
 The `expiration_type` param above (UPPER-CASE `NEVER` / `ONE_DAY` / …) is the shape of **this endpoint's** body. When
