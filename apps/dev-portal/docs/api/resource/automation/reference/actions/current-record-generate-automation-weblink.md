@@ -58,7 +58,7 @@ An action entry inside an automation definition's `actions[]`:
       {
         "variable_def": { "custom_type": "any", "label": "Note" },
         "assignment_type": "set",
-        "value": ["Opened from ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }]
+        "value": ["Opened from ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 1234 }]
       }
     ],
     "custom_variable_def": { "custom_type": "single_link", "label": "Weblink" },

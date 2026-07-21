@@ -36,7 +36,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "custom_variable",
   "config": {
-    "assignment_code": ["({ total: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }, " })"],
+    "assignment_code": ["({ total: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 1234 }, " })"],
     "custom_variable_defs": [
       { "custom_type": "any", "label": "Total" }
     ]

@@ -39,7 +39,7 @@ An action entry inside an automation definition's `actions[]`:
   "config": {
     "code": [
       "return { greeting: 'Hello ' + ",
-      { "kind": "variable", "source": "meta", "meta_type": "app_record_id" },
+      { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 1234 },
       " };"
     ],
     "custom_variable_defs": [
