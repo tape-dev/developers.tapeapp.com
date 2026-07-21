@@ -22,9 +22,11 @@ A revision is a **read** snapshot with a wider envelope than the [update](/docs/
 accepts. Two things make a whole-object `PUT` fail with a `400`: the envelope keys `id`, `automation_id`,
 `created_at`, `paused` and `broken` are not writable (the update body is closed to stray keys), and a `filter` (or
 action condition) that uses a **change-tracking condition** has no writable form (see
-[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Re-submit only the definition members —
-`name`, `description`, `trigger`, `filter` and `actions` — and strip any change-tracking condition first. Ordinary
-field / metadata / trigger / action subjects round-trip fine.
+[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Re-submit only the definition members the
+revision carries — `name`, `trigger`, `filter` and `actions` — and strip any change-tracking condition first. A
+revision has **no `description`** (see the field table below), so **rollback cannot restore it**: `description` keeps
+its current value and must be reset separately if you need to revert it too. Ordinary field / metadata / trigger /
+action subjects round-trip fine.
 
 Note that a `webhook_received` trigger's server-assigned `webhook_url` is present on the live
 [automation object](/docs/api/resource/automation/reference/object) but is **not** included in a revision snapshot, so

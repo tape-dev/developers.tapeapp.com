@@ -74,7 +74,10 @@ an empty `{}`); an action missing its `config` key is a `400`.
 
 The one exception to the closed trigger `config` is a legacy `app_id` key: it is **accepted and silently ignored**
 rather than rejected (an automation's app is always taken from the automation itself, never from its trigger config).
-It is tolerated only for older callers — new integrations should omit it.
+It is type-checked as an integer (a non-integer `app_id` is a `400`) and then **discarded without being resolved** — a
+**wrong or nonexistent** `app_id` is swallowed just as quietly as a redundant one, with no error and no effect, so
+`config.app_id` **never** re-targets which app the trigger watches. It is tolerated only for older callers — new
+integrations should omit it.
 
 :::caution Limit — 500 automations per app
 An app can hold at most **500 automations**. Once an app has reached this limit, further create

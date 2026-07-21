@@ -90,7 +90,7 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `text` | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values) | Text / template comparison. |
 | `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
 | `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
-| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialised at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. `operator` / `unit` are **enum-enforced**: an out-of-set token is rejected with a `400` (omit them to keep the `plus` / `day` defaults). `amount` is a [code dynamic value](/docs/api/resource/automation/dynamic-values) — an **array** (e.g. `["1"]`), not a scalar; a scalar `amount` is a `400`. |
+| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialised at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. `operator` / `unit` are **enum-enforced**: an out-of-set token is rejected with a `400` (omit them to keep the `plus` / `day` defaults). `amount` is a [code dynamic value](/docs/api/resource/automation/dynamic-values): an **array of string** (e.g. `["1"]`) or a bare **string** (`"1"`, normalized to `["1"]` on read) — a bare **number** (`1`) is rejected with a `400`. Read-back is always the array form, so a retrieved definition re-submits verbatim. |
 | `boolean` | `boolean` | Boolean comparison — arises from a webhook-payload-property subject. Round-trips on write. |
 | `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. Round-trips on write. |
 
@@ -98,8 +98,9 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value
 channel from the subject **field's type** — number / unique-id → `number`; date fields → `date`; category / status /
 relation / user → `ids`; text → `text`. A value whose `type` doesn't match the field's channel is **rejected with a
-`400`** on both create and update — the response names the offending condition (by its `id`, else its path) and the tag
-it expected. The accepted tag for a field type is not served by
+`400`** on both create and update. The check is **recursive** — a bad condition nested any number of groups deep is
+caught — and the response names the offending condition (by its `id`, else its JSON path, e.g. `filter.rows[1].rows[0]`)
+and the tag it expected. The accepted tag for a field type is not served by
 [`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only), so match the tag to the field
 yourself. An **empty** comparison value, and a **value-arity** mismatch (a value on a `none`-arity operator such as
 `is_empty`, or a missing value on an operator that needs one), are rejected with a `400` the same way.

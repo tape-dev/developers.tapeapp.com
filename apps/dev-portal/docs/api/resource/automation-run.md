@@ -46,10 +46,12 @@ every run you may see.
 | `created_at_from` | `string`    | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).     |
 | `created_at_to`   | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).    |
 
-Every id you name must be one you may see: an **existing** app, automation or workspace you do not administrate is
-rejected with a `404`. Note that `automation_ids` is a **filter, not a lookup** — an id that does not resolve to a live
-automation (one that never existed, or one that has been deleted) simply matches no runs and returns `200` with an
-empty list rather than a `404`. Do not use this endpoint to test whether an automation exists; use
+Every id you name that **exists but you do not administrate** — an app, automation or workspace, including one in
+another organization — is rejected with a `404`. The one difference is how a **completely unknown** id is treated: an
+unknown `app_ids` or `workspace_ids` value is a `404`, whereas an unknown `automation_ids` value is silently treated as
+a **filter, not a lookup** — an id that never existed, or a soft-deleted automation whose runs you would otherwise see,
+simply matches no runs and returns `200` with an empty list rather than a `404`. Do not use this endpoint to test
+whether an automation exists; use
 `GET /v1/automation/{id}`, which returns `404` in those cases.
 
 The example below requests the 2 most recent successful runs you may see.
