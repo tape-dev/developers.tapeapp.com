@@ -15,7 +15,7 @@ Tape applies limits to all executed automations regarding utilized computation p
 - A single record-collection action (e.g. `collect_app_records` / `collect_app_view_records`) returns at most **1000 records**. A configured `limit` above 1000 — or with `limit_enabled: false`, or non-positive — is stored and read back **unchanged**; the cap is applied only when the run executes, where the collection is silently truncated to exactly 1000. The truncation is **not surfaced at write or validate time**. (This is separate from the per-run action cap above.)
 - Automation email sends (`send_email` / `collected_records_send_email`) draw down your organization's shared **24-hour email send quota**; once it is exhausted, further sends are refused until the window rolls over.
 
-Exceeding the time, action-count or memory/CPU limits fails the flow with a proper error message. (The record-collection cap is the exception — it truncates silently rather than failing, as noted above.) Split your work into multiple flows or avoid heavy computations, e.g. for large amounts of records.
+Exceeding the time, action-count or memory/CPU limits fails the flow with a proper error message. Two of the limits above behave differently rather than failing the run: the record-collection cap truncates silently, and the email-send quota refuses further sends once exhausted. Split your work into multiple flows or avoid heavy computations, e.g. for large amounts of records.
 
 # Throttling
 

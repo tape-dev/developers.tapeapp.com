@@ -41,8 +41,9 @@ written `config` does **not** read back byte-for-byte:
   [Action examples](/docs/api/resource/automation/action-examples). It is newly writable and still stabilizing (beta);
   the empty `[]` is always accepted as a no-op.
 - **A companion `_enabled` flag gates `limit`.** In `collect_app_records` / `collect_app_view_records`, `limit` takes
-  effect only when `limit_enabled` is `true`; send both, and with `limit_enabled: false`, `limit` is ignored and the
-  collect is capped at the server maximum of **1000 records** (see [Limitations](/docs/automations/limitations)). (The
+  effect only when `limit_enabled` is `true`; send both, and with `limit_enabled: false`, `limit` is ignored. Either
+  way the collect is capped at the server maximum of **1000 records**, silently truncated at run time (see
+  [Limitations](/docs/automations/limitations)). (The
   `triggering_app_ids` / `custom_variable_defs` `_enabled` flags belong to **trigger** config, not action
   config; control-flow branches are gated by **presence**, not a flag.)
 - **A condition embedded in `config`** (e.g. a collect/filter action's `match_condition`) uses the **same public
