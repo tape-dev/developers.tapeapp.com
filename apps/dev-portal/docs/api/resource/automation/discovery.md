@@ -50,6 +50,9 @@ and filter) are cacheable for an hour (`Cache-Control: public, max-age=3600`, se
 </ContextCodeBlock>
 
 Each entry is `{ type, label, description?, config_schema }`. See the [trigger types](/docs/api/resource/automation/reference/triggers).
+A `config_schema` property may carry `"readOnly": true` — a **server-assigned** field (e.g. a `webhook_received`
+trigger's `webhook_url`) that appears on read but is rejected on write. Strip read-only properties before submitting a
+config.
 
 ## List action types
 

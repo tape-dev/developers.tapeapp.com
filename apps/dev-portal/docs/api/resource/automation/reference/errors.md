@@ -32,6 +32,14 @@ an unhandled `500`):
 - An **unrecognized enum token** — nested inside a `field_assignments` / `call_arguments` entry (e.g. an invalid
   `assignment_type`), or any config enum value that isn't one of the advertised lower-case tokens.
 - A `filter` / `actions` tree nested **beyond the maximum block depth**.
+- A **malformed `filter` comparison** (in the top-level `filter` or an in-action condition): a value tagged for a
+  channel the field doesn't have, an empty comparison value, or a value-arity mismatch (a value on a `none`-arity
+  operator such as `is_empty`, or a missing value on an operator that needs one). An explicitly **empty top-level
+  `filter` group** (`rows: []`) is rejected too — send `filter: null` to run unfiltered.
+- A **malformed filter-condition `value` union**: a payload key belonging to a channel other than its `type` tag (each
+  `type` branch is closed), or a relative-`date` value with an out-of-set `operator` / `unit`, a scalar `amount` (it
+  must be a code-value array), or an unknown member. (Out-of-set relative-date enums were previously silently coerced,
+  and a scalar `amount` was previously a `500`.)
 
 Semantic problems — a member required only by validation, a non-existent referenced id, or an operator outside a
 field's channel — are **not** `400`s at write; they surface at [`validate`](/docs/api/resource/automation/execution) /

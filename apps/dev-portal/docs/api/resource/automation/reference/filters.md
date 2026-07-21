@@ -13,9 +13,12 @@ may change or be withdrawn at any time without notice.
 :::
 
 A filter decides **whether** an automation runs: a recursive `and`/`or` tree of conditions the triggering record must
-match. An automation's `filter` is `null` when it has none (it always runs). The same tree shape is reused for a
-`conditional` action's `condition` and a `for_loop`'s break/continue conditions — see
-[actions](/docs/api/resource/automation/reference/actions).
+match. An automation's `filter` is `null` when it has none (it always runs); to run unfiltered, send `filter: null`
+explicitly — an explicitly **empty** top-level group (`rows: []`) is **rejected with a `400`**, since it narrows
+nothing and would otherwise fire on every record. (An empty group is still allowed *inside* an action — e.g. an
+always-true `conditional` `condition` or a keep-everything `match_condition` — because the trigger filter already bounds
+what the automation runs against.) The same tree shape is reused for a `conditional` action's `condition` and a
+`for_loop`'s break/continue conditions — see [actions](/docs/api/resource/automation/reference/actions).
 
 :::note The same tree is used everywhere conditions appear
 This public tree (`operator: "and" | "or"`, `rows`) is used for an automation's `filter`, a control-flow action's
@@ -87,26 +90,32 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `text` | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values) | Text / template comparison. |
 | `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
 | `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
-| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialised at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. |
+| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialised at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. `operator` / `unit` are **enum-enforced**: an out-of-set token is rejected with a `400` (omit them to keep the `plus` / `day` defaults). `amount` is a [code dynamic value](/docs/api/resource/automation/dynamic-values) — an **array** (e.g. `["1"]`), not a scalar; a scalar `amount` is a `400`. |
 | `boolean` | `boolean` | Boolean comparison — arises from a webhook-payload-property subject. Round-trips on write. |
 | `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. Round-trips on write. |
 
 :::caution On write, the `type` tag must match the field
 Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value
 channel from the subject **field's type** — number / unique-id → `number`; date fields → `date`; category / status /
-relation / user → `ids`; text → `text` — and reads **only** that tag. A value whose `type` doesn't match the field's
-channel is **silently dropped**: the condition is stored with an empty comparison and **no `400`**. The valid tag for
-a field type is not served by [`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only),
-so match the tag to the field yourself. Likewise, an **operator** outside the field type's channel (e.g. a text
-operator on a number field) is **not** rejected — it is accepted, passes `validate`, and silently never-matches at run
-time. Use only the operators [`meta/filter`](/docs/api/resource/automation/discovery) advertises for the field's type.
+relation / user → `ids`; text → `text`. A value whose `type` doesn't match the field's channel is **rejected with a
+`400`** on both create and update — the response names the offending condition (by its `id`, else its path) and the tag
+it expected. The accepted tag for a field type is not served by
+[`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only), so match the tag to the field
+yourself. An **empty** comparison value, and a **value-arity** mismatch (a value on a `none`-arity operator such as
+`is_empty`, or a missing value on an operator that needs one), are rejected with a `400` the same way.
 
-An empty comparison is a **valid** definition, so [`validate`](/docs/api/resource/automation/execution) stays green —
-**but at run time it matches every record.** A filter value that composes to empty does **not** raise an error and does
-**not** narrow the filter: the leaf compiles to a match-all short-circuit, so under the default `and` group the whole
-filter passes and the automation fires its actions on **every** record in scope. Because a mistyped `type` tag is
-dropped silently (above), a one-character error can turn a scoped automation into one that runs against your entire app.
-Always confirm a new filter with [`simulate`](/docs/api/resource/automation/execution) before activating it. See
+By contrast, an **operator** that is outside the field type's channel but otherwise well-formed (e.g. a text operator on
+a number field, carrying a number value) is **not** rejected — it is accepted, passes `validate`, and silently
+never-matches at run time. Use only the operators [`meta/filter`](/docs/api/resource/automation/discovery) advertises
+for the field's type.
+
+**The empty-match hazard is caught at write, but not at run time.** A *literal* empty comparison can no longer be stored
+through the API. But the leaf still compiles to a match-all short-circuit at run time, so a value built from a
+**reference** (a field, variable, or prior action's output) — accepted on write because the reference is present — can
+still resolve to **empty for a given record**, making the filter match **every** record under the default `and` group.
+Definitions stored before this check, or through the in-app editor, can carry an empty comparison too (create/update do
+not re-validate existing rows). Guard references that can be empty, and
+[`simulate`](/docs/api/resource/automation/execution) a new filter before activating it. See
 [Troubleshooting → Filter values](/docs/automations/troubleshooting/filter-values).
 :::
 

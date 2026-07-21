@@ -37,7 +37,10 @@ Each type has its own `config` shape — see the `config_schema` from
 
 :::note Output-only config fields
 Some config fields are **server-assigned and read-only** — for example a `webhook_received` trigger's `webhook_url`.
-They appear on read but are **rejected on input**. The input `config_schema` is the read schema minus these fields.
+They appear on read but are **rejected on input**. In the `config_schema` returned by
+[`GET /v1/automation/meta/trigger`](/docs/api/resource/automation/discovery), each such field is now flagged
+`"readOnly": true` (standard JSON Schema), so you can strip read-only fields programmatically before submitting a
+config on write. The input `config_schema` is the read schema minus these fields.
 :::
 
 :::note Companion `_enabled` flags
