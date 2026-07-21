@@ -29,7 +29,7 @@ substantive blocks — [trigger](/docs/api/resource/automation/reference/trigger
     "paused": false,
     "broken": false,
     "broken_reason": null,
-    "trigger": { "type": "record_created", "config": { "app_id": 87 } },
+    "trigger": { "type": "record_created", "config": {} },
     "filter": {
       "operator": "and",
       "rows": [

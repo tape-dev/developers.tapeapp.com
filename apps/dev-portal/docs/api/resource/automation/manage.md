@@ -50,7 +50,7 @@ Creates an automation in the app. It lands **paused and not broken** — a valid
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Email the owner on a new high-priority lead",
-    "trigger": { "type": "record_created", "config": { "app_id": 87 } }
+    "trigger": { "type": "record_created", "config": {} }
   }'`}
 </ContextCodeBlock>
 </TabItem>
@@ -59,7 +59,7 @@ Creates an automation in the app. It lands **paused and not broken** — a valid
 ```json title="➡️      Request"
 {
   "name": "Email the owner on a new high-priority lead",
-  "trigger": { "type": "record_created", "config": { "app_id": 87 } }
+  "trigger": { "type": "record_created", "config": {} }
 }
 ```
 
@@ -162,7 +162,7 @@ The **whole body is the trigger** `{ type, config }`. It replaces any existing t
 {`curl -X PUT #BASE_URL/v1/automation/4021/trigger \\
   -u #USER_API_KEY: \\
   -H "Content-Type: application/json" \\
-  --data '{ "type": "record_updated", "config": { "app_id": 87 } }'`}
+  --data '{ "type": "record_updated", "config": {} }'`}
 </ContextCodeBlock>
 
 ## Activate an automation

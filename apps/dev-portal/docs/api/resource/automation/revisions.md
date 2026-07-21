@@ -47,7 +47,7 @@ Returns the automation's full history, **newest-first**. This listing is **unpag
       "name": "Email the owner on a new high-priority lead",
       "paused": false,
       "broken": false,
-      "trigger": { "type": "record_created", "config": { "app_id": 87 } },
+      "trigger": { "type": "record_created", "config": {} },
       "filter": null,
       "actions": []
     }

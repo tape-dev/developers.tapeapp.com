@@ -35,7 +35,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `attach_files_variable_defs` | array of [references](/docs/api/resource/automation/dynamic-values) | no | File variables whose files are candidates for attachment. Empty when omitted. |
 | `attach_files_match_type` | enum | no | Which candidate files are attached. Default `all`. |
 | `attach_files_match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Restricts attached files for the `filtered` / `most_recent_filtered` modes. Empty condition ("match all") when omitted or `null`. |
-| `fields_expanded` | boolean | no | Editor-only flag: whether the address fields are expanded in the editor. Carried through when present. |
+| `fields_expanded` | boolean | no | Editor-only UI flag: whether the address fields are expanded in the editor. **Omitted from the live discovery schema** (like `create_pdf`'s `*_expanded` flags); carried through on read when present. |
 
 **`attach_files_match_type` tokens** (lower-case): `all`, `filtered`, `most_recent`, `most_recent_filtered`. `all` and
 `most_recent` ignore the condition; `filtered` and `most_recent_filtered` restrict to files matching

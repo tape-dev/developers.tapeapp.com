@@ -29,7 +29,7 @@ family. This page documents the typed `config`; for how an action sits inside an
 Each entry in `call_arguments` binds one declared input (`variable_def`) to either a
 [template value](/docs/api/resource/automation/dynamic-values) (`value`, used when `assignment_type` is `set`) or a
 [code value](/docs/api/resource/automation/dynamic-values) (`code`, used when `set_code`). `assignment_type` defaults
-to `set` when omitted, and its tokens (lower-case) are `set` and `set_code`. A server-minted `id` is filled when omitted.
+to `set` when omitted, and its tokens (lower-case) are `set` and `set_code`. A `call_arguments` entry `id` defaults to an empty string (`""`) when omitted — it is not server-minted.
 
 ## Example
 

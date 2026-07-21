@@ -41,8 +41,7 @@ and filter) are cacheable for an hour (`Cache-Control: public, max-age=3600`, se
       "description": "Triggers when a record is created in the app.",
       "config_schema": {
         "type": "object",
-        "properties": { "app_id": { "type": "integer" } },
-        "required": ["app_id"],
+        "properties": {},
         "additionalProperties": false
       }
     }

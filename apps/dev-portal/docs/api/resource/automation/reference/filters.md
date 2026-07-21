@@ -88,8 +88,8 @@ The condition `value` is tagged by `type` so you can read it without the per-fie
 | `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
 | `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
 | `date` | `date`: `{ base, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **required** — omitting it currently makes the condition silently never-match (intended to become a `400`). |
-| `boolean` | `boolean` | Boolean comparison. **Output-only** — arises from a special subject; see limitations. |
-| `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. **Output-only** — see limitations. |
+| `boolean` | `boolean` | Boolean comparison — arises from a webhook-payload-property subject. Round-trips on write. |
+| `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. Round-trips on write. |
 
 :::caution On write, the `type` tag must match the field
 Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value
@@ -114,8 +114,8 @@ record. See [Troubleshooting → Filter values](/docs/automations/troubleshootin
   `custom` references are rejected with a `400` on write.
 - **Change-tracking conditions are read-only.** A "has changed" style condition has no public operator, so it reads as
   an operator-less `{ id, subject }` and **cannot be re-submitted** verbatim.
-- The `boolean` and `entity_type` value kinds arise from special subjects and are treated as output-only.
 
-A verbatim `GET` → `PUT` still fails only for an automation that carries a **change-tracking condition** or an
-output-only value kind — strip those first. Ordinary field / metadata / trigger / action-file subjects round-trip.
+A verbatim `GET` → `PUT` still fails only for an automation that carries a **change-tracking condition** — strip those
+first. Ordinary field / metadata / trigger / action-file subjects (including the `boolean` / `entity_type` value kinds)
+round-trip.
 This is a known v1 limitation, not a bug.

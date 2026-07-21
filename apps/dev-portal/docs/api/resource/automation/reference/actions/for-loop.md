@@ -22,7 +22,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `iterable` | [reference](/docs/api/resource/automation/dynamic-values) | no | What the loop iterates over. Named `iterable` on the wire (renamed from the internal `iterable_variable_def`). |
+| `iterable` | [reference](/docs/api/resource/automation/dynamic-values) | no | The collection to loop over — a `record_collection` reference produced by an upstream `collect_*` action (or a multi-value field / custom variable). Named `iterable` on the wire (renamed from the internal `iterable_variable_def`). |
 | `action_rows` | array of nested [actions](/docs/api/resource/automation/reference/actions) | no | The loop body — the actions run once per item. Empty when omitted. |
 | `break_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Stops the loop when it matches. Omitted → disabled. |
 | `continue_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Skips to the next item when it matches. Omitted → disabled. |
@@ -35,7 +35,7 @@ An action entry inside an automation definition's `actions[]`:
 {
   "type": "for_loop",
   "config": {
-    "iterable": { "kind": "variable", "source": "meta", "meta_type": "app_record_id" },
+    "iterable": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 12345 },
     "action_rows": [
       {
         "type": "send_email",

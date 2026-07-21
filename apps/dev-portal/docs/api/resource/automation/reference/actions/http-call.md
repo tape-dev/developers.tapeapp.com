@@ -25,7 +25,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `http_call_type` | enum | **yes** | HTTP method. |
 | `http_call_url` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Request URL. |
 | `http_call_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | Request body. Empty when omitted. |
-| `http_call_headers` | array of objects | no | Request headers. Each entry is `{ key, value }` (plus a server-minted `id` that round-trips). `value` is a [template value](/docs/api/resource/automation/dynamic-values). Empty when omitted. |
+| `http_call_headers` | array of objects | no | Request headers. Each entry is `{ key, value }` (plus an optional `id` that defaults to an empty string `""` when omitted — header entries are not server-minted). `value` is a [template value](/docs/api/resource/automation/dynamic-values). Empty when omitted. |
 | `http_call_follow_redirects` | boolean | no | Whether to follow 3xx redirects. Default `false`. |
 | `custom_variable_defs` | array of [variable declarations](/docs/api/resource/automation/dynamic-values) | no | Custom variables this action declares (e.g. the response variable) for its own code or later actions. Empty when omitted. |
 

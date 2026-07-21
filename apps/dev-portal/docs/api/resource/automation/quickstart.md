@@ -37,7 +37,7 @@ Create it in an app. A new automation lands **paused** and not broken — a draf
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Email the owner on a new high-priority lead",
-    "trigger": { "type": "record_created", "config": { "app_id": 87 } }
+    "trigger": { "type": "record_created", "config": {} }
   }'`}
 </ContextCodeBlock>
 
@@ -65,7 +65,7 @@ with a partial [update](/docs/api/resource/automation/manage). Omitted fields ar
       ]
     },
     "actions": [
-      { "type": "send_email", "config": { "subject": ["A new high-priority lead was created"] } }
+      { "type": "send_email", "config": { "to_address": ["owner@example.com"], "subject": ["A new high-priority lead was created"] } }
     ]
   }'`}
 </ContextCodeBlock>

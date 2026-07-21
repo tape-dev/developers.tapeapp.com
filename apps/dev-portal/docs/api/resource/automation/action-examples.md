@@ -60,7 +60,7 @@ Updates the record the run is executing on, applying a list of `field_assignment
 }
 ```
 
-- `field_assignments` (**required**) — an empty `[]` is a valid **no-op** update (changes no fields, still logs success). A populated assignment is a **typed, per-field-type object** discriminated by `field_type` (lower-case `field_type` / `assignment_type` tokens, plus any nested match/search conditions in the public [filter tree](/docs/api/resource/automation/reference/filters)); since `meta/action` advertises the items opaquely, treat this shape as **beta** and still stabilizing.
+- `field_assignments` (optional) — omitted or `[]` is a valid **no-op** update (changes no fields, still logs success). A populated assignment is a **typed, per-field-type object** discriminated by `field_type` (lower-case `field_type` / `assignment_type` tokens, plus any nested match/search conditions in the public [filter tree](/docs/api/resource/automation/reference/filters)); since `meta/action` advertises the items opaquely, treat this shape as **beta** and still stabilizing.
 - Targets the **current record** implicitly — no `app_id` (that's `referenced_records_update`) and no `record_collection` (that's `collected_records_update`).
 - `silent` / `trigger_webhooks` / `trigger_other_flows` / `author_id` are optional mutation flags; omitting `author_id` runs the update as the automation's default author.
 

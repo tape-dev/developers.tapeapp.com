@@ -114,7 +114,7 @@ return the automation in the same envelope, so the shape below is the one you wi
     "broken_reason": null,
     "trigger": {
       "type": "record_created",
-      "config": { "app_id": 87 }
+      "config": {}
     },
     "filter": null,
     "actions": [
