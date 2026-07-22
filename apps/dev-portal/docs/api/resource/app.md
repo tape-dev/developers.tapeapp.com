@@ -169,7 +169,7 @@ Retrieve an app with fields by its ID `1`:
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}/views" />
 
-Retrieve all team views of an app via the app ID `1`:
+Retrieve the public views of an app via the app ID `1`. Each entry is a **preview** — its id, name, layout and default flag. To retrieve a view's full definition, or to create, update, promote or delete views, see the [View resource](view).
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/app/1/views \\
@@ -182,16 +182,20 @@ Retrieve all team views of an app via the app ID `1`:
     {
       "id": 500,
       "view_id": 500,
-      "app_id": 1,
       "name": "Open Tasks",
-      "is_default": true
+      "app_id": 1,
+      "is_default": true,
+      "layout": "list",
+      "private": false
     },
     {
       "id": 501,
       "view_id": 501,
-      "app_id": 1,
       "name": "Completed Tasks",
-      "is_default": false
+      "app_id": 1,
+      "is_default": false,
+      "layout": "table",
+      "private": false
     }
   ],
   "total": 2

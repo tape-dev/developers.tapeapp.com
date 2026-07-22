@@ -47,6 +47,7 @@ module.exports = {
             'api/resource/record-permissions',
             'api/resource/record-follow',
             'api/resource/app',
+            'api/resource/view',
             {
               type: 'category',
               label: 'Field',
