@@ -527,6 +527,10 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 
 ## Created At
 
+:::note Filtering without a Created-At field
+This filter targets an App that has a dedicated Created-At field (it references a `field_id`). To filter by a record's creation time on **any** App — including those without such a field — use the field-less [`created_at` metadata filter](#created-at-metadata) instead.
+:::
+
 This is an example on how to filter records by a `created_at` field:
 
 <Tabs defaultValue="json">
@@ -585,6 +589,10 @@ E.g. if the match value is `2020-01-01`, the offset amount is `1` and the relati
 | `on_or_after`  | Matches all records whose creation date is after the date of the provided match value + offset_amount + relative_date_type            |
 
 ## Last Modified At
+
+:::note Filtering without a Last-Modified field
+This filter targets an App that has a dedicated Last-Modified field (it references a `field_id`). To filter by a record's last-modified time on **any** App — including those without such a field — use the field-less [`last_modified_at` metadata filter](#last-modified-at-metadata) instead.
+:::
 
 This is an example on how to filter records by a `last_modified_at` field:
 
@@ -759,3 +767,174 @@ Note that the calculation field is polymorphic, and may contain textual, numeric
 |    `not_equal`     | Matches all records whose field value does not reference the status specified by the match value. Comparison is case insensitive and spaces are ignored. |
 |      `empty`       | Matches all records whose field value is empty                                                                                                           |
 |    `not_empty`     | Matches all records whose field value is not empty                                                                                                       |
+
+## Record metadata filters {#record-metadata-filters}
+
+All of the filters above target a **field** — each one carries a `field_id` and a `field_type`. Tape additionally supports a small set of **metadata filters** that match on a record's intrinsic properties. Because every record has these properties, a metadata filter needs **no field** on the App.
+
+A metadata filter is identified by its `type` alone and omits `field_id` and `field_type`:
+
+| `type`             | Filters on                                                                      | Match `value`                |
+| ------------------ | ------------------------------------------------------------------------------- | ---------------------------- |
+| `created_at`       | When the record was created                                                     | nested — `{ "date": "…" }`   |
+| `last_modified_at` | When the record was last modified                                               | nested — `{ "date": "…" }`   |
+| `app_record_id`    | The record's App-specific ID (the [`app_record_id`](field/unique-id) property)  | bare scalar — e.g. `123`     |
+
+Metadata filters go in the same `filters` array as field filters and are combined with the same boolean `AND`.
+
+:::caution The timestamp match value is nested
+`created_at` and `last_modified_at` read the match value from `values[0].value.date` — a nested object. Field filters and `app_record_id` use a bare scalar at `values[0].value`. This asymmetry is an easy integration mistake to make.
+:::
+
+### Created At (metadata) {#created-at-metadata}
+
+Filter records by their creation time, without the App having a Created-At field:
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Created At Meta Filter — bounded window"
+{
+  "filters": [
+    {
+      "type": "created_at",
+      "match_type": "on_or_after",
+      "values": [{ "value": { "date": "2026-07-01T00:00:00.000Z" } }]
+    },
+    {
+      "type": "created_at",
+      "match_type": "on_or_before",
+      "values": [{ "value": { "date": "2026-07-02T00:00:00.000Z" } }]
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+- **Absolute UTC dates only.** Provide a full ISO-8601 timestamp as `value.date`. `relative_date_type` may be omitted or set to `exact_date`; any genuinely relative value (`num_days_before`, `num_weeks_after`, …) returns a `400`. The `offset_amount` sub-field is accepted by the type but ignored — do not rely on it.
+- **All bounds are inclusive.** Every supported match type compares with `>=` or `<=`: `after` behaves exactly like `on_or_after`, and `before` like `on_or_before`.
+- **Express a window with two filters** — one lower bound and one upper bound, as shown above. Repeating a bound in the same direction _narrows_ the window (the latest lower bound and the earliest upper bound win); it never widens it.
+- **Invalid input fails loudly** with a `400` rather than being silently dropped — an unsupported `match_type`, a missing or unparseable `date`, or a calendar year outside `1`–`9999`.
+
+The following `match_type` values are supported for `created_at`:
+
+| Match type                                              | Description                                        |
+| ------------------------------------------------------- | -------------------------------------------------- |
+| `after`, `on_or_after`, `larger`, `larger_or_equal`     | Matches records created **on or after** the value  |
+| `before`, `on_or_before`, `smaller`, `smaller_or_equal` | Matches records created **on or before** the value |
+
+Any other match type (`equal`, `empty`, `not_empty`, …) returns a `400`.
+
+For filtering an App that has a dedicated Created-At field, see [Created At](#created-at) above.
+
+### Last Modified At (metadata) {#last-modified-at-metadata}
+
+Identical to [Created At (metadata)](#created-at-metadata) in every respect — same match types, inclusive bounds, absolute-date rule and `400` behavior — using `type: "last_modified_at"`:
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      Last Modified At Meta Filter"
+{
+  "filters": [
+    {
+      "type": "last_modified_at",
+      "match_type": "on_or_after",
+      "values": [{ "value": { "date": "2026-07-01T00:00:00.000Z" } }]
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Never-modified records are excluded
+A record that has not been edited since it was created has no last-modified timestamp, and matches **no** `last_modified_at` filter — not even a far-past `on_or_after`. To retrieve everything created **or** modified since a point in time, query `created_at` and `last_modified_at` separately and merge the results (see [Pattern: incremental sync](#pattern-incremental-sync)).
+:::
+
+### App Record ID (metadata) {#app-record-id-metadata}
+
+Filter records by their App-specific ID — the sequential [`app_record_id`](field/unique-id) returned on every record (the first record created in an App is `1`, the second `2`, and so on):
+
+<Tabs defaultValue="json">
+<TabItem value="json" label="JSON">
+
+```json title="➡️      App Record ID Meta Filter"
+{
+  "filters": [
+    {
+      "type": "app_record_id",
+      "match_type": "larger_or_equal",
+      "values": [{ "value": 1000 }]
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+The match value is a **bare scalar** (`values[0].value`), not a nested object, and must be numeric — a missing or non-numeric value returns a `400`.
+
+The following `match_type` values are supported for `app_record_id`:
+
+|    Match type      | Description                                                        |
+| ------------------ | ----------------------------------------------------------------- |
+| `equal`            | Matches the record whose App ID equals the value                  |
+| `not_equal`        | Matches all records whose App ID does not equal the value         |
+| `larger`           | Matches all records whose App ID is larger than the value         |
+| `larger_or_equal`  | Matches all records whose App ID is larger than or equal to the value    |
+| `smaller`          | Matches all records whose App ID is smaller than the value        |
+| `smaller_or_equal` | Matches all records whose App ID is smaller than or equal to the value   |
+| `empty`            | Matches records that have no App ID                               |
+| `not_empty`        | Matches records that have an App ID                               |
+
+Any other match type returns a `400`. Note that every record always has an `app_record_id`, so in practice `empty` matches nothing and `not_empty` matches every record.
+
+### Pattern: incremental sync {#pattern-incremental-sync}
+
+A common use of the timestamp metadata filters is an **incremental sync** — pulling only the records that changed since your last run, without having to add Created-At or Last-Modified fields to every App.
+
+Because filters combine with `AND` (there is no `OR`), "created **or** modified since `T`" cannot be expressed in a single request. Issue two requests and union the results:
+
+<Tabs defaultValue="created">
+<TabItem value="created" label="Created since T">
+
+```json title="➡️      Request 1 — records created since T"
+{
+  "filters": [
+    {
+      "type": "created_at",
+      "match_type": "on_or_after",
+      "values": [{ "value": { "date": "2026-07-22T00:00:00.000Z" } }]
+    }
+  ]
+}
+```
+
+</TabItem>
+<TabItem value="modified" label="Modified since T">
+
+```json title="➡️      Request 2 — records modified since T"
+{
+  "filters": [
+    {
+      "type": "last_modified_at",
+      "match_type": "on_or_after",
+      "values": [{ "value": { "date": "2026-07-22T00:00:00.000Z" } }]
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>
+
+De-duplicate the combined result by record `id`. Request 2 only returns records edited since creation (see the caveat above), which is why Request 1 is still needed to catch brand-new records.
+
+:::info These filters previously had no effect
+Before this change, the API accepted `created_at` and `last_modified_at` metadata filters but silently **ignored** them, returning the full unfiltered record set. They are now applied. An integration that was unknowingly relying on the old no-op behavior will see its result sets shrink.
+:::
