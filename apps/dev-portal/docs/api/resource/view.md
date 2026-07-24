@@ -11,11 +11,12 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 A **view** is a saved way of looking at an app's records. Every view belongs to exactly one app and stores:
 
-- a **layout** — `table`, `list` or `board`;
+- a **layout** — `table`, `list` or `board` — and its layout-specific **display configuration** (table row height, board grouping and card preview, …);
 - an ordered list of **filters** — which records the view shows;
 - a **sort** — one field and a direction, or none (which means the app's manual record order);
 - per-**field** display settings — which fields are visible, and how wide the columns are;
-- an optional **split by** — the field the view groups its records into sections by.
+- an optional **split by** — the field the view groups its records into sections by;
+- how it renders **progress bars** (`show_progress`).
 
 Every app has exactly one **default view**, which is what a user lands on when they open the app. Views created and managed through this API are always **public** — shared with everyone who can see the app.
 
@@ -78,6 +79,9 @@ Everything in the preview, plus:
 | `filters`   | array          | The view's filters, flat and implicitly ANDed. See [Filters](#filters).                      |
 | `fields`    | object         | Per-field display settings, keyed by `field_id`, for the view's current layout. See [Field settings](#field-settings). |
 | `split_by`  | object \| null | The split-by definition, or `null`. See [Split by](#split-by).                               |
+| `show_progress` | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | How the view renders progress bars. See [Display configuration](#display-configuration). |
+| `table`     | object \| null | Table-layout display settings, or `null` unless `layout` is `table`. See [Display configuration](#display-configuration). |
+| `board`     | object \| null | Board grouping, card preview and display settings, or `null` unless `layout` is `board`. See [Display configuration](#display-configuration). |
 
 The `fields` object always contains an entry for **every** field of the app — including fields the view has no stored setting for, which are reported with their effective default. That completeness is what makes a `GET` → `PUT` round-trip faithful: a detail response can be sent straight back to [Update a view](#update-a-view) unchanged.
 
@@ -126,12 +130,16 @@ Retrieve a view with its full definition. Requires view access to the app it bel
       "55204": { "hidden": false },
       "55207": { "hidden": true }
     },
-    "split_by": null
+    "split_by": null,
+    "show_progress": "none",
+    "table": { "row_height": "medium", "wrap_cells": false },
+    "board": null
   }
 }
 ```
 
 - `width` appears only for `table` views, and only for fields that carry a stored width.
+- `table` is present only for `table` views and `board` only for `board` views; the other is `null`.
 - Filter operands come back **normalised to ids** — a status or category filter written with option names comes back as `{ "value": <option_id> }`, and a relation filter as `{ "value": <record_id> }`.
 - The response body is directly re-`PUT`-able — see [Update a view](#update-a-view).
 
@@ -152,6 +160,9 @@ Create a view on the app with the specified `app_id`. Requires share access to t
 | `sort_desc` | –        | boolean                            | defaults to `false`; ignored without `sort_by`         |
 | `fields`    | –        | object keyed by `field_id`         | `hidden` required per entry; see [Field settings](#field-settings) |
 | `split_by`  | –        | object                             | see [Split by](#split-by)                              |
+| `show_progress` | –    | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | defaults to `none`; see [Display configuration](#display-configuration) |
+| `table`     | –        | object                             | `table` layout only; see [Display configuration](#display-configuration) |
+| `board`     | –        | object                             | `board` layout only; see [Display configuration](#display-configuration) |
 
 `null` is **not** accepted for any key on create — nullability is an update-only affordance, because on create there is nothing to clear. Any unknown or misspelled key is rejected with a `400`.
 
@@ -249,7 +260,9 @@ Promotion is a separate endpoint ([`POST /v1/view/{view_id}/default`](#set-the-d
 
 **The effective layout.** `fields` is interpreted against `layout ?? the view's current layout`. If you change `layout` and send `fields` in the same request, the map is written to the **new** layout's settings; the other two layouts' settings are preserved untouched. Switching a view's layout back and forth never destroys the settings of the layout you left.
 
-Beyond the keys this API exposes, a `PUT` reads back and re-writes everything else a view stores — column footer statistics, board lanes and grouping, card-preview settings, and the settings of the layouts the view is not currently in — so an update that only renames a view leaves all of it intact. (The one exception is split-by drill-down filters; see [Limitations](#known-limitations).)
+**Display config.** `show_progress` omitted preserves the current mode; it always has a value, so it is only ever replaced, never cleared. `table` and `board` each replace their config wholesale when sent; omitting them — **or sending `null`** — preserves the stored config. `table` is accepted only on a `table` view and `board` only on a `board` view (otherwise a `400`). The `null`-tolerance is what lets a detail `GET` — which reports `table: null` on a board view and `board: null` on a table view — round-trip verbatim. See [Display configuration](#display-configuration).
+
+Beyond the keys this API exposes, a `PUT` reads back and re-writes everything else a view stores — column footer statistics, a board's custom **lane customization**, and the field/display settings of the layouts the view is not currently in — so an update that only renames a view leaves all of it intact. (The one exception is split-by drill-down filters; see [Limitations](#known-limitations).)
 
 **Rename only** — everything else is preserved:
 
@@ -406,12 +419,70 @@ Every `field_id` you name must belong to the app the view is on; a foreign or un
 | `field_id` | number — **required**                                            | the field to split by; must belong to the view's app          |
 | `period`   | `day` \| `weekday` \| `week` \| `month` \| `year` \| null        | bucket granularity; only meaningful for date-valued fields    |
 | `sorting`  | `label_asc` \| `label_desc` \| `value_asc` \| `value_desc` \| null | section order                                                |
-| `limit`    | number ≥ 1, or null                                              | maximum number of sections                                     |
+| `limit`    | number **1–100**, or null                                        | maximum number of sections (capped at 100)                    |
 
 A view can be split by a field of type `single_category`, `multi_category`, `status`, `single_user`, `multi_user`, `single_relation`, `multi_relation`, `single_date`, `range_date`, `created_on`, `last_modified_on` or `calculation`. Any other field type is a `400` (`Invalid split_by field: a field of type '…' cannot be split by`).
 
 - On update, `"split_by": null` **removes** the split-by; omitting the key preserves it.
 - `sorting` is auto-filled with `label_asc` for `single_category`, `multi_category` and `status` fields, so a `GET` can report a `sorting` you never sent.
+
+## Display configuration
+
+Beyond filters and per-field settings, a view stores a few display options. `show_progress` applies to any layout; `table` and `board` are layout-specific and are reported as `null` for a view not currently in that layout (like `fields`, they address the **effective** layout only). On write each config is **replaced wholesale** — there is no partial merge — and `table` / `board` are accepted only on a matching-layout view.
+
+### `show_progress`
+
+How the view renders progress bars:
+
+| Value      | Meaning                                    |
+| ---------- | ------------------------------------------ |
+| `none`     | No progress bars (the default on create).  |
+| `view`     | A single progress bar for the whole view.  |
+| `split_by` | A progress bar per split-by section.       |
+| `all`      | Both.                                      |
+
+### `table` (table views only)
+
+Present on read for a `table` view (`null` otherwise), and accepted on create/update **only** when the effective layout is `table` — otherwise `400 'table' settings are only valid on a 'table' view.` Both fields are required when the object is sent.
+
+| Key          | Type                                                | Notes                                                   |
+| ------------ | --------------------------------------------------- | ------------------------------------------------------- |
+| `row_height` | `"short"` \| `"medium"` \| `"tall"` \| `"extra_tall"` | Row height.                                             |
+| `wrap_cells` | boolean                                             | Whether cell content wraps onto multiple lines instead of being truncated. |
+
+```json title="➡️      table config"
+{ "row_height": "medium", "wrap_cells": true }
+```
+
+### `board` (board views only)
+
+Present on read for a `board` view (`null` otherwise), and accepted on create/update **only** when the effective layout is `board` — otherwise `400 'board' settings are only valid on a 'board' view.` All seven fields are required when the object is sent.
+
+| Key                     | Type            | Notes                                                                                                       |
+| ----------------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
+| `group_by_field_id`     | number \| null  | The field the board groups into lanes by. Must be a `status` or `single_category` field of the app, or `null` for an ungrouped board. |
+| `card_preview_field_id` | number \| null  | The field rendered as each card's preview image. Must be a `single_attachment`, `multi_attachment` or `multi_image` field of the app, or `null` for no preview. |
+| `card_size`             | `"small"` \| `"medium"` \| `"large"` | Card size.                                                                             |
+| `large_text`            | boolean         | Render card text at the larger size.                                                                        |
+| `hide_empty_columns`    | boolean         | Hide lanes that contain no records.                                                                         |
+| `color_columns`         | boolean         | Tint each lane with its group-by option's colour.                                                           |
+| `fit_preview_image`     | boolean         | Scale the preview image to fill the card rather than fit inside it.                                          |
+
+A `group_by_field_id` of the wrong type is `400 Invalid board group_by field: a field of type '…' cannot group a board`; a wrong-type `card_preview_field_id` is `400 Invalid board card_preview field: a field of type '…' cannot be a card preview`.
+
+```json title="➡️      board config"
+{
+  "group_by_field_id": 55203,
+  "card_preview_field_id": 55210,
+  "card_size": "medium",
+  "large_text": false,
+  "hide_empty_columns": true,
+  "color_columns": true,
+  "fit_preview_image": false
+}
+```
+
+A board's **lane customization** and a table's **column footer statistics** are not exposed by this API — they are preserved across updates but cannot be read or set here.
 
 ## Errors
 
@@ -430,9 +501,11 @@ All errors use the API's standard [error envelope](/docs/api/errors).
 - `layout` not one of `table` / `list` / `board`;
 - more than 100 `filters`, or a filter missing `type` or using a `match_type` the field type does not support;
 - a `fields` key that is not a plain non-negative integer, a `fields` entry without `hidden`, or a `width` outside 100–1500;
-- `split_by` without `field_id`, a `limit` below 1, or a split-by field whose type cannot be split by;
-- an unknown `period`, `sorting`, `field_type` or `match_type`;
-- a `field_id` (in `filters`, `sort_by`, `fields` or `split_by`) that belongs to a different app;
+- `split_by` without `field_id`, a `limit` outside **1–100**, or a split-by field whose type cannot be split by;
+- an unknown `period`, `sorting`, `field_type`, `match_type`, `show_progress`, `row_height` or `card_size` value, or a `table` / `board` config missing a required field;
+- a `field_id` (in `filters`, `sort_by`, `fields`, `split_by`, or a board `group_by_field_id` / `card_preview_field_id`) that belongs to a different app;
+- a `table` config on a non-`table` view, or a `board` config on a non-`board` view;
+- a board `group_by_field_id` that is not a `status` / `single_category` field, or a `card_preview_field_id` that is not a `single_attachment` / `multi_attachment` / `multi_image` field;
 - `null` for any key on create;
 - the app already holds the maximum of **2000** views;
 - deleting the app's current **default** view (`Cannot delete default BlabView`) — promote another view to default first.
@@ -446,7 +519,7 @@ Each of these is a deliberate v1 boundary:
 1. **Checklist sort sub-mode is not exposed.** A view sorted by a checklist field also stores _which_ aspect of the checklist it sorts on (status, title, assignee or due date). This API neither reports nor accepts it, so a `GET` → `PUT` of a checklist-sorted view resets that sub-mode. The `sort_property` key is reserved for a future release and is accepted-and-ignored today. Avoid round-tripping checklist-sorted views until it ships.
 2. **Public views only.** Every view this API creates is public. Your _own_ private views are readable and writable by id and report `"private": true`; other users' private views are `404`; private views never appear in the list endpoint.
 3. **No gallery layout.** `layout` is `table`, `list` or `board`. The legacy gallery layout has no public value and a view still using it cannot be read through this API.
-4. **Column statistics and board configuration are preserved but not editable.** Column footer statistics, board lanes, the board grouping field, the board card-preview field and the "show progress" setting all survive every update untouched, but there is no way to read or set them here.
+4. **Board lane customization and column statistics are preserved but not exposed.** A board's custom lane ordering and a table's column footer statistics survive every update untouched, but there is no way to read or set them here. (The board's grouping field, card-preview field and display options, the table's row height and cell wrap, and the `show_progress` mode **are** editable — see [Display configuration](#display-configuration).)
 5. **Split-by drill-down filters are dropped by any update.** When a user clicks into a section of a split view, the app writes temporary filters derived from the split-by. Those are never reported by `GET`, and any `PUT` removes them — the app regenerates them from the split-by, so nothing a user configured is lost.
 6. **No timestamps.** Views have no creation or modification metadata.
 7. **No ordering control.** The list endpoint returns views in no guaranteed order, and there is no endpoint to reorder an app's views.
@@ -462,10 +535,11 @@ Recreating a view on a different app — the core migration use case — is a re
    - every `filters[].field_id` → the target field id, **and every operand in `values`** — option ids, user ids and record ids all need remapping;
    - the keys of `fields` → target field ids;
    - `split_by.field_id` → the target field id;
+   - `board.group_by_field_id` and `board.card_preview_field_id` → the target field ids;
    - drop `id`, `view_id`, `app_id`, `is_default` and `private` (a `PUT` tolerates them, but `POST` rejects them).
-4. [Create the view](#create-a-view) on the target app: `POST /v1/view/app/{target_app_id}` with `name`, `layout` and the rewritten fields.
+4. [Create the view](#create-a-view) on the target app: `POST /v1/view/app/{target_app_id}` with `name`, `layout` and the rewritten fields (including `show_progress` and, for a `table` / `board` view, its `table` / `board` config).
 5. If the source view was the app's default (`is_default: true`), [promote the new view](#set-the-default-view) — it cannot be set in the create body.
 
 Two things to plan for: the target app must be one where you hold **share access**, not just edit access; and each app allows at most **2000** views, which a repeated or retried bulk migration can reach.
 
-What does **not** carry over, and must be replayed by hand: the default-view flag (replay with the promote endpoint), private views (invisible in the source listing), the checklist sort sub-mode, column statistics and board configuration, gallery-layout views (not readable), and field _order_ within a layout (inherited from the target app's own field order).
+What does **not** carry over, and must be replayed by hand: the default-view flag (replay with the promote endpoint), private views (invisible in the source listing), the checklist sort sub-mode, column footer statistics and board lane customization, gallery-layout views (not readable), and field _order_ within a layout (inherited from the target app's own field order).
