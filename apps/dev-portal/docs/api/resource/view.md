@@ -29,7 +29,7 @@ An update **replaces** the `filters` array and the `fields` map entirely — it 
 
 ## Authentication and permissions
 
-All view endpoints require a **user API key**, sent as a bearer token. Automation ("workflow") API keys are rejected with `401` (`App views can only be accessed with a user API key.`) — the view permission model depends on user identity.
+The five `/v1/view/...` endpoints require a **user API key**, sent as a bearer token. Automation ("workflow") API keys are rejected with `401` (`App views can only be accessed with a user API key.`) — the view permission model depends on user identity. The one exception is the [list endpoint](app#retrieve-views-for-an-app) (which lives on the app resource): it also accepts an automation API key, subject to view access.
 
 Permissions are checked in two layers against the app the view belongs to:
 
@@ -324,8 +324,8 @@ Delete a view. Requires share access to the app.
 
 The view is soft-deleted: afterwards every endpoint reports it as `404`. Records are never affected — deleting a view removes only the saved way of looking at them.
 
-:::caution Do not delete an app's default view
-Promote another view to default **first**, then delete. Deleting the view that is currently the default can leave the app with no default view, after which [promoting a view](#set-the-default-view) fails. Every app keeps exactly one default view; this endpoint does not enforce it for you.
+:::caution The current default view cannot be deleted
+Deleting the view that is currently the app's default is rejected with a `400` (`Cannot delete default BlabView …`). To remove it, [promote another view](#set-the-default-view) to default first, then delete it. Every app always keeps exactly one default view.
 :::
 
 ## Filters
@@ -434,7 +434,8 @@ All errors use the API's standard [error envelope](/docs/api/errors).
 - an unknown `period`, `sorting`, `field_type` or `match_type`;
 - a `field_id` (in `filters`, `sort_by`, `fields` or `split_by`) that belongs to a different app;
 - `null` for any key on create;
-- the app already holds the maximum of **2000** views.
+- the app already holds the maximum of **2000** views;
+- deleting the app's current **default** view (`Cannot delete default BlabView`) — promote another view to default first.
 
 **`429 Too Many Requests`** — the [credit budget](/docs/api/request-limits) is exhausted.
 
