@@ -365,8 +365,9 @@ Every filter entry carries at least a `field_id`, a `field_type`, a `type` discr
 - `values` is the operand list; its shape depends on the field type, and it is omitted for `empty` / `not_empty`.
 - Only **field filters** are accepted. The record endpoint's metadata filters (`created_at` / `last_modified_at` / `app_record_id`) are not part of a view's stored filters.
 
-Two view-specific facts:
+Three view-specific facts:
 
+- **References must resolve.** A view's filters are **persisted** (a record-filter query, by contrast, is evaluated once and discarded), so operands that name something invalid are rejected with a `400` rather than silently matching nothing: a `single_relation` / `multi_relation` filter naming a record that does not exist (`Record(s) with ID … referenced by filters do not exist.`), or a user-referencing filter (`single_user` / `multi_user` / `created_by` / `last_modified_by` / checklist `assignee`) naming a user outside your organization. Deactivated organization members are still valid operands.
 - **`include_active_user` ("@me")** resolves to the owner of the API key you authenticate with, so a view saved with it is dynamic per viewer — exactly as in the app:
 
   ```json
@@ -506,6 +507,7 @@ All errors use the API's standard [error envelope](/docs/api/errors).
 - a `field_id` (in `filters`, `sort_by`, `fields`, `split_by`, or a board `group_by_field_id` / `card_preview_field_id`) that belongs to a different app;
 - a `table` config on a non-`table` view, or a `board` config on a non-`board` view;
 - a board `group_by_field_id` that is not a `status` / `single_category` field, or a `card_preview_field_id` that is not a `single_attachment` / `multi_attachment` / `multi_image` field;
+- a relation filter that references a record which does not exist, or a user-referencing filter that references a user outside your organization;
 - `null` for any key on create;
 - the app already holds the maximum of **2000** views;
 - deleting the app's current **default** view (`Cannot delete default BlabView`) — promote another view to default first.
