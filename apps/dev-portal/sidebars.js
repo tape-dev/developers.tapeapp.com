@@ -150,7 +150,6 @@ module.exports = {
             'api/resource/automation-usage-report',
             'api/resource/file',
             'api/resource/icon',
-            'api/resource/link-preview',
             'api/resource/webhook',
             'api/resource/email',
             'api/resource/filter',
