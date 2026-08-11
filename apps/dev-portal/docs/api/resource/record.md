@@ -11,6 +11,8 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 Records are the place where work gets done inside a Tape organization. Records can be created, retrieved, updated and deleted via the API.
 
+The endpoints on this resource always work within a known app or view. To find records by text across every app at once, use the [Search resource](search).
+
 ## Create a record
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />

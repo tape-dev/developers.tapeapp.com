@@ -18,6 +18,7 @@ module.exports = {
           label: 'Resources',
           collapsed: true,
           items: [
+            'api/resource/search',
             'api/resource/record',
             {
               type: 'category',

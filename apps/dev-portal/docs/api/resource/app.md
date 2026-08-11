@@ -9,6 +9,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
+An **app** holds records of one kind, and belongs to exactly one workspace. Apps can be created, retrieved, updated and deleted via the API. To find an app by name across every workspace at once, use the [Search resource](search).
+
 ## Retrieve apps for a workspace
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspaceId}" />
