@@ -68,7 +68,7 @@ Each entry in `results` is a tagged union with exactly two keys: `type`, and a p
 | `"app"`    | `app`       | An app preview, including the name of the workspace it lives in.          |
 | `"record"` | `record`    | A record preview, without its field values.                               |
 
-Apps and records are **not** returned in separate lists — they are interleaved by relevance in a single `results` array.
+Apps and records are **not** returned in separate lists — they are interleaved by relevance in a single `results` array. To receive only one kind, narrow the search with `types` (as [`?types=record`](#search) on the `GET`, or [`filter.types`](#search-with-a-filter) on the `POST`).
 
 ### App results
 
@@ -86,7 +86,7 @@ The `app` payload is identical to an entry from [`GET /v1/app`](app#retrieve-all
 | `item_name`      | `string`  | _Deprecated._ Identical to `record_name`.                                          |
 | `type`           | `string`  | One of `database`, `dashboard`, `form`. Legacy apps without a type report `database`. |
 | `description`    | `string`  | Optional. Absent when the app has no description.                                  |
-| `position`       | `integer` | The app's ordering position within its workspace.                                  |
+| `position`       | `number`  | The app's ordering position within its workspace. Fractional — apps are reordered by inserting between neighbours, so expect values like `107.125125118059`. |
 | `config`         | `object`  | Legacy-compatible mirror of `name`, `record_name` and `description`.               |
 
 ### Record results
@@ -118,13 +118,16 @@ Search across every app and record you can see. Supply `text` to start a search,
 
 | Parameter   | Type      | Required | Description                                                                                              |
 | ----------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `text`      | `string`  | Yes\*    | The text to search for. At most 100 characters. An empty value is allowed and matches everything.        |
+| `text`      | `string`  | Yes\*    | The text to search for. Between 1 and 100 characters, and must contain a searchable term.                |
 | `cursor`    | `string`  | Yes\*    | Cursor from a previous response, to fetch the next page. Send it on its own.                             |
 | `limit`     | `integer` | No       | Results per page. Between `1` and `100`. Defaults to `50`.                                               |
+| `types`     | `string`  | No       | Comma-separated kinds to return — `app`, `record`, or `app,record`. Omit to receive both.                |
 | `sort_by`   | `string`  | No       | One of `ranking_score`, `created_on`, `last_modified_on`. Defaults to `ranking_score`.                   |
 | `sort_desc` | `boolean` | No       | Order descending. Defaults to `true`. See [Sorting](#sorting).                                           |
 
 \* Exactly one of `text` or `cursor` is required. Supplying neither is a `400`. Supplying both is accepted, but the cursor wins and `text` is ignored.
+
+`types` is comma-separated here rather than repeated (`?types=app&types=record` is **not** the accepted form). An unrecognised member is a `400`, not a silently dropped filter. Narrowing to one kind does not enlarge the page — a page still holds at most `limit` results — but it stops the other kind consuming slots in it.
 
 Remember to URL-encode `text` — an unencoded `&` or `=` will silently truncate your query.
 
@@ -248,20 +251,25 @@ Everything the filter offers is a restriction on _which_ apps and records are co
 
 | Parameter   | Type      | Required | Description                                                                                              |
 | ----------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `text`      | `string`  | Yes      | The text to search for. At most 100 characters. `""` matches everything, leaving the filter to decide.   |
+| `text`      | `string`  | Yes      | The text to search for. Between 1 and 100 characters, and must contain a searchable term.                |
 | `filter`    | `object`  | No       | Restrictions on which apps and records are considered. See below.                                        |
 | `sort_by`   | `string`  | No       | One of `ranking_score`, `created_on`, `last_modified_on`. Defaults to `ranking_score`.                   |
 | `sort_desc` | `boolean` | No       | Order descending. Defaults to `true`. Must be a real JSON boolean, not a string.                         |
 
 **`filter` object**
 
-| Parameter              | Type        | Description                                                                              |
-| ---------------------- | ----------- | ------------------------------------------------------------------------------------------ |
-| `workspace_ids`        | `integer[]` | Only return results living in one of these workspaces. At most 100 ids.                  |
-| `app_ids`              | `integer[]` | Only return records belonging to one of these apps, and only these apps themselves. At most 100 ids. |
-| `created_by_user_ids`  | `integer[]` | Only return results created by one of these users. At most 100 ids.                      |
-| `created_within`       | `string`    | One of `last_24_hours`, `last_7_days`, `last_30_days`.                                   |
-| `last_modified_within` | `string`    | One of `last_24_hours`, `last_7_days`, `last_30_days`.                                   |
+| Parameter                | Type        | Description                                                                              |
+| ------------------------ | ----------- | ------------------------------------------------------------------------------------------ |
+| `types`                  | `string[]`  | Kinds to return — `["app"]`, `["record"]` or both. Must be non-empty and free of duplicates. Omit to receive both. |
+| `workspace_ids`          | `integer[]` | Only return results living in one of these workspaces. At most 100 ids.                  |
+| `app_ids`                | `integer[]` | Only return records belonging to one of these apps, and only these apps themselves. At most 100 ids. |
+| `created_by_user_ids`    | `integer[]` | Only return results created by one of these users. At most 100 ids.                      |
+| `created_at_from`        | `string`    | Only results created at or after this moment. `YYYY-MM-DD HH:mm:ss`, UTC.                |
+| `created_at_to`          | `string`    | Only results created at or before this moment. `YYYY-MM-DD HH:mm:ss`, UTC.               |
+| `last_modified_at_from`  | `string`    | Only results last changed at or after this moment. `YYYY-MM-DD HH:mm:ss`, UTC.           |
+| `last_modified_at_to`    | `string`    | Only results last changed at or before this moment. `YYYY-MM-DD HH:mm:ss`, UTC.          |
+
+The four date bounds are **absolute and independent**. Send only a `_from` for "since", only a `_to` for "until", or both for a closed window. A `_from` later than its matching `_to` is a `400` rather than an empty result set, as is a calendar-impossible date such as `2026-02-30`. Timestamps use the same format as everywhere else in the API — see [Date & Timezone](/docs/api/date-timezone).
 
 **Query Parameters**
 
@@ -273,7 +281,7 @@ Everything the filter offers is a restriction on _which_ apps and records are co
 
 Unknown keys are rejected rather than ignored. Misspelling `workspace_ids` as `workspaceIds` returns a `400` — the API will never quietly accept a filter it is not applying.
 
-The example below finds records and apps mentioning "onboarding", limited to two workspaces and to things changed in the last week.
+The example below finds records mentioning "onboarding" in either of two workspaces, changed since a fixed moment.
 
 <Tabs defaultValue="curl">
 <TabItem value="curl" label="cURL">
@@ -285,8 +293,9 @@ The example below finds records and apps mentioning "onboarding", limited to two
   --data '{
     "text": "onboarding",
     "filter": {
+      "types": ["record"],
       "workspace_ids": [913, 914],
-      "last_modified_within": "last_7_days"
+      "last_modified_at_from": "2026-08-01 00:00:00"
     },
     "sort_by": "last_modified_on"
   }'`}
@@ -299,8 +308,9 @@ The example below finds records and apps mentioning "onboarding", limited to two
 {
   "text": "onboarding",
   "filter": {
+    "types": ["record"],
     "workspace_ids": [913, 914],
-    "last_modified_within": "last_7_days"
+    "last_modified_at_from": "2026-08-01 00:00:00"
   },
   "sort_by": "last_modified_on"
 }
@@ -311,21 +321,25 @@ The example below finds records and apps mentioning "onboarding", limited to two
 
 The response shape is identical to [`GET /v1/search`](#search).
 
-To browse rather than search — say, everything created in one app in the last 24 hours — send an empty `text` and let the filter do the work:
+### Polling for changes
+
+`last_modified_at_from` is the filter an incremental sync runs on: pass the timestamp of your last successful poll to receive only what has changed since.
 
 ```json title="➡️      Request"
 {
-  "text": "",
+  "text": "invoice",
   "filter": {
+    "types": ["record"],
     "app_ids": [4821],
-    "created_within": "last_24_hours"
+    "last_modified_at_from": "2026-08-11 14:30:00"
   },
-  "sort_by": "created_on"
+  "sort_by": "last_modified_on",
+  "sort_desc": false
 }
 ```
 
-:::note Only relative time windows are available
-`created_within` and `last_modified_within` accept three fixed windows measured backwards from the moment the search runs. There is no absolute date range, and nothing older than 30 days can be windowed. For anything more precise, filter records by a date field with [`POST /v1/record/filter/app/{app_id}`](record#retrieve-filtered-records-for-an-app).
+:::caution Never-modified results are excluded by a `last_modified_at` bound
+A record or app that has not been changed since it was created has no last-modified timestamp at all, so it satisfies neither bound and drops out of the result set as soon as you set either one. A sync built only on `last_modified_at_from` will therefore never see brand-new, untouched records — pair it with `created_at_from` over the same window, or seed from an unfiltered search first.
 :::
 
 ## Pagination
@@ -350,8 +364,8 @@ A cursor is an opaque signed token that encodes the entire search — its text, 
 
 A page can contain fewer entries than `limit` and still not be the last page — a record whose workspace is mid-deletion is dropped from the page rather than failing the whole request. Trust `cursor`, not the length of `results`.
 
-:::caution An unsearchable query returns a single page
-When `text` is empty, or reduces to nothing meaningful (only punctuation, or only stop words), the response always has `cursor: null` — even if more matches exist. Without a real text query every page would be identical to the first, so no cursor is issued rather than handing you an endless loop. If you need to page through a large filtered set, give it real search text.
+:::note Every accepted search pages to completion
+There is no partial mode. A search that cannot be paginated is rejected at the door with a `400` rather than being served as a truncated first page — so a `limit`-sized page with `cursor: null` genuinely means you have seen everything. See [What matches](#what-matches) for which queries get rejected.
 :::
 
 ## Sorting
@@ -378,22 +392,27 @@ Search runs over a text index built per app and per record, not over raw field v
 
 **More than titles is indexed.** For a record that includes text and multi-line text fields, calculations, email, phone, link, location, unique id, number, category, status, date and relation values — **and its comments**. So a record can match on a comment even though the result exposes no comment data. For an app it covers the app's name, description and blocks. Long values are truncated in the index at 2,000 characters per field.
 
-**`text` is capped at 100 characters** on both verbs. Longer text is a `400`.
+**`text` is required, and must carry a searchable term.** It is between 1 and 100 characters, and text made only of punctuation or symbols — `"..."`, `"!!!"` — is a `400`, not an empty result set. A search always searches for something: there is no "match everything and let the filter decide" mode. To narrow by filter alone, search for a term you expect and add the filter to it.
 
 :::note Very short queries in large organizations
-Most organizations can search for anything, including an empty string. In a small number of very large organizations, short queries are expensive enough to be disallowed: a query of fewer than four characters returns `{"results": [], "cursor": null}` with a `200`, not an error. If you get an unexpectedly empty result for a two- or three-letter query, try a longer one before assuming nothing matched.
+Most organizations can search for any term of one character or more. In a small number of very large organizations, short queries are expensive enough to be disallowed: a query of fewer than four characters is rejected with a `400` naming the minimum. It is an error rather than an empty `200`, so you can tell "your query was too short" apart from "nothing matched".
 :::
+
+Both of these are checked only when a search **starts**. Continuing one with a cursor never re-runs them.
 
 ## Errors
 
 **`400 Bad Request`** covers every input problem. The common causes:
 
 - Neither `text` nor `cursor` on `GET /v1/search`.
-- `text` longer than 100 characters.
+- `text` that is empty, longer than 100 characters, or carries no searchable term.
+- `text` shorter than the minimum your organization enforces.
 - `limit` that is not an integer, is above `100`, or is below `1`.
 - `sort_by` outside the three accepted values.
 - `sort_desc` that is not boolean-like on `GET`, or not a real boolean on `POST`.
-- A `POST` body that is missing `text`, is not valid JSON, contains an unknown key, has an id array longer than 100 entries, or uses a time window outside the three accepted values.
+- `types` naming anything other than `app` or `record`, or an empty `types` list.
+- A date bound that is malformed, calendar-impossible (`2026-02-30`), or a `_from` later than its `_to`.
+- A `POST` body that is missing `text`, is not valid JSON, contains an unknown key, or has an id array longer than 100 entries.
 - Using an automation API key.
 
 <ContextCodeBlock language="json" title='⬅️      Response'>
@@ -420,6 +439,7 @@ See [Errors](/docs/api/errors) for the full list of error codes.
 - **Apps and records only.** Workspaces, users, files, comments, tasks, views and automations are not returned as results, even though comment text does feed the record index.
 - **No `total`.** Page until `cursor` is `null`.
 - **No relevance score and no highlights.** You cannot tell _how_ well a result matched, or _where_ the match was.
-- **No absolute date filtering.** Only the three relative windows.
+- **No browsing without a search term.** Every request must carry real text; a filter alone cannot drive a result set.
+- **No relative date windows.** Date bounds are absolute timestamps you compute yourself.
 - **No field-level search.** To match against a specific field, use [`POST /v1/record/filter/app/{app_id}`](record#retrieve-filtered-records-for-an-app).
 - **Previews only.** No field values come back with a search result.
