@@ -82,7 +82,7 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 
 :::info User Organization Role
 
-The `role` property to create users needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
+The `role` property to create users needs to be one of `"admin"`, `"member"` and `"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
 :::
 
 ## Resend User invitation email

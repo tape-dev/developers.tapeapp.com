@@ -583,7 +583,7 @@ Retrieve records for the view with the specified `view_id`:
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}/ref/{ref_app_id}" />
 
-Retrieve related records for the app with the specified `app_id` and the records with IDs `100` and `101` provided via the `recordIds` array inside the request body.:
+Retrieve related records for the app with the specified `app_id` and the records with IDs `100` and `101` provided via the `recordIds` array inside the request body:
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/record/app/1/ref/2?limit=10 \\

@@ -212,6 +212,5 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       }
     }
   ]
-}```
-
+}
 ````

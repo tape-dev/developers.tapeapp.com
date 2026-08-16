@@ -205,7 +205,7 @@ Add an existing organization user to a given workspace. If the user is already a
 
 :::info User Workspace Role
 
-The `role` property to add members needs to be one of `"admin"`, `"member"` and`"guest"`. This corresponds to the workspace organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces).
+The `role` property to add members needs to be one of `"admin"`, `"member"` and `"guest"`. This corresponds to the workspace organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces).
 :::
 
 ## Remove a workspace member

@@ -28,7 +28,7 @@ Rate limit headers are sent **with every response**. This allows the integration
 
 | HTTP Header          | Description                                                                 | Example               |
 | :------------------- | :-------------------------------------------------------------------------- | :-------------------- |
-| `X-RateLimit-Limit ` | Total credits that can be used per time interval                            | `1000`                |
+| `X-RateLimit-Limit`  | Total credits that can be used per time interval                            | `1000`                |
 | `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
 | `X-Retry-Cost`       | The amount of credits consumed by the current request                       | `20`                  |
 | `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |

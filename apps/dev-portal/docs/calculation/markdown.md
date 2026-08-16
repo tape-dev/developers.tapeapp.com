@@ -17,3 +17,5 @@ Here are some useful resources to get started with Markdown:
 :::note
 
 The exact specification used for our markdown parser can be found [here](https://github.github.com/gfm/).
+
+:::

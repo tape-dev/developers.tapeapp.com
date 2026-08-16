@@ -10,7 +10,7 @@ Forms are currently in beta - [register here.](https://get.tapeapp.com/forms12/)
 
 ---
 
-# Customize Your Form with CSS
+## Customize Your Form with CSS
 
 Tape makes it easy to create beautiful forms without any coding. But if you want that extra layer of personalization, a small amount of custom code can truly elevate your form’s look and feel.
 

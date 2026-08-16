@@ -70,8 +70,7 @@ const { data, headers } = await tape.Record.get(1234);
 console.log({ record: data.record });
 ```
 
-**Note that you do not need to handle authentication when using the Tape API client inside an automation. The automation will automatically configure its own authorization token that is valid during its execution.
-**
+**Note that you do not need to handle authentication when using the Tape API client inside an automation. The automation will automatically configure its own authorization token that is valid during its execution.**
 
 However, you can set and change the used API key of the Tape client SDK. Be careful with that, as it may affect following actions (also graphical actions, as the use the client SDK under the hood).
 

@@ -73,6 +73,7 @@ In case the recipient clicks on reply-to in its email client, the recipient of t
 By default, emails are sent from the address `reply.automations@tape-app.com`.
 
 <b>Coming Soon: </b><br/>
+
 If your organization has configured its own SMTP server in the organization settings, the email can also be sent from your own email address. To do this, specify the `smtp_settings_id` (containing the id of the organization smtp settings to use) and the `from_address` property that contains the sender address. Note that your SMTP server must be authorized to send email on behalf of this address for the email to be sent successfully.
 
 <br/>

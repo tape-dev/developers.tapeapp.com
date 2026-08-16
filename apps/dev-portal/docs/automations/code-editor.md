@@ -30,7 +30,7 @@ Rename a variable inside a single code block by using the F2 key.
 
 Use "CTRL+F" ("CMD+F" on Mac) to open the search toolbar.
 
-# Links
+## Links
 
 - [Monaco Editor Reference](https://microsoft.github.io/monaco-editor/)
 - [VS Code basics](https://code.visualstudio.com/docs/editor/codebasics)
