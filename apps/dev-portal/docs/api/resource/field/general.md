@@ -19,7 +19,7 @@ All fields share the following properties:
 - `label`: The label (= name) of the field. This is the name of the field that is displayed to the user.
 - `description`: The description of the field. This is the help text that is displayed to the user.
 - `slug`: The slug of the field. This is the unique identifier of the field. The slug is used to identify the field in the record create and update endpoints of the API.
-- `external_id`: equal to the property slug. The slug is used to identify the field in the record create and update endpoints of the API.
+- `external_id`: equal to the property `slug`, described above.
 - `required`: Whether the field is required or not. If a field is required, it must have a value when creating or updating a record.
 - `hidden_if_empty`: Whether the field is hidden if it has no value. If a field is hidden if empty, it is not displayed in the record if it has no value.
 - `always_hidden`: Whether the field is always hidden. If a field is always hidden, it is not displayed in the record, even if it has a value.

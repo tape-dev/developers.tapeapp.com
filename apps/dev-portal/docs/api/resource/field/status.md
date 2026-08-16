@@ -196,7 +196,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A status field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+A status field can be created or updated as part of an App update. Here is an example request body for updating the previously created tasks app with ID 1.
 The update adds an option "Discarded" to the "Status" field.
 When updating a status field, the order of the options in the input is preserved in case you specify all existing options.
 
@@ -349,6 +349,12 @@ curl -X PUT #BASE_URL/v1/app/1 \\
               "id": 3,
               "text": "Done",
               "color": "GREEN",
+              "means_completed": true
+            },
+            {
+              "id": 4,
+              "text": "Discarded",
+              "color": "RED",
               "means_completed": true
             }
           ]

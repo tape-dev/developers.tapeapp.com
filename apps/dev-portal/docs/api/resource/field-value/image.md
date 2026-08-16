@@ -130,7 +130,7 @@ An image field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more image field values can be updated as part of a record update. Both existing IDs (integers) as well as temporary file IDs (strings) can be provided as input. Existing IDs of the same field (integers), existing IDs of different Attachment or Image fields (integers) as well as temporary file IDs (strings) can be provided as input. Existing files of Attachment fields can only be used as inputs to the image field, in case the files are of type `jpeg`, `jpg`, `png`, `gif`, `tiff`, `svg`, `bmp` or `webp`.
+One or more image field values can be updated as part of a record update. Existing IDs of the same field (integers), existing IDs of different Attachment or Image fields (integers) as well as temporary file IDs (strings) can be provided as input. Existing files of Attachment fields can only be used as inputs to the image field, in case the files are of type `jpeg`, `jpg`, `png`, `gif`, `tiff`, `svg`, `bmp` or `webp`.
 Here is an example request body for updating multiple image field values of a record:
 
 <Tabs defaultValue="curl">

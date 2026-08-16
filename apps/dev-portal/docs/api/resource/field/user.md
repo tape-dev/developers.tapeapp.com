@@ -19,7 +19,7 @@ A user field definition consists only of the common field properties and has no 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
 A user field can be created as part of an App creation. Here is an example request body for creating an excerpt for a meetings app within a workspace with ID 1.
-The app contains a `single_user` field "Note taker", and a `multi_user` field "Participants". Other useful fields for a meetings app, like "Date", "Location" or "Notes" are omitted for brevity.
+The app contains a `single_user` field "Responsible for Note taking", and a `multi_user` field "Participants". Other useful fields for a meetings app, like "Date", "Location" or "Notes" are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -149,7 +149,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 A user field can be created or updated as part of an App update. Here is an example request body for updating the previously created meetings app with ID 1.
 The update splits the "Participants" field into "Internal Participants" and "External Participants" fields. Therefore, the "Participants" field with ID 2 is being renamed (updated) to "Internal Participants" and a new field "External Participants" is being created.
-The "Responsible for note taking" field is not provided in the request body and therefore remains unchanged.
+The "Responsible for Note taking" field is not provided in the request body and therefore remains unchanged.
 
 <Tabs defaultValue="curl">
 
@@ -190,19 +190,19 @@ curl -X PUT #BASE_URL/v1/app/1 \\
   "app_id": 1,
   "fields": [
     {
-      "field_id": 1,
+      "field_id": 2,
       "config": {
-        "label": "First Name",
-        "description": "The first name of the contact.",
-        "required": true
+        "label": "Internal Participants",
+        "description": "The company-internal participants of the meeting.",
+        "required": false
       }
     },
     {
-      "field_type": "single_user",
+      "field_type": "multi_user",
       "config": {
-        "label": "Last Name",
-        "description": "The last name of the contact.",
-        "required": true
+        "label": "External Participants",
+        "description": "The company-external participants of the meeting.",
+        "required": false
       }
     }
   ]

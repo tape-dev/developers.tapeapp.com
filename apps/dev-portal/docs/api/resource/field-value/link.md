@@ -213,7 +213,7 @@ One or more link field values can be updated as part of a record update, while o
           "embed_id": 101,
           "url": "https://secondcustomerwebsite.com",
           "title": "Another awesome customer website",
-          "description": "Welcome, Find our more and other products and services here.",
+          "description": "Welcome, Find out more about our other products and services here.",
           "type": "link"
         }
       ]

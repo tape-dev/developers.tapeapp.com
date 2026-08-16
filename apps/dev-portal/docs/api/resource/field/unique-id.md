@@ -17,7 +17,7 @@ The first record of an app will have the unique_id "1", the second record "2", e
 In addition to the common field properties, a unique_id field has the following settings:
 
 - `min_digits` (optional): minimum number of digits of the unique_id field-values. Can be any integer between 1 and 12. (default: 1). In case the number of digits of the unique_id field-value is smaller than `min_digits`, the unique_id field-value will be padded with leading zeros.
-- `prefix` (optional): prefix of the unique_id field-values. Can be any string, e.g. "DEAL-" for tickets, "Ticket-" for tickets, etc.
+- `prefix` (optional): prefix of the unique_id field-values. Can be any string, e.g. "DEAL-" for deals, "Ticket-" for tickets, etc.
 
 Currently, unique_id field values are not returned in the API responses of the record endpoints. However, they can be used for viewing, searching for and filtering records in the web-application.
 The unique_id value (without its prefix) however is returned as the property `app_record_id` in the API responses of the record endpoints.

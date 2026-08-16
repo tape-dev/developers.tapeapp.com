@@ -144,7 +144,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
           "description": "Subtasks of the task.",
           "required": false,
           "settings": {
-            "show_in_focus": true
+            "show_in_focus": false
           }
         }
       }
@@ -169,7 +169,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "description": "Subtasks of the task.",
         "required": false,
         "settings": {
-          "show_in_focus": true
+          "show_in_focus": false
         }
       }
     }
@@ -208,7 +208,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "always_hidden": false,
         "hidden_if_empty": false,
         "settings": {
-          "show_in_focus": true
+          "show_in_focus": false
         }
       }
     }

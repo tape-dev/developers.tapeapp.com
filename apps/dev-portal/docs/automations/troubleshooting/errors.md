@@ -27,7 +27,7 @@ Simply throw an error in your control flow, and the automation will fail with th
 
 ```
 if (some_condition) {
-    throw new Error('Oops, some_condition was false')
+    throw new Error('Oops, some_condition was true')
 }
 ```
 

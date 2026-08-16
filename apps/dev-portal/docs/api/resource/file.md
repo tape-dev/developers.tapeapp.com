@@ -160,7 +160,7 @@ The following limits are enforced for all file upload endpoints:
 
 ## Rate limit credits
 
-File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always costs 2x the credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
+File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always costs at least 2x the credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
 
 ```
 Uploading 1KB: 2x credits

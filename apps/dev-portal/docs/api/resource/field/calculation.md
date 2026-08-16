@@ -125,7 +125,7 @@ To reference the sum of all field-values for a given field over all related reco
 
 ```
 @[Sum of Number](out_sum_*field ID*_*relation field ID*) // Relations that go from the app of the calculation field to a different app
-@[Sum of Number](in*sum*_field ID*_*relation field ID*) // Relations that go from a different app to the app of the calculation field
+@[Sum of Number](in_sum_*field ID*_*relation field ID*) // Relations that go from a different app to the app of the calculation field
 ```
 
 To reference the average of all field-values for a given field over all related records you can use the following scheme:
@@ -157,7 +157,7 @@ To reference the maximum of all field-values for a given field over all related 
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A calculation field can be created or updated as part of an App update. Here is an example request body of updating an existing contacts app with ID 1.
+A calculation field can be created or updated as part of an App update. Here is an example request body of updating an existing meetings app with ID 1.
 The contacts app has two fields, a `single_text` field "First Name" with ID 1 and a `single_text` field "Last Name" with ID 2.
 The update adds a calculation field "Full Name" that concatenates the values of the "First Name" and "Last Name" fields.
 

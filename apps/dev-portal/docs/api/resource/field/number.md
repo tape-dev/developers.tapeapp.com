@@ -142,7 +142,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
    -H "Content-Type: application/json" \
    --data '{
     "app_id": 1,
-    "name": "Contacts",
+    "name": "Deals",
     "item_name": "Contact",
     "fields": [
       {
@@ -169,7 +169,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 ```json title="➡️      Request"
 {
   "app_id": 1,
-  "name": "Contacts",
+  "name": "Deals",
   "item_name": "Contact",
   "fields": [
     {

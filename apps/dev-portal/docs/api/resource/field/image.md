@@ -113,7 +113,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-An image field can be created or updated as part of an App update. Here is an example request body for updating the previously created portraits app with ID 1.
+An image field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update changes the description of the "Portraits" field to "Photos of the contact".
 
 <Tabs defaultValue="curl">

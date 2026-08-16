@@ -37,7 +37,7 @@ It is not allowed to use Promises or async/await syntax in this context. When ne
 Hint: If you need a more complex syntax or would like to declare functions that you invoke later, use an immediately invoked function expression (IIFE), as shown below (`yourFunctionName` could be any arbitrary function name of your choice):
 
 ```
-(yourFunctionName(){
+(function yourFunctionName(){
     let variable1 = 1337;
 
     function yourSubFunctionName1() {

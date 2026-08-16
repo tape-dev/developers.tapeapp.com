@@ -27,7 +27,7 @@ A text field value can be created as part of a record creation. Here is an examp
   --data '{
     "fields": {
       "first_name": "Adam Smith",
-      "notes": "<p>Registered <b>10</b> month ago.</p>"
+      "notes": "<p>Registered <b>10</b> months ago.</p>"
     }
   }' 
 `}
@@ -40,7 +40,7 @@ A text field value can be created as part of a record creation. Here is an examp
 {
   "fields": {
     "first_name": "Adam Smith",
-    "notes": "<p>Registered <b>10</b> month ago.</p>"
+    "notes": "<p>Registered <b>10</b> months ago.</p>"
   }
 }
 ```
@@ -67,7 +67,7 @@ A text field value can be created as part of a record creation. Here is an examp
       "type": "text",
       "field_type": "multi_text",
       "label": "Notes",
-      "values": [{ "value": "<p>Registered <b>10</b> month ago.</p>" }]
+      "values": [{ "value": "<p>Registered <b>10</b> months ago.</p>" }]
     }
   ]
 }
@@ -103,7 +103,7 @@ A text field value can be retrieved as part of a record retrieval:
       "type": "text",
       "field_type": "multi_text",
       "label": "Notes",
-      "values": [{ "value": "<p>Registered <b>10</b> month ago.</p>" }]
+      "values": [{ "value": "<p>Registered <b>10</b> months ago.</p>" }]
     }
   ]
 }

@@ -130,7 +130,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A phone field can be created or updated as part of an App update. Here is an example request body for updating the previously created deals app with ID 1.
+A phone field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update sets the call_link_scheme to "callto".
 
 <Tabs defaultValue="curl">
@@ -179,7 +179,8 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "description": "The phone number(s) of the contact.",
         "required": false,
         "settings": {
-          "only_allow_single_entry": true
+          "only_allow_single_entry": false,
+          "call_link_scheme": "callto"
         }
       }
     }
@@ -219,7 +220,8 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "always_hidden": false,
         "hidden_if_empty": false,
         "settings": {
-          "only_allow_single_entry": true
+          "only_allow_single_entry": false,
+          "call_link_scheme": "callto"
         }
       }
     }

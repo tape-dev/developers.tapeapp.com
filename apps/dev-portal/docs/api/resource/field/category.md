@@ -181,7 +181,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A category field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+A category field can be created or updated as part of an App update. Here is an example request body for updating the previously created leads app with ID 1.
 The update adds an option "Negotiating" to the "Pipeline Stage" field and updates the color of the "Lost" option to "orange".
 When updating a category field, the order of the options in the input is preserved in case you specify all existing options.
 

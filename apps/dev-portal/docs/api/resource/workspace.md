@@ -199,7 +199,7 @@ Add an existing organization user to a given workspace. If the user is already a
 {`{
     "workspace_id": 1,
     "user_id": 10002,
-    "role": "'admin"
+    "role": "admin"
 }`}
 </ContextCodeBlock>
 
@@ -224,7 +224,7 @@ Remove a workspace member from a given workspace. Note that the user will contin
 {`{
     "workspace_id": 100,
     "user_id": 10002,
-    "role": "'admin"
+    "role": "admin"
 }`}
 </ContextCodeBlock>
 
