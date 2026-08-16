@@ -32,7 +32,7 @@ Here's how the button types from above will be rendered:
 
 ## Button with link
 
-Executing custom JavaScript code in the browser of the user is not permitted due to security reasons. So you cannot execute JavaScript in the `onclick` event handler of the button. However, wrapping the button in an anchor gives you a clickable button that opens the specified URL:
+Executing custom JavaScript code in the browser of the user is not permitted for security reasons. So you cannot execute JavaScript in the `onclick` event handler of the button. However, wrapping the button in an anchor gives you a clickable button that opens the specified URL:
 
 ```html
 <a target="_blank" href="https://get.tapeapp.com">

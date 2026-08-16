@@ -18,7 +18,7 @@ In the future, Tape plans to adjust rate limits to balance for demand and reliab
 
 ### Rate limit credits
 
-Tape uses a credit-based system to enforce rate limits. Each API key has a certain amount of credits per time interval (currently 2,000 credits per minute). After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
+Tape uses a credit-based system to enforce rate limits. Each API key has a certain number of credits per time interval (currently 2,000 credits per minute). After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
 
 You can see how many credits your API key has left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
 
@@ -30,7 +30,7 @@ Rate limit headers are sent **with every response**. This allows the integration
 | :------------------- | :-------------------------------------------------------------------------- | :-------------------- |
 | `X-RateLimit-Limit`  | Total credits that can be used per time interval                            | `1000`                |
 | `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
-| `X-Retry-Cost`       | The amount of credits consumed by the current request                       | `20`                  |
+| `X-Retry-Cost`       | The number of credits consumed by the current request                       | `20`                  |
 | `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
 | `Retry-After`        | The number of seconds remaining in this interval until credits are reset    | `60`                  |
 
@@ -45,7 +45,7 @@ X-Retry-Cost: 2
 X-Retry-Reset: 2022-03-01 12:00:00
 ```
 
-In case the rate limit is exceeded, the error response body will also include all rate limit information:
+If the rate limit is exceeded, the error response body will also include all rate limit information:
 
 ```json
 {
@@ -66,7 +66,7 @@ In case the rate limit is exceeded, the error response body will also include al
 - Avoid making API requests inside loops. Instead of loading individual objects inside a loop, load a collection of objects in one API operation.
 - Use result caching where applicable.
 - Do not poll for changed data. Use webhooks to react to changes instead.
-- Use logging to see how many requests you're making
+- Use logging to see how many requests you're making.
 
 ### Getting more credits
 

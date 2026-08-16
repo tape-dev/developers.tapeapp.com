@@ -15,7 +15,7 @@ Calculation fields are a special field type within Tape that calculate values ba
 To calculate values, a calculation field has a property `script` with javascript code that is executed whenever a record is created or updated.
 More information on how to use the calculation field can be found in the [Calculation field documentation](/docs/calculation/introduction).
 
-The key difference in developing scripts for the `calculation` field in the script editor of the web-application and doing so via the API lies in how fields are referenced.
+The key difference in developing scripts for the `calculation` field in the script editor of the web application and doing so via the API lies in how fields are referenced.
 
 ## Properties
 
@@ -48,7 +48,7 @@ An example of referencing a `single_text` field named "Title" with ID 123 would 
 
 ### Referencing fields of a different app than the calculation field via an outgoing relation field
 
-In case the app of the calculation field has a `single_relation` or `multi_relation` field that references another app, you can reference fields of the referenced app in the following ways
+If the app of the calculation field has a `single_relation` or `multi_relation` field that references another app, you can reference fields of the referenced app in the following ways
 
 #### Referencing a single field of all related records
 
@@ -62,8 +62,8 @@ This scheme starts with an `@` symbol followed by the string `All of` and the na
 The name of the referenced app is followed by the prefix `out_` and the field id of the relation field that references the app.
 The field id of the relation field is followed by an underscore and the field id of the relation field itself.
 
-This is the equivalent of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 123 of the records that are referenced by the relation field.
-In case a record has no value for a field, the record is ignored.
+This is the equivalent of using the `[] All of Title` token in the script editor of the web application, and includes all field values for field with ID 123 of the records that are referenced by the relation field.
+If a record has no value for a field, the record is ignored.
 
 #### Referencing a single field of all related records with nulls
 
@@ -79,8 +79,8 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title with nulls](outn_123_654)
 ```
 
-This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
-In case a record has no value for a field, the record is included with a null value for the field.
+This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+If a record has no value for a field, the record is included with a null value for the field.
 
 #### Referencing a single field of all relating records (incoming relations from relation fields that reference the app of the calculation field)
 
@@ -96,8 +96,8 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title](in_123_654)
 ```
 
-This is the equivalent of using the `[] All of Title` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
-In case a record has no value for a field, the record is ignored.
+This is the equivalent of using the `[] All of Title` token in the script editor of the web application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+If a record has no value for a field, the record is ignored.
 
 #### Referencing a single field of all relating records with nulls (incoming relations from relation fields that reference the app of the calculation field)
 
@@ -113,8 +113,8 @@ An example of using this scheme to reference all field-values of the title field
 @[All of Title with nulls](inn_123_654)
 ```
 
-This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web-application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
-In case a record has no value for a field, the record is included with a null value for the field.
+This is the equivalent of using the `[] All of Title with nulls` token in the script editor of the web application, and includes all field values for field with ID 1 of the records that are referenced by the relation field.
+If a record has no value for a field, the record is included with a null value for the field.
 
 #### Referencing a number field of all related records (incoming or outgoing)
 
@@ -151,13 +151,13 @@ To reference the maximum of all field-values for a given field over all related 
 
 ## App creation
 
-`calculation` fields cannot be created upon app creation. They can only be created or updated as part of an App update.
+`calculation` fields cannot be created upon app creation. They can only be created or updated as part of an app update.
 
 ## App update
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A calculation field can be created or updated as part of an App update. Here is an example request body of updating an existing meetings app with ID 1.
+A calculation field can be created or updated as part of an app update. Here is an example request body of updating an existing meetings app with ID 1.
 The contacts app has two fields, a `single_text` field "First Name" with ID 1 and a `single_text` field "Last Name" with ID 2.
 The update adds a calculation field "Full Name" that concatenates the values of the "First Name" and "Last Name" fields.
 

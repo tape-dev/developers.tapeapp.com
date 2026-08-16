@@ -56,7 +56,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- `http_call_type` and `http_call_url` are the only required members — neither has a canonical default. Everything else fills a default (`http_call_body` → empty, `http_call_headers` → `[]`, `http_call_follow_redirects` → `false`, `custom_variable_defs` → `[]`), so an omitting caller still yields a complete internal action.
+- `http_call_type` and `http_call_url` are the only required members — neither has a canonical default. Everything else fills a default (`http_call_body` → empty, `http_call_headers` → `[]`, `http_call_follow_redirects` → `false`, `custom_variable_defs` → `[]`), so a caller that omits them still yields a complete internal action.
 - Each `http_call_headers` entry requires both `key` and `value`; a header without a value is meaningless — send `""` (or `[]`) for a deliberately blank value. `http_call_url`, `http_call_body`, and each header `value` are template values that resolve against the record / run at execution time.
 - The request is SSRF-protected: private and internal hosts are refused.
 - With `http_call_follow_redirects` `false` (the default), 3xx responses are not followed.

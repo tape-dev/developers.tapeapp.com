@@ -17,16 +17,16 @@ In addition to the common field properties, a category field definition has a `s
 The `options` property is an array of objects with the following properties:
 
 - `id`: Once an option has been created, the id property can be used to update the option. This is also the id of the option that is used to specify an option within record update or creation.
-- `text` (required): The text (= label) of the option. This is the name of the option that is displayed to the user.
-- `color` (optional): The color of the option. This is the color of the option that is displayed to the user. The color can be one of ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
+- `text` (required): The text (=label) of the option. This is the name of the option that is displayed to the user.
+- `color` (optional): The color of the option. This is the color of the option that is displayed to the user. The color can be one of ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"].
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A category field can be created as part of an App creation. Here is an example request body for creating an excerpt of a leads app within a workspace with ID 1.
+A category field can be created as part of an app creation. Here is an example request body for creating an excerpt of a leads app within a workspace with ID 1.
 
-The app contains a `single_category` field "Pipeline Stage". Other useful fields for a leads app, like "Name", "Company" or "Notes" are omitted for brevity.
+The app contains a `single_category` field "Pipeline Stage". Other useful fields for a leads app, like "Name", "Company" or "Notes", are omitted for brevity.
 `multi_category` fields are created in the same way as `single_category` fields.
 
 <Tabs defaultValue="curl">
@@ -181,11 +181,11 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A category field can be created or updated as part of an App update. Here is an example request body for updating the previously created leads app with ID 1.
+A category field can be created or updated as part of an app update. Here is an example request body for updating the previously created leads app with ID 1.
 The update adds an option "Negotiating" to the "Pipeline Stage" field and updates the color of the "Lost" option to "orange".
-When updating a category field, the order of the options in the input is preserved in case you specify all existing options.
+When updating a category field, the order of the options in the input is preserved if you specify all existing options.
 
-In case you want to remove one or multiple options from a `category` field, you can specify the property `options_to_delete` within the `settings` property of the field.
+If you want to remove one or multiple options from a `category` field, you can specify the property `options_to_delete` within the `settings` property of the field.
 Just add the options you want to delete to the `options_to_delete` array. The options are identified by their `id` property.
 
 `multi_category` fields are updated in the same way as `single_category` fields.

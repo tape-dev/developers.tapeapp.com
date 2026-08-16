@@ -20,7 +20,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 ## Config
 
-This action carries no config-specific members of its own — its behaviour is fully determined by the action type, so
+This action carries no config-specific members of its own — its behavior is fully determined by the action type, so
 its `config` is an empty object.
 
 | Key | Type | Required | Description |
@@ -41,7 +41,7 @@ An action entry inside an automation definition's `actions[]`:
 ## Validation & behavior
 
 - The `config` is an empty object — pass `"config": {}` (the served schema advertises zero properties and rejects any additional key).
-- Behaviour is fixed by the action type: it resolves the previous revision of the run's current record.
+- Behavior is fixed by the action type: it resolves the previous revision of the run's current record.
 - Requires a record-context trigger so that a current record exists to resolve a previous revision from.
 
 ## See also

@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A relation field value consists of its `value` property which holds a reference to another record. A relation to another record has the properties `record_id` (unique record ID), `app_id` (unique ID of the record's app), `title` (title of the record) and others.
+A relation field value consists of its `value` property, which holds a reference to another record. A relation to another record has the properties `record_id` (unique record ID), `app_id` (unique ID of the record's app), `title` (title of the record) and others.
 A `single_relation` field value holds at most one record reference while a `multi_relation` field value can hold multiple record references.
 
 ## Record creation

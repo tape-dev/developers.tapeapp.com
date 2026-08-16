@@ -18,13 +18,13 @@ The easiest way to authenticate with the Developer API is to use your personal u
 
 > Note that your API key carries the same privileges as your user account, so be sure to keep it secret! However, if your API key gets leaked, you can always deactivate it and generate a new one inside your user settings.
 
-## The Basics
+## The basics
 
 The world runs on JSON over HTTP (or HTTPS hopefully). The Tape API is no exception, so if you know how to send and receive JSON data via HTTPS, you are all set.
 The API is RESTful for the most part, meaning that you can use the HTTP verbs `GET`, `POST`, `PUT`, and `DELETE` to interact with resources like records, apps and workspaces.
 The base URL to send all API requests is `https://api.tapeapp.com`.
 
-## Retrieve your first Record
+## Retrieve your first record
 
 Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/record/{record_id}`. Let's go ahead and retrieve a record:
 

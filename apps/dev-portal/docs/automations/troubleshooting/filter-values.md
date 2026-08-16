@@ -51,7 +51,7 @@ matches only the records you expect.
 ### How to avoid it
 
 - **Guard the source.** If the value comes from a reference that can be empty, wrap the filter or action in a
-  `conditional` that first checks the source is present, or supply a fallback value. This is the main defence against
+  `conditional` that first checks the source is present, or supply a fallback value. This is the main defense against
   the run-time case.
 - **Match the value channel to the field type** so the write isn't rejected. See the channel rules linked above.
 - **Simulate before you activate.** A [`simulate`](/docs/api/resource/automation/execution) run exercises the filter

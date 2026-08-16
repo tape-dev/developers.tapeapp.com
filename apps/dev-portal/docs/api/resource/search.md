@@ -86,7 +86,7 @@ The `app` payload is identical to an entry from [`GET /v1/app`](app#retrieve-all
 | `item_name`      | `string`  | _Deprecated._ Identical to `record_name`.                                          |
 | `type`           | `string`  | One of `database`, `dashboard`, `form`. Legacy apps without a type report `database`. |
 | `description`    | `string`  | Optional. Absent when the app has no description.                                  |
-| `position`       | `number`  | The app's ordering position within its workspace. Fractional — apps are reordered by inserting between neighbours, so expect values like `107.125125118059`. |
+| `position`       | `number`  | The app's ordering position within its workspace. Fractional — apps are reordered by inserting between neighbors, so expect values like `107.125125118059`. |
 | `config`         | `object`  | Legacy-compatible mirror of `name`, `record_name` and `description`.               |
 
 ### Record results
@@ -127,7 +127,7 @@ Search across every app and record you can see. Supply `text` to start a search,
 
 \* Exactly one of `text` or `cursor` is required. Supplying neither is a `400`. Supplying both is accepted, but the cursor wins and `text` is ignored.
 
-`types` is comma-separated here rather than repeated (`?types=app&types=record` is **not** the accepted form). An unrecognised member is a `400`, not a silently dropped filter. Narrowing to one kind does not enlarge the page — a page still holds at most `limit` results — but it stops the other kind consuming slots in it.
+`types` is comma-separated here rather than repeated (`?types=app&types=record` is **not** the accepted form). An unrecognized member is a `400`, not a silently dropped filter. Narrowing to one kind does not enlarge the page — a page still holds at most `limit` results — but it stops the other kind consuming slots in it.
 
 Remember to URL-encode `text` — an unencoded `&` or `=` will silently truncate your query.
 
@@ -384,7 +384,7 @@ The ranking score itself is not exposed. Relevance is observable only as the ord
 
 ## What matches
 
-Search runs over a text index built per app and per record, not over raw field values, so a few behaviours differ from a `contains` filter.
+Search runs over a text index built per app and per record, not over raw field values, so a few behaviors differ from a `contains` filter.
 
 **Terms match as prefixes, and all terms must match.** A query is split into words, and each word matches from the start of an indexed word. Searching `onboard` finds "onboarding"; searching `onboardings` does **not** find "onboarding". A multi-word query returns only results matching every word.
 

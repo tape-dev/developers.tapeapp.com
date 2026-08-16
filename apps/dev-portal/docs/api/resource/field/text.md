@@ -10,8 +10,8 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 There are two types of text fields: `single_text` and `multi_text`.
-For both types, the respective field value consists of its `value` property which holds the text value of the field.
-`single_text` field-values can only hold plain text values with up to 500 characters while `multi_text` fields can hold rich-text (HTML) values with up to 150000 characters.
+For both types, the respective field value consists of its `value` property, which holds the text value of the field.
+`single_text` field values can only hold plain text values with up to 500 characters while `multi_text` fields can hold rich-text (HTML) values with up to 150000 characters.
 
 A text field definition consists only of the common field properties and has no settings.
 
@@ -19,7 +19,7 @@ A text field definition consists only of the common field properties and has no 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A text field can be created as part of an App creation. Here is an example request body for creating a contacts app within a workspace with ID 1.
+A text field can be created as part of an app creation. Here is an example request body for creating a contacts app within a workspace with ID 1.
 The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
 
 <Tabs defaultValue="curl">
@@ -147,7 +147,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A text field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+A text field can be created or updated as part of an app update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update splits the "name" field into "First name" and "Last name" fields. Therefore, the "name" field is being renamed (updated) to "First name" and a new field "Last name" is being created.
 The "notes" field is not provided in the request body and therefore remains unchanged.
 

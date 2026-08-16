@@ -135,7 +135,7 @@ Makes an outbound HTTP request from the automation sandbox.
 }
 ```
 
-- `http_call_type` (**required**) — a lowercase enum scalar: `get` / `post` / `put` / `patch` / `delete`.
+- `http_call_type` (**required**) — a lower-case enum scalar: `get` / `post` / `put` / `patch` / `delete`.
 - `http_call_url` (**required**) — a **template dynamic value** (array), so you can interpolate record data into the URL.
 - Outbound requests run from Tape's worker IPs and are subject to network restrictions — see [Troubleshooting → IP addresses](/docs/automations/troubleshooting/ip-addresses). Private/internal hosts are refused.
 

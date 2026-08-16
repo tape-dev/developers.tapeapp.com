@@ -23,7 +23,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `automation_id` | integer | no | Id of the automation to call for each collected record. Omitted → no target; an unset target round-trips as absent. |
+| `automation_id` | integer | no | ID of the automation to call for each collected record. Omitted → no target; an unset target round-trips as absent. |
 | `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to iterate over — an action-variable reference to a prior action's collection output. Omitted when unset. |
 | `call_arguments` | array of call-argument objects | no | Arguments bound to the called automation's declared inputs, one per its custom variables. Empty when omitted. |
 

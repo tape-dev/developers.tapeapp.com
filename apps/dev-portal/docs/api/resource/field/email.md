@@ -15,14 +15,14 @@ There is only one type of email field: `multi_email`.
 
 In addition to the common field properties, an email field has the following settings:
 
-- `only_allow_single_entry` (optional): boolean flag, whether only a single email entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the email field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
+- `only_allow_single_entry` (optional): boolean flag, whether only a single email entry should be allowed. (default: false). This property is not used for server-side validation. If set to true, users can only add a single entry to the email field value via the web client. However, the API will still accept multiple entries in the field value. This property is only used for the web client.
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-An email field can be created as part of an App creation. Here is an example request body for creating an excerpt for a contacts app within a workspace with ID 1.
-The app contains a `multi_email` field "Email". Other useful fields for a contacts app, like "Name", "Phone" or "Address" are omitted for brevity.
+An email field can be created as part of an app creation. Here is an example request body for creating an excerpt of a contacts app within a workspace with ID 1.
+The app contains a `multi_email` field "Email". Other useful fields for a contacts app, like "Name", "Phone" or "Address", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -122,7 +122,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-An email field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+An email field can be created or updated as part of an app update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update sets the `only_allow_single_entry` setting to true.
 
 <Tabs defaultValue="curl">

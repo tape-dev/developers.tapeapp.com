@@ -42,7 +42,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- `delay_ms` is the only member and is **required** — it has no canonical default, so an omitting caller has no meaningful fallback.
+- `delay_ms` is the only member and is **required** — it has no canonical default, so a caller that omits it has no meaningful fallback.
 - Only the four enum values `15000`, `30000`, `45000`, and `60000` are accepted; any other value is rejected.
 - The run pauses for the given number of milliseconds, then continues with the next action.
 

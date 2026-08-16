@@ -19,8 +19,8 @@ A `multi_image` field definition consists only of the common field properties an
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-An image field can be created as part of an App creation. Here is an example request body for creating an excerpt for a Contacts app within a workspace with ID 1.
-The app contains a `multi_image` field "Portraits". Other useful fields for a contacts app, like "First Name", "Last Name" or "Notes" are omitted for brevity.
+An image field can be created as part of an app creation. Here is an example request body for creating an excerpt of a Contacts app within a workspace with ID 1.
+The app contains a `multi_image` field "Portraits". Other useful fields for a contacts app, like "First Name", "Last Name" or "Notes", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -113,7 +113,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-An image field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+An image field can be created or updated as part of an app update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update changes the description of the "Portraits" field to "Photos of the contact".
 
 <Tabs defaultValue="curl">

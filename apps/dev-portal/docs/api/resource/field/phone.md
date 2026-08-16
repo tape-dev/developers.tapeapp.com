@@ -15,15 +15,15 @@ There is only one type of phone field: `multi_phone`.
 
 In addition to the common field properties, a phone field has the following settings:
 
-- `only_allow_single_entry` (optional): boolean flag, whether only a single phone entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the phone field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
-- `call_link_scheme` (optional): the scheme that should be used for the call links in the web-client. Can be one of ["tel", "callto"]. (default: "tel")
+- `only_allow_single_entry` (optional): boolean flag, whether only a single phone entry should be allowed. (default: false). This property is not used for server-side validation. If set to true, users can only add a single entry to the phone field value via the web client. However, the API will still accept multiple entries in the field value. This property is only used for the web client.
+- `call_link_scheme` (optional): the scheme that should be used for the call links in the web client. Can be one of ["tel", "callto"]. (default: "tel")
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A phone field can be created as part of an App creation. Here is an example request body for creating an excerpt for a contacts app within a workspace with ID 1.
-The app contains a `multi_phone` field "Phone". Other useful fields for a contacts app, like "Name", "Email" or "Address" are omitted for brevity.
+A phone field can be created as part of an app creation. Here is an example request body for creating an excerpt of a contacts app within a workspace with ID 1.
+The app contains a `multi_phone` field "Phone". Other useful fields for a contacts app, like "Name", "Email" or "Address", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -130,7 +130,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A phone field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+A phone field can be created or updated as part of an app update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update sets the call_link_scheme to "callto".
 
 <Tabs defaultValue="curl">

@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-## Retrieve Organization
+## Retrieve organization
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org" />
 
@@ -40,6 +40,6 @@ Retrieve your current organization (e.g. the organization with ID `1337`):
 
 :::caution Not available
 
-Endpoints for modifying the **Organization** are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
+Endpoints for modifying the **Organization** resource are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 
 :::

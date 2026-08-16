@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A phone field value consists of its `value` property which holds one or multiple phone number entries. An entry contains the phone number itself, plus its type, e.g. `work` or `home`.
+A phone field value consists of its `value` property, which holds one or multiple phone number entries. An entry contains the phone number itself, plus its type, e.g. `work` or `home`.
 
 Currently the following values are allowed as type: `work`, `work_fax`, `home`, `home_fax`, `main`, `mobile`, `pager`, and `other`. If no type is provided, phone entries always default to `work`.
 
@@ -19,7 +19,7 @@ Currently the following values are allowed as type: `work`, `work_fax`, `home`, 
 
 A phone field value can be created as part of a record creation. It is possible to provide either a string, an object following the phone number entry structure or an array of those two. It is advised to use an array of objects for the best accuracy of the provided data.
 
-Here is an example request body for creating a record with a value for the "Customer phone" field with ID 2, type `multi_phone` and external ID `customer_phone` :
+Here is an example request body for creating a record with a value for the "Customer phone" field with ID 2, type `multi_phone` and external ID `customer_phone`:
 
 <Tabs defaultValue="curl">
 

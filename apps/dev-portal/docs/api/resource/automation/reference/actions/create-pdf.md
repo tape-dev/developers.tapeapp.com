@@ -20,7 +20,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 ## Config
 
-Every member is optional — each carries a canonical editor default, so an omitting caller still yields a complete
+Every member is optional — each carries a canonical editor default, so a caller that omits them still yields a complete
 action.
 
 | Key | Type | Required | Description |

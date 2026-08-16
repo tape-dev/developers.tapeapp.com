@@ -23,8 +23,8 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `app_id` | integer | no | Id of the app to collect records from. |
-| `app_view_id` | integer | no | Id of the app view to collect records from. |
+| `app_id` | integer | no | ID of the app to collect records from. |
+| `app_view_id` | integer | no | ID of the app view to collect records from. |
 | `limit` | integer | no | Maximum number of records to collect. Defaults to the editor default when omitted. |
 | `limit_enabled` | boolean | no | Whether `limit` is applied. `false` when omitted. |
 
@@ -56,7 +56,7 @@ An action entry inside an automation definition's `actions[]`:
   missing either.
 - `app_view_id` is only checked for presence at validate time — a syntactically valid but non-existent view passes
   validation and then fails at run time.
-- `limit` defaults to the editor default when omitted, and `limit_enabled` defaults to `false`, so an omitting caller
+- `limit` defaults to the editor default when omitted, and `limit_enabled` defaults to `false`, so a caller that omits them
   still yields a complete action.
 - Every collect is capped at **1000 records** at run time **regardless of `limit_enabled`**. A configured `limit` above
   1000 — or with `limit_enabled: false` — is stored and read back **unchanged** (there is no write-time or `validate`

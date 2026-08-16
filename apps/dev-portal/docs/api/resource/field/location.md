@@ -21,8 +21,8 @@ In addition to the common field properties, a location field has the following s
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A location field can be created as part of an App creation. Here is an example request body for creating an excerpt for a meetings app within a workspace with ID 1.
-The app contains a `single_location` field "Location". Other useful fields for a meetings app, like "Date", "Participants" or "Notes" are omitted for brevity.
+A location field can be created as part of an app creation. Here is an example request body for creating an excerpt of a meetings app within a workspace with ID 1.
+The app contains a `single_location` field "Location". Other useful fields for a meetings app, like "Date", "Participants" or "Notes", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -121,7 +121,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A location field can be created or updated as part of an App update. Here is an example request body for updating the previously created meetings app with ID 1.
+A location field can be created or updated as part of an app update. Here is an example request body for updating the previously created meetings app with ID 1.
 The update sets the `has_map` flag to false.
 
 <Tabs defaultValue="curl">

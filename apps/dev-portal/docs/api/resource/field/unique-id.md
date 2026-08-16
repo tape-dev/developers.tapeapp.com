@@ -1,7 +1,7 @@
 ---
 id: unique-id
-title: Unique-Id Field
-sidebar_label: Unique-Id
+title: Unique ID Field
+sidebar_label: Unique ID
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
@@ -16,18 +16,18 @@ The first record of an app will have the unique_id "1", the second record "2", e
 
 In addition to the common field properties, a unique_id field has the following settings:
 
-- `min_digits` (optional): minimum number of digits of the unique_id field-values. Can be any integer between 1 and 12. (default: 1). In case the number of digits of the unique_id field-value is smaller than `min_digits`, the unique_id field-value will be padded with leading zeros.
+- `min_digits` (optional): minimum number of digits of the unique_id field-values. Can be any integer between 1 and 12. (default: 1). If the number of digits of the unique_id field-value is smaller than `min_digits`, the unique_id field-value will be padded with leading zeros.
 - `prefix` (optional): prefix of the unique_id field-values. Can be any string, e.g. "DEAL-" for deals, "Ticket-" for tickets, etc.
 
-Currently, unique_id field values are not returned in the API responses of the record endpoints. However, they can be used for viewing, searching for and filtering records in the web-application.
+Currently, unique_id field values are not returned in the API responses of the record endpoints. However, they can be used for viewing, searching for and filtering records in the web application.
 The unique_id value (without its prefix) however is returned as the property `app_record_id` in the API responses of the record endpoints.
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A unique_id field can be created as part of an App creation. Here is an example request body for creating an excerpt for a Tickets app within a workspace with ID 1.
-The app contains a `unique_id` field "Ticket-ID". Other useful fields for a tickets app, like "Title", "Status" or "Description" are omitted for brevity.
+A unique_id field can be created as part of an app creation. Here is an example request body for creating an excerpt of a Tickets app within a workspace with ID 1.
+The app contains a `unique_id` field "Ticket-ID". Other useful fields for a tickets app, like "Title", "Status" or "Description", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -122,7 +122,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A unique_id field can be created or updated as part of an App update. Here is an example request body for updating the previously created tickets app with ID 1.
+A unique_id field can be created or updated as part of an app update. Here is an example request body for updating the previously created tickets app with ID 1.
 The update sets the `min_digits` to 5.
 
 <Tabs defaultValue="curl">

@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A category field value consists of its `value` property which holds a reference to a category option. A category option has the properties `id` (unique ID), `text` (the label) and `color` (hex color value). A `single_category` field value holds at most one category option while a `multi_category` field value can hold multiple category options.
+A category field value consists of its `value` property, which holds a reference to a category option. A category option has the properties `id` (unique ID), `text` (the label) and `color` (hex color value). A `single_category` field value holds at most one category option while a `multi_category` field value can hold multiple category options.
 
 ## Record creation
 

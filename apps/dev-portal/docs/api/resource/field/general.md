@@ -9,10 +9,10 @@ An example "Contacts" app could have the fields "First name" (text), "Last Name"
 
 The fields of an App determine the structure of the records within the app. Adding a record to this app includes specifying its field values for each of the fields "First Name", "Last Name" and "Phone number".
 
-Each field object can be uniquely identified via its `field_id`. Fields are returned as part of an app and can be created and updated via the App endpoint.
-Fields can be created as part of the create App endpoint and created or updated via the update App endpoint.
+Each field object can be uniquely identified via its `field_id`. Fields are returned as part of an app and can be created and updated via the app endpoint.
+Fields can be created as part of the create app endpoint and created or updated via the update app endpoint.
 
-## Common Properties
+## Common properties
 
 All fields share the following properties:
 

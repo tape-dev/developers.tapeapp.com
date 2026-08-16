@@ -12,11 +12,11 @@ import Admonition from '@theme/Admonition';
 
 For communication that happens outside of Tape, the API offers an endpoint to send emails.
 
-## Sending an Email
+## Sending an email
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/email/send" />
 
-To send an email to one or more recipients, make a POST request to that endpoint. The POST body must contain the `to` property with one or more recipient email addresses, the `subject` property, and the `html` property which contains the formatted email body.
+To send an email to one or more recipients, make a POST request to that endpoint. The POST body must contain the `to` property with one or more recipient email addresses, the `subject` property, and the `html` property, which contains the formatted email body.
 
 Optionally, the request can contain `cc`, `bcc` and `reply_to` properties, all of which can contain a list of email addresses.
 
@@ -31,7 +31,7 @@ If an email could not be delivered, the job is rescheduled after 10, 100 and 100
 :::
 
 The following example sends an email with subject, and body to `recipient@example.com` with the default sender address.
-In case the recipient clicks on reply-to in their email client, the recipient of the reply is `reply-to@example.com`
+If the recipient clicks on reply-to in their email client, the recipient of the reply is `reply-to@example.com`.
 
 <Tabs defaultValue="curl">
 
@@ -123,7 +123,7 @@ In addition, the email contains an attachment with file ID 42, which is present 
 }
 ```
 
-## limits
+## Limits
 
 The following limits are enforced for each email:
 

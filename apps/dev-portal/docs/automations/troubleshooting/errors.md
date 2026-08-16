@@ -19,7 +19,7 @@ The following API errors can be expected:
 
 More information on API errors can be found in the [API errors](/docs/api/errors) section.
 
-## Throwing Custom Errors
+## Throwing custom errors
 
 In calculations and script executions, developers may throw a custom error that will also be properly logged and propagated via automation info webhooks.
 

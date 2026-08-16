@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-An email field value consists of its `value` property which holds one or multiple email address entries. An entry contains the email address itself, plus its type, e.g. `work` or `home`. Currently the following values are allowed as type: `work`, `home` and `other`. If no type is provided, email address entries always default to `work`.
+An email field value consists of its `value` property, which holds one or multiple email address entries. An entry contains the email address itself, plus its type, e.g. `work` or `home`. Currently the following values are allowed as type: `work`, `home` and `other`. If no type is provided, email address entries always default to `work`.
 
 ## Record creation
 
@@ -17,7 +17,7 @@ An email field value consists of its `value` property which holds one or multipl
 
 An email field value can be created as part of a record creation. It is possible to provide either a string, an object following the email address entry structure or an array of those two. It is advised to use an array of objects for the best accuracy of the provided data.
 
-Here is an example request body for creating a record with a value for the "Customer email" field with ID 2, type `multi_email` and external ID `customer_email` :
+Here is an example request body for creating a record with a value for the "Customer email" field with ID 2, type `multi_email` and external ID `customer_email`:
 
 <Tabs defaultValue="curl">
 

@@ -204,7 +204,7 @@ Retrieve the public views of an app via the app ID `1`. Each entry is a **previe
 }`}
 </ContextCodeBlock>
 
-## Create an App
+## Create an app
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
@@ -384,7 +384,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 }
 ```
 
-## Update an App
+## Update an app
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
@@ -553,7 +553,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 }
 ```
 
-## Update an App's field order
+## Update an app's field order
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}/fields/order" />
 
@@ -689,7 +689,7 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
 }
 ```
 
-## Delete an App
+## Delete an app
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/app/{appId}" />
 

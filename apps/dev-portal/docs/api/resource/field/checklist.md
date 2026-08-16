@@ -21,8 +21,8 @@ In addition to the common field properties, a checklist field has the following 
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A checklist field can be created as part of an App creation. Here is an example request body for creating an excerpt for a tasks app within a workspace with ID 1.
-The app contains a `checklist` field "Subtasks". Other useful fields for a tasks app, like "Title", "Description" or "Due date" are omitted for brevity.
+A checklist field can be created as part of an app creation. Here is an example request body for creating an excerpt of a tasks app within a workspace with ID 1.
+The app contains a `checklist` field "Subtasks". Other useful fields for a tasks app, like "Title", "Description" or "Due date", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -121,7 +121,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A checklist field can be created or updated as part of an App update. Here is an example request body for updating the previously created tasks app with ID 1.
+A checklist field can be created or updated as part of an app update. Here is an example request body for updating the previously created tasks app with ID 1.
 The update sets the `show_in_focus` flag to false, so that checklist entries of the field's values do not show up in the assignee user's focus.
 
 <Tabs defaultValue="curl">

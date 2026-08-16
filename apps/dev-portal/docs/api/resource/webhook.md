@@ -473,7 +473,7 @@ The webhook must respond with a 2xx status code. If the status code is different
 
 Only hooks on ports 80 and 443 are supported, i.e. you cannot use `http://www.example.org/webhook:8080`, only `http://www.example.org/webhook` or `https://www.example.org/webhook`.
 
-## Rate Limits
+## Rate limits
 
 Webhook executions are rate limited. The current rate limit is 100 webhook executions per minute per app.
 

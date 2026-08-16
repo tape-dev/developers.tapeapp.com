@@ -13,7 +13,7 @@ may change or be withdrawn at any time without notice.
 :::
 
 This walks the full lifecycle end to end: **discover → create → configure → validate → activate → run → observe**.
-Every call uses a [user API key](/docs/api/authentication) and assumes you administrate the app's workspace.
+Every call uses a [user API key](/docs/api/authentication) and assumes you administer the app's workspace.
 
 ## 1. Discover the vocabulary
 

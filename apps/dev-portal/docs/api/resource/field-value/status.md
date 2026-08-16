@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A status field value consists of its `value` property which holds a reference to a status option. A status option has the properties `id` (unique ID), `text` (the label), `color` (hex color value) and `means_completed` (whether the status indicates completion). A `status` field value holds at most one status option.
+A status field value consists of its `value` property, which holds a reference to a status option. A status option has the properties `id` (unique ID), `text` (the label), `color` (hex color value) and `means_completed` (whether the status indicates completion). A `status` field value holds at most one status option.
 
 ## Record creation
 

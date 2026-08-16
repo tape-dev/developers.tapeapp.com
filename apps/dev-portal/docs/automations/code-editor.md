@@ -6,7 +6,7 @@ sidebar_label: Code Editor
 
 The code editor in Tape's automations is used inside custom script filters, and inside the "perform calculation" and "execute script" action blocks. It is powered by the [Monaco](https://microsoft.github.io/monaco-editor/) editor used by millions of developers worldwide.
 
-## Auto completion & Typing Information
+## Autocompletion & typing information
 
 The editor will provide typing information on which variables and APIs are available. You can fuzzy search by just starting to type and hit the "ENTER" key to apply a suggestion from the suggestion overlay.
 

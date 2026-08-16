@@ -16,7 +16,7 @@ The script of a calculation field is written in JavaScript. In order to calculat
 
 ### Client-side JavaScript
 
-Tape does not support the execution of user-provided JavaScript in the client applications due to security reasons. Your JavaScript is executed on the server in an isolated and secure environment, the client only renders the result of the calculation.
+Tape does not support the execution of user-provided JavaScript in the client applications for security reasons. Your JavaScript is executed on the server in an isolated and secure environment, the client only renders the result of the calculation.
 
 ### Timeouts
 

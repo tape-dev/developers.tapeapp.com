@@ -58,7 +58,7 @@ Hint: If you need a more complex syntax or would like to declare functions that 
 
 When using the "execute script" action block, developers are free to run their own asynchronous JavaScript code. While it is possible to use the classic Promise syntax, we recommend using [Async/Await](https://nodejs.dev/learn/modern-asynchronous-javascript-with-async-and-await).
 
-Inside this context, more APIs, modules and functions are exposed. The [code editor](/docs/automations/code-editor) provides auto-completion and typing info to assist developers, some more details are described in the next sections.
+Inside this context, more APIs, modules and functions are exposed. The [code editor](/docs/automations/code-editor) provides autocompletion and typing info to assist developers, some more details are described in the next sections.
 
 #### Tape API client
 
@@ -86,7 +86,7 @@ console.log({ data });
 console.log({ headers });
 ```
 
-### Custom Variables
+### Custom variables
 
 You may introduce custom variables that can be used globally by using one of the following action blocks:
 
@@ -122,7 +122,7 @@ Some variables are provided by the system when an automation is executed. A list
 
 Note that some variables depend on the [execution type](/docs/automations/execution-types) of the current automation.
 
-## Logging & Debugging
+## Logging & debugging
 
 Use regular console log statements to log any variable during automation execution. Your logs will show up inside the run logs, enabling quick debugging and live feedback.
 

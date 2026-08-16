@@ -22,7 +22,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `app_id` | integer | no | Id of the app whose records are collected. Carried through only when set. |
+| `app_id` | integer | no | ID of the app whose records are collected. Carried through only when set. |
 | `match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Records filter. Empty "match all" condition when omitted; `null` composes back from an empty condition. |
 | `limit` | integer | no | Maximum number of records to collect. Default `1`. |
 | `limit_enabled` | boolean | no | Whether `limit` is applied. Default `false`. |
@@ -61,7 +61,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- Every member is optional; an omitting caller still yields a complete internal action via the mapper's defaults.
+- Every member is optional; a caller that omits them still yields a complete internal action via the mapper's defaults.
 - `match_condition` defaults to the empty "match all" condition, so with no filter the whole app is collected.
 - `limit` defaults to `1` and only takes effect when `limit_enabled` is `true`; with `limit_enabled: false` the configured `limit` is ignored.
 - This action is a producer: it publishes a `record_collection`. Every collect is capped at **1000 records** at run time **regardless of `limit_enabled`**. A configured `limit` above 1000 is stored and read back **unchanged** (there is no write-time or `validate` warning), then truncated to 1000 when the run executes. See [Limitations](/docs/automations/limitations).

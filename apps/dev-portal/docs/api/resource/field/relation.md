@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There are two types of relation fields: `single_relation` and `multi_relation`.
 
-`single_relation` field-values can only hold a single record reference while `multi_relation` fields can hold multiple record references.
+`single_relation` field values can only hold a single record reference while `multi_relation` fields can hold multiple record references.
 
 In addition to the common field properties, a relation field definition has a `settings` property `referenced_apps` containing the IDs of the apps that can be referenced by the field.
 When creating a record with a relation field value, only records of apps specified in the field definition's `referenced_apps` can be referenced.
@@ -25,7 +25,7 @@ The `referenced_apps` property is an array of objects with the following propert
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A relation field can be created as part of an App creation. Here is an example request body for creating an excerpt of a Development-Issues app within a workspace with ID 1.
+A relation field can be created as part of an app creation. Here is an example request body for creating an excerpt of a Development-Issues app within a workspace with ID 1.
 
 The app contains a `single_relation` field "Belongs to Epic" with a reference to the "Epics" app with ID 2.
 
@@ -155,7 +155,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A relation field can be created or updated as part of an App update. Here is an example request body for updating the previously created Development-Issues app with ID 1.
+A relation field can be created or updated as part of an app update. Here is an example request body for updating the previously created Development-Issues app with ID 1.
 The update adds a reference to the "Sprints" app with ID 3 to the "Belongs to Epic" field, and renames the field to "Belongs to".
 When updating a relation field, you need to specify all referenced apps again, not just the ones you want to add or remove. Referenced apps that exist in a field and are not specified in the update request are removed from the field.
 

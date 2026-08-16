@@ -19,7 +19,7 @@ may change or be withdrawn at any time without notice.
 Create, retrieve, list, update, replace the trigger, activate, pause and delete automations.
 
 :::info Requires a user API key
-Every endpoint here requires a **user API key**, and you must **administrate the workspace** the automation's app
+Every endpoint here requires a **user API key**, and you must **administer the workspace** the automation's app
 belongs to. Unavailable automations answer a uniform `404` — see
 [Authentication and permissions](/docs/api/resource/automation/overview#authentication-and-permissions). The returned
 shape is the [automation object](/docs/api/resource/automation/reference/object), always wrapped as `{ automation }`.
@@ -100,9 +100,9 @@ Returns `{ automation }` with its `trigger`, `filter` and `actions` inlined.
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/workspace/{workspace_id}" />
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/org" />
 
-List automations in an app, a workspace, or across every workspace you administrate in your organization. The `org`
+List automations in an app, a workspace, or across every workspace you administer in your organization. The `org`
 variant derives the organization from your key — it has no path scope, and returns an **empty page** (not a `404`) if
-you administrate nothing.
+you administer nothing.
 
 **Query Parameters**
 

@@ -15,7 +15,7 @@ An automation run is a single execution of one of your automations. The API lets
 optionally filtered by app, automation, workspace and status — and retrieve an individual run together with its
 logs.
 
-You see the runs of automations that belong to apps in a workspace you **administrate**. Only the last **30 days**
+You see the runs of automations that belong to apps in a workspace you **administer**. Only the last **30 days**
 of runs are retained. Simulation runs — the ones produced by testing an automation in the editor — are excluded
 from the listings, except the [per-automation listing](#list-runs-for-an-automation); they can still be retrieved
 individually by id.
@@ -46,7 +46,7 @@ every run you may see.
 | `created_at_from` | `string`    | Only runs created at or after this instant. Inclusive. See [Filtering by date](#filtering-by-date).     |
 | `created_at_to`   | `string`    | Only runs created at or before this instant. Inclusive. See [Filtering by date](#filtering-by-date).    |
 
-Every id you name that **exists but you do not administrate** — an app, automation or workspace, including one in
+Every id you name that **exists but you do not administer** — an app, automation or workspace, including one in
 another organization — is rejected with a `404`. The one difference is how a **completely unknown** id is treated: an
 unknown `app_ids` or `workspace_ids` value is a `404`, whereas an unknown `automation_ids` value is silently treated as
 a **filter, not a lookup** — an id that never existed, or a soft-deleted automation whose runs you would otherwise see,
@@ -240,7 +240,7 @@ List the runs of the automations belonging to the app with the specified `app_id
 scope-locked variant of [List automation runs](#list-automation-runs): the app is fixed by the path, so the body
 carries pagination only — `cursor` and `limit`, exactly as [described above](#pagination). The filters and date
 bounds of the general list are **not** accepted here; sending any other property returns a `400`. Simulation runs
-are excluded, as in the general list. You must administrate the workspace the app lives in, and the app must be a
+are excluded, as in the general list. You must administer the workspace the app lives in, and the app must be a
 database app.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
@@ -291,7 +291,7 @@ apps can have automations.
 
 List the runs of the automations belonging to the workspace with the specified `workspace_id`, newest first. As with
 [List runs for an app](#list-runs-for-an-app), the body carries pagination only (`cursor`, `limit`), simulation runs
-are excluded, and the response shape is identical. You must administrate the workspace.
+are excluded, and the response shape is identical. You must administer the workspace.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/automation-run/workspace/7 \\
@@ -310,7 +310,7 @@ A `workspace_id` that is not available to you returns a `404`, indistinguishable
 
 List the runs of the automation with the specified `automation_id`, newest first. The body carries pagination only
 (`cursor`, `limit`) and the response shape is identical to [List runs for an app](#list-runs-for-an-app). You must
-administrate the workspace the automation lives in.
+administer the workspace the automation lives in.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/automation-run/automation/88 \\
@@ -327,7 +327,7 @@ Unlike every other listing, this one mirrors the per-automation run history you 
 `automation_runs`. The general list and the per-app and per-workspace endpoints all exclude them.
 :::
 
-An `automation_id` that is missing, deleted, or not one you administrate returns the same `404`.
+An `automation_id` that is missing, deleted, or not one you administer returns the same `404`.
 
 ## Retrieve an automation run
 
@@ -467,7 +467,7 @@ used.
 Tape IDs are globally unique, so a run ID belonging to another organization is still a perfectly well-formed ID.
 To avoid turning this endpoint into a way of probing which run IDs exist, every run that is not available to you
 answers the same `404` — whether it does not exist, was deleted, has aged out of the retention window, or lives in
-a workspace you do not administrate. A run authenticated with the wrong kind of key (not a user API key) still
+a workspace you do not administer. A run authenticated with the wrong kind of key (not a user API key) still
 returns `401`, and a run ID that is not an integer returns `400`.
 :::
 

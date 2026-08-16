@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-## Retrieve Organization Users
+## Retrieve organization users
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org/user" />
 
@@ -48,7 +48,7 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 }`}
 </ContextCodeBlock>
 
-## Add User to Organization
+## Add user to organization
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
 
@@ -85,7 +85,7 @@ Add a new user to your current organization (e.g. the organization with ID `1337
 The `role` property to create users needs to be one of `"admin"`, `"member"` and `"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
 :::
 
-## Resend User invitation email
+## Resend user invitation email
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user/{userId}/resend-invitation" />
 

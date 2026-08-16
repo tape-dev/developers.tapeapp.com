@@ -56,7 +56,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- Both members are optional at input; an omitting caller still yields a complete internal action, with `ref_collection_defs` defaulting to `[]`.
+- Both members are optional at input; a caller that omits them still yields a complete internal action, with `ref_collection_defs` defaulting to `[]`.
 - This action is both a consumer and a producer: it reads the upstream `record_collection` reference as its starting set, then publishes the collected referenced records as a record collection. It emits no per-action success log.
 - `record_collection` has no canonical default — it is carried through when present and dropped when unset; with no source set, the action starts from an empty set.
 - Within each `ref_collection_defs` entry, `direction` and `match_type` are required; `match_condition` only applies to `filtered` entries and defaults to the empty "match all" condition.

@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A date field value consists of its `value` property which holds a start date and optionally an end date. A start date has the properties `start` (datetime string), `start_date` (date string), `start_time` (HH:mm:ss formatted string), an end date is structured in the same way. A `single_date` field value can only hold a start date while a `range_date` field value can hold an additional end date.
+A date field value consists of its `value` property, which holds a start date and optionally an end date. A start date has the properties `start` (datetime string), `start_date` (date string), `start_time` (HH:mm:ss formatted string), an end date is structured in the same way. A `single_date` field value can only hold a start date while a `range_date` field value can hold an additional end date.
 
 More details on date and datetime strings can be found [here](/docs/api/date-timezone).
 

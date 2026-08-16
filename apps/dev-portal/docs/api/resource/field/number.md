@@ -23,8 +23,8 @@ In addition to the common field properties, a number field has the following set
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A number field can be created as part of an App creation. Here is an example request body for creating an excerpt for a Deals app within a workspace with ID 1.
-The app contains a `number` field "Closing Amount". Other useful fields for a deals app, like "Name", "Stage" or "Closing Date" are omitted for brevity.
+A number field can be created as part of an app creation. Here is an example request body for creating an excerpt of a Deals app within a workspace with ID 1.
+The app contains a `number` field "Closing Amount". Other useful fields for a deals app, like "Name", "Stage" or "Closing Date", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -129,7 +129,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A number field can be created or updated as part of an App update. Here is an example request body for updating the previously created deals app with ID 1.
+A number field can be created or updated as part of an app update. Here is an example request body for updating the previously created deals app with ID 1.
 The update sets the `unit` to "$" and the `unit_location` to "prefix".
 
 <Tabs defaultValue="curl">

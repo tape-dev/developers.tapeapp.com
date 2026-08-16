@@ -48,7 +48,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- No member is required — an omitting caller still yields a complete internal action.
+- No member is required — a caller that omits them still yields a complete internal action.
 - `join_type` has no public default, but the editor seeds `add_below` and the mapper fills it, so an omitted `join_type` behaves as `add_below`.
 - `webpage_body` defaults to empty when omitted; `fullscreen` and `remove_branding` are carried through only when the caller supplies them.
 - This action needs the `weblink_clicked` trigger context to run.

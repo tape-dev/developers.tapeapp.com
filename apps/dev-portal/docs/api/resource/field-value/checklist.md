@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A checklist field value consists of its `value` property which holds one or multiple checklist entries. An entry contains a `title`, a `description`, an `assignee`, and a `due_at` property. It further includes a boolean `completed` status indicating whether that individual entry has been completed.
+A checklist field value consists of its `value` property, which holds one or multiple checklist entries. An entry contains a `title`, a `description`, an `assignee`, and a `due_at` property. It further includes a boolean `completed` status indicating whether that individual entry has been completed.
 
 `due_at` will be a date or datetime, depending on the data. More details on date and datetime strings can be found [here](/docs/api/date-timezone).
 
@@ -21,7 +21,7 @@ The `assignee` has to be a user inside the same organization. Use the `user_id` 
 
 A checklist field value can be created as part of a record creation. It is possible to provide either a string, a checklist entry object or an array of those two. It is advised to use an array of objects for the best accuracy of the provided data.
 
-Here is an example request body for creating a record with a value for the "Subtasks" field with ID 2, type `checklist` and external ID `subtasks` :
+Here is an example request body for creating a record with a value for the "Subtasks" field with ID 2, type `checklist` and external ID `subtasks`:
 
 <Tabs defaultValue="curl">
 

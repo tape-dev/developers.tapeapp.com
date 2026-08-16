@@ -23,7 +23,7 @@ family. This page documents the typed `config`; for how an action sits inside an
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `automation_id` | integer | no | Id of the automation to call. Unset target when omitted. |
+| `automation_id` | integer | no | ID of the automation to call. Unset target when omitted. |
 | `call_arguments` | array of argument bindings | no | Arguments bound to the called automation's declared inputs, one per the callee's custom variable. Empty when omitted. |
 
 Each entry in `call_arguments` binds one declared input (`variable_def`) to either a

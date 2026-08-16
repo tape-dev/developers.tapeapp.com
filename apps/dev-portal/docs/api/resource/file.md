@@ -69,7 +69,7 @@ The response will be a file object containing information of the uploaded file:
 }
 ```
 
-The `thumbnail` property is optional and will only be available in case a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
+The `thumbnail` property is optional and will only be available if a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
 
 ## Upload multiple files
 
@@ -128,7 +128,7 @@ The response will be an array of file objects containing information of the uplo
 ]
 ```
 
-The `thumbnail` property is optional and will only be available in case a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
+The `thumbnail` property is optional and will only be available if a [thumbnail](#thumbnails) could be generated for the uploaded file (e.g., if it is an image).
 
 If you intended to upload multiple files but only provided one, you receive a single file object instead of an array. The API will always return a file object if only one file was uploaded and an array of file objects if more than one file was uploaded.
 
@@ -160,7 +160,7 @@ The following limits are enforced for all file upload endpoints:
 
 ## Rate limit credits
 
-File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always costs at least 2x the credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
+File uploads are rate limited based on their file size. For uploading multiple files, the sum of all file sizes is used. The file size limit for a single file is 100MB. Uploading a file always costs at least 2x the credits of a normal request. Uploading a file with the maximum file size costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
 
 ```
 Uploading 1KB: 2x credits

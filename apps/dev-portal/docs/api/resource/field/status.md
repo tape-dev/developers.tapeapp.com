@@ -17,7 +17,7 @@ Status fields are created or updated like `single_category` fields, with one dif
 An option with `means_completed` set to true means that the record is resolved. Descriptive labels for such an option could be e.g. ("Done", "Discarded", "Duplicate")
 An option with `means_completed` set to false means that the record is not yet resolved. Descriptive labels for such an option could be e.g. ("Open", "In Progress", "Blocked")
 
-The `means_completed` property of a status option determines whether the record that has this option selected within its status field value, is added to, or removed from the Focus section within the Home section of Tape.
+The `means_completed` property of a status option determines whether the record that has this option selected within its status field value is added to or removed from the Focus section within the Home section of Tape.
 For further information on the Focus feature or on how to configure an App so that its records land in a user's Focus section, please refer to https://help.tapeapp.com/en/articles/6394049-focus
 
 ## Working with Status fields
@@ -26,7 +26,7 @@ For further information on the Focus feature or on how to configure an App so th
 
 Within Tape, a record can have maximally one status, therefore you can only add up to one `status` field to an App.
 
-A `status` field must be set to `required`. In case an App has a `status` field, each record within this app needs to select an option for this field in order to be created or updated.
+A `status` field must be set to `required`. If an App has a `status` field, each record within this app needs to select an option for this field in order to be created or updated.
 
 A `status` field must specify at least one option with `means_completed` set to true and at least one option with `means_completed` set to false.
 
@@ -38,15 +38,15 @@ The `options` property is an array of objects with the following properties:
 - `id`: Once an option has been created, the id property can be used to update the option. This is also the id of the option that is used to specify an option within record update or creation.
 - `text` (required): The text (=label) of the option. This is the name of the option that is displayed to the user.
 - `means_completed` (required): Whether this status option means that the task it refers to is completed or not.
-- `color` (optional): The color of the option. This is the color of the option that is displayed to the user. The color can be one of ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"]
+- `color` (optional): The color of the option. This is the color of the option that is displayed to the user. The color can be one of ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"].
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A status field can be created as part of an App creation. Here is an example request body for creating an excerpt of a Tasks app within a workspace with ID 1.
+A status field can be created as part of an app creation. Here is an example request body for creating an excerpt of a Tasks app within a workspace with ID 1.
 
-The app contains a `status` field "Status". Other useful fields for a Tasks app, like "Title", "Due Date" or "Description" are omitted for brevity.
+The app contains a `status` field "Status". Other useful fields for a Tasks app, like "Title", "Due Date" or "Description", are omitted for brevity.
 
 <Tabs defaultValue="curl">
 
@@ -196,14 +196,14 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A status field can be created or updated as part of an App update. Here is an example request body for updating the previously created tasks app with ID 1.
+A status field can be created or updated as part of an app update. Here is an example request body for updating the previously created tasks app with ID 1.
 The update adds an option "Discarded" to the "Status" field.
-When updating a status field, the order of the options in the input is preserved in case you specify all existing options.
+When updating a status field, the order of the options in the input is preserved if you specify all existing options.
 
-In case you want to remove one or multiple options from a `status` field, you can specify the property `options_to_delete` within the `settings` property of the field.
+If you want to remove one or multiple options from a `status` field, you can specify the property `options_to_delete` within the `settings` property of the field.
 Just add the options you want to delete to the `options_to_delete` array. The options are identified by their `id` property.
 
-Attention: In case you delete a status option, all status field values that have this option selected, will be migrated to the first option (smallest position/index) of the status field that has the same means_completed property as the deleted option.
+Attention: If you delete a status option, all status field values that have this option selected will be migrated to the first option (smallest position/index) of the status field that has the same means_completed property as the deleted option.
 In our example below: If we deleted the "Open" option, all status field values that have the "Open" option selected, would be migrated to the "In Progress" option, because both options have `means_completed` set to false.
 
 <Tabs defaultValue="curl">

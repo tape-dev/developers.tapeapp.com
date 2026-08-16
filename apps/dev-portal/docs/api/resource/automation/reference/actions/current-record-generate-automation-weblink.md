@@ -22,7 +22,7 @@ family. This page documents the typed `config`; for how an action sits inside an
 
 | Key | Type | Required | Description |
 | --- | --- | --- | --- |
-| `automation_id` | integer | no | Id of the automation the generated weblink calls. Unset target when omitted. |
+| `automation_id` | integer | no | ID of the automation the generated weblink calls. Unset target when omitted. |
 | `call_arguments` | array of argument bindings | no | Arguments bound to the target automation's declared inputs, one per the callee's custom variable. Empty when omitted. |
 | `custom_variable_def` | object | no | The action's output variable carrying the generated weblink. Each entry is `{ custom_type, label }`. Defaults to the canonical single-link `Weblink` variable (`{ custom_type: "single_link", label: "Weblink" }`) when omitted. |
 | `weblink_expiration` | enum | no | When the generated weblink expires. Default `never`. |
@@ -69,7 +69,7 @@ An action entry inside an automation definition's `actions[]`:
 
 ## Validation & behavior
 
-- No member is required — an omitting caller still yields a complete internal action: `automation_id` round-trips as an
+- No member is required — a caller that omits them still yields a complete internal action: `automation_id` round-trips as an
   unset target, `call_arguments` defaults to an empty list, `custom_variable_def` defaults to the canonical single-link
   `Weblink` variable, and `weblink_expiration` defaults to `never`.
 - The weblink target automation must live in the **same app** as this automation and be reachable from the

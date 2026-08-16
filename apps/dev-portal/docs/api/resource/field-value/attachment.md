@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-An attachment field value consists of its `value` property which holds a reference to an attachment. An attachment has the properties `id` (unique ID), `filename` (the filename), `size` (filesize in bytes), `download_url` (URL to download the file) and others.
+An attachment field value consists of its `value` property, which holds a reference to an attachment. An attachment has the properties `id` (unique ID), `filename` (the filename), `size` (file size in bytes), `download_url` (URL to download the file) and others.
 A `single_attachment` field value holds at most one attachment reference while a `multi_attachment` field value can hold multiple attachment references.
 
 Attachment fields behave quite similarly to [image fields](/docs/api/resource/field-value/image), also allowing non-image files.

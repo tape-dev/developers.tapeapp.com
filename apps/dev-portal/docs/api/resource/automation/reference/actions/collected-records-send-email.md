@@ -31,7 +31,7 @@ documents the typed `config`; for how an action sits inside an automation defini
 | `from_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Sender address. Empty when omitted. |
 | `from_name` | [template value](/docs/api/resource/automation/dynamic-values) | no | Sender display name. Empty when omitted. |
 | `message_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | HTML email body. Empty when omitted. |
-| `smtp_account_id` | integer | no | Id of the SMTP account to send from. Omitted → the organization's **default** SMTP account. |
+| `smtp_account_id` | integer | no | ID of the SMTP account to send from. Omitted → the organization's **default** SMTP account. |
 | `attach_files_variable_defs` | array of [references](/docs/api/resource/automation/dynamic-values) | no | File variables whose files are candidates for attachment. Empty when omitted. |
 | `attach_files_match_type` | enum | no | Which candidate files are attached. Default `all`. |
 | `attach_files_match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Restricts attached files for the `filtered` / `most_recent_filtered` modes. Empty condition ("match all") when omitted or `null`. |

@@ -61,7 +61,7 @@ Tape also supports a few field-less [metadata filters](#record-metadata-filters)
 
 ## Single Text
 
-This is an example on how to filter records by a `single_text` field:
+This is an example of how to filter records by a `single_text` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -100,7 +100,7 @@ The following `match_type` values are supported for `single_text` fields:
 
 ## Multi Text
 
-This is an example on how to filter records by a `multi_text` field:
+This is an example of how to filter records by a `multi_text` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -139,7 +139,7 @@ The following `match_type` values are supported for `multi_text` fields:
 
 ## Number
 
-This is an example on how to filter records by a `number` field:
+This is an example of how to filter records by a `number` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -178,7 +178,7 @@ The following `match_type` values are supported for `number` fields:
 
 ## Unique ID
 
-This is an example on how to filter records by a `unique_id` field:
+This is an example of how to filter records by a `unique_id` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -221,7 +221,7 @@ The following `match_type` values are supported for `unique_id` fields (identica
 
 ## Single Category
 
-This is an example on how to filter records by a `single_category` field:
+This is an example of how to filter records by a `single_category` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -258,7 +258,7 @@ The following `match_type` values are supported for `single_category` fields:
 
 ## Multi Category
 
-This is an example on how to filter records by a `multi_category` field:
+This is an example of how to filter records by a `multi_category` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -295,7 +295,7 @@ The following `match_type` values are supported for `multi_category` fields:
 
 ## Status
 
-This is an example on how to filter records by a `status` field:
+This is an example of how to filter records by a `status` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -334,7 +334,7 @@ The following `match_type` values are supported for `status` fields:
 
 ## Single Relation
 
-This is an example on how to filter records by a `single_relation` field:
+This is an example of how to filter records by a `single_relation` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -371,7 +371,7 @@ The following `match_type` values are supported for `single_relation` fields:
 
 ## Multi Relation
 
-This is an example on how to filter records by a `multi_relation` field:
+This is an example of how to filter records by a `multi_relation` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -408,7 +408,7 @@ The following `match_type` values are supported for `multi_relation` fields:
 
 ## Single User
 
-This is an example on how to filter records by a `single_user` field:
+This is an example of how to filter records by a `single_user` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -445,7 +445,7 @@ The following `match_type` values are supported for `single_user` fields:
 
 ## Multi User
 
-This is an example on how to filter records by a `multi_user` field:
+This is an example of how to filter records by a `multi_user` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -482,7 +482,7 @@ The following `match_type` values are supported for `multi_user` fields:
 
 ## Created By
 
-This is an example on how to filter records by a `created_by` field:
+This is an example of how to filter records by a `created_by` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -519,7 +519,7 @@ The following `match_type` values are supported for `created_by` fields:
 
 ## Last Modified By
 
-This is an example on how to filter records by a `last_modified_by` field:
+This is an example of how to filter records by a `last_modified_by` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -556,7 +556,7 @@ The following `match_type` values are supported for `last_modified_by` fields:
 
 ## Single Date
 
-This is an example on how to filter records by a `single_date` field:
+This is an example of how to filter records by a `single_date` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -613,7 +613,7 @@ The following `match_type` values are supported for `single_date` fields:
 
 ## Range Date
 
-This is an example on how to filter records by a `range_date` field:
+This is an example of how to filter records by a `range_date` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -666,7 +666,7 @@ The following `match_type` values are supported for `range_date` fields:
 This filter targets an App that has a dedicated Created-At field (it references a `field_id`). To filter by a record's creation time on **any** App — including those without such a field — use the field-less [`created_at` metadata filter](#created-at-metadata) instead.
 :::
 
-This is an example on how to filter records by a `created_on` field:
+This is an example of how to filter records by a `created_on` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -718,7 +718,7 @@ The following `match_type` values are supported for `created_on` fields:
 This filter targets an App that has a dedicated Last-Modified field (it references a `field_id`). To filter by a record's last-modified time on **any** App — including those without such a field — use the field-less [`last_modified_at` metadata filter](#last-modified-at-metadata) instead.
 :::
 
-This is an example on how to filter records by a `last_modified_on` field:
+This is an example of how to filter records by a `last_modified_on` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -766,7 +766,7 @@ The following `match_type` values are supported for `last_modified_on` fields:
 
 ## Calculation
 
-This is an example on how to filter records by a `calculation` field:
+This is an example of how to filter records by a `calculation` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -823,7 +823,7 @@ The following `match_type` values are supported for `calculation` fields (the un
 
 ## Multi Email
 
-This is an example on how to filter records by a `multi_email` field:
+This is an example of how to filter records by a `multi_email` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -845,7 +845,7 @@ This is an example on how to filter records by a `multi_email` field:
 </TabItem>
 </Tabs>
 
-An email field can hold several addresses. Most match types quantify over those entries — a record matches when **at least one** email entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case insensitive and leading/trailing whitespace in the match value is ignored.
+An email field can hold several addresses. Most match types quantify over those entries — a record matches when **at least one** email entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
 
 The following `match_type` values are supported for `multi_email` fields:
 
@@ -861,7 +861,7 @@ The following `match_type` values are supported for `multi_email` fields:
 
 ## Multi Phone
 
-This is an example on how to filter records by a `multi_phone` field:
+This is an example of how to filter records by a `multi_phone` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -883,7 +883,7 @@ This is an example on how to filter records by a `multi_phone` field:
 </TabItem>
 </Tabs>
 
-A phone field can hold several numbers. Most match types quantify over those entries — a record matches when **at least one** phone entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case insensitive and leading/trailing whitespace in the match value is ignored.
+A phone field can hold several numbers. Most match types quantify over those entries — a record matches when **at least one** phone entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
 
 The following `match_type` values are supported for `multi_phone` fields:
 
@@ -899,7 +899,7 @@ The following `match_type` values are supported for `multi_phone` fields:
 
 ## Multi Link
 
-This is an example on how to filter records by a `multi_link` field:
+This is an example of how to filter records by a `multi_link` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -921,7 +921,7 @@ This is an example on how to filter records by a `multi_link` field:
 </TabItem>
 </Tabs>
 
-Note that the data `type` for a link field is `embed`, not `link`. A link field can hold several links; matching is performed over each entry's **URL** (case insensitive, surrounding whitespace ignored), and a record matches when at least one URL satisfies the criterion.
+Note that the data `type` for a link field is `embed`, not `link`. A link field can hold several links; matching is performed over each entry's **URL** (case-insensitive, surrounding whitespace ignored), and a record matches when at least one URL satisfies the criterion.
 
 Link fields have **no exact-match arm** — `equal` and `fully_includes` are not supported and return a `400`. Use `contains` (or `starts_with` / `ends_with`) instead.
 
@@ -938,7 +938,7 @@ The following `match_type` values are supported for `multi_link` fields:
 
 ## Single Location
 
-This is an example on how to filter records by a `single_location` field:
+This is an example of how to filter records by a `single_location` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -960,7 +960,7 @@ This is an example on how to filter records by a `single_location` field:
 </TabItem>
 </Tabs>
 
-A location filter matches **free text over the formatted address** — the street address, postal code, city, state, country and original formatted address concatenated together. There is no component-level filtering (you cannot filter on city or country in isolation). Comparison is case insensitive and leading/trailing whitespace in the match value is ignored.
+A location filter matches **free text over the formatted address** — the street address, postal code, city, state, country and original formatted address concatenated together. There is no component-level filtering (you cannot filter on city or country in isolation). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
 
 The following `match_type` values are supported for `single_location` fields:
 
@@ -973,7 +973,7 @@ The following `match_type` values are supported for `single_location` fields:
 
 ## Single Attachment
 
-This is an example on how to filter records by a `single_attachment` field:
+This is an example of how to filter records by a `single_attachment` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -995,7 +995,7 @@ This is an example on how to filter records by a `single_attachment` field:
 </TabItem>
 </Tabs>
 
-Note that the data `type` for an attachment field is `file`. Attachment filters match on the file **name**, never on file ids — the match value must be a **string** file name. Comparison is case insensitive and leading/trailing whitespace in the match value is ignored.
+Note that the data `type` for an attachment field is `file`. Attachment filters match on the file **name**, never on file ids — the match value must be a **string** file name. Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
 
 The following `match_type` values are supported for `single_attachment` fields:
 
@@ -1012,7 +1012,7 @@ The following `match_type` values are supported for `single_attachment` fields:
 
 ## Multi Attachment
 
-This is an example on how to filter records by a `multi_attachment` field:
+This is an example of how to filter records by a `multi_attachment` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -1051,7 +1051,7 @@ The following `match_type` values are supported for `multi_attachment` fields:
 
 ## Multi Image
 
-This is an example on how to filter records by a `multi_image` field:
+This is an example of how to filter records by a `multi_image` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
@@ -1073,7 +1073,7 @@ This is an example on how to filter records by a `multi_image` field:
 </TabItem>
 </Tabs>
 
-Image fields share the `file` data `type` with attachment fields — the discriminant is `field_type`. Matching is on the image file **name** (provide a string). An image field can hold several images, so every match type quantifies over them; `equal` / `not_equal` reach the exact-match arm over the file-name set. Comparison is case insensitive and leading/trailing whitespace in the match value is ignored.
+Image fields share the `file` data `type` with attachment fields — the discriminant is `field_type`. Matching is on the image file **name** (provide a string). An image field can hold several images, so every match type quantifies over them; `equal` / `not_equal` reach the exact-match arm over the file-name set. Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
 
 The following `match_type` values are supported for `multi_image` fields:
 
@@ -1222,7 +1222,7 @@ The following `match_type` values are supported for `checklist` fields. Which on
 Beyond `values`, some filters carry optional **operand keys** that refine the criterion. They apply mainly to the temporal filters — every filter with `type: "date"` (Single Date, Range Date, Created At, Last Modified At, and date-typed Calculation) — and to Checklist filters with `entry_property: "due_date"`. Each key is validated per field type: supplying one where it is not accepted returns a `400`.
 
 :::caution `offset_amount` is nested; the other keys are top-level
-Every operand key below is a **top-level** property of the filter object — except `offset_amount`, which lives **inside** the value at `values[0].value.offset_amount`. Placing it at the top level has no effect.
+Every operand key below is a **top-level** property of the filter object — except `offset_amount`, which lives **inside** the value at `values[0].value.offset_amount`. Placing it at the top-level has no effect.
 :::
 
 | Operand key                | Where it goes               | Applies to                           | Used with                                             |

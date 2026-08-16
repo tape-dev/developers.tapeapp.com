@@ -37,7 +37,7 @@ The final automation looks like this:
 <br />
 This simple example using PDF files also works for various other file formats like Word documents or PowerPoint presentations. The extracted text can be further processed e.g., by using a conditional action to assign a user based on a keyword ("When the PDF contains the word 'legal', assign John").
 
-## Demo Record Video
+## Demo record video
 
 Let's test our automation by creating a new task with an attached PDF document:
 

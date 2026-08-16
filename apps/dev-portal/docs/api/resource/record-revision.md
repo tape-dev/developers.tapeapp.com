@@ -14,15 +14,15 @@ As Records in Tape change over time, it is important to understand what changes 
 
 ## Revisions concept
 
-Every record in Tape has a `revision` number property, that starts with `0` upon creation and is increased with each change made to the Record.
+Every record in Tape has a `revision` number property that starts with `0` upon creation and is increased with each change made to the Record.
 
 Record revisions will include the author of the revision as `created_by`, the date and time of the revision `created_on` and the revision number.
 
-## Retrieve Revisions for a Record
+## Retrieve revisions for a record
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}/revision" />
 
-The following example fetches the revisions of record with ID `1`, that was created and updated once by the user `Dan Jacob` with ID `600`:
+The following example fetches the revisions of record with ID `1`, which was created and updated once by the user `Dan Jacob` with ID `600`:
 
 | Query param       | Type      | Description                                                                          |
 | :---------------- | :-------- | :----------------------------------------------------------------------------------- |
@@ -68,13 +68,13 @@ The following example fetches the revisions of record with ID `1`, that was crea
 Note that **_Revisions_** do not contain the actual changes made, but only the metadata. Use the endpoint described in the next section to fetch individual revision changes.
 :::
 
-## Retrieve Revision delta
+## Retrieve revision delta
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}/revision/previous/{toRevisionId}" />
 
-In order to understand how a record changed over time, the Tape-API provides consumers with the concept of **_Revision Deltas_**. Revision deltas will include a `from` and `to` property, describing the transition of individual fields from one value (or no value) to another (or none). These properties follow the same form as the record field `values` property, check the [field value section](/docs/api/resource/field-value/overview) for more details.
+In order to understand how a record changed over time, the Tape API provides consumers with the concept of **_Revision Deltas_**. Revision deltas will include a `from` and `to` property, describing the transition of individual fields from one value (or no value) to another (or none). These properties follow the same form as the record field `values` property, check the [field value section](/docs/api/resource/field-value/overview) for more details.
 
-A single record revision may include deltas for multiple fields, if the changes were made at the same time by the same entity.
+A single record revision may include deltas for multiple fields if the changes were made at the same time by the same entity.
 
 The following example fetches the revision delta of revision number `1` of record with ID `1` to its previous revision number `0` to understand the changes made from the previous example. One may now see that a single text field with external_id `notes` was updated from no value to the value `Some important notes`.
 

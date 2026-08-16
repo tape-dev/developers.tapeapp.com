@@ -38,7 +38,7 @@ import Admonition from '@theme/Admonition';
 </div>
 
 :::caution Not final
-While the Automation API is in beta, the endpoints, payloads and behaviour described on these pages may change, or be
+While the Automation API is in beta, the endpoints, payloads and behavior described on these pages may change, or be
 withdrawn, at any time without notice. Use at your own risk, and pin nothing you cannot change.
 :::
 
@@ -78,7 +78,7 @@ else, an automation API key authenticates an automation, not a person, and there
 check; using one there returns a `401`. See [Authentication](/docs/api/authentication).
 :::
 
-You may work with the automations of any app in a workspace you **administrate**. Concretely, for every
+You may work with the automations of any app in a workspace you **administer**. Concretely, for every
 automation-scoped call the caller must be an **administrator of the workspace** the automation's app belongs to, and
 that workspace must be in your own organization.
 
@@ -93,7 +93,7 @@ The three [discovery endpoints](/docs/api/resource/automation/discovery) (`meta/
 Tape IDs are globally unique, so an ID belonging to another organization is still a perfectly well-formed ID. To
 avoid turning these endpoints into a way of probing which IDs exist, every automation that is not available to you
 answers the same `404` — whether it does not exist, was deleted, is an unsaved draft, or lives in a workspace you do
-not administrate. A request authenticated with the wrong kind of key still returns `401`, and a malformed ID (one
+not administer. A request authenticated with the wrong kind of key still returns `401`, and a malformed ID (one
 that is not an integer) returns `400`.
 
 ## The automation object

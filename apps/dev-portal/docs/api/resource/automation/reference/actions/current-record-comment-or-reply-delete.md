@@ -52,7 +52,7 @@ An action entry inside an automation definition's `actions[]`:
   or reply to delete.
 - `author_id`, `trigger_webhooks`, `trigger_other_flows`, and `silent` are all optional; each omitted member falls back
   to the internal default (the mutation is attributed to the automation itself).
-- Deleting a comment or reply is a record mutation and honours the shared mutation-control envelope above.
+- Deleting a comment or reply is a record mutation and honors the shared mutation-control envelope above.
 
 ## See also
 

@@ -140,7 +140,7 @@ Retrieve a view with its full definition. Requires view access to the app it bel
 
 - `width` appears only for `table` views, and only for fields that carry a stored width.
 - `table` is present only for `table` views and `board` only for `board` views; the other is `null`.
-- Filter operands come back **normalised to ids** — a status or category filter written with option names comes back as `{ "value": <option_id> }`, and a relation filter as `{ "value": <record_id> }`.
+- Filter operands come back **normalized to ids** — a status or category filter written with option names comes back as `{ "value": <option_id> }`, and a relation filter as `{ "value": <record_id> }`.
 - The response body is directly re-`PUT`-able — see [Update a view](#update-a-view).
 
 ## Create a view
@@ -255,7 +255,7 @@ Update a view. Every key is optional. Requires share access to the app.
 **Read-only keys are accepted and ignored.** So that a detail response can be `PUT` back verbatim, the update body also tolerates `id`, `view_id`, `app_id`, `is_default`, `private` and `sort_property`. None of them has any effect.
 
 :::caution `is_default: true` in a `PUT` body does nothing
-Promotion is a separate endpoint ([`POST /v1/view/{view_id}/default`](#set-the-default-view)). Setting `is_default` in an update body is silently ignored, not honoured.
+Promotion is a separate endpoint ([`POST /v1/view/{view_id}/default`](#set-the-default-view)). Setting `is_default` in an update body is silently ignored, not honored.
 :::
 
 **The effective layout.** `fields` is interpreted against `layout ?? the view's current layout`. If you change `layout` and send `fields` in the same request, the map is written to the **new** layout's settings; the other two layouts' settings are preserved untouched. Switching a view's layout back and forth never destroys the settings of the layout you left.
@@ -466,7 +466,7 @@ Present on read for a `board` view (`null` otherwise), and accepted on create/up
 | `card_size`             | `"small"` \| `"medium"` \| `"large"` | Card size.                                                                             |
 | `large_text`            | boolean         | Render card text at the larger size.                                                                        |
 | `hide_empty_columns`    | boolean         | Hide lanes that contain no records.                                                                         |
-| `color_columns`         | boolean         | Tint each lane with its group-by option's colour.                                                           |
+| `color_columns`         | boolean         | Tint each lane with its group-by option's color.                                                           |
 | `fit_preview_image`     | boolean         | Scale the preview image to fill the card rather than fit inside it.                                          |
 
 A `group_by_field_id` of the wrong type is `400 Invalid board group_by field: a field of type '…' cannot group a board`; a wrong-type `card_preview_field_id` is `400 Invalid board card_preview field: a field of type '…' cannot be a card preview`.

@@ -30,7 +30,7 @@ Valid permission levels to be specified for the `permission_level` property are:
 - 1 / (can view)
 - 0 / (no access)
 
-Optionally specifying `remove_permissions`, each entry must be either a user ID or an email. Access for the respective user will be removed, if it was added prior. This does not affect access that a user might have via workspace memberships or app permissions.
+Optionally specifying `remove_permissions`, each entry must be either a user ID or an email. Access for the respective user will be removed if it was added prior. This does not affect access that a user might have via workspace memberships or app permissions.
 
 Currently, only for a maximum of **50 records** the permissions can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit. If you need more, issue separate requests.
 

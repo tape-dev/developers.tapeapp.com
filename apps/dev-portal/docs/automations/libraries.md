@@ -20,7 +20,7 @@ Tape makes several Node.js libraries available for you to reference inside autom
 
 <br />
 
-A library is missing? You can [submit an issue](https://github.com/tape-dev/developers.tapeapp.com/issues/new?body=Hey%20Tape%20Team%20%F0%9F%91%8B%0A%0AI%20would%20like%20to%20propose%20the%20following%20Node.js%20library%20to%20be%20included%20in%20the%20calculation%20field%3A%0A%0AName%3A%0AVersion%3A%0ANPM%20Link%3A%0AWhy%20it%20would%20be%20useful%20to%20me%3A%0A%0AThanks%21) and the Tape team will look into it!
+A library is missing? You can [submit an issue](https://github.com/tape-dev/developers.tapeapp.com/issues/new?body=Hey%20Tape%20Team%20%F0%9F%91%8B%0A%0AI%20would%20like%20to%20propose%20the%20following%20Node.js%20library%20to%20be%20included%20in%20the%20automations%3A%0A%0AName%3A%0AVersion%3A%0ANPM%20Link%3A%0AWhy%20it%20would%20be%20useful%20to%20me%3A%0A%0AThanks%21) and the Tape team will look into it!
 
 <!--
 Body of the GitHub new issue link:

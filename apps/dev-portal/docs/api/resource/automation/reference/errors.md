@@ -48,7 +48,7 @@ activate as [broken-reason codes](#broken-reason-codes), or for some only at run
 ### The 404 collapse
 
 Tape IDs are globally unique, so existence and tenancy **collapse into a single `404`**. An automation that is missing,
-soft-deleted, in another organization, or in a workspace you don't administrate answers the **identical `404`** —
+soft-deleted, in another organization, or in a workspace you don't administer answers the **identical `404`** —
 the API is never an existence oracle. Cross-tenant access is `404`, **not `403`**.
 
 ## The broken state
@@ -99,14 +99,14 @@ Grouped by where the fault sits. Codes are worded in the public vocabulary; inte
 `action_call_argument_invalid`
 
 :::note `filter_value_missing` was retired
-A previously-listed `filter_value_missing` code has been **removed** from this catalogue. It was published but
+A previously-listed `filter_value_missing` code has been **removed** from this catalog. It was published but
 **never emitted** — no validation path produces it, and under the [semantic-only](/docs/api/resource/automation/execution)
 role of `validate` it never could: a value's own well-formedness is settled at the write boundary
 ([create/update](/docs/api/resource/automation/manage) reject a malformed value with a `400`), not re-checked here. A
 condition whose **value** references a deleted field or variable is reported as `filter_value_variable_missing`
 (above); a value that composes to empty is not a `validate` fault at all — it
-[matches every record at run time](/docs/automations/troubleshooting/filter-values). This is a catalogue cleanup, not a
-behavioural change: no verdict you previously received stops being returned.
+[matches every record at run time](/docs/automations/troubleshooting/filter-values). This is a catalog cleanup, not a
+behavioral change: no verdict you previously received stops being returned.
 :::
 
 :::note `broken` can lag the current definition
