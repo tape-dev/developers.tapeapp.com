@@ -4,7 +4,7 @@ title: Code Editor
 sidebar_label: Code Editor
 ---
 
-The code editor in Tape's automations is used inside custom script filters, and inside the "perform calculation" and "execute script" action blocks. It is powered by the [Monaco](https://microsoft.github.io/monaco-editor/) editor used by millions of developers world wide.
+The code editor in Tape's automations is used inside custom script filters, and inside the "perform calculation" and "execute script" action blocks. It is powered by the [Monaco](https://microsoft.github.io/monaco-editor/) editor used by millions of developers worldwide.
 
 ## Auto completion & Typing Information
 
@@ -16,7 +16,7 @@ Enter and exit full screen mode in any Tape automation code editor by using "CTR
 
 ### Multi cursor
 
-Using "CLICK+ALT" it is possible to insert another cursor, allowing fast simultanious edits.
+Using "CLICK+ALT" it is possible to insert another cursor, allowing fast simultaneous edits.
 
 ### Move lines
 

@@ -15,11 +15,11 @@ Records are the place where work gets done inside a Tape organization. Records c
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/permission/batch" isNew="true" />
 
-To share a record to individual users or update record permissions, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `record_id` property to specify for which record permissions should be alterered, and arrays `add_permissions`, `update_permissions` and `remove_permissions`.
+To share a record to individual users or update record permissions, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `record_id` property to specify for which record permissions should be altered, and arrays `add_permissions`, `update_permissions` and `remove_permissions`.
 
 Optionally specifying `add_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, a new one will be created and an invitation to join Tape will be sent. Additionally, a numeric `permission_level` needs to be specified.
 
-Optionally specifying `update_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, nothing will happen. A numeric `permission_level` needs to be specified and will update existing permissions for that user. As opposed to `add_permissions`, no new invite email will be send, so this is useful to silently update user's permissions.
+Optionally specifying `update_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, nothing will happen. A numeric `permission_level` needs to be specified and will update existing permissions for that user. As opposed to `add_permissions`, no new invite email will be sent, so this is useful to silently update a user's permissions.
 
 Valid permission levels to be specified for the `permission_level` property are:
 
@@ -113,4 +113,4 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
 {}
 ```
 
-The example above alters permissions for two records with id `1` and `2`, adding the user with ID `100` two both records gaining full access, and additionally adding a second user gaining access to record with ID `2` via email. The user would be created and invited if there is no user matching the email in the active organization. Further, user with ID `101` is revoked the access two both records.
+The example above alters permissions for two records with id `1` and `2`, adding the user with ID `100` to both records with full access, and additionally adding a second user gaining access to record with ID `2` via email. The user would be created and invited if there is no user matching the email in the active organization. Further, user with ID `101` is revoked the access to both records.

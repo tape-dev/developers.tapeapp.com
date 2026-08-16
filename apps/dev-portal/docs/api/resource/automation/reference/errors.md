@@ -48,7 +48,7 @@ activate as [broken-reason codes](#broken-reason-codes), or for some only at run
 ### The 404 collapse
 
 Tape IDs are globally unique, so existence and tenancy **collapse into a single `404`**. An automation that is missing,
-soft-deleted, in another organization, or in a workspace you don't administrate all answer the **identical `404`** —
+soft-deleted, in another organization, or in a workspace you don't administrate answers the **identical `404`** —
 the API is never an existence oracle. Cross-tenant access is `404`, **not `403`**.
 
 ## The broken state

@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only one type of link field: `multi_link`.
 
-`multi_link` fields-values can hold a one or more link entries.
+`multi_link` field values can hold one or more link entries.
 
 A `multi_link` field definition consists only of the common field properties and has no settings.
 

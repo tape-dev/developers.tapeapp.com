@@ -4,7 +4,7 @@ title: Field
 sidebar_label: Overview
 ---
 
-An App consist of its static properties like `app_id`, `name` or `config` and its fields.
+An App consists of its static properties like `app_id`, `name` or `config` and its fields.
 An example "Contacts" app could have the fields "First name" (text), "Last Name" (text) and "Phone number" (phone).
 
 The fields of an App determine the structure of the records within the app. Adding a record to this app includes specifying its field values for each of the fields "First Name", "Last Name" and "Phone number".
@@ -28,4 +28,4 @@ All fields share the following properties:
 
 ## Field type
 
-Each field has a `field_type` property. The `field_type` property specifies the type of the field like `single_text`, `multi_text`, `single_category` or `multi_phone`. Whenever there is an option to specify whether to allow one or more values per field, the `field_type` specifies this information in its prefix. Tape distinguishes between these field types down to the database level so that a field value for a field of type `single_category` can never have multiple category options selected. Therefore, switching from e.g., `single_category`to `multi_category` requires a field conversion where all field values are migrated.
+Each field has a `field_type` property. The `field_type` property specifies the type of the field like `single_text`, `multi_text`, `single_category` or `multi_phone`. Whenever there is an option to specify whether to allow one or more values per field, the `field_type` specifies this information in its prefix. Tape distinguishes between these field types down to the database level so that a field value for a field of type `single_category` can never have multiple category options selected. Therefore, switching from e.g., `single_category` to `multi_category` requires a field conversion where all field values are migrated.

@@ -11,7 +11,7 @@ The Tape calculation field supports HTML syntax inside the result of a calculati
 
 ## Tape color scheme
 
-The Tape color schema is available via the following CSS variables:
+The Tape color scheme is available via the following CSS variables:
 
 | CSS Variable                   | Description                    | Color                                                 |
 | :----------------------------- | :----------------------------- | ----------------------------------------------------- |

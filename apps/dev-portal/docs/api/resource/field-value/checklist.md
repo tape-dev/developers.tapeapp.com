@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A checklist field value consists of its `value` property which holds one or multiple checklist entries. An entry contains a `title` a `description`, an `assignee`, and a `due_at` property. It further includes a boolean `completed` status indicating whether that individual entry has been completed.
+A checklist field value consists of its `value` property which holds one or multiple checklist entries. An entry contains a `title`, a `description`, an `assignee`, and a `due_at` property. It further includes a boolean `completed` status indicating whether that individual entry has been completed.
 
 `due_at` will be a date or datetime, depending on the data. More details on date and datetime strings can be found [here](/docs/api/date-timezone).
 

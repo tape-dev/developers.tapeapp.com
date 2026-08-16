@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Admonition from '@theme/Admonition';
 
-For communication that happens outside of tape, the API offers an endpoint to send emails.
+For communication that happens outside of Tape, the API offers an endpoint to send emails.
 
 ## Sending an Email
 
@@ -20,7 +20,7 @@ To send an email to one or more recipients, make a POST request to that endpoint
 
 Optionally, the request can contain `cc`, `bcc` and `reply_to` properties, all of which can contain a list of email addresses.
 
-Further specify `attachment_ids`, an array of existing file IDs analog to the attachment field type (temporary file ids are not yet supported). More details on file inputs can be found [here](/docs/api/resource/field-value/attachment).
+Further specify `attachment_ids`, an array of existing file IDs analogous to the attachment field type (temporary file ids are not yet supported). More details on file inputs can be found [here](/docs/api/resource/field-value/attachment).
 
 :::info
 If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly in the request transaction.
@@ -31,7 +31,7 @@ If an email could not be delivered, the job is rescheduled after 10, 100 and 100
 :::
 
 The following example sends an email with subject, and body to `recipient@example.com` with the default sender address.
-In case the recipient clicks on reply-to in its email client, the recipient of the reply is `reply-to@example.com`
+In case the recipient clicks on reply-to in their email client, the recipient of the reply is `reply-to@example.com`
 
 <Tabs defaultValue="curl">
 
@@ -143,5 +143,5 @@ Sending to 10 recipients: 11x credits
 ...
 ```
 
-As you can see, sending the same email to multiple recipients at one costs less credits than sending the same email to multiple recipients separately.
+As you can see, sending the same email to multiple recipients at once costs fewer credits than sending the same email to multiple recipients separately.
 Note that with the first option, each recipient sees the other recipients. Depending on the use case, this could conflict with your privacy policy.

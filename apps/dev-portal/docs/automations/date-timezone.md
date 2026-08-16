@@ -41,14 +41,14 @@ A date field named `Date` in Tape, with time and without an end date, produces t
   - Contains the date field value's date in UTC
   - Example value: `2023-02-01`
 - `current_task_date_start_date_formatted`
-  - Contains the date field value's date and time as formatted string in the user's timezone
+  - Contains the date field value's date and time as a formatted string in the user's timezone
   - Example value: `2023-02-01 15:00`
 
-Users are free to compose those above variable to yield different results, based on requirements. Be sure to use the UTC values when setting / updating field values, and also check below information on timezone handling
+Users are free to compose the variables above to yield different results, based on requirements. Be sure to use the UTC values when setting / updating field values, and also read the information on timezone handling below.
 
 ## Formatting dates
 
-Tape exposed several ways of formatting dates, the preferred option is using the integrated `date_fns` library.
+Tape exposes several ways of formatting dates; the preferred option is using the integrated `date_fns` library.
 
 Use the `format` for your custom date variables:
 
@@ -86,6 +86,6 @@ var_target_datetime = date_fns_tz.zonedTimeToUtc(new Date('2023-02-01 15:00'), '
 
 Now, the record will be updated to Feb 1st, 2023 15:00 in the user's timezone as expected and this change will be reflected properly when opening the record in Tape.
 
-A resulting example flow may look like to this one:
+A resulting example flow may look like this one:
 
 <MediaFrame><img src={DateTimezoneFlowPng} /></MediaFrame>

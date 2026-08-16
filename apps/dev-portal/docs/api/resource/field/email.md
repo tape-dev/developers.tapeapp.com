@@ -21,7 +21,7 @@ In addition to the common field properties, an email field has the following set
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A email field can be created as part of an App creation. Here is an example request body for creating an excerpt for a contacts app within a workspace with ID 1.
+An email field can be created as part of an App creation. Here is an example request body for creating an excerpt for a contacts app within a workspace with ID 1.
 The app contains a `multi_email` field "Email". Other useful fields for a contacts app, like "Name", "Phone" or "Address" are omitted for brevity.
 
 <Tabs defaultValue="curl">
@@ -122,7 +122,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A email field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
+An email field can be created or updated as part of an App update. Here is an example request body for updating the previously created contacts app with ID 1.
 The update sets the `only_allow_single_entry` setting to true.
 
 <Tabs defaultValue="curl">

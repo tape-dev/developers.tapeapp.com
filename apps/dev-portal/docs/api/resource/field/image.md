@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only one type of image fields: `multi_image`.
+There is only one type of image field: `multi_image`.
 
 `multi_image` field-values can only hold one or more multi_image entries.
 
@@ -114,7 +114,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
 An image field can be created or updated as part of an App update. Here is an example request body for updating the previously created portraits app with ID 1.
-The changes the description of the "Portraits" field to "Photos of the contact".
+The update changes the description of the "Portraits" field to "Photos of the contact".
 
 <Tabs defaultValue="curl">
 

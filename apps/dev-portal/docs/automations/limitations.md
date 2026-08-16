@@ -6,7 +6,7 @@ sidebar_label: Limitations & Throttling
 
 Tape applies limits to all executed automations regarding utilized computation power and time.
 
-## Limitations for individual worflow automation runs
+## Limitations for individual workflow automation runs
 
 - The maximum time a flow can run is currently 3 minutes
 - Maximum number of actions consumed for a single run: 1000 (One thousand)
@@ -21,4 +21,4 @@ Exceeding the time, action-count or memory/CPU limits fails the flow with a prop
 
 Throttling per organization may be applied if an organization performs excessive action usage during a short period of time. The throttling will be lifted after 5 minutes and will be indicated by a yellow "THROTTLED" status for scheduled automations in the runs overview and individual runs sidebar.
 
-Throttling affects the whole organization and will lead to temporary delays and scheduled flows.
+Throttling affects the whole organization and will lead to temporary delays.

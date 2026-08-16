@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only one type of phone field: `multi_phone`.
 
-`multi_phone` fields can hold a one or more phone entries.
+`multi_phone` fields can hold one or more phone entries.
 
 In addition to the common field properties, a phone field has the following settings:
 

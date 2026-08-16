@@ -471,7 +471,7 @@ Connection      close
 
 The webhook must respond with a 2xx status code. If the status code is different from 2xx more than 50 consecutive times the webhook will return to being unverified and will have to be verified again to be active. Additionally, your webhook may return to unverified if you do not send responses in a timely manner (5 seconds). You should handle any heavy processing asynchronously.
 
-Only hooks on port 80 and 443 are supported, i.e. you cannot use `http://www.example.org/webhook:8080`, only `http://www.example.org/webhook` or `https://www.example.org/webhook`.
+Only hooks on ports 80 and 443 are supported, i.e. you cannot use `http://www.example.org/webhook:8080`, only `http://www.example.org/webhook` or `https://www.example.org/webhook`.
 
 ## Rate Limits
 

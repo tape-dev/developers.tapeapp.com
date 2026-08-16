@@ -31,7 +31,7 @@ To register a webhook in Google Forms, you need to open the **Script editor** fr
 
 <br />
 
-Once you opened the script editor, replace `https://tapeapp.com/api/catch/YOUR_WEBHOOK_URL_HERE` with the URL of your webhook trigger in the code below and copy&paste the resulting code into the editor:
+Once you have opened the script editor, replace `https://tapeapp.com/api/catch/YOUR_WEBHOOK_URL_HERE` with the URL of your webhook trigger in the code below and copy&paste the resulting code into the editor:
 
 ```js
 var POST_URL = 'https://tapeapp.com/api/catch/YOUR_WEBHOOK_URL_HERE';

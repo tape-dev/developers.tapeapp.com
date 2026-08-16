@@ -715,7 +715,7 @@ This endpoint is not paginated: it returns at most 10 matching records, and acce
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
 
-To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record creation endpoint.
+To create new records for the app with the specified `app_id`, issue a POST request to this endpoint. The POST body has to contain the `inputs` property with an array of objects that have a `fields` property, analogous to the single input provided in the single record creation endpoint.
 
 Currently, only a maximum of **50 records** can be batch created at the same time. An error will be thrown if the `inputs` array exceeds that limit.
 
@@ -827,7 +827,7 @@ Note that if one input is invalid and yields an error, all record creations will
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/app/batch/{app_id}" isNew="true" />
 
-To update records of an app with the specified `app_id`, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `fields` property, analog to the single input provided in the single record update endpoint. In additional, for each individual input object a `record_id` property needs to be specified.
+To update records of an app with the specified `app_id`, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `fields` property, analogous to the single input provided in the single record update endpoint. In addition, a `record_id` property needs to be specified for each individual input object.
 
 Currently, only a maximum of **50 records** can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit.
 

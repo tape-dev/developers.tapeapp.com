@@ -14,7 +14,7 @@ The following three run types exist:
 
 ## Regular / triggered
 
-The configured trigger started an automation execution. This would be the case, if an automation uses the "Record created" trigger and a record is created in Tape, either by a user inside the web or mobile app, or via the API. Filters are evaluated here, and runs will only appear in Tape if the record matched the configured filters of that automation.
+The configured trigger started an automation execution. This would be the case, if an automation uses the "Record created" trigger and a record is created in Tape, either by a user inside the web or mobile app, or via the API. Filters are evaluated here, and runs will only appear in Tape if the record matches the configured filters of that automation.
 
 ## Manual run
 

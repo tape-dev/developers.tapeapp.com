@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 ## What is a Calculation field?
 
-Calculation fields are a special field type within Tape that are calculate values based on other fields of a record, or related records.
+Calculation fields are a special field type within Tape that calculate values based on other fields of a record, or related records.
 To calculate values, a calculation field has a property `script` with javascript code that is executed whenever a record is created or updated.
 More information on how to use the calculation field can be found in the [Calculation field documentation](/docs/calculation/introduction).
 
@@ -25,7 +25,7 @@ In addition to the common field properties, a calculation field definition has a
 - `decimals` (optional): The number of decimals of the calculated value. Only applicable if the return type is "number".
 - `unit` (optional): The unit of the calculated value. Only applicable if the return type is "number".
 - `unit_location` (optional): The location of the unit of the calculated value. Can be one of ["prefix", "suffix"]. Only applicable if the return type is "number".
-- `calendar` (optional): Boolean flag wether the records of the field-values should be displayed in the calendar sidebar and included to the iCal export. Only applicable if the return type is "date".
+- `calendar` (optional): Boolean flag whether the records of the field-values should be displayed in the calendar sidebar and included to the iCal export. Only applicable if the return type is "date".
 - `time` (optional): Controls whether a time-of-day component is included with the date value. Can be one of ["disabled", "enabled", "required"]. Only applicable if the return type is "date".
 
 ## Writing Scripts for Calculation fields via the API
@@ -38,7 +38,7 @@ To reference a field of the same app as the calculation field, you can use the f
 @[*Field name*](field_*field ID*)
 ```
 
-A field reference starts with an `@` symbol followed by the fields name enclosed in square brackets and the field id prefixed with `field_` and enclosed in parentheses.
+A field reference starts with an `@` symbol followed by the field's name enclosed in square brackets and the field id prefixed with `field_` and enclosed in parentheses.
 
 An example of referencing a `single_text` field named "Title" with ID 123 would be:
 

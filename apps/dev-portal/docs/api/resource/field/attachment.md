@@ -12,13 +12,13 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 There are two types of attachment fields: `single_attachment` and `multi_attachment`.
 `single_attachment` field-values can only hold a single file while `multi_attachment` fields can hold multiple files.
 
-A attachment field definition consists only of the common field properties and has no settings.
+An attachment field definition consists only of the common field properties and has no settings.
 
 ## App creation
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A attachment field can be created as part of an App creation. Here is an example request body for creating an excerpt for a bug-report app within a workspace with ID 1.
+An attachment field can be created as part of an App creation. Here is an example request body for creating an excerpt for a bug-report app within a workspace with ID 1.
 The app contains a `multi_attachment` field "Screenshots". Other useful fields for a bug-report app, like "Title", "Description" or "Priority" are omitted for brevity.
 
 `single_attachment` fields are created in the same way as `multi_attachment` fields.
@@ -113,7 +113,7 @@ The app contains a `multi_attachment` field "Screenshots". Other useful fields f
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A attachment field can be created or updated as part of an App update. Here is an example request body for updating the previously created bug-reports app with ID 1.
+An attachment field can be created or updated as part of an App update. Here is an example request body for updating the previously created bug-reports app with ID 1.
 The update sets the required property of "Screenshots" to true and adds a second multi_attachment field "Other Files".
 
 <Tabs defaultValue="curl">

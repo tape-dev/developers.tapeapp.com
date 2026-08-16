@@ -16,7 +16,7 @@ While data is stored inside records, communication in Tape usually happens insid
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/comment/record/{record_id}" />
 
-To create a new record comment for the record with the specified `record_id`, issue a POST request to this endpoint. The POST body has to contain the `value` property with the text of the comment. It may further specify `file_ids`, an array of temporary file IDs analog to the attachment field type. More details on file uploads can be found [here](/docs/api/resource/file).
+To create a new record comment for the record with the specified `record_id`, issue a POST request to this endpoint. The POST body has to contain the `value` property with the text of the comment. It may further specify `file_ids`, an array of temporary file IDs analogous to the attachment field type. More details on file uploads can be found [here](/docs/api/resource/file).
 
 Apart from plain text, the comment `value` property supports limited formatting and extra options:
 

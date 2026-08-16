@@ -4,7 +4,7 @@ title: Errors
 sidebar_label: Errors
 ---
 
-If an automation fails, independent from its execution type, it will be logged as a failed run. The failed run will contain the individual logs also i.e. also the failed action including its error message.
+If an automation fails, regardless of its execution type, it will be logged as a failed run. The failed run also contains the individual logs, including the failed action and its error message.
 
 ## Common API errors
 

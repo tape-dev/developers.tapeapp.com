@@ -14,12 +14,12 @@ There are two types of relation fields: `single_relation` and `multi_relation`.
 `single_relation` field-values can only hold a single record reference while `multi_relation` fields can hold multiple record references.
 
 In addition to the common field properties, a relation field definition has a `settings` property `referenced_apps` containing the IDs of the apps that can be referenced by the field.
-When creating a record with a relation field value, only records of apps specified in the field definitions `referenced_apps` can be referenced.
+When creating a record with a relation field value, only records of apps specified in the field definition's `referenced_apps` can be referenced.
 
 The `referenced_apps` property is an array of objects with the following properties:
 
-- `app_id` (required): The ID of the referenced app. You can only reference Apps to which you have access to.
-- `view_id` (optional): The ID of the view that is used to restrict the referencable records with filters. (currently no enpoints to create or update views exist, but views can be created and updated via the web application)
+- `app_id` (required): The ID of the referenced app. You can only reference Apps to which you have access.
+- `view_id` (optional): The ID of the view that is used to restrict the referenceable records with filters. (currently no endpoints to create or update views exist, but views can be created and updated via the web application)
 
 ## App creation
 

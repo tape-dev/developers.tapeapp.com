@@ -52,7 +52,7 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
 
-Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending invitation email upon user creation.
+Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending the invitation email upon user creation.
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl -X POST #BASE_URL/v1/org/user \\
@@ -106,7 +106,7 @@ Resend an invitation email for an organization user. This will be important when
 
 :::caution Not available
 
-Modifying existing **User** endpoints are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
+Endpoints for modifying existing **User** resources are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
 :::
 
 ## Resend pending invitations

@@ -390,7 +390,7 @@ Search runs over a text index built per app and per record, not over raw field v
 
 **Matching is case-insensitive** and aware of common stop words.
 
-**More than titles is indexed.** For a record that includes text and multi-line text fields, calculations, email, phone, link, location, unique id, number, category, status, date and relation values — **and its comments**. So a record can match on a comment even though the result exposes no comment data. For an app it covers the app's name, description and blocks. Long values are truncated in the index at 2,000 characters per field.
+**More than titles is indexed.** For a record it covers text and multi-line text fields, calculations, email, phone, link, location, unique id, number, category, status, date and relation values — **and its comments**. So a record can match on a comment even though the result exposes no comment data. For an app it covers the app's name, description and blocks. Long values are truncated in the index at 2,000 characters per field.
 
 **`text` is required, and must carry a searchable term.** It is between 1 and 100 characters, and text made only of punctuation or symbols — `"..."`, `"!!!"` — is a `400`, not an empty result set. A search always searches for something: there is no "match everything and let the filter decide" mode. To narrow by filter alone, search for a term you expect and add the filter to it.
 

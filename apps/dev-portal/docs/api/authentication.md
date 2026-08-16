@@ -20,7 +20,7 @@ The user API key can be found inside the user settings after logging into Tape. 
 Note that your API key carries the same privileges as your user account, so be sure to keep it secret! However, if your API key gets leaked, you can always deactivate it and generate a new one inside your user settings.
 
 :::note User API key implications and limitations
-It is also notable that as each API key belongs to a user, all changes made using that API key will show the respective user as author, e.g. inside the record's activity stream. This also leads to the fact that you will not receive notifications, if you follow a record and make a change using your own API key. A workaround is to have a dedicated user, e.g. called "API User" that will then act as a host to yield the key that will then be utilized.
+It is also notable that as each API key belongs to a user, all changes made using that API key will show the respective user as author, e.g. inside the record's activity stream. This also means that you will not receive notifications if you follow a record and make a change using your own API key. A workaround is to have a dedicated user, e.g. called "API User" that will then act as a host to yield the key that will then be utilized.
 :::
 
 ## Usage example

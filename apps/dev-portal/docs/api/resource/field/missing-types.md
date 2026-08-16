@@ -10,4 +10,4 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
 The documentation for the missing field types (`created_at`, `created_by`, `last_modified_at` and `last_modified_by`) will be provided soon.
-The creation and update of these fields is already supported by the API and works similar to the other field types.
+The creation and update of these fields is already supported by the API and works similarly to the other field types.

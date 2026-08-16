@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A calculation field value consists of its `value` property of type `string` or `number`. The value can be a plaintext string (`'Example text'`), a rich-text string containing Markdown/ HTML (`'# <span style="color: red">Red</span> Headline'`) or a number (`123.456`)
+A calculation field value consists of its `value` property of type `string` or `number`. The value can be a plaintext string (`'Example text'`), a rich-text string containing Markdown/HTML (`'# <span style="color: red">Red</span> Headline'`) or a number (`123.456`)
 
 Calculation field values are always calculated by the server and therefore cannot be provided to record creation or update endpoints.
 

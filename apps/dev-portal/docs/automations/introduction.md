@@ -6,11 +6,11 @@ sidebar_label: Introduction
 
 ## Execution environment
 
-All custom scripts inside Tape's automations are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only syncronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
+All custom scripts inside Tape's automations are written in JavaScript, consistent with the [calculation field](/docs/calculation/introduction). Within code filters and the "perform calculation" action, only synchronous JavaScript is valid, while the "execute script" action also allows asynchronous code.
 
 ### Synchronous execution environment
 
-Insite filters and the "perform calculation" action, use synchronous code to perform your filter assertions or assign your variable.
+Inside filters and the "perform calculation" action, use synchronous code to perform your filter assertions or assign your variable.
 
 Valid custom filter scripts could be (where the returning expression is being used to evaluate to true or false):
 
@@ -34,7 +34,7 @@ some_number_field_value < 100 ? some_number_field_value : 100;
 
 It is not allowed to use Promises or async/await syntax in this context. When needed, perform your work inside an "execute script" action that uses the asynchronous execution environment.
 
-Hint: If you need a more complex syntax or would like to declare functions that you invoke later, use an immediately invoked function expression (IIFE), as shown below (`yourFunctionName` could be any arbritrary function name of your choice):
+Hint: If you need a more complex syntax or would like to declare functions that you invoke later, use an immediately invoked function expression (IIFE), as shown below (`yourFunctionName` could be any arbitrary function name of your choice):
 
 ```
 (yourFunctionName(){
@@ -72,7 +72,7 @@ console.log({ record: data.record });
 
 **Note that you do not need to handle authentication when using the Tape API client inside an automation. The automation will automatically configure its own authorization token that is valid during its execution.**
 
-However, you can set and change the used API key of the Tape client SDK. Be careful with that, as it may affect following actions (also graphical actions, as the use the client SDK under the hood).
+However, you can set and change the used API key of the Tape client SDK. Be careful with that, as it may affect following actions (also graphical actions, as they use the client SDK under the hood).
 
 #### HTTP client
 

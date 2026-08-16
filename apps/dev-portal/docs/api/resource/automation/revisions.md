@@ -67,7 +67,7 @@ Returns the automation's full history, **newest-first**. This listing is **unpag
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/{automation_id}/revision/{revision_id}" />
 
 Returns one frozen revision, which must belong to this automation. A `revision_id` that is unknown, malformed, or
-belongs to another automation all answer the same `404` (never an existence oracle).
+belongs to another automation answers the same `404` (never an existence oracle).
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/automation/4021/revision/90071992547409929 -u #USER_API_KEY:`}

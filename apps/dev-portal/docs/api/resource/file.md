@@ -9,10 +9,10 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-A file is a container for data and primarily identified by its file name. A file could be a spreadsheet, an image, PDF, video, or just binary data. Tape supports various file formats to be attached to resources like records, comments and chat messages.
+A file is a container for data and is primarily identified by its file name. A file could be a spreadsheet, an image, PDF, video, or just binary data. Tape supports various file formats to be attached to resources like records, comments and chat messages.
 
 :::info
-There are many reasons why a file upload via HTTP can fail (file too large, bad network connection, ...). To prevent critical operations like creating a record to fail due to an unsuccessful upload, attaching a file to a resource is a two-step process:
+There are many reasons why a file upload via HTTP can fail (file too large, bad network connection, ...). To prevent critical operations like creating a record from failing due to an unsuccessful upload, attaching a file to a resource is a two-step process:
 
 1. The file is uploaded to Tape and the server returns a unique file ID.
 2. The file ID is used to attach the uploaded file to a resource (record, comment, ...).
@@ -152,7 +152,7 @@ An example thumbnail object:
 
 ## Upload limits
 
-The following limits are enforced for all file upload enpoints:
+The following limits are enforced for all file upload endpoints:
 
 | Variable          | Limit |
 | :---------------- | :---- |
@@ -160,7 +160,7 @@ The following limits are enforced for all file upload enpoints:
 
 ## Rate limit credits
 
-File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always cost 2x credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
+File uploads are rate limited based on their filesize. For uploading multiple files, the sum of all filesizes is used. The filesize limit for a single file is 100MB. Uploading a file always costs 2x the credits of a normal request. Uploading a file with the maximum filesize costs 4x credits. Uploading a file with half of the maximum file size costs 3x credits:
 
 ```
 Uploading 1KB: 2x credits
@@ -172,7 +172,7 @@ Uploading 300MB: 8x credits
 ...
 ```
 
-As you can see, uploading multiple files at once costs less credits than uploading every file individually.
+As you can see, uploading multiple files at once costs fewer credits than uploading every file individually.
 
 ## Validation errors
 

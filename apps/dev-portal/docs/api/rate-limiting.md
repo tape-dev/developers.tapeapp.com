@@ -32,7 +32,7 @@ Rate limit headers are sent **with every response**. This allows the integration
 | `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
 | `X-Retry-Cost`       | The amount of credits consumed by the current request                       | `20`                  |
 | `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
-| `Retry-After`        | The amount of seconds remaining in this interval until credits are reset    | `60`                  |
+| `Retry-After`        | The number of seconds remaining in this interval until credits are reset    | `60`                  |
 
 Here is an example for the response headers of a valid request:
 
