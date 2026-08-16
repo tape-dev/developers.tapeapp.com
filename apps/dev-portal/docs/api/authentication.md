@@ -8,7 +8,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Requests use the HTTP `Authorization` header to both authenticate and authorize operations. The Tape API accepts bearer tokens in this header. Each Tape user has an user API key associated with it that acts as a bearer token to authentciate with the API.
+Requests use the HTTP `Authorization` header to both authenticate and authorize operations. The Tape API accepts bearer tokens in this header. Each Tape user has a user API key associated with it that acts as a bearer token to authenticate with the API.
 
 
 :::info Where does one find the user API key?

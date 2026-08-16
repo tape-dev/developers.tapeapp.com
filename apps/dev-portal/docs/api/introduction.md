@@ -26,4 +26,4 @@ The Tape API follows RESTful conventions when possible, with most operations per
 
 ## Code samples
 
-Samples requests and responses are shown for each endpoint. Requests are shown using cURL. To increase readability, we use the `-u` option of cURL to pass the user API key instead of specifiying the `Authorization` header. These samples make it easy to copy, paste, and modify as you build your integration.
+Sample requests and responses are shown for each endpoint. Requests are shown using cURL. To increase readability, we use the `-u` option of cURL to pass the user API key instead of specifying the `Authorization` header. These samples make it easy to copy, paste, and modify as you build your integration.

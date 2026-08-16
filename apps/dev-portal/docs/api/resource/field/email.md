@@ -11,9 +11,9 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 There is only one type of email field: `multi_email`.
 
-`multi_email` fields can hold a one or more email entries.
+`multi_email` fields can hold one or more email entries.
 
-In addition to the common field properties, a email field has the following settings:
+In addition to the common field properties, an email field has the following settings:
 
 - `only_allow_single_entry` (optional): boolean flag, whether only a single email entry should be allowed. (default: false). This property is not used for server side validation. If set to true, users can only add a single entry to the email field value via the web-client. However, the API will still accept multiple entries in the field value. This property is only used for the web-client.
 

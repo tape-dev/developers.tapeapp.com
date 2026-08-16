@@ -64,7 +64,7 @@ The most convenient way to test your date formatting is [the interactive date_fn
 
 Tape automations run in UTC to be universally applicable and non-opinionated. When using the built in Tape actions, all date and time data will thereby yield the expected results, e.g. when a record is updated and set to another record's date field value, that value will match the date and time the user sees when opening the record in Tape.
 
-Be careful when setting dates using code, e.g. via the "Perform Calculation" or "Execute script" automation actions. Without futher steps, unexpected results may be encountered.
+Be careful when setting dates using code, e.g. via the "Perform Calculation" or "Execute script" automation actions. Without further steps, unexpected results may be encountered.
 
 See this example below, where a user in Central European Time (UTC+1) utilized Tape automations to set a record date field's date and time:
 

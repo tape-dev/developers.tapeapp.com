@@ -62,7 +62,7 @@ Inside this context, more APIs, modules and functions are exposed. The [code edi
 
 #### Tape API client
 
-The editor exposes the client side Tape SDK that allows to consume the [developer API](/docs/api/introduction). Use it to perform operations that are not available (yet) as dedicated graphical action blocks, or if you need more control over the behavior.
+The editor exposes the client side Tape SDK that allows you to consume the [developer API](/docs/api/introduction). Use it to perform operations that are not available (yet) as dedicated graphical action blocks, or if you need more control over the behavior.
 
 ```
 const { data, headers } = await tape.Record.get(1234);

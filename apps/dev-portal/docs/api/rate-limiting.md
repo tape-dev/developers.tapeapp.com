@@ -32,7 +32,7 @@ Rate limit headers are sent **with every response**. This allows the integration
 | `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
 | `X-Retry-Cost`       | The amount of credits consumed by the current request                       | `20`                  |
 | `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
-| `Retry-After`        | The amount of seconds remaining in this interval until credits are resetted | `60`                  |
+| `Retry-After`        | The amount of seconds remaining in this interval until credits are reset    | `60`                  |
 
 Here is an example for the response headers of a valid request:
 
@@ -74,6 +74,6 @@ If your integration needs more credits per time interval, you can always ask the
 
 ## Size limits
 
-Tape limits the size of certain parameters. A requests that exceeds any of these limits will return `validation_error` error code (HTTP response status 400) and contain more specific details in the `error_message` property.
+Tape limits the size of certain parameters. A request that exceeds any of these limits will return a `validation_error` error code (HTTP response status 400) and contain more specific details in the `error_message` property.
 
 Integrations should avoid sending requests beyond these limits proactively. It may be helpful to use test data in your own test suite which intentionally contains large parameters to verify that the errors are handled appropriately. For example, if the integration reads a URL from an external system to put into a Tape record, the integration should have a plan to deal with URLs that are beyond the length limit. The integration might choose to log the error, or send an alert to the user who set up the integration via an email, or some other action.

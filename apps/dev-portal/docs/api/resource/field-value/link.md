@@ -142,7 +142,7 @@ A link field value can be retrieved as part of a record retrieval:
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more link field values can be updated as part of a record update, while omitted entries will be removed. Be sure to include the ID of existing entries, to prevent them from being recreated and regenerated. Here is an example request body for updating the link entries of an link field with external ID `customer_website` of a record, keeping one existing entry and adding another one via URL:
+One or more link field values can be updated as part of a record update, while omitted entries will be removed. Be sure to include the ID of existing entries, to prevent them from being recreated and regenerated. Here is an example request body for updating the link entries of a link field with external ID `customer_website` of a record, keeping one existing entry and adding another one via URL:
 
 <Tabs defaultValue="curl">
 
