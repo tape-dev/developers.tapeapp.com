@@ -24,6 +24,7 @@ Here is an example error response body for requesting a non-existent resource:
 | 400    | `validation_error`      | The request body does not match the schema for the expected parameters. Check the "message" property for more details.                                       |
 | 401    | `unauthorized`          | The bearer token is not valid.                                                                                                                               |
 | 403    | `restricted_resource`   | Given the bearer token used, the client doesn't have permission to perform this operation.                                                                   |
+| 403    | `forbidden`             | The personal access token used lacks a [capability](capabilities) this endpoint requires. See [Insufficient capabilities](capabilities#insufficient-capabilities). |
 | 404    | `not_found`             | Given the bearer token used, the resource does not exist. This error can also indicate that the resource has not been shared with the owner of the bearer token. |
 | 404    | `record_not_exists`     | The requested record does not exist.                                                                                                                        |
 | 409    | `conflict_error`        | The transaction could not be completed, potentially due to a data collision. Make sure the parameters are up to date and try again.                          |

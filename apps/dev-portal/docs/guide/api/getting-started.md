@@ -18,6 +18,8 @@ The easiest way to authenticate with the Developer API is to use your personal u
 
 > Note that your API key carries the same privileges as your user account, so be sure to keep it secret! However, if your API key gets leaked, you can always deactivate it and generate a new one inside your user settings.
 
+Once you move from experimenting to building something real, use a [personal access token](/docs/api/personal-access-tokens) instead. A token can be limited to only the [capabilities](/docs/api/capabilities) your integration actually needs, restricted to particular workspaces and apps, and revoked on its own. User API keys are deprecated for new integrations.
+
 ## The basics
 
 The world runs on JSON over HTTP (or HTTPS hopefully). The Tape API is no exception, so if you know how to send and receive JSON data via HTTPS, you are all set.

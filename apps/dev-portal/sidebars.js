@@ -8,6 +8,8 @@ module.exports = {
       items: [
         'api/introduction',
         'api/authentication',
+        'api/personal-access-tokens',
+        'api/capabilities',
         'api/pagination',
         'api/versioning',
         'api/errors',

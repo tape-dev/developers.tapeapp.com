@@ -24,7 +24,7 @@ The `cursor` a search returns encodes the text, filter, sorting **and** page siz
 
 ## Authentication and permissions
 
-Both verbs require a **user API key**. An automation API key is rejected with a `400`:
+Both verbs require a credential that belongs to a user — either a [user API key](/docs/api/authentication#user-api-key) or a [personal access token](/docs/api/personal-access-tokens). An automation API key is rejected with a `400`:
 
 ```json title="⬅️      Response"
 {
@@ -38,6 +38,14 @@ Both verbs require a **user API key**. An automation API key is rejected with a 
 This is a structural limit rather than a policy choice. Every search is scoped by the permissions of the user behind the key, and an automation key has no user to scope by. Organization guests are rejected with a `401`.
 
 Results are permission-filtered on every request — records **and** apps. Two keys belonging to different users will legitimately return different results, and different numbers of results, for the same query. Nothing you cannot already open in Tape can surface through search.
+
+:::info Personal access tokens see a narrowed result set
+Search is allowed for a [personal access token](/docs/api/personal-access-tokens) holding **either** the `apps:read` or the `records:read` [capability](/docs/api/capabilities) — you do not need both. A token holding only one of them still gets a `200`, but the response contains only the result type it is allowed to see: a token with just `records:read` receives record results and no app results, even if `types` asked for both. A token holding neither is rejected with a `403`.
+
+A token restricted to selected workspaces and apps is narrowed a second time: search succeeds with a `200` and returns only hits from within its [content selection](/docs/api/personal-access-tokens#content-selection).
+
+A user API key is subject to neither narrowing and always receives both result types across everything its owner can see.
+:::
 
 ### Rate limit credits
 
@@ -427,6 +435,8 @@ Both of these are checked only when a search **starts**. Continuing one with a c
 Body-schema failures on `POST /v1/search` report `error_code` as `input_validation` and name the offending path in `error_message`.
 
 **`401 Unauthorized`.** No API key, or an organization guest.
+
+**`403 Forbidden`.** A personal access token holding neither `apps:read` nor `records:read`. See [Capabilities](/docs/api/capabilities).
 
 **`429 Too Many Requests`.** Each search costs 50 credits. See [Request limits](/docs/api/request-limits).
 

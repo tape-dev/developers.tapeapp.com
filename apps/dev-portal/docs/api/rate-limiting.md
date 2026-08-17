@@ -18,9 +18,9 @@ In the future, Tape plans to adjust rate limits to balance for demand and reliab
 
 ### Rate limit credits
 
-Tape uses a credit-based system to enforce rate limits. Each API key has a certain number of credits per time interval (currently 2,000 credits per minute). After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
+Tape uses a credit-based system to enforce rate limits. Each user has a certain number of credits per time interval (currently 2,000 credits per minute). All of a user's credentials — their user API key and every [personal access token](personal-access-tokens) they own — draw from that same budget, so creating more tokens does not increase throughput. After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
 
-You can see how many credits your API key has left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
+You can see how many credits you have left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
 
 ### Rate limit headers
 
@@ -70,7 +70,7 @@ If the rate limit is exceeded, the error response body will also include all rat
 
 ### Getting more credits
 
-If your integration needs more credits per time interval, you can always ask the Tape team to increase the rate limit credits of your API key. It is discouraged to do key rotations to get around this problem.
+If your integration needs more credits per time interval, you can always ask the Tape team to increase your rate limit credits. It is discouraged to do key rotations, or to create additional personal access tokens, to get around this problem — neither adds credits.
 
 ## Size limits
 
