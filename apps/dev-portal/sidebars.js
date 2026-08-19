@@ -162,6 +162,12 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'MCP Server',
+      collapsed: true,
+      items: ['mcp/overview', 'mcp/connect', 'mcp/supported-tools', 'mcp/security'],
+    },
+    {
+      type: 'category',
       label: 'Calculation Field',
       collapsed: true,
       items: [
