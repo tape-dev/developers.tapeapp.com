@@ -10,17 +10,18 @@ import DateTimezoneFlowPng from '@site/static/docs/automations/date-timezone/aut
 
 ## Datetime format
 
-Tape automations use the same date and time format used when working with [date & time using the Tape API](/docs/api/date-timezone):
+Tape automations use the same date and time formats as the
+[Tape API](/docs/api/date-timezone):
 
-```
-2022-02-01 15:00
-```
+| Format   | Shape                 | Example               |
+| :------- | :-------------------- | :-------------------- |
+| Datetime | `YYYY-MM-DD HH:mm:ss` | `2023-02-01 15:00:00` |
+| Date     | `YYYY-MM-DD`          | `2023-02-01`          |
+| Time     | `HH:mm:ss`            | `15:00:00`            |
 
-which would be equal to the following in standardized ISO 8601:
-
-```
-2022-02-01T15:00Z
-```
+These strings carry **no `Z` suffix and no numeric offset**, so the string alone does not tell you which
+timezone a value is in — the variable name does. A variable ending in `_utc` holds UTC; the same variable
+without that suffix holds the same instant in the user's timezone. See [Variables](#variables) below.
 
 ## Variables
 
@@ -29,20 +30,28 @@ When working with Tape date fields inside automations, multiple variables will b
 A date field named `Date` in Tape, with time and without an end date, produces these available record field value variables (where the app is called `Tasks`):
 
 - `current_task_date_start_time`
-  - Contains the date field value's time in the user's timezone
-  - Example value: `15:00`
-- `current_task_date_start_time_utc` - `14:00`
-  - Contains the date field value's time in UTC
-  - Example value: `14:00`
+  - The date field value's time in the user's timezone
+  - Example value: `15:00:00`
+- `current_task_date_start_time_utc`
+  - The same time in UTC
+  - Example value: `14:00:00`
 - `current_task_date_start_date`
-  - Contains the date field value's date in the user's timezone
+  - The date field value's date in the user's timezone
   - Example value: `2023-02-01`
 - `current_task_date_start_date_utc`
-  - Contains the date field value's date in UTC
+  - The same date in UTC. Note this can be a **different calendar day** than the local one, when the local
+    time falls near midnight
   - Example value: `2023-02-01`
 - `current_task_date_start_date_formatted`
-  - Contains the date field value's date and time as a formatted string in the user's timezone
+  - The date and time as one display string in the user's timezone. This is the only one rendered
+    **without seconds**, and it drops the time entirely for a whole-day value
   - Example value: `2023-02-01 15:00`
+
+:::info Whole-day values have no time
+If the date field value is a whole calendar day rather than a point in time, both `_start_time` variables are
+`null` and the local and `_utc` dates are identical — a calendar day is deliberately not converted between
+timezones. See [Calendar days](/docs/api/date-timezone#calendar-days).
+:::
 
 Users are free to compose the variables above to yield different results, based on requirements. Be sure to use the UTC values when setting / updating field values, and also read the information on timezone handling below.
 

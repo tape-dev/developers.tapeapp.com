@@ -31,8 +31,14 @@ Rate limit headers are sent **with every response**. This allows the integration
 | `X-RateLimit-Limit`  | Total credits that can be used per time interval                            | `1000`                |
 | `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
 | `X-Retry-Cost`       | The number of credits consumed by the current request                       | `20`                  |
-| `X-Retry-Reset`      | The date at which the credits will be reset                                 | `2022-03-01 12:00:00` |
+| `X-Retry-Reset`      | The date and time at which the credits will be reset                        | `2022-03-01 12:00:00` |
 | `Retry-After`        | The number of seconds remaining in this interval until credits are reset    | `60`                  |
+
+:::info `X-Retry-Reset` is a UTC datetime
+`X-Retry-Reset` is formatted `YYYY-MM-DD HH:mm:ss` — the same datetime format used throughout the API, with
+no `Z` suffix and no numeric offset. Unlike the temporal properties in response bodies, it is a header and so
+has no local counterpart: **it is always UTC**. See [Date & Timezone](/docs/api/date-timezone).
+:::
 
 Here is an example for the response headers of a valid request:
 

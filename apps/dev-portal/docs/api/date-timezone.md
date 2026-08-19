@@ -76,7 +76,9 @@ grouping them by `start_date_utc` will not produce the same buckets. Pick one de
 :::tip Default to the `_utc` values
 If you are building an integration, read `_utc` and convert to your own display timezone yourself. The
 unsuffixed values are a display convenience whose meaning depends on whose API key is in use, which makes
-them a poor fit for anything cached, compared, or persisted.
+them a poor fit for anything cached, compared, or persisted. Daylight saving makes this concrete: the local
+half of a stored instant shifts by an hour twice a year while its `_utc` half never moves, so two local
+values recorded either side of a transition are not directly comparable.
 :::
 
 ### Where "local" comes from
