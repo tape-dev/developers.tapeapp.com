@@ -12,11 +12,11 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 **Search** looks across your whole organization in one request. A single search spans every workspace and every app you have access to, and returns two kinds of result — **apps** and **records** — interleaved in one relevance-ranked list.
 
-This is the resource to reach for when you know _what_ you are looking for but not _where_ it lives. When you already know the app, [`POST /v1/record/filter/app/{app_id}`](record#retrieve-filtered-records-for-an-app) is the better tool: it filters on specific fields, returns full field values and gives you a `total`.
+This is the resource to reach for when you know _what_ you are looking for but not _where_ it lives. When you already know the app, [`POST /v1/record/filter/app/{app_id}`](/docs/api/resource/record#retrieve-filtered-records-for-an-app) is the better tool: it filters on specific fields, returns full field values and gives you a `total`.
 
 There is one URL — `/v1/search` — and two ways to send a search to it. [`GET`](#search) takes the search as query parameters and is the one you want most of the time. [`POST`](#search-with-a-filter) takes the same search as a JSON body, which is what lets it carry a **filter** narrowing the search to particular workspaces, apps, authors or time windows. Whichever verb you start with, you [page through the results](#pagination) with a `GET`.
 
-Results are **previews**. An app result carries no fields, and a record result carries no field values — just enough to identify the match and fetch it. Follow up with [`GET /v1/record/{record_id}`](record#retrieve-a-record) or [`GET /v1/app/{app_id}`](app#retrieve-a-single-app) for the full object.
+Results are **previews**. An app result carries no fields, and a record result carries no field values — just enough to identify the match and fetch it. Follow up with [`GET /v1/record/{record_id}`](/docs/api/resource/record#retrieve-a-record) or [`GET /v1/app/{app_id}`](/docs/api/resource/app#retrieve-a-single-app) for the full object.
 
 :::caution Page with `GET /v1/search?cursor=…`, whichever verb you started with
 The `cursor` a search returns encodes the text, filter, sorting **and** page size of the search that produced it, so continuing a search never needs anything but the cursor. `POST` accepts no `cursor` at all: to fetch page two of a filtered search, send its cursor to the `GET`, with no body and nothing else. Parameters sent alongside a cursor are ignored, not merged — a `sort_by` on page two will silently have no effect. See [Pagination](#pagination).
@@ -80,7 +80,7 @@ Apps and records are **not** returned in separate lists — they are interleaved
 
 ### App results
 
-The `app` payload is identical to an entry from [`GET /v1/app`](app#retrieve-all-available-apps), with `workspace_name` added.
+The `app` payload is identical to an entry from [`GET /v1/app`](/docs/api/resource/app#retrieve-all-available-apps), with `workspace_name` added.
 
 | Field            | Type      | Description                                                                        |
 | ---------------- | --------- | ------------------------------------------------------------------------------------ |
@@ -99,7 +99,7 @@ The `app` payload is identical to an entry from [`GET /v1/app`](app#retrieve-all
 
 ### Record results
 
-The `record` payload is identical to a record preview from [`GET /v1/record/field/{field_id}/find`](record#find-relatable-records-for-a-relation-field).
+The `record` payload is identical to a record preview from [`GET /v1/record/field/{field_id}/find`](/docs/api/resource/record#find-relatable-records-for-a-relation-field).
 
 | Field              | Type               | Description                                                                        |
 | ------------------ | ------------------ | ------------------------------------------------------------------------------------ |
@@ -451,5 +451,5 @@ See [Errors](/docs/api/errors) for the full list of error codes.
 - **No relevance score and no highlights.** You cannot tell _how_ well a result matched, or _where_ the match was.
 - **No browsing without a search term.** Every request must carry real text; a filter alone cannot drive a result set.
 - **No relative date windows.** Date bounds are absolute timestamps you compute yourself.
-- **No field-level search.** To match against a specific field, use [`POST /v1/record/filter/app/{app_id}`](record#retrieve-filtered-records-for-an-app).
+- **No field-level search.** To match against a specific field, use [`POST /v1/record/filter/app/{app_id}`](/docs/api/resource/record#retrieve-filtered-records-for-an-app).
 - **Previews only.** No field values come back with a search result.

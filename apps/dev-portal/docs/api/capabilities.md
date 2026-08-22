@@ -5,13 +5,13 @@ sidebar_label: Capabilities
 description: The 17 capabilities a personal access token can be granted, and how Tape enforces them.
 ---
 
-A **capability** is a single thing a [personal access token](personal-access-tokens) is allowed to do, such as reading records or sending email. When you create a token you pick its capabilities; every request that token makes is then checked against them.
+A **capability** is a single thing a [personal access token](/docs/api/personal-access-tokens) is allowed to do, such as reading records or sending email. When you create a token you pick its capabilities; every request that token makes is then checked against them.
 
 :::info Capabilities and scopes are the same thing
 Tape's settings screen calls them **capabilities**. On the wire — in error messages and, in future, in OAuth — they appear as **scopes**, written `resource:action`, for example `records:read`. Same concept, two names for two audiences.
 :::
 
-Capabilities apply **only** to personal access tokens. A [user API key](authentication#user-api-key) carries no capabilities and is never subject to these checks.
+Capabilities apply **only** to personal access tokens. A [user API key](/docs/api/authentication#user-api-key) carries no capabilities and is never subject to these checks.
 
 ## The capabilities
 
@@ -41,9 +41,9 @@ Capabilities apply **only** to personal access tokens. A [user API key](authenti
 
 **Deleting is part of editing.** There is no separate delete capability. `records:edit` covers creating, changing, deleting and restoring records; `workspaces:edit` covers deleting a workspace, and everything inside it.
 
-**Identifying yourself needs nothing.** [`GET /v1/user`](resource/user) answers "which user is this credential?" and requires no capability at all. It takes no parameters and can return no other user, so it discloses nothing a caller does not already know.
+**Identifying yourself needs nothing.** [`GET /v1/user`](/docs/api/resource/user) answers "which user is this credential?" and requires no capability at all. It takes no parameters and can return no other user, so it discloses nothing a caller does not already know.
 
-**Search is filtered, not blocked.** [`/v1/search`](resource/search) returns both app and record results, and is allowed for a token holding **either** `apps:read` **or** `records:read`. Rather than refusing a token that holds only one of them, Tape narrows the response to the result types the token is allowed to see. A token with only `records:read` gets record results and no app results.
+**Search is filtered, not blocked.** [`/v1/search`](/docs/api/resource/search) returns both app and record results, and is allowed for a token holding **either** `apps:read` **or** `records:read`. Rather than refusing a token that holds only one of them, Tape narrows the response to the result types the token is allowed to see. A token with only `records:read` gets record results and no app results.
 
 ## Insufficient capabilities
 
@@ -79,7 +79,7 @@ A personal access token passes through two independent checks, and they fail wit
 | Status | Meaning                                                                       | Fix                                                              |
 | ------ | ----------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | `403`  | The token lacks a **capability** the endpoint requires                        | Issue a token with that capability                               |
-| `404`  | The resource is outside the token's [content selection](personal-access-tokens#content-selection) | Issue a token that selects that workspace or app |
+| `404`  | The resource is outside the token's [content selection](/docs/api/personal-access-tokens#content-selection) | Issue a token that selects that workspace or app |
 
 A `404` is deliberately indistinguishable from a resource that genuinely does not exist, so it carries no `WWW-Authenticate` header. If you get a `404` for a record or app you know exists, check the token's content selection before anything else.
 

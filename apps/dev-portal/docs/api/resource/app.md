@@ -9,7 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-An **app** holds records of one kind, and belongs to exactly one workspace. Apps can be created, retrieved, updated and deleted via the API. To find an app by name across every workspace at once, use the [Search resource](search).
+An **app** holds records of one kind, and belongs to exactly one workspace. Apps can be created, retrieved, updated and deleted via the API. To find an app by name across every workspace at once, use the [Search resource](/docs/api/resource/search).
 
 ## Retrieve apps for a workspace
 
@@ -171,7 +171,7 @@ Retrieve an app with fields by its ID `1`:
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}/views" />
 
-Retrieve the public views of an app via the app ID `1`. Each entry is a **preview** — its id, name, layout and default flag. To retrieve a view's full definition, or to create, update, promote or delete views, see the [View resource](view).
+Retrieve the public views of an app via the app ID `1`. Each entry is a **preview** — its id, name, layout and default flag. To retrieve a view's full definition, or to create, update, promote or delete views, see the [View resource](/docs/api/resource/view).
 
 <ContextCodeBlock language="shell" title='➡️      Request'>
 {`curl #BASE_URL/v1/app/1/views \\

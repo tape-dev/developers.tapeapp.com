@@ -22,7 +22,7 @@ Every app has exactly one **default view**, which is what a user lands on when t
 
 The view resource exists so that an integration can **read a view's definition from one app and recreate it on another** — for example when migrating a workspace between organizations. See [Copy a view to another app](#copy-a-view-to-another-app) for that walkthrough.
 
-This resource never returns records. To read the records of a view, use [`GET /v1/record/view/{view_id}`](record#retrieve-records-for-a-view) on the record resource. It also never returns computed data — no section lists, no per-section counts, no column totals. Only the view's _definition_.
+This resource never returns records. To read the records of a view, use [`GET /v1/record/view/{view_id}`](/docs/api/resource/record#retrieve-records-for-a-view) on the record resource. It also never returns computed data — no section lists, no per-section counts, no column totals. Only the view's _definition_.
 
 :::caution `PUT` replaces `filters` and `fields` wholesale
 An update **replaces** the `filters` array and the `fields` map entirely — it never merges them. Omitting a key preserves it, but sending one overwrites what was stored. This is the most likely way to lose data with this resource. Read [Update a view](#update-a-view) before you write.
@@ -30,7 +30,7 @@ An update **replaces** the `filters` array and the `fields` map entirely — it 
 
 ## Authentication and permissions
 
-The five `/v1/view/...` endpoints require a **user API key**, sent as a bearer token. Automation ("workflow") API keys are rejected with `401` (`App views can only be accessed with a user API key.`) — the view permission model depends on user identity. The one exception is the [list endpoint](app#retrieve-views-for-an-app) (which lives on the app resource): it also accepts an automation API key, subject to view access.
+The five `/v1/view/...` endpoints require a **user API key**, sent as a bearer token. Automation ("workflow") API keys are rejected with `401` (`App views can only be accessed with a user API key.`) — the view permission model depends on user identity. The one exception is the [list endpoint](/docs/api/resource/app#retrieve-views-for-an-app) (which lives on the app resource): it also accepts an automation API key, subject to view access.
 
 Permissions are checked in two layers against the app the view belongs to:
 
@@ -45,7 +45,7 @@ The [base request cost](/docs/api/request-limits) is 10 credits. This resource c
 
 | Endpoint                                                              | Credits          |
 | --------------------------------------------------------------------- | ---------------- |
-| [`GET /v1/app/{app_id}/views`](app#retrieve-views-for-an-app)         | 50 (5× base)     |
+| [`GET /v1/app/{app_id}/views`](/docs/api/resource/app#retrieve-views-for-an-app)         | 50 (5× base)     |
 | [`GET /v1/view/{view_id}`](#retrieve-a-single-view)                    | 20 (2× base)     |
 | [`POST /v1/view/app/{app_id}`](#create-a-view)                        | 50 (5× base)     |
 | [`PUT /v1/view/{view_id}`](#update-a-view)                            | 50 (5× base)     |
@@ -54,7 +54,7 @@ The [base request cost](/docs/api/request-limits) is 10 credits. This resource c
 
 ## The view object
 
-Two shapes exist. The **preview** is what the [list endpoint](app#retrieve-views-for-an-app) returns; the **detail** object extends it with the full definition and is what every other endpoint returns, wrapped in a `{ "view": … }` envelope.
+Two shapes exist. The **preview** is what the [list endpoint](/docs/api/resource/app#retrieve-views-for-an-app) returns; the **detail** object extends it with the full definition and is what every other endpoint returns, wrapped in a `{ "view": … }` envelope.
 
 ### Preview
 
@@ -347,7 +347,7 @@ A view's filters are a **flat array**, implicitly **ANDed**. There is no `OR`, a
 
 Array order is the filter order; there is no `position` key on the wire. A view holds **at most 100 filters**.
 
-**A view filter is exactly the filter object documented for [`POST /v1/record/filter/app/{app_id}`](filter)** — the same union, the same `match_type` vocabulary, the same operand keys. Anything you can write as a record filter you can write as a view filter, unchanged. See the [filter reference](filter) for every field type and its supported match types.
+**A view filter is exactly the filter object documented for [`POST /v1/record/filter/app/{app_id}`](/docs/api/resource/filter)** — the same union, the same `match_type` vocabulary, the same operand keys. Anything you can write as a record filter you can write as a view filter, unchanged. See the [filter reference](/docs/api/resource/filter) for every field type and its supported match types.
 
 Every filter entry carries at least a `field_id`, a `field_type`, a `type` discriminator and a `match_type`:
 
@@ -530,7 +530,7 @@ Each of these is a deliberate v1 boundary:
 
 Recreating a view on a different app — the core migration use case — is a read-then-create sequence. Views reference apps, fields, options, users and records by **id**, and ids are never portable across organizations, so you need a mapping from source ids to target ids for all of them first.
 
-1. [List the source app's views](app#retrieve-views-for-an-app): `GET /v1/app/{source_app_id}/views`.
+1. [List the source app's views](/docs/api/resource/app#retrieve-views-for-an-app): `GET /v1/app/{source_app_id}/views`.
 2. For each one, [retrieve the full definition](#retrieve-a-single-view): `GET /v1/view/{view_id}`.
 3. Rewrite the body against the target app:
    - `sort_by` → the target field id (or drop it);

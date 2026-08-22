@@ -8,6 +8,7 @@
     "start-prd": "runtime=PRD nx serve dev-portal",
     "serve": "runtime=DEV nx serve dev-portal",
     "build": "nx build dev-portal",
+    "check-links": "node tools/check-doc-links.js",
     "test": "nx test dev-portal",
     "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME && git add ."
   },

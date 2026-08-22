@@ -5,11 +5,11 @@ sidebar_label: Personal Access Tokens
 description: Named, capability-scoped API credentials that can be limited to specific workspaces and apps, and revoked individually.
 ---
 
-A **personal access token** (PAT) is a named credential you create for a single integration. Unlike the [user API key](authentication#user-api-key), which can do everything your account can do, a personal access token only does what you allow it to.
+A **personal access token** (PAT) is a named credential you create for a single integration. Unlike the [user API key](/docs/api/authentication#user-api-key), which can do everything your account can do, a personal access token only does what you allow it to.
 
 Every token carries two independent grants:
 
-- a set of [**capabilities**](capabilities) — _what_ the token may do, such as reading records or sending email,
+- a set of [**capabilities**](/docs/api/capabilities) — _what_ the token may do, such as reading records or sending email,
 - a **content selection** — _which_ workspaces and apps it may do it to.
 
 Tokens begin with the prefix `tape_pat_`.
@@ -62,7 +62,7 @@ You can select up to 50 workspaces and up to 50 apps.
 
 When a token addresses a resource outside its selection, the request is refused with a `404`, exactly as if the resource did not exist.
 
-Endpoints that return **lists** behave differently: they succeed with a `200` and simply return fewer results. [`GET /v1/app`](resource/app), [`GET /v1/workspace/org`](resource/workspace), `GET /v1/automation/org`, the automation run history and [search](resource/search) all narrow their results this way.
+Endpoints that return **lists** behave differently: they succeed with a `200` and simply return fewer results. [`GET /v1/app`](/docs/api/resource/app), [`GET /v1/workspace/org`](/docs/api/resource/workspace), `GET /v1/automation/org`, the automation run history and [search](/docs/api/resource/search) all narrow their results this way.
 
 Some endpoints name the resource they act on in the request **body** rather than in the URL — creating an app names its `workspace_id`, batch-updating record permissions names its `record_id`s, and generating an automation weblink names its `trigger_workflow_def_id`. These are checked against the selection as well, so they succeed as long as the resource named in the body is inside it.
 
@@ -97,7 +97,7 @@ A webhook created through the API keeps delivering after the token that created 
 
 A personal access token does **not** get its own rate limit budget. All of your credentials — your user API key and every personal access token you own — draw from the **same per-user budget**.
 
-Creating more tokens therefore does not buy more throughput. See [Request limits](request-limits) for the credit system.
+Creating more tokens therefore does not buy more throughput. See [Request limits](/docs/api/request-limits) for the credit system.
 
 ## Attribution
 
@@ -107,7 +107,7 @@ A token acts as **you**. Records it creates or changes show you as the author in
 
 - **Never commit a token** to source control, and never paste one into a client-side application. A token in a browser bundle is a public token.
 - **One token per integration.** Shared credentials cannot be revoked without breaking something unrelated.
-- **Grant the narrowest set of [capabilities](capabilities) that works.** In particular, `edit` is not required to read — a reporting integration should hold only read capabilities.
+- **Grant the narrowest set of [capabilities](/docs/api/capabilities) that works.** In particular, `edit` is not required to read — a reporting integration should hold only read capabilities.
 - **Select only the workspaces and apps the integration needs**, rather than defaulting to all of them.
 - The `tape_pat_` prefix is designed to be recognizable by secret-scanning tools, so a leaked token can be spotted automatically.
 - If a token may have leaked, revoke it first and investigate afterwards. Revocation is instant and costs you nothing but a new token.

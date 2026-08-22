@@ -11,7 +11,7 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 Records are the place where work gets done inside a Tape organization. Records can be created, retrieved, updated and deleted via the API.
 
-The endpoints on this resource always work within a known app or view. To find records by text across every app at once, use the [Search resource](search).
+The endpoints on this resource always work within a known app or view. To find records by text across every app at once, use the [Search resource](/docs/api/resource/search).
 
 ## Create a record
 
@@ -77,7 +77,7 @@ The following query parameters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record creation. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record creation. See the [field value](/docs/api/resource/field-value/overview) documentation section for examples of all supported field types.
 
 ## Retrieve a record
 
@@ -116,7 +116,7 @@ Retrieve the record with the specified `record_id`.
 }
 ```
 
-The example response above only contains a `single_text` field value. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+The example response above only contains a `single_text` field value. See the [field value](/docs/api/resource/field-value/overview) documentation section for examples of all supported field types.
 
 Attempting to retrieve a deleted record returns the following error:
 
@@ -193,7 +193,7 @@ The following query parameters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record update. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record update. See the [field value](/docs/api/resource/field-value/overview) documentation section for examples of all supported field types.
 
 ## Delete a record
 
@@ -498,7 +498,7 @@ Retrieve records for the app with the specified `app_id` with filters:
 
 | Parameter | Type    | Description                                                                                                                                                                                                                                                                              |
 | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](filter) documentation section for examples of all supported field types. |
+| `filters` | `Array` | Set of filters to be applied when retrieving records for the specified app. Filters are concatenated with the boolean operator `AND`. The example above only specifies a `single_text` filter. See the [filter](/docs/api/resource/filter) documentation section for examples of all supported field types. |
 
 ## Retrieve records for a view
 
@@ -819,7 +819,7 @@ The following query parameters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record creations. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record creations. See the [field value](/docs/api/resource/field-value/overview) documentation section for examples of all supported field types.
 
 Note that if one input is invalid and yields an error, all record creations will fail (the whole transaction).
 
@@ -936,6 +936,6 @@ The following query parameters are available:
 }
 ```
 
-The example above only specifies a `single_text` field value as part of the record updates. See the [field value](field-value/overview) documentation section for examples of all supported field types.
+The example above only specifies a `single_text` field value as part of the record updates. See the [field value](/docs/api/resource/field-value/overview) documentation section for examples of all supported field types.
 
 Note that if one input is invalid and yields an error, all record updates will fail (the whole transaction).

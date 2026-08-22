@@ -40,4 +40,4 @@ Tape has to limit the time a calculation takes to execute so that the overall pe
 
 ### Editors
 
-Tape has two editors for writing calculations: one for the classic record, one for the New Record Experience. For more details, see [here](editors).
+Tape has two editors for writing calculations: one for the classic record, one for the New Record Experience. For more details, see [here](/docs/calculation/editors).

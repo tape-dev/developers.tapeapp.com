@@ -11,8 +11,8 @@ import ContextCodeBlock from '@site/src/components/context-code-block/context-co
 
 Filter inputs select which Records are returned from an App. The **same filter object** is used in two places:
 
-- to [retrieve filtered Records](record#retrieve-filtered-records-for-an-app) (`POST /v1/record/filter/app/{app_id}`), and
-- to define the filters of an [app view](view).
+- to [retrieve filtered Records](/docs/api/resource/record#retrieve-filtered-records-for-an-app) (`POST /v1/record/filter/app/{app_id}`), and
+- to define the filters of an [app view](/docs/api/resource/view).
 
 Anything documented here applies to both, unchanged. Multiple filters can be provided; they are combined with the boolean `AND` operator (there is no `OR`) — a Record is returned only if it matches **every** filter.
 
@@ -21,7 +21,7 @@ Each **field filter** is a JSON object with:
 | Key          | Description                                                                                                                     |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
 | `field_id`   | The id of the field to filter on. **Required.**                                                                               |
-| `field_type` | The field's type, e.g. `single_text`, `status`, `single_date` (see the sections below). Required for [view](view) filters; optional for record filtering, where the field is identified by `field_id` (sending it is still recommended). |
+| `field_type` | The field's type, e.g. `single_text`, `status`, `single_date` (see the sections below). Required for [view](/docs/api/resource/view) filters; optional for record filtering, where the field is identified by `field_id` (sending it is still recommended). |
 | `type`       | The legacy data-type discriminator that goes with the field type, e.g. `text`, `status`, `date`. **Required** — a filter without it returns a `400`. |
 | `match_type` | The operator, e.g. `contains`, `equal`, `before`. The operators each field type accepts are listed per section below.         |
 | `values`     | The operand(s), as an array of `{ "value": … }` objects. Omitted for the `empty` / `not_empty` operators.                     |
@@ -200,7 +200,7 @@ This is an example of how to filter records by a `unique_id` field:
 </TabItem>
 </Tabs>
 
-A Unique ID field surfaces a record's auto-generated, App-specific record number (its [`app_record_id`](field/unique-id) — the first record created in an App is `1`, the second `2`, and so on). The match value is a **bare numeric scalar** with no prefix, and `unique_id` filters compare on the underlying number, so this field uses the numeric `type` discriminator `"number"` (not `"unique_id"`). Omit `values` for `empty` / `not_empty` — though, because every record always has an App-specific number, `empty` matches no records and `not_empty` matches every record.
+A Unique ID field surfaces a record's auto-generated, App-specific record number (its [`app_record_id`](/docs/api/resource/field/unique-id) — the first record created in an App is `1`, the second `2`, and so on). The match value is a **bare numeric scalar** with no prefix, and `unique_id` filters compare on the underlying number, so this field uses the numeric `type` discriminator `"number"` (not `"unique_id"`). Omit `values` for `empty` / `not_empty` — though, because every record always has an App-specific number, `empty` matches no records and `not_empty` matches every record.
 
 :::note
 To filter by the record number on an App that has **no** Unique ID field, use the field-less [`app_record_id` metadata filter](#app-record-id-metadata) instead — it targets the same underlying value without requiring a field.
@@ -1301,7 +1301,7 @@ A metadata filter is identified by its `type` alone and omits `field_id` and `fi
 | ------------------ | ------------------------------------------------------------------------------- | ---------------------------- |
 | `created_at`       | When the record was created                                                     | nested — `{ "date": "…" }`   |
 | `last_modified_at` | When the record was last modified                                               | nested — `{ "date": "…" }`   |
-| `app_record_id`    | The record's App-specific ID (the [`app_record_id`](field/unique-id) property)  | bare scalar — e.g. `123`     |
+| `app_record_id`    | The record's App-specific ID (the [`app_record_id`](/docs/api/resource/field/unique-id) property)  | bare scalar — e.g. `123`     |
 
 Metadata filters go in the same `filters` array as field filters and are combined with the same boolean `AND`.
 
@@ -1380,7 +1380,7 @@ A record that has not been edited since it was created has no last-modified time
 
 ### App Record ID (metadata) {#app-record-id-metadata}
 
-Filter records by their App-specific ID — the sequential [`app_record_id`](field/unique-id) returned on every record (the first record created in an App is `1`, the second `2`, and so on):
+Filter records by their App-specific ID — the sequential [`app_record_id`](/docs/api/resource/field/unique-id) returned on every record (the first record created in an App is `1`, the second `2`, and so on):
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">

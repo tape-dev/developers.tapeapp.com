@@ -24,9 +24,9 @@ Here is an example error response body for requesting a non-existent resource:
 | 400    | `validation_error`      | The request body does not match the schema for the expected parameters. Check the "message" property for more details.                                       |
 | 401    | `unauthorized`          | The bearer token is not valid.                                                                                                                               |
 | 403    | `restricted_resource`   | Given the bearer token used, the client doesn't have permission to perform this operation.                                                                   |
-| 403    | `forbidden`             | The personal access token used lacks a [capability](capabilities) this endpoint requires. See [Insufficient capabilities](capabilities#insufficient-capabilities). |
+| 403    | `forbidden`             | The personal access token used lacks a [capability](/docs/api/capabilities) this endpoint requires. See [Insufficient capabilities](/docs/api/capabilities#insufficient-capabilities). |
 | 404    | `not_found`             | Given the bearer token used, the resource does not exist. This error can also indicate that the resource has not been shared with the owner of the bearer token. |
 | 404    | `record_not_exists`     | The requested record does not exist.                                                                                                                        |
 | 409    | `conflict_error`        | The transaction could not be completed, potentially due to a data collision. Make sure the parameters are up to date and try again.                          |
-| 429    | `user_too_many_requests` | This request exceeds the number of requests allowed. Slow down and try again. More details on [rate limits](request-limits#rate-limits)                     |
+| 429    | `user_too_many_requests` | This request exceeds the number of requests allowed. Slow down and try again. More details on [rate limits](/docs/api/request-limits#rate-limits)                     |
 | 500    | `internal_server_error` | An unexpected error occurred. Reach out to [Tape support](mailto:team@tapeapp.com).                                                                          |

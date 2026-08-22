@@ -17,20 +17,20 @@ There are two kinds of bearer token, and both authenticate the same way. What di
 |                   | Personal access token                              | User API key                            |
 | ----------------- | -------------------------------------------------- | --------------------------------------- |
 | Prefix            | `tape_pat_`                                        | `user_key_`                             |
-| What it may do    | Only the [capabilities](capabilities) you grant it | Everything your user account can do     |
+| What it may do    | Only the [capabilities](/docs/api/capabilities) you grant it | Everything your user account can do     |
 | What it may reach | All, or only the workspaces and apps you select    | Everything you can reach                |
 | How many          | Several per user, typically one per integration    | Exactly one per user                    |
 | Revoking          | Individually, at any time                          | Only by rotating the single key         |
 | Status            | Recommended                                        | Deprecated — existing integrations only |
 
 :::tip Prefer a personal access token for new integrations
-A personal access token can be limited to exactly the capabilities an integration needs, restricted to particular workspaces and apps, and revoked on its own without disturbing anything else you have built. See [Personal access tokens](personal-access-tokens).
+A personal access token can be limited to exactly the capabilities an integration needs, restricted to particular workspaces and apps, and revoked on its own without disturbing anything else you have built. See [Personal access tokens](/docs/api/personal-access-tokens).
 :::
 
 :::caution User API keys are deprecated
 Existing user API keys keep working, and nothing about them changed when personal access tokens were introduced — they carry no capabilities, are never subject to capability or content checks, and existing integrations are unaffected.
 
-They are no longer the recommended credential, though. A user API key cannot be limited to a set of capabilities, cannot be restricted to particular workspaces and apps, and can only be invalidated by rotating it — which breaks every other integration using it at the same time. Build new integrations on a [personal access token](personal-access-tokens).
+They are no longer the recommended credential, though. A user API key cannot be limited to a set of capabilities, cannot be restricted to particular workspaces and apps, and can only be invalidated by rotating it — which breaks every other integration using it at the same time. Build new integrations on a [personal access token](/docs/api/personal-access-tokens).
 :::
 
 ## User API key
@@ -47,7 +47,7 @@ Note that your API key carries the same privileges as your user account, so be s
 
 A personal access token is a named credential you create for a single integration. You choose what it may do, and which workspaces and apps it may do it to. Tokens start with `tape_pat_` and are shown only once, at creation.
 
-Read [Personal access tokens](personal-access-tokens) for how to create, scope and revoke one, and [Capabilities](capabilities) for the full list of what a token can be granted.
+Read [Personal access tokens](/docs/api/personal-access-tokens) for how to create, scope and revoke one, and [Capabilities](/docs/api/capabilities) for the full list of what a token can be granted.
 
 ## Attribution
 
@@ -86,7 +86,7 @@ curl https://api.tapeapp.com/v1/record/1 \
 ```
 
 :::info Authentication via OAuth
-In the future, Tape plans to support authentication flows via OAuth. OAuth will use the same [capabilities](capabilities) as personal access tokens, so anything you learn about them now carries over.
+In the future, Tape plans to support authentication flows via OAuth. OAuth will use the same [capabilities](/docs/api/capabilities) as personal access tokens, so anything you learn about them now carries over.
 :::
 
 ## Authentication errors
@@ -124,4 +124,4 @@ Tape returns comprehensive error messages for authentication failures. The messa
 An unknown token, a revoked token and a token whose owner was deactivated all return the same "no active user for the given API key" message. This is deliberate: distinguishing them would let an unauthenticated caller probe which tokens exist.
 :::
 
-A personal access token that authenticates successfully but lacks the capability an endpoint requires is rejected with a `403` instead. See [Insufficient capabilities](capabilities#insufficient-capabilities).
+A personal access token that authenticates successfully but lacks the capability an endpoint requires is rejected with a `403` instead. See [Insufficient capabilities](/docs/api/capabilities#insufficient-capabilities).

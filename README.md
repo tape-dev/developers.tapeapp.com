@@ -23,3 +23,13 @@ npm run start
 npm run publish
 
 ```
+
+## Writing documentation
+
+Links between docs pages **must be absolute** (`/docs/api/errors`), never relative
+(`errors`). Relative links are baked into the client bundle unresolved and break
+on any page reload, because GitHub Pages redirects to a trailing-slash URL and the
+router then resolves them one level too deep. The failure is silent — no build
+warning, no console error, and it never reproduces on the dev server.
+
+See [CLAUDE.md](CLAUDE.md) for the full rule and rationale.
