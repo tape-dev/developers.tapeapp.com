@@ -19,7 +19,7 @@ What differs between clients is only where that URL and header are written down.
 
 ## Before you start
 
-Create a [personal access token](/docs/api/personal-access-tokens) for this client — the token **is** the connection's permission boundary, and it is required today (OAuth 2.1 is [planned](overview#authentication)).
+Create a [personal access token](/docs/api/personal-access-tokens) for this client — the token **is** the connection's permission boundary, and it is required today (OAuth 2.1 is [planned](/docs/mcp/overview#authentication)).
 
 1. Click the user avatar on the top right and open your user settings.
 2. Go to the **Developer** section, and under **Personal access tokens (PATs)** click **New token**.
@@ -150,7 +150,7 @@ Export `TAPE_PAT` before starting Codex — if the variable is unset or empty, t
 
 ## Claude Desktop
 
-Claude Desktop's **Connectors** onboard a remote server through an OAuth sign-in and cannot set a bearer token, so they cannot reach Tape until [OAuth 2.1](overview#authentication) ships. Until then, bridge to the endpoint with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which runs locally over stdio and forwards to the HTTP endpoint with your header.
+Claude Desktop's **Connectors** onboard a remote server through an OAuth sign-in and cannot set a bearer token, so they cannot reach Tape until [OAuth 2.1](/docs/mcp/overview#authentication) ships. Until then, bridge to the endpoint with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which runs locally over stdio and forwards to the HTTP endpoint with your header.
 
 ```json title="claude_desktop_config.json"
 {

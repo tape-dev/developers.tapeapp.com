@@ -29,7 +29,7 @@ A [personal access token](/docs/api/personal-access-tokens) is the security boun
 Beyond that:
 
 - **One token per client.** A shared token cannot be revoked without breaking something unrelated, and you lose the ability to tell which client did what.
-- **Never commit a token**, and prefer the environment-variable or secret-prompt form for your client — see [Connect to Tape MCP](connect#before-you-start).
+- **Never commit a token**, and prefer the environment-variable or secret-prompt form for your client — see [Connect to Tape MCP](/docs/mcp/connect#before-you-start).
 - **A token can never exceed you.** It is your own permissions, narrowed by its capabilities, narrowed again by its content selection. It cannot reach data you cannot reach.
 - **Everything it does is attributed to you.** Records the assistant creates or changes show you as the author in the activity stream. If you want an assistant's activity to be distinguishable, mint its token from a dedicated user account.
 

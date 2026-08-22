@@ -12,7 +12,7 @@ The **Model Context Protocol (MCP)** is an open standard that lets AI applicatio
 | **Endpoint**       | `https://mcp.tapeapp.com/mcp`                                          |
 | **Transport**      | Streamable HTTP — JSON-RPC 2.0 over HTTP `POST`                        |
 | **Authentication** | A [personal access token](/docs/api/personal-access-tokens) sent as `Authorization: Bearer` |
-| **Tools**          | See [Supported tools](supported-tools)                                 |
+| **Tools**          | See [Supported tools](/docs/mcp/supported-tools)                                 |
 | **Health check**   | `https://mcp.tapeapp.com/health`                                       |
 
 ## How it works
@@ -40,7 +40,7 @@ Two things are deliberately absent. **Nothing on this surface deletes** — ther
 
 Workspace reads are also **membership-scoped**: they answer the workspaces *you* belong to, not an inventory of your organization's.
 
-Exactly which tools are available, and what each one requires, is listed by your MCP client on connection — see [Supported tools](supported-tools).
+Exactly which tools are available, and what each one requires, is listed by your MCP client on connection — see [Supported tools](/docs/mcp/supported-tools).
 
 ## Resources
 
@@ -89,7 +89,7 @@ Support for the MCP OAuth 2.1 authorization flow is planned. Once it lands, clie
 
 ## Which clients can connect
 
-Any client that can call a remote MCP server over streamable HTTP **and set a request header** works today, because that header is how the token is supplied. That covers Claude Code, Cursor, VS Code, Windsurf, Codex, the MCP Inspector, the `mcp-remote` bridge, and the Claude API's MCP connector. [Connect to Tape MCP](connect) has a configuration for each.
+Any client that can call a remote MCP server over streamable HTTP **and set a request header** works today, because that header is how the token is supplied. That covers Claude Code, Cursor, VS Code, Windsurf, Codex, the MCP Inspector, the `mcp-remote` bridge, and the Claude API's MCP connector. [Connect to Tape MCP](/docs/mcp/connect) has a configuration for each.
 
 Clients that onboard a remote server purely through an OAuth sign-in flow — including Claude Desktop connectors and ChatGPT connectors — cannot connect directly yet, because that flow is what OAuth 2.1 will add. For Claude Desktop, the `mcp-remote` bridge is the workaround, and it is documented on the connect page.
 
@@ -103,6 +103,6 @@ Clients that onboard a remote server purely through an OAuth sign-in flow — in
 
 ## Next steps
 
-- [Connect to Tape MCP](connect) — configuration for every supported client
-- [Supported tools](supported-tools) — tool reference
+- [Connect to Tape MCP](/docs/mcp/connect) — configuration for every supported client
+- [Supported tools](/docs/mcp/supported-tools) — tool reference
 - [Personal access tokens](/docs/api/personal-access-tokens) — creating and scoping a credential

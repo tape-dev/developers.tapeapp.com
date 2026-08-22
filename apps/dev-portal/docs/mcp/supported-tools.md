@@ -20,4 +20,4 @@ Two properties hold for the whole surface today:
 
 Renaming or removing a tool would be a breaking change for every connected client, so the surface is a stable contract even while this reference is unwritten.
 
-The list gets **shorter** as well as longer. Reference material that is the same for every caller moves out of it and behind an MCP [resource](overview#resources): the field value specification made that move, and a record filter syntax and the automation definition schema are expected to follow. Each stays reachable through the fetch tool for clients that cannot read resources, so this is a relocation rather than a removal of capability.
+The list gets **shorter** as well as longer. Reference material that is the same for every caller moves out of it and behind an MCP [resource](/docs/mcp/overview#resources): the field value specification made that move, and a record filter syntax and the automation definition schema are expected to follow. Each stays reachable through the fetch tool for clients that cannot read resources, so this is a relocation rather than a removal of capability.
