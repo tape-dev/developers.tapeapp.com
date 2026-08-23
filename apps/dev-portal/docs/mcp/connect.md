@@ -2,7 +2,7 @@
 id: connect
 title: Connect to Tape MCP
 sidebar_label: Connect to Tape MCP
-description: Configure Claude Code, Cursor, VS Code, Windsurf, Codex, Claude Desktop or any other MCP client to reach the Tape MCP server.
+description: Configure Claude Code, Cursor, VS Code, Claude Desktop, Windsurf, Codex or any other MCP client to reach the Tape MCP server.
 ---
 
 Every client connects to the same endpoint and authenticates the same way:
@@ -21,11 +21,12 @@ What differs between clients is only where that URL and header are written down.
 
 Create a [personal access token](/docs/api/personal-access-tokens) for this client — the token **is** the connection's permission boundary, and it is required today (OAuth 2.1 is [planned](/docs/mcp/overview#authentication)).
 
-1. Click the user avatar on the top right and open your user settings.
-2. Go to the **Developer** section, and under **Personal access tokens (PATs)** click **New token**.
-3. Choose which **workspaces and apps** the assistant may reach.
-4. Choose its [**capabilities**](/docs/api/capabilities) — see the table below.
-5. Copy the token. It is shown exactly once.
+1. Click the user avatar in the top-right corner and open **Preferences**.
+2. Go to the **Developer** section.
+3. Under **Personal access tokens (PATs)**, click **New token**.
+4. Choose which **workspaces and apps** the assistant may reach.
+5. Choose its [**capabilities**](/docs/api/capabilities) — see the table below.
+6. Copy the token. It is shown exactly once.
 
 Grant only what the assistant actually needs:
 
@@ -145,6 +146,42 @@ Client documentation: [VS Code MCP servers](https://code.visualstudio.com/docs/c
 }
 ```
 
+## Claude Desktop
+
+Claude Desktop's **Connectors** onboard a remote server through an OAuth sign-in and cannot set a bearer token, so they cannot reach Tape until [OAuth 2.1](/docs/mcp/overview#authentication) ships. Until then, bridge to the endpoint with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which runs locally over stdio and forwards to the HTTP endpoint with your header.
+
+1. Add the configuration below to your `claude_desktop_config.json`.
+2. **Restart Claude Desktop.**
+
+```json title="claude_desktop_config.json"
+{
+  "mcpServers": {
+    "tape": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.tapeapp.com/mcp",
+        "--transport",
+        "http-only",
+        "--header",
+        "Authorization:${TAPE_AUTH_HEADER}"
+      ],
+      "env": {
+        "TAPE_AUTH_HEADER": "Bearer tape_pat_0a1b2c3d..."
+      }
+    }
+  }
+}
+```
+
+Two details in that snippet are deliberate:
+
+- **`--transport http-only`.** Tape speaks streamable HTTP and has no SSE endpoint, so there is nothing for the default SSE fallback to find.
+- **`Authorization:${TAPE_AUTH_HEADER}` with no space, and the `Bearer ` inside the variable.** Claude Desktop on Windows and Cursor mangle arguments containing spaces; keeping the space inside the environment variable avoids it. On macOS and Linux you may write `"Authorization: Bearer ${TAPE_PAT}"` directly.
+
+The same configuration works in any other stdio-only client.
+
 ## Windsurf
 
 Client documentation: [Windsurf MCP](https://docs.windsurf.com/windsurf/cascade/mcp).
@@ -182,42 +219,6 @@ bearer_token_env_var = "TAPE_PAT"
 ```
 
 Export `TAPE_PAT` before starting Codex — if the variable is unset or empty, the server fails to start. On older Codex versions that only pick up stdio servers, add `experimental_use_rmcp_client = true` under a `[features]` block above the server entry, or upgrade.
-
-## Claude Desktop
-
-Claude Desktop's **Connectors** onboard a remote server through an OAuth sign-in and cannot set a bearer token, so they cannot reach Tape until [OAuth 2.1](/docs/mcp/overview#authentication) ships. Until then, bridge to the endpoint with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which runs locally over stdio and forwards to the HTTP endpoint with your header.
-
-1. Add the configuration below to your `claude_desktop_config.json`.
-2. **Restart Claude Desktop.**
-
-```json title="claude_desktop_config.json"
-{
-  "mcpServers": {
-    "tape": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://mcp.tapeapp.com/mcp",
-        "--transport",
-        "http-only",
-        "--header",
-        "Authorization:${TAPE_AUTH_HEADER}"
-      ],
-      "env": {
-        "TAPE_AUTH_HEADER": "Bearer tape_pat_0a1b2c3d..."
-      }
-    }
-  }
-}
-```
-
-Two details in that snippet are deliberate:
-
-- **`--transport http-only`.** Tape speaks streamable HTTP and has no SSE endpoint, so there is nothing for the default SSE fallback to find.
-- **`Authorization:${TAPE_AUTH_HEADER}` with no space, and the `Bearer ` inside the variable.** Claude Desktop on Windows and Cursor mangle arguments containing spaces; keeping the space inside the environment variable avoids it. On macOS and Linux you may write `"Authorization: Bearer ${TAPE_PAT}"` directly.
-
-The same configuration works in any other stdio-only client.
 
 ## Claude API
 

@@ -66,7 +66,7 @@ These are deliberate and are not planned to change. They bound the **tools**, no
 
 Revocation is the kill switch, and it is cheap:
 
-- Revoke from the **Developer** section of your user settings. It takes effect on the **next request** — nothing is cached and nothing needs re-issuing.
+- Revoke from the **Developer** section of your Preferences. It takes effect on the **next request** — nothing is cached and nothing needs re-issuing.
 - Revoking one token never affects your other tokens, your user API key, or your account.
 - If a token may have leaked, revoke first and investigate afterwards. The `tape_pat_` prefix is designed to be recognisable by secret scanners, so a leaked token can be spotted automatically.
 - Rotate the token when you stop using a client, rather than leaving a live credential in a config file you have forgotten about.

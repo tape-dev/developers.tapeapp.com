@@ -20,7 +20,7 @@ A token's effective access is your own permissions, narrowed by its capabilities
 
 ## Creating a token
 
-1. Click the user avatar on the top right and open your user settings.
+1. Click the user avatar in the top-right corner and open **Preferences**.
 2. Go to the **Developer** section.
 3. Under **Personal access tokens (PATs)**, click **New token**.
 4. Give the token a name, choose which workspaces and apps it may reach, and choose its capabilities.
