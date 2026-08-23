@@ -25,7 +25,7 @@ MCP client  ──HTTPS──▶  mcp.tapeapp.com  ──▶  Tape Developer API
  Cursor, VS Code, …)
 ```
 
-Because the token is yours, the assistant can only ever reach what you can reach — narrowed further by the capabilities and content selection you granted the token.
+Because the token is yours, the assistant can only ever reach what you can reach — narrowed further by the capabilities and content selection you granted the token. The **automation** capabilities are the exception: an automation executes with its owner's rights rather than your token's, so [`automations:run`](/docs/mcp/connect#before-you-start) can start one that reaches further than the token, and `automations:edit` can rewrite what a live automation does before its own trigger fires it.
 
 ## What you can do
 
@@ -35,8 +35,9 @@ With the server connected, an assistant can:
 - **Read** records, field values, apps, views, workspaces and users — including the exact field structure of an app.
 - **Create and update** records, post comments, and mint file upload tickets.
 - **Build structure** — create and update workspaces, apps, fields and views.
+- **Work with automations** — read their definitions and run history, create and change them, and trigger one manually. Automations are the one part of this surface that reaches beyond the token: an automation runs with the rights of the person who **owns** it, not with your token's capabilities or its app selection, so triggering one can change data in apps the token never selected. See [`automations:run`](/docs/mcp/connect#before-you-start).
 
-Two things are deliberately absent. **Nothing on this surface deletes** — there is no tool for removing a record, app or workspace. And **nothing grants people access**: an assistant cannot add or remove workspace members, or change who can see a record. Both are decisions the surface leaves to a human, and neither is planned.
+Two things are deliberately absent. **No tool removes a record, comment, app, workspace or automation.** And **nothing grants people access**: an assistant cannot add or remove workspace members, or change who can see a record. Both are decisions the surface leaves to a human, and neither is planned. One tool is the exception, deliberately and behind its own flag: `tape-update-database` can delete a **field** or a **field option**, and both permanently destroy data in every record that holds one.
 
 Workspace reads are also **membership-scoped**: they answer the workspaces *you* belong to, not an inventory of your organization's.
 
@@ -44,14 +45,21 @@ Exactly which tools are available, and what each one requires, is listed by your
 
 ## Resources
 
-Alongside tools, MCP defines **resources** — reference documents a client reads directly, instead of spending a tool call on them. Tape serves its **field value specification** this way: the description of how each [field type](/docs/api/resource/field-value/overview) expects a value to be shaped when written.
+Alongside tools, MCP defines **resources** — reference documents a client reads directly, instead of spending a tool call on them. Tape serves its reference specifications this way: how each [field type](/docs/api/resource/field-value/overview) expects a value to be shaped when written, how to define a field, how to write a record filter, how a view is configured, and the grammar of an automation definition.
 
 | Resource | URI |
-| ------------------------ | ------------------------------------------- |
-| The whole specification  | `tape://docs/field-value-spec`              |
-| One field type           | `tape://docs/field-value-spec/{field_type}` |
+| ---------------------------------------- | -------------------------------------------- |
+| Field values, the whole specification    | `tape://docs/field-value-spec`                |
+| Field values, one field type             | `tape://docs/field-value-spec/{field_type}`   |
+| App fields, the whole specification      | `tape://docs/app-field-spec`                  |
+| App fields, one field type               | `tape://docs/app-field-spec/{field_type}`     |
+| Record filters, the whole specification  | `tape://docs/filter-spec`                     |
+| Record filters, one field type           | `tape://docs/filter-spec/{field_type}`        |
+| Views, the whole specification           | `tape://docs/view-spec`                       |
+| Automations, the whole schema            | `tape://docs/automation-schema`               |
+| Automations, one block type              | `tape://docs/automation-schema/{block_type}`  |
 
-Both are JSON, and **neither needs a credential** — they read no Tape data and answer identically for every caller. Every *tool*, by contrast, requires a token.
+All of them are JSON, and **none needs a credential** — they read no Tape data and answer identically for every caller. Every *tool*, by contrast, requires a token.
 
 :::info Read the specification before writing field values
 Tape writes a record as a map of field values, and the accepted shape of each value depends on that field's `field_type`. Several unrecognised shapes **clear the field silently** at `200` rather than failing — which is why this is worth reading before a write rather than diagnosing after one.
@@ -59,13 +67,9 @@ Tape writes a record as a map of field values, and the accepted shape of each va
 Two things it deliberately does not tell you. It describes field **types in general**: it reads no Tape data and knows nothing about any particular app, so for an app's own fields, their required flags and option lists, fetch the app itself. And `field_type` is not `type` — a status field reads back as `category`, attachment and image both read back as `file`, and the single- and multi-value variants of one type accept different shapes.
 :::
 
-**If your client cannot read resources**, the fetch tool serves the same document under `type: "field_value_spec"`. Support across MCP clients is uneven, and a resource a client never surfaces is a specification the model never reads. Note that this fallback path *does* require a token, unlike the resource itself.
+**If your client cannot read resources**, the fetch tool serves four of the five specifications, under `type: "field_value_spec"`, `"filter_spec"`, `"view_spec"` and `"app_field_spec"`. Support across MCP clients is uneven, and a resource a client never surfaces is a specification the model never reads. Note that this fallback path *does* require a token, unlike the resources themselves — and that **`tape://docs/automation-schema` has no fetch equivalent**, so a client that cannot read resources cannot reach it at all.
 
 Resource URIs are stable public API: clients bookmark them, and a person who attached one to a conversation keeps a reference to that exact string, so changing a URI is treated as breaking in the same way renaming a tool is.
-
-:::note More reference material is headed the same way
-A record filter syntax and the automation definition schema are both slated for resources rather than tool arguments. Either would otherwise cost thousands of tokens of JSON Schema resident in every client's context on every request, whether or not the model uses it.
-:::
 
 ## Authentication
 
@@ -85,7 +89,7 @@ Grant the narrowest token that does the job, and mint a separate one per client 
 Support for the MCP OAuth 2.1 authorization flow is planned. Once it lands, clients will be able to connect by signing in to Tape rather than by pasting a token, and the scopes granted will be the same [capabilities](/docs/api/capabilities) a personal access token uses today. Until then, configure a token.
 :::
 
-**Every tool requires a token.** The [field value specification resources](#resources) do not, because they carry no per-caller data — so an assistant can read those before a credential is configured, but it cannot reach any of your data without one.
+**Every tool requires a token.** The [specification resources](#resources) do not, because they carry no per-caller data — so an assistant can read those before a credential is configured, but it cannot reach any of your data without one.
 
 ## Which clients can connect
 

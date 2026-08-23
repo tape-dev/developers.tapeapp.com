@@ -30,7 +30,7 @@ Beyond that:
 
 - **One token per client.** A shared token cannot be revoked without breaking something unrelated, and you lose the ability to tell which client did what.
 - **Never commit a token**, and prefer the environment-variable or secret-prompt form for your client — see [Connect to Tape MCP](/docs/mcp/connect#before-you-start).
-- **A token can never exceed you.** It is your own permissions, narrowed by its capabilities, narrowed again by its content selection. It cannot reach data you cannot reach.
+- **A token can never exceed you — except through automations.** It is your own permissions, narrowed by its capabilities, narrowed again by its content selection. Both automation write capabilities escape that: an automation executes with its **owner's** rights rather than the token's, so `automations:run` can start one that reaches apps the token never selected, and `automations:edit` can rewrite a live automation's actions and let its own trigger fire them. See the [`automations:run` callout](/docs/mcp/connect#before-you-start).
 - **Everything it does is attributed to you.** Records the assistant creates or changes show you as the author in the activity stream. If you want an assistant's activity to be distinguishable, mint its token from a dedicated user account.
 
 ## Guard against prompt injection
@@ -43,10 +43,12 @@ A successful injection does not need to break Tape's permissions to do damage �
 
 **Writes have reach beyond the record they touch.** By default a record or comment written through MCP behaves exactly like one written by hand: it notifies followers, fires webhooks, and triggers [automations](/docs/automations/introduction). An automation can send email and make outbound HTTP calls, so a single injected write can become egress out of Tape entirely. The write tools accept `silent`, `no_webhook` and `no_workflow` to suppress each of those, but all three default to `false` — the safe behaviour is opt-in, not the default.
 
+**The surface can also write automations.** Six dedicated tools read, create, change and trigger them, and `tape-fetch` reads one as a seventh way in. That widens what an injected instruction can reach for: instead of hoping a write happens to fire a trigger, it can compose the trigger itself, or start an existing automation whose actions send email and call external systems. Two properties bound this. A created automation is **always paused** and needs a deliberate second call to activate, and activation of a broken definition is refused. Neither helps against an automation that is already live, so treat `automations:edit` and [`automations:run`](/docs/mcp/connect#before-you-start) as write capabilities of a heavier class than `records:edit`.
+
 What follows from that:
 
 - **Treat tool results as untrusted input**, not as instructions — the same posture you would take toward any content from an external system.
-- **Review write actions before approving them.** Clients that can gate destructive or write tools behind a confirmation are worth configuring that way; the server advertises which tools are read-only and which are destructive so a client can act on it.
+- **Review write actions before approving them.** Clients that can gate write tools behind a confirmation are worth configuring that way. Every tool carries the standard MCP annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`), so a client can tell the ten read-only tools from the thirteen that write, and single out the six flagged destructive. `tape-run-automation` is one of those six and also the only tool flagged `openWorldHint` — the one whose effects leave Tape — so it is worth its own confirmation step rather than being grouped with the others.
 - **Prefer a read-only token** for anything exploratory. Most of the value of an assistant on Tape is in reading and reasoning, and a token without write capabilities cannot be turned against your data no matter what it reads.
 - **Be deliberate about which apps the assistant can see.** Content selection limits a credential rather than isolating data, so treat it as blast-radius reduction, not as a boundary around sensitive information — see [the caveat on content selection](/docs/api/personal-access-tokens#content-selection).
 
@@ -54,11 +56,11 @@ What follows from that:
 
 Some limits are structural rather than a matter of scoping, and hold whatever the token allows:
 
-- **Nothing on this surface deletes.** There is no tool for deleting a record, comment, app or workspace.
+- **Almost nothing on this surface deletes.** There is no tool for deleting a record, comment, app, workspace or automation. The exception is `tape-update-database`: it can delete a **field**, destroying that field's values in every record, and a **field option**, removing it from every record holding it. Both demand `allow_deleting_field_values: true` in the same call.
 - **Nothing grants people access.** An assistant cannot add or remove workspace members, or change who can see a record.
 - **No arbitrary HTTP, and no file downloads.** There is no proxy tool an injected instruction could point at a URL of its choosing.
 
-These are deliberate and are not planned to change. They bound the worst case, but note that a **capability** can still exceed them — `workspaces:edit`, for example, permits deleting a workspace through any *other* client or script that token is used from, even though no MCP tool does. Grant it accordingly.
+These are deliberate and are not planned to change. They bound the **tools**, not the **token**, and most `:edit` capabilities exceed them through any *other* client or script the token is used from: `records:edit` permits deleting records, `apps:edit` permits deleting apps, fields and views, `records.comments:edit` permits deleting your own comments, `automations:edit` permits deleting automations, and `workspaces:edit` permits deleting a workspace and everything inside it. So "the assistant cannot delete anything" is true of the tool list and false of the credential. Grant accordingly.
 
 ## Revoke when in doubt
 
