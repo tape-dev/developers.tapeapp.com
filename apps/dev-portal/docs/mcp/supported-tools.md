@@ -47,7 +47,7 @@ Argument and result keys are `snake_case`, matching the [developer API](/docs/ap
 
 A capability in parentheses is **conditional** — needed only on some calls, and the two behave differently. Without `apps:read`, `tape-update-record` **fails** on the calls that need it, while `tape-query-records` still answers in full and only its diagnostics degrade. Grant it alongside either way. See [the capability table](/docs/mcp/connect#before-you-start) for the same information organised by what you want the assistant to do.
 
-**No tool deletes a record, comment, app, workspace or automation, and nothing grants people access.** One tool is the exception to the deletion rule: `tape-update-database` can delete a **field** or a **field option**, and both destroy data in every record that holds one. See [Security best practices](/docs/mcp/security).
+**No tool deletes anything, and nothing grants people access.** No record, comment, app, workspace or automation, and since 2026-08-23 no field or field option either — `tape-update-database` used to be the exception and no longer is. Removing a field or an option is something a person does in the Tape app. `tape-update-database` is still flagged destructive, for the reason given in [its section](#change-an-app). See [Security best practices](/docs/mcp/security).
 
 ## Finding your way around
 
@@ -280,11 +280,11 @@ Creates one app (a table) in a workspace, optionally with its fields. Only `data
 
 Changes an app's name and description, and the fields it holds. Partial at the argument level: what you name changes, what you omit is left alone.
 
-**Note:** This is the one tool that destroys record data across *every* record at once, and it does so in two ways, both behind `allow_deleting_field_values: true` in the same call. `fields_to_delete` deletes a field's values in every record, permanently. `options_to_delete`, which sits inside a `fields` entry's `config.settings`, removes a category or status option from every record holding it — outright on a category field, and on a status field by **moving** those records to a different option, so they end up asserting something that was never true. A saved view filtering on the deleted option silently **stops filtering and starts returning every record in the app**.
+**Note:** This tool cannot delete, as of 2026-08-23. It removes no field and no field option, and nothing else on this surface does either — that is now a job for a person in the Tape app. If you built against the old shape, the two removed arguments now behave differently from each other: `fields_to_delete` and `allow_deleting_field_values` are simply **gone from the schema**, so a call still sending them succeeds with everything else applied and nothing deleted, no error. `options_to_delete`, which rides inside a `fields` entry, is instead **refused**, and the whole call is rejected — nothing changes, not the options and not the rest of it. Tape refuses both again behind the tool, so this is a property of the surface, not of one client's arguments.
 
-**Note:** Deleting the app's first field also silently renames every record, because the title moves to whatever field is first afterwards.
+**Note:** A new field is always appended last. `config.position` is ignored when it is a string and rejected when it is a number, and no tool here reorders fields — so an app's first field, which supplies every record's title, cannot be changed through MCP at all.
 
-**Note:** A field entry is a replace, not a patch. `config.label` is required on every entry, and every top-level `config` key you leave out is reset — with one exception: what you omit inside `config.settings` survives, so a label-only change keeps a number field's `unit` and `decimals` and a category field's options. Do **not** echo `settings` back to protect it. An `options` entry carrying an existing `id` renames that option everywhere, so every record holding it reads differently afterwards. The whole call is all or nothing.
+**Note:** The tool is still flagged **destructive**, because not deleting is not the same as not losing data. A field entry is a replace, not a patch. `config.label` is required on every entry, and every top-level `config` key you leave out is reset — with one exception: what you omit inside `config.settings` survives, so a label-only change keeps a number field's `unit` and `decimals` and a category field's options. Do **not** echo `settings` back to protect it. An `options` entry carrying an existing `id` renames that option everywhere, so every record holding it reads differently afterwards. The whole call is all or nothing.
 
 **Example prompts:**
 

@@ -67,7 +67,7 @@ On top of the capability, **every** automation route requires **admin rights on 
 A **read-only assistant** — one that can answer questions but never change anything — is a token holding `apps:read` and `records:read` and nothing else. Note that reading is not a single capability: that token cannot read comments, see automations, list workspaces or look up colleagues, and it will be **refused rather than answering partially**. Add `records.comments:read`, `automations:read`, `workspaces:read` and `organization:read` for whichever of those the assistant should reach. Capabilities are fixed at creation, so to change them, create a new token and revoke the old one.
 
 :::caution `workspaces:edit` reaches further than the MCP tools do
-The MCP server exposes almost no way to delete anything, and `workspaces:edit` is still not a delete-free grant — it covers **deleting a workspace, and with it every app and record inside**. The token carries that reach into any other client or script it is used from, whatever the tool list allows. Grant it only for a token that genuinely needs to create or rename workspaces, and keep it off your everyday assistant token.
+The MCP server exposes no way to delete anything, and `workspaces:edit` is still not a delete-free grant — it covers **deleting a workspace, and with it every app and record inside**. The token carries that reach into any other client or script it is used from, whatever the tool list allows. Grant it only for a token that genuinely needs to create or rename workspaces, and keep it off your everyday assistant token.
 
 Note also that creating a workspace requires a token whose content selection is **All**, and an organization role permitting workspace creation. A token restricted to selected workspaces and apps is refused outright — see [Content selection](/docs/api/personal-access-tokens#content-selection).
 :::
@@ -318,7 +318,7 @@ Request bodies are capped at 128 KB. Split the work across several calls.
 Not yet. Tape MCP requires a personal access token today. Support for the MCP OAuth 2.1 authorization flow is [planned](/docs/mcp/overview#authentication), and once it lands, clients will connect by signing in to Tape instead. The scopes granted will be the same capabilities a token uses today.
 
 **Can the assistant delete anything?**
-One tool can: `tape-update-database` deletes a **field**, or a **field option**, and both destroy data in every record holding one — which is why each requires `allow_deleting_field_values: true` in the same call. Beyond that, no tool removes a record, comment, app, workspace or automation, and none is planned.
+No. No tool removes a record, comment, app, workspace or automation, and none is planned. Fields and field options were the last exception and stopped being one on 2026-08-23 — a person removes those in the Tape app now. A write can still overwrite: `tape-update-database` replaces a field's configuration wholesale, so it is flagged destructive even though it deletes nothing.
 
 Note that this bounds the **tools**, not the **token**. Most `:edit` capabilities permit deletion through any *other* client or script the token is used from: `records:edit` covers deleting records, `apps:edit` covers deleting apps, fields and views, `records.comments:edit` covers deleting your own comments, `automations:edit` covers deleting automations, and `workspaces:edit` covers deleting a workspace and everything inside it. Grant them accordingly.
 

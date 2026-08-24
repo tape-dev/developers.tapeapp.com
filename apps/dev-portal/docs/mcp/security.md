@@ -56,7 +56,7 @@ What follows from that:
 
 Some limits are structural rather than a matter of scoping, and hold whatever the token allows:
 
-- **Almost nothing on this surface deletes.** There is no tool for deleting a record, comment, app, workspace or automation. The exception is `tape-update-database`: it can delete a **field**, destroying that field's values in every record, and a **field option**, removing it from every record holding it. Both demand `allow_deleting_field_values: true` in the same call.
+- **Nothing on this surface deletes.** There is no tool for deleting a record, comment, app, workspace or automation, and since 2026-08-23 none for deleting a field or a field option either — `tape-update-database` was the last exception, and both arguments that carried it are gone, refused at the API as well as in the tool. Removing a field or an option is a human action in the Tape app. This bounds the tools, not the token: see the note on `:edit` capabilities in [the FAQ](/docs/mcp/connect#faq).
 - **Nothing grants people access.** An assistant cannot add or remove workspace members, or change who can see a record.
 - **No arbitrary HTTP, and no file downloads.** There is no proxy tool an injected instruction could point at a URL of its choosing.
 
