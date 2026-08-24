@@ -2,10 +2,10 @@
 id: supported-tools
 title: Supported tools
 sidebar_label: Supported tools
-description: Reference for the 23 tools the Tape MCP server exposes — what each one does, what it will not do, and which capability its token needs.
+description: Reference for the 24 tools the Tape MCP server exposes — what each one does, what it will not do, and which capability its token needs.
 ---
 
-The Tape MCP server exposes **23 tools** for finding, reading and changing content in your Tape organization. An assistant combines them: it looks up an app, reads the records that match a condition, and writes a comment on the one that matters.
+The Tape MCP server exposes **24 tools** for finding, reading and changing content in your Tape organization. An assistant combines them: it looks up an app, reads the records that match a condition, and writes a comment on the one that matters.
 
 Every tool is advertised on connection with a description written for the model, so your client's tool list is always current. This page is the version for people: what each tool is for, what it will not do, and which [capability](/docs/api/capabilities) its token needs.
 
@@ -17,6 +17,7 @@ Argument and result keys are `snake_case`, matching the [developer API](/docs/ap
 | --- | --- | --- |
 | **Finding your way around** | | |
 | `tape-get-apps` | Every app the token can see, with its workspace | `apps:read` |
+| `tape-list-shared-records` | Records the token reaches individually, outside the apps it is granted | `records:read` |
 | `tape-search` | Full-text search across apps and records | `apps:read` **or** `records:read` |
 | `tape-fetch` | One app, record, view, workspace or automation by id | varies by `type` |
 | `tape-get-workspaces` | The workspaces you belong to | `workspaces:read` |
@@ -56,6 +57,8 @@ A capability in parentheses is **conditional** — needed only on some calls, an
 
 Returns every app the token can see, with the workspace each one belongs to. Start here when you have no ids yet: Tape organizes data as workspaces, which hold apps, which hold records. This is not paginated, so it returns the complete picture in one response.
 
+**Note:** "Every app the token can see" is not "everything the token can reach". A record can be shared with you individually inside an app you cannot open, and no app is listed here for it. `tape-list-shared-records` is the other half of the picture.
+
 **Note:** Not every app holds records. An app is a `database`, a `dashboard` or a `form`, and only `database` apps have records and fields. Filter on `type` before passing an `app_id` to a tool that reads records. Two apps in different workspaces can share a name.
 
 **Example prompts:**
@@ -64,13 +67,34 @@ Returns every app the token can see, with the workspace each one belongs to. Sta
 - "Which apps are in the Sales workspace?"
 - "Find the app where we track candidates"
 
+### List records shared with you
+
+`tape-list-shared-records`
+
+Lists the records the token can reach **individually** — granted on the record itself, or matched by a permission rule — where it holds no app-level access to the app they live in. It is the only tool that enumerates them: `tape-get-apps` lists apps and `tape-query-records` needs an app id, so no app-based listing reliably reaches past the app boundary. Rows are previews — ids, app name, title, link, author and creation time, with no field values. Newest first, paginated, with a maximum of 100 records per page.
+
+**Note:** Pair it with `tape-get-apps`: that one lists what the assistant can browse, this one lists what reaches it from outside. Without it, an assistant asked what it can see enumerates everything it can browse and reports that as the complete answer.
+
+**Note:** "Shared with you" is not exact, in both directions. A permission rule can place a record here because you created it or because a field names you, with no share involved — so these are records you can reach, not necessarily records someone shared with you. And a record shared with you inside an app you hold access to — through workspace membership or a grant on the app itself — is deliberately absent; read that one with `tape-query-records` on its app.
+
+**Note:** The `app_id` on a row is usually an app the token cannot read, so `tape-fetch` with `type: "app"` on it, or `tape-query-records` with that id, will often be refused. That is expected rather than a fault. Read a row in full with `tape-fetch` and `type: "record"`, which checks permission on the record itself.
+
+**Note:** There is no total, and an empty list is not proof that an account reaches nothing: a token restricted to selected workspaces or apps has this listing silently narrowed to them as well. The date a record was shared with you is not recorded and is not returned.
+
+**Example prompts:**
+
+- "What is shared with me?"
+- "Take stock of everything this account can reach"
+- "Are there records I can see outside my own apps?"
+- "List what is shared with me and summarise the newest one"
+
 ### Search
 
 `tape-search`
 
-Searches across every app and record the token can see, best match first. Use it when you have words rather than ids: a record someone described in prose, or an app named approximately. Results are previews — ids, names, titles — enough to identify something and then read it. Paginated, with a maximum of 100 results per page.
+Searches across every app and record the token can reach, best match first — including records shared with it individually, in apps it cannot otherwise open. Use it when you have words rather than ids: a record someone described in prose, or an app named approximately. Results are previews — ids, names, titles, a link and creation times — enough to identify something and then read it. Paginated, with a maximum of 100 results per page.
 
-**Note:** Search returns no field values and no total count. Use `has_more` to decide whether more results exist. It cannot express "all records where status is open", which is `tape-query-records` with filters. A token holding only `apps:read` searches successfully and returns no records at all, because [search narrows rather than refuses](/docs/api/capabilities#four-rules-worth-knowing).
+**Note:** Search returns no field values and no total count. Use `has_more` to decide whether more results exist. It cannot express "all records where status is open", which is `tape-query-records` with filters. Because it needs words that match and reports no total, it can confirm that a record exists but can never answer "what do I have access to" — that is `tape-list-shared-records`. A token holding only `apps:read` searches successfully and returns no records at all, because [search narrows rather than refuses](/docs/api/capabilities#four-rules-worth-knowing).
 
 **Example prompts:**
 
@@ -83,11 +107,11 @@ Searches across every app and record the token can see, best match first. Use it
 
 `tape-fetch`
 
-Reads one app, record, saved view, workspace or automation by its id. With `type: "self"` it returns the user and organization the token acts as, which is the fastest way to confirm a connection. It also serves four static specifications that are otherwise [MCP resources](/docs/mcp/overview#resources): `field_value_spec`, `filter_spec`, `view_spec` and `app_field_spec`.
+Reads one app, record, saved view, workspace or automation by its id. With `type: "self"` it returns the user and organization the token acts as, which is the fastest way to confirm a connection. It also serves the five static specifications that are otherwise [MCP resources](/docs/mcp/overview#resources): `field_value_spec`, `filter_spec`, `view_spec`, `app_field_spec` and `automation_schema`.
 
-**Note:** Each arm needs a different capability, so one token reads some and not others. The `automation` arm needs `automations:read`, which is not part of a normal read-only token. `self` and the four documents need no capability at all.
+**Note:** Each arm needs a different capability, so one token reads some and not others. The `automation` arm needs `automations:read`, which is not part of a normal read-only token. `self` and the five documents need no capability at all.
 
-**Note:** Those are four of the five specifications. `tape://docs/automation-schema` has **no** fetch arm and is reachable only as an [MCP resource](/docs/mcp/overview#resources), so a client that cannot read resources has no way to reach it — and the automation tools are hard to use without it.
+**Note:** No documentation arm takes a per-type narrowing, so each serves its whole document. That matters most for `automation_schema`, which is around 75 KB — roughly as large as the other four put together. The [resource](/docs/mcp/overview#resources) form can be narrowed to one block type (`tape://docs/automation-schema/{block_type}`), so prefer it if your client reads resources; the arm exists for clients that cannot.
 
 **Note:** A Tape id is only unique within its own kind and the sequences overlap, so a wrong `type` does not reliably fail: reading a record id with `type: "app"` can return a real, unrelated app. Take `type` from wherever you got the id.
 
@@ -440,7 +464,7 @@ The **base** request cost is 10 credits, which would be 200 calls per minute —
 
 A refused call still costs credits, because capability checks run after rate limiting. Retrying a call your token cannot make will exhaust the budget without ever succeeding.
 
-**If you are rate limited:** ask the assistant to work in smaller batches and to stop searching in parallel. Prefer one `tape-query-records` call with a filter over many `tape-fetch` calls in a loop, and prefer `tape-get-apps` over repeated searches when you need the complete picture.
+**If you are rate limited:** ask the assistant to work in smaller batches and to stop searching in parallel. Prefer one `tape-query-records` call with a filter over many `tape-fetch` calls in a loop, and prefer `tape-get-apps` (with `tape-list-shared-records`) over repeated searches when you need the complete picture.
 
 ## Next steps
 

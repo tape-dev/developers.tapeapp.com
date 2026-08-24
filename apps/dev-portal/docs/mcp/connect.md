@@ -34,6 +34,7 @@ Grant only what the assistant actually needs:
 | ------------------------------------------------ | ----------------------------------------- |
 | List apps, read views, and search                | `apps:read`                               |
 | Read records and their field values              | `records:read`                            |
+| Take stock of records shared with them           | `records:read`                            |
 | Create records                                   | `apps:read` + `records:edit`              |
 | Update records                                   | `records:read` + `records:edit` (+ `apps:read`) |
 | Upload files                                     | `records:edit`                            |

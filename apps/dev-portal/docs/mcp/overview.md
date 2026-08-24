@@ -32,6 +32,7 @@ Because the token is yours, the assistant can only ever reach what you can reach
 With the server connected, an assistant can:
 
 - **Search** across your apps and records, and follow references between them.
+- **Take stock** of what reaches you outside the apps the token can browse — the records shared with you individually, which no app-based listing returns.
 - **Read** records, field values, apps, views, workspaces and users — including the exact field structure of an app.
 - **Create and update** records, post comments, and mint file upload tickets.
 - **Build structure** — create and update workspaces, apps, fields and views.
@@ -67,7 +68,7 @@ Tape writes a record as a map of field values, and the accepted shape of each va
 Two things it deliberately does not tell you. It describes field **types in general**: it reads no Tape data and knows nothing about any particular app, so for an app's own fields, their required flags and option lists, fetch the app itself. And `field_type` is not `type` — a status field reads back as `category`, attachment and image both read back as `file`, and the single- and multi-value variants of one type accept different shapes.
 :::
 
-**If your client cannot read resources**, the fetch tool serves four of the five specifications, under `type: "field_value_spec"`, `"filter_spec"`, `"view_spec"` and `"app_field_spec"`. Support across MCP clients is uneven, and a resource a client never surfaces is a specification the model never reads. Note that this fallback path *does* require a token, unlike the resources themselves — and that **`tape://docs/automation-schema` has no fetch equivalent**, so a client that cannot read resources cannot reach it at all.
+**If your client cannot read resources**, the fetch tool serves all five specifications, under `type: "field_value_spec"`, `"filter_spec"`, `"view_spec"`, `"app_field_spec"` and `"automation_schema"`. Support across MCP clients is uneven, and a resource a client never surfaces is a specification the model never reads. Note that this fallback path *does* require a token, unlike the resources themselves, and that no arm takes a per-type narrowing — `"automation_schema"` therefore always serves the whole ~75 KB catalogue, where the resource can be narrowed to one block type.
 
 Resource URIs are stable public API: clients bookmark them, and a person who attached one to a conversation keeps a reference to that exact string, so changing a URI is treated as breaking in the same way renaming a tool is.
 
