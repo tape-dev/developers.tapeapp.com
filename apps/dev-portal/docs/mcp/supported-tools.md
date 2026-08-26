@@ -2,10 +2,10 @@
 id: supported-tools
 title: Supported tools
 sidebar_label: Supported tools
-description: Reference for the 24 tools the Tape MCP server exposes — what each one does, what it will not do, and which capability its token needs.
+description: Reference for the 23 tools the Tape MCP server exposes — what each one does, what it will not do, and which capability its token needs.
 ---
 
-The Tape MCP server exposes **24 tools** for finding, reading and changing content in your Tape organization. An assistant combines them: it looks up an app, reads the records that match a condition, and writes a comment on the one that matters.
+The Tape MCP server exposes **23 tools** for finding, reading and changing content in your Tape organization. An assistant combines them: it looks up an app, reads the records that match a condition, and writes a comment on the one that matters.
 
 Every tool is advertised on connection with a description written for the model, so your client's tool list is always current. This page is the version for people: what each tool is for, what it will not do, and which [capability](/docs/api/capabilities) its token needs.
 
@@ -19,7 +19,7 @@ Argument and result keys are `snake_case`, matching the [developer API](/docs/ap
 | `tape-get-apps` | Every app the token can see, with its workspace | `apps:read` |
 | `tape-list-shared-records` | Records the token reaches individually, outside the apps it is granted | `records:read` |
 | `tape-search` | Full-text search across apps and records | `apps:read` **or** `records:read` |
-| `tape-fetch` | One app, record, view, workspace or automation by id | varies by `type` |
+| `tape-fetch` | One app, record, view, workspace, automation or automation run by id | varies by `type` |
 | `tape-get-workspaces` | The workspaces you belong to | `workspaces:read` |
 | `tape-get-users` | Find people in your organization by name | `organization:read` |
 | **Records** | | |
@@ -40,7 +40,6 @@ Argument and result keys are `snake_case`, matching the [developer API](/docs/ap
 | **Automations** | | |
 | `tape-get-automations` | Automations you administrate | `automations:read` |
 | `tape-get-runs` | Executions: what ran, when, and whether it worked | `automations:read` |
-| `tape-get-run` | One execution with its step-by-step log | `automations:read` |
 | `tape-create-automation` | Create an automation, paused | `automations:edit` |
 | `tape-update-automation` | Change, activate or pause an automation | `automations:edit` |
 | `tape-run-automation` | Run one automation immediately | `automations:run` |
@@ -107,9 +106,11 @@ Searches across every app and record the token can reach, best match first — i
 
 `tape-fetch`
 
-Reads one app, record, saved view, workspace or automation by its id. With `type: "self"` it returns the user and organization the token acts as, which is the fastest way to confirm a connection. It also serves the five static specifications that are otherwise [MCP resources](/docs/mcp/overview#resources): `field_value_spec`, `filter_spec`, `view_spec`, `app_field_spec` and `automation_schema`.
+Reads one app, record, saved view, workspace, automation or automation run by its id. With `type: "self"` it returns the user and organization the token acts as, which is the fastest way to confirm a connection. It also serves the five static specifications that are otherwise [MCP resources](/docs/mcp/overview#resources): `field_value_spec`, `filter_spec`, `view_spec`, `app_field_spec` and `automation_schema`.
 
-**Note:** Each arm needs a different capability, so one token reads some and not others. The `automation` arm needs `automations:read`, which is not part of a normal read-only token. `self` and the five documents need no capability at all.
+**Note:** Each arm needs a different capability, so one token reads some and not others. The `automation` and `automation_run` arms need `automations:read`, which is not part of a normal read-only token, and reading a run needs workspace admin rights on top of it. `self` and the five documents need no capability at all.
+
+**Note:** One arm is not addressed by `id`. `type: "automation_run"` takes `run_id` instead — a **string**, produced only by `tape-get-runs`, which should be passed back exactly as it was received rather than parsed into a number. See [Read one run](#read-one-run).
 
 **Note:** No documentation arm takes a per-type narrowing, so each serves its whole document. That matters most for `automation_schema`, which is around 75 KB — roughly as large as the other four put together. The [resource](/docs/mcp/overview#resources) form can be narrowed to one block type (`tape://docs/automation-schema/{block_type}`), so prefer it if your client reads resources; the arm exists for clients that cannot.
 
@@ -357,7 +358,7 @@ Changes a workspace's name, description or icon. Nothing else about a workspace 
 
 An automation is a saved program belonging to one app: a trigger, an optional filter, and an ordered list of actions. These tools need their own capabilities, which a normal read-only token does not carry — and the three are independent of one another, so a token can hold one and not the others. See [the capability table](/docs/mcp/connect#before-you-start).
 
-Every automation route additionally requires **admin rights on the workspace** the app is in. That is a role rather than a capability, so no broader token fixes it, and no automation tool reports it as a capability problem. `tape-get-automations` and `tape-get-runs` return an empty page and no error, so an account that administrates nothing sees exactly what an organization with no automations sees. Every other automation tool — including `tape-get-run` and `tape-fetch` with `type: "automation"` — answers `404`, the same answer as an automation that does not exist.
+Every automation route additionally requires **admin rights on the workspace** the app is in. That is a role rather than a capability, so no broader token fixes it, and no automation tool reports it as a capability problem. `tape-get-automations` and `tape-get-runs` return an empty page and no error, so an account that administrates nothing sees exactly what an organization with no automations sees. Everything else — including `tape-fetch` with `type: "automation"` or `type: "automation_run"` — answers `404`, the same answer as an automation that does not exist.
 
 ### List automations
 
@@ -393,13 +394,17 @@ Lists executions of automations: what ran, when, and whether it worked. Every fi
 
 ### Read one run
 
-`tape-get-run`
+`tape-fetch` with `type: "automation_run"`
 
-Reads one execution including the log of every step: the trigger, the filter, and one entry per action, with one entry per iteration for actions inside a loop. This is the tool for "why did that fail".
+Reads one execution including the log of every step: the trigger, the filter, and one entry per action, with one entry per iteration for actions inside a loop. This is the arm for "why did that fail".
+
+**Note:** It is addressed by `run_id`, never by `id`. A `run_id` is a **string** and comes only from a `tape-get-runs` row — pass it back exactly as you received it. Sending an `automation_id` instead does not reliably fail: runs and automations are counted by separate sequences, so the same number is routinely valid for both, and an unrelated run's log can come back with no error at all.
 
 **Note:** To diagnose a failure, find the log entry whose `status` is `failure` and read its `messages`. That names the step that broke, which the run's own `error_message` usually does not.
 
-**Note:** A refusal tells you nothing about the run. A run that never existed, one past the retention window, one deleted, and one belonging to somebody else are all refused identically, so that run ids cannot be probed.
+**Note:** The `action_id` on a log entry points at a node in the automation's stored `actions` list, and those ids are re-minted whenever `tape-update-automation` replaces that list. An `action_id` from an older run may no longer match anything in the current definition, so check the entry's `label` as well before telling somebody which action failed.
+
+**Note:** A refusal tells you nothing about the run. A run that never existed, one past the retention window, one deleted, one belonging to somebody else, and one in a workspace you do not administrate are all refused identically, so that run ids cannot be probed.
 
 **Example prompts:**
 
