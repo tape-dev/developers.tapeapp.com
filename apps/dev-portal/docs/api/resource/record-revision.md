@@ -111,3 +111,16 @@ The following example fetches the revision delta of revision number `1` of recor
   ]
 }
 ```
+
+### Revision lookback limit
+
+Revision deltas can only be computed for the **last 50 revisions** of a record. Requesting a revision that lies more than 50 revisions behind the record's current revision fails with a `400` error (see [Errors](/docs/api/errors)):
+
+```json title='⬅️      Response'
+{
+  "status_code": 400,
+  "endpoint": "/v1/record/1/revision/previous/123",
+  "error_code": "validation",
+  "error_message": "Revision ID 123 is too old. You can maximally go back 50 revisions"
+}
+```
