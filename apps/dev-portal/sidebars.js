@@ -9,6 +9,12 @@ module.exports = {
         'api/introduction',
         'api/authentication',
         'api/personal-access-tokens',
+        {
+          type: 'category',
+          label: 'OAuth',
+          collapsed: true,
+          items: ['api/oauth/overview', 'api/oauth/clients', 'api/oauth/authorization-flow', 'api/oauth/sign-in-with-tape'],
+        },
         'api/capabilities',
         'api/pagination',
         'api/versioning',
@@ -164,7 +170,7 @@ module.exports = {
       type: 'category',
       label: 'MCP Server',
       collapsed: true,
-      items: ['mcp/overview', 'mcp/connect', 'mcp/supported-tools', 'mcp/security'],
+      items: ['mcp/overview', 'mcp/connect', 'mcp/connect-with-token', 'mcp/supported-tools', 'mcp/security', 'mcp/build-a-client'],
     },
     {
       type: 'category',

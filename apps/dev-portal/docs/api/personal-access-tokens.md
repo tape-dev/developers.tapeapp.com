@@ -14,6 +14,8 @@ Every token carries two independent grants:
 
 Tokens begin with the prefix `tape_pat_`.
 
+A personal access token is the recommended credential for developers calling the API directly — for yourself, or to act in Tape on a user's behalf. [OAuth](/docs/api/oauth/overview) is mainly for MCP clients and for integrations registered by Tape; see [Which credential to use](/docs/api/authentication#which-credential-to-use).
+
 :::info A token can never exceed you
 A token's effective access is your own permissions, narrowed by its capabilities, narrowed again by its content selection. Both grants only ever subtract. Granting a capability never gives a token access to something you cannot already reach yourself, and losing your own access to a workspace immediately narrows every token you own.
 :::

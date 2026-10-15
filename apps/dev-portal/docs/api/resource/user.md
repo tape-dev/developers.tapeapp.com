@@ -9,6 +9,48 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
+## Retrieve the current user
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/user" />
+
+Retrieve the user the credential belongs to, the name of their organization, and what the credential may do. This endpoint requires no [capability](/docs/api/capabilities), and can only ever return the credential's own user.
+
+<ContextCodeBlock language="shell" title='➡️      Request'>
+{`curl #BASE_URL/v1/user \\
+  -u #USER_API_KEY:`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='⬅️      Response'>
+{`{
+  "user_id": 10000,
+  "org_id": 1337,
+  "org_name": "Acme Inc.",
+  "name": "John Doe",
+  "status": "active",
+  "role": "owner",
+  "email": "john@doe.com",
+  "phone": "555 123 456",
+  "job_description": "Founder & CEO",
+  "authentication": {
+    "method": "personal_access_token",
+    "scopes": ["apps:read", "records:read"],
+    "content_access": {
+      "scope": "selected",
+      "workspace_ids": [42],
+      "app_ids": []
+    }
+  }
+}`}
+</ContextCodeBlock>
+
+The `authentication` block describes the credential used for the request:
+
+| `method`                | `scopes`                              | `content_access`                                                                                     |
+| ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `personal_access_token` | The token's capabilities              | `scope` is `all`, or `selected` with the selected `workspace_ids` and `app_ids`                      |
+| `oauth_access_token`    | The scopes the access token holds     | Always `{"scope": "all", "workspace_ids": [], "app_ids": []}`                                        |
+| `user_key`              | `null` — a user API key is unrestricted | `null`                                                                                             |
+
 ## Retrieve organization users
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org/user" />

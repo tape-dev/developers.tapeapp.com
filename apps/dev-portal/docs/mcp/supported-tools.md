@@ -44,7 +44,7 @@ Argument and result keys are `snake_case`, matching the [developer API](/docs/ap
 | `tape-update-automation` | Change, activate or pause an automation | `automations:edit` |
 | `tape-run-automation` | Run one automation immediately | `automations:run` |
 
-A capability in parentheses is **conditional** — needed only on some calls, and the two behave differently. Without `apps:read`, `tape-update-record` **fails** on the calls that need it, while `tape-query-records` still answers in full and only its diagnostics degrade. Grant it alongside either way. See [the capability table](/docs/mcp/connect#before-you-start) for the same information organised by what you want the assistant to do.
+A capability in parentheses is **conditional** — needed only on some calls, and the two behave differently. Without `apps:read`, `tape-update-record` **fails** on the calls that need it, while `tape-query-records` still answers in full and only its diagnostics degrade. Grant it alongside either way. See [the capability table](/docs/mcp/connect-with-token#before-you-start) for the same information organised by what you want the assistant to do.
 
 **No tool deletes anything, and nothing grants people access.** No record, comment, app, workspace or automation, and since 2026-08-23 no field or field option either — `tape-update-database` used to be the exception and no longer is. Removing a field or an option is something a person does in the Tape app. `tape-update-database` is still flagged destructive, for the reason given in [its section](#change-an-app). See [Security best practices](/docs/mcp/security).
 
@@ -356,7 +356,7 @@ Changes a workspace's name, description or icon. Nothing else about a workspace 
 
 ## Automations
 
-An automation is a saved program belonging to one app: a trigger, an optional filter, and an ordered list of actions. These tools need their own capabilities, which a normal read-only token does not carry — and the three are independent of one another, so a token can hold one and not the others. See [the capability table](/docs/mcp/connect#before-you-start).
+An automation is a saved program belonging to one app: a trigger, an optional filter, and an ordered list of actions. These tools need their own capabilities, which a normal read-only token does not carry — and the three are independent of one another, so a token can hold one and not the others. See [the capability table](/docs/mcp/connect-with-token#before-you-start).
 
 Every automation route additionally requires **admin rights on the workspace** the app is in. That is a role rather than a capability, so no broader token fixes it, and no automation tool reports it as a capability problem. `tape-get-automations` and `tape-get-runs` return an empty page and no error, so an account that administrates nothing sees exactly what an organization with no automations sees. Everything else — including `tape-fetch` with `type: "automation"` or `type: "automation_run"` — answers `404`, the same answer as an automation that does not exist.
 
@@ -463,7 +463,7 @@ Runs one automation immediately, with real effects. This is the only tool whose 
 
 ## Rate limits
 
-MCP tool calls draw on the same per-user budget as the rest of the Tape API: **2,000 credits per minute**, shared across your user API key and every personal access token you own. Connecting another client does not buy extra throughput. See [Request limits](/docs/api/request-limits).
+MCP tool calls draw on the same per-user budget as the rest of the Tape API: **2,000 credits per minute**, shared across everything that acts as you — signed-in MCP clients and other connected apps, your personal access tokens and your user API key. Connecting another client does not buy extra throughput. See [Request limits](/docs/api/request-limits).
 
 The **base** request cost is 10 credits, which would be 200 calls per minute — but several routes charge a multiple of it, so treat 200 as a ceiling rather than an expectation. A search costs 50 credits (5× base), and so does each further page of results, which works out to roughly 40 searches per minute. Reading one view with `tape-fetch` costs 20. A single tool call can also bill more than one route: `tape-fetch` with `type: "app"` or `type: "workspace"` makes two. Where an endpoint charges above base, its [API resource](/docs/api/introduction) page says so. Every response carries `X-Retry-Remaining` and `X-Retry-Reset`.
 
