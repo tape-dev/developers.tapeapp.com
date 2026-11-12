@@ -1,19 +1,16 @@
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Admonition from '@theme/Admonition';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   getActiveUserIsLoading,
   getActiveUserPrimaryName,
-  getAppState,
-  subscribeToAppState,
+  useAppState,
 } from '@site/src/store';
 
 const STATIC_HEIGHT = '180px';
 
 export default function UserLoginInfo() {
   // Initialize application state usage
-  const [state, setAppState] = useState(getAppState());
-  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
+  const state = useAppState();
 
   // Select properties from state
   const isLoading = getActiveUserIsLoading(state);

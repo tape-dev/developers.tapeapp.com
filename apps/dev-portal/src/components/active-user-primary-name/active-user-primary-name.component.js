@@ -1,16 +1,13 @@
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   getActiveUserIsLoading,
   getActiveUserPrimaryNameWithFallback,
-  getAppState,
-  subscribeToAppState,
+  useAppState,
 } from '@site/src/store';
 
 export const ActiveUserPrimaryName = () => {
   // Initialize application state usage
-  const [state, setAppState] = useState(getAppState());
-  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
+  const state = useAppState();
 
   // Select properties from state
   const isLoading = getActiveUserIsLoading(state);
