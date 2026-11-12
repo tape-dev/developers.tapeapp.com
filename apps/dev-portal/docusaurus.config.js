@@ -134,9 +134,7 @@ module.exports = {
           editUrl:
             'https://github.com/tape-dev/developers.tapeapp.com/edit/main/apps/dev-portal',
         },
-        blog: {
-          showReadingTime: true,
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
