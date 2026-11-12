@@ -13,6 +13,9 @@ git clone git@github.com:tape-dev/developers.tapeapp.com.git
 # Navigate into the newly created folder
 cd developers.tapeapp.com
 
+# Switch to the pinned Node version (24, see .nvmrc)
+nvm use
+
 # Install NPM dependencies
 npm install
 
