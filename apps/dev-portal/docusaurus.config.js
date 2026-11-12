@@ -1,4 +1,5 @@
 const { themes } = require('prism-react-renderer');
+const { preserveExpressionIndentation } = require('./mdx-preprocessor');
 
 module.exports = {
   title: 'Tape Developers',
@@ -8,6 +9,9 @@ module.exports = {
   staticDirectories: ['static'],
   onBrokenLinks: 'throw',
   markdown: {
+    // Undo MDX 3's indent stripping in <ContextCodeBlock> code, see the module
+    preprocessor: ({ fileContent }) =>
+      preserveExpressionIndentation(fileContent),
     hooks: {
       onBrokenMarkdownLinks: 'warn',
     },
