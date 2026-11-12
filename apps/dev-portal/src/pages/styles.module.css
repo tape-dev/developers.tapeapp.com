@@ -60,6 +60,8 @@
 .getStarted {
   background-color: transparent;
   color: var(--tape-color--darkest);
+  /* Infima's .button border no longer falls back to currentColor */
+  border: var(--ifm-button-border-width) solid currentColor;
   border-radius: 999px;
   font-weight: 700;
   transition-property: transform;
