@@ -1,13 +1,12 @@
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { getAppState, subscribeToAppState } from '@site/src/store';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   getActiveUserApiKeyWithFallback,
   getDemoRecordIdWithFallback,
   getDemoRecordTitleWithFallback,
   getDevApiBaseUrl,
+  useAppState,
 } from '@site/src/store';
 import styles from './context-code-block-styles.module.css';
 
@@ -22,8 +21,7 @@ const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
  */
 export default function ContextCodeBlock({ children, language, title }) {
   // Initialize application state usage
-  const [state, setAppState] = useState(getAppState());
-  useEffect(subscribeToAppState(useDocusaurusContext(), setAppState), []);
+  const state = useAppState();
 
   // Select properties from state
   const apiKey = getActiveUserApiKeyWithFallback(state);

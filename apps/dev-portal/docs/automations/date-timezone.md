@@ -5,6 +5,7 @@ sidebar_label: Date, Time & Timezones
 ---
 
 import DateTimezoneFlowPng from '@site/static/docs/automations/date-timezone/automations-date-timezone-flow.png';
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
 # Date, Time & Timezones
 

@@ -1,7 +1,8 @@
 # Tape Developers Portal — repository rules
 
-Docusaurus 2 site. Markdown sources live in `apps/dev-portal/docs/`; the compiled
-site is committed to the repo-root `docs/` folder, which GitHub Pages serves.
+Docusaurus 3 site (React 19, MDX 3) on Node 24 — run `nvm use` (see `.nvmrc`).
+Markdown sources live in `apps/dev-portal/docs/`; the compiled site is committed
+to the repo-root `docs/` folder, which GitHub Pages serves.
 
 ## MANDATORY: internal doc links must be absolute
 
@@ -67,11 +68,36 @@ npm run check-links
 It skips fenced code blocks and `@[...](...)` formula syntax, so a clean run means
 there are genuinely no relative links. Source: `tools/check-doc-links.js`.
 
+## Writing MDX 3
+
+Every `.md` file is compiled as MDX 3, which is stricter than plain Markdown:
+
+- `{` and `<` in prose start JSX. Escape them (`\{`, `\<`) or put them in inline code.
+- Every component a page uses (`<ContextCodeBlock>`, `<MediaFrame>`, …) must be
+  imported in that file — an unimported component fails the build.
+- `:::note Title` admonitions, HTML comments and `{#id}` heading anchors work
+  through Docusaurus' default `markdown.mdx1Compat` options; keep them enabled.
+- Pass `<ContextCodeBlock>` code as a `` {`…`} `` template literal whose `{` opens
+  a line, with natural indentation. MDX 3 strips two leading spaces from every
+  continuation line of an expression; `apps/dev-portal/mdx-preprocessor.js`
+  adds them back before parsing. Don't remove it, and don't pass code in other
+  forms (e.g. as an attribute) — those are not compensated.
+- Code languages beyond Prism's default set must be listed in `prism.additionalLanguages`
+  (bash/`shell`, php, http and toml are); an unlisted one renders as plain text
+  without any warning.
+
+Components that read the shared app state (logged-in user, API key, demo record)
+must use `useAppState()` from `@site/src/store`. Reading the store during render
+makes server and client HTML differ, and React 19 then re-renders the whole page.
+
 ## Build and deploy
 
 - `npm run start` — dev server on :3100. Note it does **not** reproduce the
   trailing-slash behaviour described above; only a real build does.
-- `npm run build` — compiles into the repo-root `docs/` folder.
+- `npm run build` — compiles into the repo-root `docs/` folder, wiping it first
+  (`docs/CNAME` comes from `apps/dev-portal/static/CNAME`). The script passes
+  `--out-dir ../../docs` because Docusaurus resolves it against the site
+  directory — a plain `docs` would target the Markdown sources.
 - `npm run publish` — builds, rewrites `docs/CNAME`, and runs `git add .`.
   There is no CI; deploying means committing the built output and pushing to `main`.
 - Because the build output is committed, every deploy replaces the hashed JS

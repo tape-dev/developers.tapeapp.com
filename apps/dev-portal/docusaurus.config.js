@@ -1,3 +1,6 @@
+const { themes } = require('prism-react-renderer');
+const { preserveExpressionIndentation } = require('./mdx-preprocessor');
+
 module.exports = {
   title: 'Tape Developers',
   tagline: 'Connect, simplify, and automate your work using Tape.',
@@ -5,7 +8,14 @@ module.exports = {
   baseUrl: '/',
   staticDirectories: ['static'],
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    // Undo MDX 3's indent stripping in <ContextCodeBlock> code, see the module
+    preprocessor: ({ fileContent }) =>
+      preserveExpressionIndentation(fileContent),
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/favicon.svg',
   organizationName: 'tape',
   projectName: 'developers.tapeapp.com',
@@ -109,11 +119,10 @@ module.exports = {
       disableSwitch: true,
     },
     prism: {
-      additionalLanguages: ['php', 'http'],
-      // theme: require('prism-react-renderer/themes/vsDark'),
-      // theme: require('prism-react-renderer/themes/vsLight'),
-      theme: require('prism-react-renderer/themes/github'),
-      // theme: require('prism-react-renderer/themes/duotoneLight'),
+      // prism-react-renderer v2 no longer bundles bash (incl. `shell`) or toml
+      additionalLanguages: ['php', 'http', 'bash', 'toml'],
+      // Alternatives: themes.vsDark, themes.vsLight, themes.duotoneLight
+      theme: themes.github,
     },
   },
   presets: [
@@ -125,9 +134,7 @@ module.exports = {
           editUrl:
             'https://github.com/tape-dev/developers.tapeapp.com/edit/main/apps/dev-portal',
         },
-        blog: {
-          showReadingTime: true,
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },

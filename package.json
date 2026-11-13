@@ -2,32 +2,29 @@
   "name": "dev-portal",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "start": "runtime=DEV nx serve dev-portal",
-    "start-dev": "runtime=DEV nx serve dev-portal",
-    "start-prd": "runtime=PRD nx serve dev-portal",
-    "serve": "runtime=DEV nx serve dev-portal",
-    "build": "nx build dev-portal",
-    "check-links": "node tools/check-doc-links.js",
-    "test": "nx test dev-portal",
-    "publish": "nx build dev-portal && echo 'developers.tapeapp.com' > docs/CNAME && git add ."
-  },
   "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "runtime=DEV docusaurus start apps/dev-portal --port 3100 --no-open",
+    "start-dev": "runtime=DEV docusaurus start apps/dev-portal --port 3100 --no-open",
+    "start-prd": "runtime=PRD docusaurus start apps/dev-portal --port 3100 --no-open",
+    "serve": "runtime=DEV docusaurus start apps/dev-portal --port 3100 --no-open",
+    "build": "docusaurus build apps/dev-portal --out-dir ../../docs",
+    "check-links": "node tools/check-doc-links.js",
+    "publish": "npm run build && echo 'developers.tapeapp.com' > docs/CNAME && git add ."
+  },
   "devDependencies": {
-    "@nrwl/cli": "12.10.1",
-    "@nrwl/tao": "12.10.1",
-    "@nrwl/workspace": "12.10.1",
-    "@nx-plus/docusaurus": "^12.2.0",
-    "@types/node": "14.14.33",
-    "prettier": "^2.3.1",
-    "typescript": "~4.3.5"
+    "prettier": "^3.10.1"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-alpha.70",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.70",
-    "@mdx-js/react": "^1.6.21",
-    "clsx": "^1.1.1",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4"
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "@mdx-js/react": "^3.1.1",
+    "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   }
 }

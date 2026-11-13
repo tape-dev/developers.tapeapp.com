@@ -1,25 +1,48 @@
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useEffect, useMemo, useSyncExternalStore } from 'react';
 import { loadAppStateFromServer } from './app-state.effect';
 import { getRuntime } from './app-state.selectors';
 import {
   getAppState,
+  getInitialAppState,
   setAppState,
-  subscribeToAppState as _subscribeToAppState,
+  subscribeToAppState,
 } from './app-state.store';
 
-export function subscribeToAppState(docusaurusContext, listenerFunc) {
-  // Initialize runtime
-  const runtime = (
-    docusaurusContext?.siteConfig?.customFields?.runtime || 'PRD'
-  )
+function getRuntimeFromContext(docusaurusContext) {
+  return (docusaurusContext?.siteConfig?.customFields?.runtime || 'PRD')
     .trim()
     .toUpperCase();
+}
 
-  if (getRuntime(getAppState()) !== runtime) {
-    setAppState({ ...getAppState(), runtime });
-  }
+/**
+ * React hook returning the global application state.
+ *
+ * Server rendering and hydration always see the initial state, so the first
+ * client render matches the static HTML: since React 18 a hydration mismatch
+ * discards the server HTML and re-renders the whole page on the client. The
+ * live state (e.g. a user context that loaded meanwhile) is applied right after.
+ */
+export function useAppState() {
+  const runtime = getRuntimeFromContext(useDocusaurusContext());
+  const serverState = useMemo(
+    () => ({ ...getInitialAppState(), runtime }),
+    [runtime]
+  );
 
-  // Lazy initialize app state
-  loadAppStateFromServer(runtime);
+  useEffect(() => {
+    // Initialize runtime
+    if (getRuntime(getAppState()) !== runtime) {
+      setAppState({ ...getAppState(), runtime });
+    }
 
-  return () => _subscribeToAppState(listenerFunc);
+    // Lazy initialize app state
+    loadAppStateFromServer(runtime);
+  }, [runtime]);
+
+  return useSyncExternalStore(
+    subscribeToAppState,
+    getAppState,
+    () => serverState
+  );
 }
