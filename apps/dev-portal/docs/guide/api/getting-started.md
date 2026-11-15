@@ -4,14 +4,11 @@ title: Quickstart
 description: Retrieve a record from your Tape organization with a personal access token and a single API request.
 ---
 
-import UserLoginInfo from '@site/src/components/user-login/user-login.component';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartTokenPng from '@site/static/docs/guide/api/getting-started/quickstart-token.png';
 import MediaFrame from '@site/src/components/media-frame/media-frame.component';
-
-<UserLoginInfo></UserLoginInfo>
 
 Retrieve your first record with a personal access token and a single API request.
 
@@ -63,11 +60,11 @@ Revoke it under **Developer** and create a new one.
 
 Make a `GET` request to `/v1/record/{record_id}`. Send the token as a bearer token in the `Authorization` header.
 
-Signed in to Tape on this site? The examples already contain the ID of one of your records. Otherwise, use the ID of a record you can view: open the record in Tape, select **•••**, then select **Developer** and copy the **Record ID**.
+Use the ID of a record you can view: open the record in Tape, select **•••**, then select **Developer** and copy the **Record ID**. In the examples, replace `123456` with your record ID.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='Retrieve "#RECORD_TITLE"'>
+<ContextCodeBlock language="shell" title='Retrieve a record'>
 {`curl #BASE_URL/v1/record/#RECORD_ID \\
   -H "Authorization: Bearer $TAPE_TOKEN"
 `}
@@ -75,7 +72,7 @@ Signed in to Tape on this site? The examples already contain the ID of one of yo
 </TabItem>
 
 <TabItem value="js" label="JavaScript">
-<ContextCodeBlock language="javascript" title='Retrieve "#RECORD_TITLE"'>
+<ContextCodeBlock language="javascript" title='Retrieve a record'>
 {`const response = await fetch("#BASE_URL/v1/record/#RECORD_ID", {
   headers: { Authorization: \`Bearer \${process.env.TAPE_TOKEN}\` },
 });
@@ -85,7 +82,7 @@ console.log(JSON.stringify(await response.json(), null, 2));`}
 </TabItem>
 
 <TabItem value="python" label="Python">
-<ContextCodeBlock language="python" title='Retrieve "#RECORD_TITLE"'>
+<ContextCodeBlock language="python" title='Retrieve a record'>
 {`import json
 import os
 import requests
@@ -99,7 +96,7 @@ print(json.dumps(response.json(), indent=2))`}
 </TabItem>
 
 <TabItem value="php" label="PHP">
-<ContextCodeBlock language="php" title='Retrieve "#RECORD_TITLE"'>
+<ContextCodeBlock language="php" title='Retrieve a record'>
 {`<?php
 $context = stream_context_create([
   'http' => [

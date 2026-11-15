@@ -87,7 +87,7 @@ Wrap your code in an immediately invoked function expression (IIFE) and return t
 
 ### Asynchronous code
 
-Use the **Execute a script** action to run asynchronous code. Add it in the automation editor with **Add action**. We recommend [async/await](https://nodejs.dev/learn/modern-asynchronous-javascript-with-async-and-await) over plain promises.
+Use the **Execute a script** action to run asynchronous code. Add it in the automation editor with **Add action**. We recommend [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) over plain promises.
 
 **Execute a script** gives you more APIs, modules and functions. The code editor shows autocompletion and types for all of them.
 

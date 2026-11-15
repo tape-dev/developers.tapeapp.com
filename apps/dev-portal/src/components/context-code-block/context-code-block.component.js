@@ -1,61 +1,33 @@
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import React from 'react';
-import {
-  getActiveUserApiKeyWithFallback,
-  getDemoRecordIdWithFallback,
-  getDemoRecordTitleWithFallback,
-  getDevApiBaseUrl,
-  useAppState,
-} from '@site/src/store';
 import styles from './context-code-block-styles.module.css';
 
-const USER_API_KEY_PLACEHOLDER = '#USER_API_KEY';
-const BASE_URL_PLACEHOLDER = '#BASE_URL';
-const RECORD_ID_PLACEHOLDER = '#RECORD_ID';
-const RECORD_TITLE_PLACEHOLDER = '#RECORD_TITLE';
+// Fixed sample values: the docs never fill examples with account data
+const VALUES = {
+  '#USER_API_KEY': '$TAPE_TOKEN',
+  '#BASE_URL': 'https://api.tapeapp.com',
+  '#RECORD_ID': '123456',
+  '#RECORD_TITLE': 'Acme Inc.',
+};
+const PATTERN = new RegExp(Object.keys(VALUES).join('|'), 'g');
+
+const replacePlaceholders = (str) => (str || '').replace(PATTERN, (m) => VALUES[m]);
 
 /**
- * Context-aware CodeBlock component wrapper, replacing placeholders with the respective values from the context.
- * Replaces placeholders inside the title and children components.
+ * CodeBlock wrapper that replaces the placeholders above in the title and in
+ * the code with the fixed sample values.
  */
 export default function ContextCodeBlock({ children, language, title }) {
-  // Initialize application state usage
-  const state = useAppState();
-
-  // Select properties from state
-  const apiKey = getActiveUserApiKeyWithFallback(state);
-  const recordId = getDemoRecordIdWithFallback(state);
-  const recordTitle = getDemoRecordTitleWithFallback(state);
-  const baseUrl = getDevApiBaseUrl(state);
-
-  function replacePlaceholders(str) {
-    return (str || '')
-      .replace(new RegExp(USER_API_KEY_PLACEHOLDER, 'g'), apiKey)
-      .replace(new RegExp(BASE_URL_PLACEHOLDER, 'g'), baseUrl)
-      .replace(new RegExp(RECORD_ID_PLACEHOLDER, 'g'), recordId)
-      .replace(new RegExp(RECORD_TITLE_PLACEHOLDER, 'g'), recordTitle);
-  }
-
   const childrenArr =
-    typeof children === 'string'
-      ? [children]
-      : Array.isArray(children)
-      ? children
-      : [];
-
-  const result = childrenArr.map((child) => {
-    if (typeof child === 'string') {
-      return replacePlaceholders(child);
-    }
-    return child;
-  });
-
-  const replacedTitle = replacePlaceholders(title);
+    typeof children === 'string' ? [children] : Array.isArray(children) ? children : [];
+  const result = childrenArr.map((child) =>
+    typeof child === 'string' ? replacePlaceholders(child) : child
+  );
 
   return (
     <div className={clsx(styles.codeBlock)}>
-      <CodeBlock title={replacedTitle} language={language}>
+      <CodeBlock title={replacePlaceholders(title)} language={language}>
         {result}
       </CodeBlock>
     </div>
