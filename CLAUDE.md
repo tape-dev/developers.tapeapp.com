@@ -100,6 +100,11 @@ makes server and client HTML differ, and React 19 then re-renders the whole page
   directory — a plain `docs` would target the Markdown sources.
 - `npm run publish` — builds, rewrites `docs/CNAME`, and runs `git add .`.
   There is no CI; deploying means committing the built output and pushing to `main`.
+- The site is proxied through Cloudflare, whose email obfuscation would serve
+  `[email protected]` to crawlers, curl and AI fetch tools in place of every
+  example address. `apps/dev-portal/plugins/cloudflare-email-off.js` wraps each
+  built page in `<!--email_off-->` markers to opt out. Keep it whichever host
+  serves `docs/`.
 - Because the build output is committed, every deploy replaces the hashed JS
   chunks and deletes the previous ones. Pages and assets are served with
   `max-age=600`, so for roughly ten minutes after a push a client running the

@@ -125,6 +125,8 @@ module.exports = {
       theme: themes.github,
     },
   },
+  // Opt every page out of Cloudflare's email obfuscation, see the module
+  plugins: ['./plugins/cloudflare-email-off'],
   presets: [
     [
       '@docusaurus/preset-classic',
