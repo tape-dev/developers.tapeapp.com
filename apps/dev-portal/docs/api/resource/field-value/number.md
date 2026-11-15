@@ -1,6 +1,6 @@
 ---
 id: number
-title: Number Field Value
+title: Number field value
 sidebar_label: Number
 ---
 
@@ -9,36 +9,62 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A number field value consists of its `value` property of type `number`. The value is a decimal like 1, 1.0 or 1.5. A `number` field value holds at most one value.
+Use a number field value to read and write the number of a record.
+
+The value of a [number field](/docs/api/resource/field/number) is a `number`, like `1`, `1.0` or `1.5`. A `number` field holds at most one value.
+
+```json title="Number field value object"
+{
+  "field_id": 2,
+  "external_id": "closing_amount",
+  "label": "Closing Amount",
+  "type": "number",
+  "field_type": "number",
+  "values": [{ "value": 85000, "formatted": "85,000.00€" }]
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"number"`. | `"number"` |
+| `field_type` | `string` | `"number"`. | `"number"` |
+| `values[].value` | `number` | The number. | `85000` |
+| `values[].formatted` | `string` | The number with the decimal places and the unit from the field settings. | `"85,000.00€"` |
+
+Each field in a record response also contains the field's `config`. The examples on this page leave it out.
 
 ## Record creation
 
+Use the [create record endpoint](/docs/api/resource/record#create-a-record) to set number values on a new record.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A number field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Salary" field with ID 2, type `number` and external ID `salary`:
+The example creates a deal with the "Deal Name" field (ID `1`, type `single_text`, slug `deal_name`) and the "Closing Amount" field (ID `2`, type `number`, slug `closing_amount`). The "Closing Amount" field has two decimal places and the unit "€" after the value.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/record/app/1 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "salary": 2000
+      "deal_name": "Solar roof for Acme Inc.",
+      "closing_amount": 85000
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "salary": 2000
+    "deal_name": "Solar roof for Acme Inc.",
+    "closing_amount": 85000
   }
 }
 ```
@@ -46,79 +72,114 @@ A number field value can be created as part of a record creation. Here is an exa
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "2000$",
+  "title": "Solar roof for Acme Inc.",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "deal_name",
+      "label": "Deal Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Solar roof for Acme Inc." }]
+    },
+    {
       "field_id": 2,
-      "external_id": "salary",
+      "external_id": "closing_amount",
+      "label": "Closing Amount",
       "type": "number",
       "field_type": "number",
-      "label": "Salary",
-      "values": [{ "value": 2000 }]
+      "values": [{ "value": 85000, "formatted": "85,000.00€" }]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- Use the field ID or the field's slug (returned as `external_id` in records) as the key in `fields`.
+- Send the number as a number or as a string, for example `85000` or `"85000.50"`. Tape also accepts `{ "value": 85000 }` or an array with one of these.
+- Tape removes spaces at the start and the end of a string.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- A value that isn't a number returns `400` with `validation` and the message `Invalid input for number field with ID …`.
+- A number outside the allowed range returns `400` with `validation`.
+
+See [Errors](/docs/api/errors) for all error codes.
 
 ## Record retrieval
 
+Use the [retrieve record endpoint](/docs/api/resource/record#retrieve-a-record) to read the number values of a record.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-A number field value can be retrieved as part of a record retrieval:
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title='Response'
 {
   "record_id": 1,
-  "title": "2000$",
+  "title": "Solar roof for Acme Inc.",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "deal_name",
+      "label": "Deal Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Solar roof for Acme Inc." }]
+    },
+    {
       "field_id": 2,
-      "external_id": "salary",
+      "external_id": "closing_amount",
+      "label": "Closing Amount",
       "type": "number",
       "field_type": "number",
-      "label": "Salary",
-      "values": [{ "value": 2000 }]
+      "values": [{ "value": 85000, "formatted": "85,000.00€" }]
     }
   ]
 }
 ```
 
+**Requirements:** `records:read`. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Record update
+
+Use the [update record endpoint](/docs/api/resource/record#update-a-record) to change the number values of a record.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more number field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "Salary" field with ID 2, type `number` and external ID `salary`:
+The example changes the "Closing Amount" field (slug `closing_amount`) of the record with ID `1`.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X PUT #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "salary": 4000
+      "closing_amount": 92500.5
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "salary": 4000
+    "closing_amount": 92500.5
   }
 }
 ```
@@ -126,19 +187,59 @@ One or more number field values can be updated as part of a record update. Here 
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "4000$",
+  "title": "Solar roof for Acme Inc.",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "deal_name",
+      "label": "Deal Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Solar roof for Acme Inc." }]
+    },
+    {
       "field_id": 2,
-      "external_id": "salary",
+      "external_id": "closing_amount",
+      "label": "Closing Amount",
       "type": "number",
       "field_type": "number",
-      "label": "Salary",
-      "values": [{ "value": 4000 }]
+      "values": [{ "value": 92500.5, "formatted": "92,500.50€" }]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- The new number replaces the old number.
+- To clear the field, send `null` or an empty string `""`.
+- Tape doesn't stop you from clearing a required number field through the API. Send a value instead.
+- Fields that aren't in the request keep their values.
+
+```json title="Request: clear the field"
+{
+  "fields": {
+    "closing_amount": null
+  }
+}
+```
+
+A cleared field isn't in the `fields` of the response.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+Same errors as under [Record creation](#record-creation).
+
+See [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Number field](/docs/api/resource/field/number): create and change number fields.
+- [Field value](/docs/api/resource/field-value/overview): how all field values work.
+- [Record](/docs/api/resource/record): create, read, update and delete records.
+- [Filter](/docs/api/resource/filter#number): find records by their number values.

@@ -9,32 +9,48 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-A webhook enables Tape to push real-time notifications to your app. Tape uses HTTP or HTTPS to send these notifications to your app as a JSON payload. You can then use these notifications to execute actions in your backend systems.
+Use these endpoints to create, verify, list and delete webhooks for an app.
+
+A webhook sends a POST request to your URL whenever something changes in a database app. The JSON payload carries IDs only, for example `record_id` and `revision_id`. Tape doesn't sign webhook requests, so read the record with your token to get its values.
+
+Your URL must answer every request with a `2xx` status code within 5 seconds. See [Error handling](#error-handling).
+
+:::info Which capability do I need?
+All webhook endpoints need `webhooks:manage`. See [Capabilities](/docs/api/capabilities).
+:::
+
+:::tip New to webhooks?
+Follow [Working with webhooks](/docs/guide/api/working-with-webhooks) for a complete handler in Node.js.
+
+Used webhooks with the Podio API? Verification works the same. Tape sends JSON instead of form parameters, and event types start with `record.` instead of `item.`. See [Coming from the Podio API](/docs/guide/api/coming-from-podio#move-your-webhooks).
+:::
 
 ## Create a webhook
 
-A webhook can be created via the API by providing a URL and the type of events you want to get notified for. See the list of available webhook types [below](#webhook-types).
+Use this endpoint to register a URL that receives events of one type from an app.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/app/{app_id}" />
+
+Send the URL and the event `type` you want to receive. To find the `app_id`, see [Find the app ID and field IDs](/docs/api/resource/app#find-app-and-field-ids).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/hook/app/1 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "type": "record.create",
     "url": "https://webhook.example.org/example-webhook-endpoint"
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "type": "record.create",
   "url": "https://webhook.example.org/example-webhook-endpoint"
@@ -44,7 +60,7 @@ A webhook can be created via the API by providing a URL and the type of events y
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "hook_id": 1,
   "app_id": 1,
@@ -55,19 +71,40 @@ A webhook can be created via the API by providing a URL and the type of events y
 }
 ```
 
+**General behavior**
+
+- A new webhook starts with the status `inactive`.
+- Right after you create it, Tape sends the `hook.verify` request to your URL.
+- Tape sends `hook.verify` only to an `http` or `https` URL on port 80 or 443. Tape saves any other URL too, but the webhook stays `inactive`.
+- Send the code to [Validate hook verification](#validate-hook-verification), and the webhook becomes `active` and receives events.
+- Missed the code? [Request hook verification](#request-hook-verification) again.
+
+**Requirements:** `webhooks:manage`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+A request without the **Admin** role in the app's workspace returns `400` with `workspace_invalid_permission`.
+
+**Body parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `type` | `string` | Required. The event type, see [Webhook types](#webhook-types). |
+| `url` | `string` | Required. The URL that receives the events. |
+
 ## Request hook verification
+
+Use this endpoint to send a verification code to the URL of a webhook.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/{hook_id}/verify/request" />
 
-To avoid potential abuse of webhooks and increase security, every webhook URL must be verified first before Tape starts sending requests to that URL. You can request the verification code via the API. This will cause the webhook to send a request to the URL with the parameter `type` set to `hook.verify` and `code` set to the verification code. The endpoint must then call the validate method with the code to complete the verification.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/hook/1/verify/request \\
-  -u #USER_API_KEY:
+  -H "Authorization: Bearer $TAPE_TOKEN"
 `}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "hook_id": 1,
   "status": "inactive",
@@ -77,9 +114,9 @@ To avoid potential abuse of webhooks and increase security, every webhook URL mu
 }
 ```
 
-The Tape server will send a POST request to the provided URL with the following body:
+Tape then sends a POST request to the webhook URL with `type` set to `hook.verify` and the verification code in `code`:
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "type": "hook.verify",
@@ -87,29 +124,40 @@ The Tape server will send a POST request to the provided URL with the following 
 }
 ```
 
+To complete the verification, send this code to [Validate hook verification](#validate-hook-verification).
+
+**General behavior**
+
+- Tape sends events only to verified URLs. This keeps others from sending Tape traffic to a URL they don't control.
+- Your handler can send the code back itself, so verification needs no manual step. See [Working with webhooks](/docs/guide/api/working-with-webhooks#step-1-write-the-handler).
+- To reactivate an `inactive` webhook, request the verification again.
+- Tape sends the request in the background, so the response still shows `inactive`. An `active` webhook gets no new request.
+
+**Requirements:** `webhooks:manage`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Validate hook verification
 
-Validates the hook using the code received from the verify call. On successful validation the hook will become active.
+Use this endpoint to activate a webhook with the code it received.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/hook/{hook_id}/verify/validate" />
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/hook/1/verify/validate \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "code": "f43d05e6"
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "code": "f43d05e6"
 }
@@ -118,7 +166,7 @@ Validates the hook using the code received from the verify call. On successful v
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "hook_id": 1,
   "status": "active",
@@ -128,19 +176,29 @@ Validates the hook using the code received from the verify call. On successful v
 }
 ```
 
+With the right code, the webhook becomes `active` and its count of failed executions starts at `0` again.
+
+**Requirements:** `webhooks:manage`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+A wrong code, or a webhook that is already active, returns `400` with `validation`.
+
+<a id="get-app-webhook"></a>
+
 ## Retrieve app webhooks
+
+Use this endpoint to list all webhooks of an app.
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/hook/app/{app_id}" />
 
-All existing webhooks for an app can be retrieved via the API by providing the ID of the app.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X GET #BASE_URL/v1/hook/app/1 \\
-  -u #USER_API_KEY:
+<ContextCodeBlock language="shell" title='Request'>
+{`curl #BASE_URL/v1/hook/app/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN"
 `}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "webhooks": [
     {
@@ -156,19 +214,25 @@ All existing webhooks for an app can be retrieved via the API by providing the I
 }
 ```
 
+**Requirements:** `webhooks:manage`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+A request without the **Admin** role in the app's workspace returns `400` with `workspace_invalid_permission`.
+
 ## Delete a webhook
+
+Use this endpoint to delete a webhook by its ID.
 
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/hook/{hook_id}" />
 
-A webhook can be deleted via the API by providing the ID of the webhook.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X DELETE #BASE_URL/v1/hook/1 \\
-  -u #USER_API_KEY:
+  -H "Authorization: Bearer $TAPE_TOKEN"
 `}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "hook_id": 1,
   "status": "inactive",
@@ -178,18 +242,20 @@ A webhook can be deleted via the API by providing the ID of the webhook.
 }
 ```
 
+**Requirements:** `webhooks:manage`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Webhook types
 
-Webhooks have to specify a `type`, which indicates which events should be sent to this webhook. The types of webhooks currently available are the following:
+Every webhook has one `type`. It decides which events Tape sends to the webhook. To receive several types, create one webhook per type with the same URL.
 
 ### Record created
 
-The `record.create` webhook type allows you to get notified whenever a record was created in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `record.create` type notifies you when someone creates a record in the database app of the webhook. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -202,14 +268,14 @@ The `record.create` webhook type allows you to get notified whenever a record wa
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  68
+Host            webhook.example.org
 Connection      close
 
 {
@@ -225,12 +291,12 @@ Connection      close
 
 ### Record updated
 
-The `record.update` webhook type allows you to get notified whenever a record was updated in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `record.update` type notifies you when someone updates a record in the database app of the webhook. To see which values changed, send `revision_id` to [Retrieve revision delta](/docs/api/resource/record-revision#retrieve-revision-delta). Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -243,14 +309,14 @@ The `record.update` webhook type allows you to get notified whenever a record wa
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  68
+Host            webhook.example.org
 Connection      close
 
 {
@@ -266,12 +332,12 @@ Connection      close
 
 ### Record deleted
 
-The `record.delete` webhook type allows you to get notified whenever a record was deleted in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `record.delete` type notifies you when someone deletes a record in the database app of the webhook. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -284,14 +350,14 @@ The `record.delete` webhook type allows you to get notified whenever a record wa
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  68
+Host            webhook.example.org
 Connection      close
 
 {
@@ -307,12 +373,12 @@ Connection      close
 
 ### Record restored
 
-The `record.restore` webhook type allows you to get notified whenever a record was restored in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `record.restore` type notifies you when someone restores a record in the database app of the webhook. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -325,14 +391,14 @@ The `record.restore` webhook type allows you to get notified whenever a record w
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  69
+Host            webhook.example.org
 Connection      close
 
 {
@@ -346,14 +412,14 @@ Connection      close
 </TabItem>
 </Tabs>
 
-### Comment created
+### Comment added {#comment-created}
 
-The `comment.create` webhook type allows you to get notified whenever a comment was created for a record in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `comment.create` type notifies you when someone comments on a record in the database app of the webhook. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -366,14 +432,14 @@ The `comment.create` webhook type allows you to get notified whenever a comment 
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  70
+Host            webhook.example.org
 Connection      close
 
 {
@@ -389,12 +455,12 @@ Connection      close
 
 ### Comment deleted
 
-The `comment.delete` webhook type allows you to get notified whenever a comment was deleted for a record in the app the webhook is registered for. Here is an example incoming POST request payload:
+The `comment.delete` type notifies you when someone deletes a comment on a record in the database app of the webhook. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "record_id": 100,
@@ -407,14 +473,14 @@ The `comment.delete` webhook type allows you to get notified whenever a comment 
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  70
+Host            webhook.example.org
 Connection      close
 
 {
@@ -430,12 +496,12 @@ Connection      close
 
 ### App updated
 
-The `app.update` webhook type allows you to get notified whenever the app the webhook is registered for was updated (for example, its fields or settings changed). Here is an example incoming POST request payload:
+The `app.update` type notifies you when someone updates the app of the webhook, for example its fields or settings. Example of an incoming POST request:
 
 <Tabs>
 <TabItem value="json" label="JSON">
 
-```json title='⬅️      Incoming request'
+```json title="Incoming request"
 {
   "hook_id": 1,
   "app_id": 1,
@@ -447,14 +513,14 @@ The `app.update` webhook type allows you to get notified whenever the app the we
 
 <TabItem value="http" label="HTTP">
 
-```http title='⬅️      Incoming request'
+```http title="Incoming request"
 POST https://webhook.example.org/example-webhook-endpoint
 
 Accept          application/json, text/plain, */*
 Content-type    application/json;charset=utf-8
 User-agent      Tape Webhook
-Content-length  51
-Host            localhost:3009
+Content-length  44
+Host            webhook.example.org
 Connection      close
 
 {
@@ -467,16 +533,37 @@ Connection      close
 </TabItem>
 </Tabs>
 
+## Avoid endless loops
+
+A handler that changes a record in the same app starts a new event, which calls the handler again. Add the query parameter `hook=false` to every request your handler sends to change records, for example `PUT /v1/record/{record_id}?hook=false`. It works on [create, update, delete, restore](/docs/api/resource/record) and the batch endpoints.
+
+Add `silent=true` to skip notifications, and `workflow=false` to skip automations.
+
 ## Error handling
 
-The webhook must respond with a 2xx status code. If the status code is different from 2xx more than 50 consecutive times the webhook will return to being unverified and will have to be verified again to be active. Additionally, your webhook may return to unverified if you do not send responses in a timely manner (5 seconds). You should handle any heavy processing asynchronously.
+Respond to every webhook request with a `2xx` status code within 5 seconds. Handle heavy processing after you respond.
 
-Only hooks on ports 80 and 443 are supported, i.e. you cannot use `http://www.example.org/webhook:8080`, only `http://www.example.org/webhook` or `https://www.example.org/webhook`.
+- Send an empty body or a short one, such as `OK`. A long body, such as an HTML page, counts as a failed request.
+- After 100 failed requests in a row, the webhook becomes `inactive`. Request the verification again to activate it.
+- Tape retries a request briefly after a timeout, a network error, a `429` or a `5xx` response. Other status codes fail at once.
+- Tape doesn't follow redirects. Use the final URL, including `https`.
+- The same event can arrive more than once. Use `record_id` and `revision_id` to skip events you already handled.
+- Tape sends webhooks only to ports 80 and 443. `https://www.example.org:8080/webhook` doesn't work. Use `https://www.example.org/webhook`.
 
 ## Rate limits
 
-Webhook executions are rate limited. The current rate limit is 100 webhook executions per minute per app.
+Tape sends webhook requests at a limited rate. When many events happen at the same time, requests can arrive with a short delay.
 
-:::caution Rate limits may change
-In the future, Tape plans to adjust rate limits to balance for demand and reliability. Tape may also introduce distinct rate limits for organizations in different pricing plans.
+:::caution Can these limits change?
+Yes. Tape can adjust rate limits to balance demand and reliability, also with different limits per pricing plan.
 :::
+
+## Next steps
+
+- [Working with webhooks](/docs/guide/api/working-with-webhooks): build, verify and test a handler end to end.
+- [Record](/docs/api/resource/record): read the record that an event points to.
+- [Record comment](/docs/api/resource/record-comment): read the comment of a `comment.create` event.
+- [App](/docs/api/resource/app): read the app after an `app.update` event.
+- [Request limits](/docs/api/request-limits): the limits of the API itself.
+- [Capabilities](/docs/api/capabilities): what `webhooks:manage` allows.
+- In the Help Center: [App webhooks](https://help.tapeapp.com/en/articles/18449250-app-webhooks)

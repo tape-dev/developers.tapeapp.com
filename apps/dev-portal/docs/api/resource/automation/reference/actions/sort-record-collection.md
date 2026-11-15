@@ -2,42 +2,22 @@
 id: sort-record-collection
 title: sort_record_collection
 sidebar_label: sort_record_collection
-description: Config reference for the Tape automation sort_record_collection action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation sort_record_collection action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to put the records of a record collection from an earlier action in order.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Sort collection** — sorts the records in a record collection by one or more variables. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Sort collected records** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to sort — an action-variable reference to a prior action's collection output. Omitted when unset. |
-| `sorts` | array of sort entries | no | Ordered list of sort entries applied to the collection. Empty when omitted. |
-
-Each entry in `sorts` is an object:
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `id` | string | no | Stable entry id; server-minted when omitted, and round-trips on read. |
-| `variable_def` | [reference](/docs/api/resource/automation/dynamic-values) | **yes** | The variable to sort by — a reference to one of the record collection's app fields (or a meta field). |
-| `direction` | enum | **yes** | Sort direction. |
-
-**`direction` tokens** (lower-case): `asc`, `desc`.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+An earlier action collected deals from database app `42`. This action sorts them by **Amount**, highest first, and then by **Close date**:
 
 ```json
 {
@@ -46,7 +26,11 @@ An action entry inside an automation definition's `actions[]`:
     "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 42 },
     "sorts": [
       {
-        "variable_def": { "kind": "variable", "source": "field", "field_id": 4055, "field_type": "single_text", "previous": false, "collection": true, "triggering": false },
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 4055, "field_type": "number", "previous": false, "collection": true, "triggering": false },
+        "direction": "desc"
+      },
+      {
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 4061, "field_type": "single_date", "previous": false, "collection": true, "triggering": false },
         "direction": "asc"
       }
     ]
@@ -54,15 +38,50 @@ An action entry inside an automation definition's `actions[]`:
 }
 ```
 
-## Validation & behavior
+## Config
 
-- Both members are optional: an omitted `record_collection` is dropped, and an omitted `sorts` defaults to the empty list `[]`.
-- Within each `sorts` entry, `variable_def` and `direction` are required; `id` is server-minted when omitted and round-trips on a GET→PUT.
-- This is a **consumer** action — its sort keys must reference a variable scoped to the collection being sorted (a record-collection app field or meta field).
-- Sort entries are applied in the order given, so later entries act as tie-breakers for earlier ones.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection to sort, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 42 }` |
+| `sorts` | array of [sort entries](#sort-entries) | The sort order, applied in the order given. Empty when left out. | `[{ "variable_def": { … }, "direction": "asc" }]` |
 
-## See also
+To find the field IDs for `sorts`, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids).
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Actions catalog](/docs/api/resource/automation/reference/actions) · [Record collections family](/docs/api/resource/automation/reference/actions#record-collections)
-- [Action examples](/docs/api/resource/automation/action-examples)
+### Sort entries
+
+Each entry in `sorts` is an object:
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `variable_def` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The field or record metadata to sort by. It must belong to the collection's database app, with `"collection": true`. | `{ "kind": "variable", "source": "field", "field_id": 4055, "field_type": "number", "previous": false, "collection": true, "triggering": false }` |
+| `direction` | enum | **Required.** `asc` for ascending, `desc` for descending. | `"desc"` |
+| `id` | string | Stable ID of the entry. Tape creates one when you leave it out and returns it on read. | `"sort-1"` |
+
+To sort by record metadata, use a `meta` reference with `"collection": true`: record ID (`app_record_id`), created on (`created_at`), created by (`created_by`), last modified on (`last_modified_at`) or last modified by (`last_modified_by`). For example: `{ "kind": "variable", "source": "meta", "meta_type": "created_at", "app_id": 42, "collection": true }`.
+
+## General behavior {#validation--behavior}
+
+- `record_collection` has no default. Without it, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`.
+- Without `sorts`, Tape stores an empty list, and the action doesn't change the order.
+- `variable_def` and `direction` are required in every sort entry. A missing one returns `400`.
+- A sort key outside the collection's database app fails validation with `action_variable_missing`.
+- A `meta` sort key without `"collection": true`, or with `record_id`, fails validation with `action_variable_missing`.
+- Tape applies the entries in order. Each later entry breaks ties of the entries before it.
+- Tape sorts the collection in place. Later actions that reference it get the new order.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [filter_record_collection](/docs/api/resource/automation/reference/actions/filter-record-collection): narrow the collection before you sort it.
+- [for_loop](/docs/api/resource/automation/reference/actions/for-loop): go through the sorted records one by one.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build the `record_collection` reference and the sort keys.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

@@ -1,24 +1,50 @@
 ---
 id: limitations
-title: Limitations & Throttling
-sidebar_label: Limitations & Throttling
+title: Limits and throttling
+sidebar_label: Limits and throttling
 ---
 
-Tape applies limits to all executed automations regarding utilized computation power and time.
+Keep each automation run within the limits for time, actions and computing power. Tape also throttles organizations with very heavy use.
 
-## Limitations for individual workflow automation runs
+## Limits for each run {#limitations-for-individual-workflow-automation-runs}
 
-- The maximum time a flow can run is currently 3 minutes
-- Maximum number of actions consumed for a single run: 1000 (One thousand)
-- Memory & CPU limitations apply
-- There is a limit for parallel async operations (avoid heavy parallel HTTP operations and perform them sequentially instead)
-- A single record-collection action (e.g. `collect_app_records` / `collect_app_view_records`) returns at most **1000 records**. A configured `limit` above 1000 — or with `limit_enabled: false`, or non-positive — is stored and read back **unchanged**; the cap is applied only when the run executes, where the collection is silently truncated to exactly 1000. The truncation is **not surfaced at write or validate time**. (This is separate from the per-run action cap above.)
-- Automation email sends (`send_email` / `collected_records_send_email`) draw down your organization's shared **24-hour email send quota**; once it is exhausted, further sends are refused until the window rolls over.
+| Limit | Value | What happens |
+| --- | --- | --- |
+| Run time | 3 minutes | The run fails with an error message |
+| Actions in one run | 1000 | The run fails with an error message |
+| Memory and CPU | Limited | The run fails with an error message |
+| Parallel async operations | Limited | Run HTTP calls one after another instead of in parallel |
+| Records in one collection action | 1000 | The collection stops at 1000 records, without an error |
+| Emails | Shared 24-hour quota of your organization | Further emails are refused until the quota renews |
 
-Exceeding the time, action-count or memory/CPU limits fails the flow with a proper error message. Some of the limits above behave differently rather than failing the run: the record-collection cap truncates silently, and the email-send quota refuses further sends once exhausted. Split your work into multiple flows or avoid heavy computations, e.g. for large amounts of records.
+### Record collections stop at 1000 records
+
+Actions that collect records, like `collect_app_records` and `collect_app_view_records`, return at most 1000 records.
+
+Tape saves a higher `limit`, `limit_enabled: false` or a value of 0 or below unchanged. The cap applies only when the run executes. Neither saving nor validating the automation warns you.
+
+This cap is separate from the limit of 1000 actions per run.
+
+### Emails use a shared quota
+
+The actions `send_email` and `collected_records_send_email` use the 24-hour email quota of your organization. Once the quota is used up, Tape refuses further emails until the 24-hour window moves on.
+
+### Stay within the limits
+
+- Split large jobs into several automations.
+- Avoid heavy computations, for example on large numbers of records.
+- Run HTTP calls one after another.
 
 ## Throttling
 
-Throttling per organization may be applied if an organization performs excessive action usage during a short period of time. The throttling will be lifted after 5 minutes and will be indicated by a yellow "THROTTLED" status for scheduled automations in the runs overview and individual runs sidebar.
+Tape can throttle an organization that uses a very large number of actions in a short time. Throttling affects the whole organization and delays runs for a while.
 
-Throttling affects the whole organization and will lead to temporary delays.
+Tape checks the load regularly and lifts throttling as soon as the load drops below the limit. Until then, waiting runs show the orange status **Throttled** under **Runs** in the automation editor and under **Automations** → **Runs**.
+
+## Next steps
+
+- [Execution types](/docs/automations/execution-types): simulate a run before it changes data.
+- [Errors](/docs/automations/troubleshooting/automations-troubleshooting-errors): read failed runs and their error messages.
+- [Request limits](/docs/api/request-limits): limits for the Tape API.
+- [Automations](/docs/automations/introduction): where scripts run and what they can do.
+- In the Help Center: [Automation limits and throttling](https://help.tapeapp.com/en/articles/18449020-automation-limits-and-throttling)

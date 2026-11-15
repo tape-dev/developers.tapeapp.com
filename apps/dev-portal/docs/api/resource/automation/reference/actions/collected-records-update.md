@@ -2,61 +2,87 @@
 id: collected-records-update
 title: collected_records_update
 sidebar_label: collected_records_update
-description: Config reference for the Tape automation collected_records_update action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation collected_records_update action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to update every record in a collection that an earlier action built.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Update collected records** — applies field assignments to each record in a collected record collection. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Update all collected records** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to update — the output of a prior collect action. |
-| `field_assignments` | array of field assignments | no | Array of typed per-field-type field assignments (discriminated by `field_type`), new in the typed schema. Empty when omitted. |
-| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | no | Who the mutation is attributed to — a fixed user id or a reference. Omitted → the automation itself. |
-| `trigger_webhooks` | boolean | no | Whether the mutation fires outbound webhooks. |
-| `trigger_other_flows` | boolean | no | Whether the mutation triggers other automations. |
-| `silent` | boolean | no | Whether the mutation is silent (suppresses notifications). |
-
-`field_assignments` covers 20 per-field-type shapes discriminated by `field_type`; its populated encoding is **beta** — see
-[Action examples](/docs/api/resource/automation/action-examples). An empty array `[]` (no-op) is always accepted, and an
-omitted list defaults to `[]`.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action marks every collected task as ready for review:
 
 ```json
 {
   "type": "collected_records_update",
   "config": {
     "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 5 },
-    "field_assignments": [],
+    "field_assignments": [
+      {
+        "field_type": "single_text",
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 4021, "field_type": "single_text", "previous": false, "collection": false, "triggering": false },
+        "assignment_type": "set",
+        "field_value": ["Ready for review"]
+      }
+    ],
     "silent": true
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- No member is required; `record_collection` and `field_assignments` both default (an omitted `field_assignments` becomes `[]`).
-- This is a **consumer** action: `record_collection` should reference a record collection produced by an earlier collect action.
-- As a **mutating** action, it applies `field_assignments` to each collected record; `author_id`, `trigger_webhooks`, `trigger_other_flows`, and `silent` control attribution and side effects, each falling back to the internal default when omitted.
-- The populated `field_assignments` encoding is beta — an empty array is always accepted; consult [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) for the live shape before sending populated assignments.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection to update, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 5 }` |
+| `field_assignments` | array of field assignments | The values to set on each collected record, one entry per field. Empty when left out. See [Field assignments](#field-assignments). | `[]` |
+| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | User Tape attributes the change to: a user ID, or a reference to the creator, the last modifier or a user field. Left out, the automation itself is the author. | `812` |
+| `trigger_webhooks` | boolean | Whether the change fires outbound webhooks. Default `false`. | `false` |
+| `trigger_other_flows` | boolean | Whether the change starts other automations. Default `false`. | `false` |
+| `silent` | boolean | Whether Tape sends no notifications for the change. Default `false`. | `true` |
 
-## See also
+To find the field IDs, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids).
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Action examples](/docs/api/resource/automation/action-examples) — field-assignment encodings
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+`author_id`, `trigger_webhooks`, `trigger_other_flows` and `silent` are shared by every action that changes records. In the action menu of the automation editor, they are **Author**, **Trigger webhooks**, **Trigger automations** and **Silent**. To find a user ID for `author_id`, see [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users).
+
+### Field assignments
+
+Each entry in `field_assignments` sets one field on every collected record.
+
+- `field_type` tells the 20 field-type shapes apart, for example `single_text` or `number`.
+- `variable_def` is a [reference](/docs/api/resource/automation/dynamic-values) to the target field.
+- `assignment_type` picks how Tape produces the value. `set` uses `field_value`, `set_code` uses `code`.
+
+[`meta/action`](/docs/api/resource/automation/discovery) describes the populated shape only loosely. Copy the shapes from [`current_record_update`](/docs/api/resource/automation/reference/actions/current-record-update#field-assignments) and check the live `config_schema` before you send filled assignments.
+
+## General behavior {#validation--behavior}
+
+- No key is required by the schema. Without `record_collection`, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`. Tape resolves the reference to the nearest earlier action that creates a collection for the same `app_id`.
+- Left out or `[]`, `field_assignments` changes no field value. The action still logs a `success` step for each collected record.
+- On an empty collection, the action changes nothing and logs one `success` step with the message `No records were found in the collection.`
+- Without `author_id`, the automation itself is the author. A user ID that Tape can't find gives the broken reason `action_user_missing`.
+- Tape returns `silent` on every read. It's `false` when you left it out.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [referenced_records_update](/docs/api/resource/automation/reference/actions/referenced-records-update): update the records related to the current record.
+- [current_record_update](/docs/api/resource/automation/reference/actions/current-record-update): update only the record the run works on.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build references and template values.
+- [Action examples](/docs/api/resource/automation/action-examples): a full collect-and-update payload.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

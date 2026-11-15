@@ -7,18 +7,11 @@ description: The Tape automation object — its fields, the paused/broken status
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+The automation object describes one automation: its trigger, filter and actions, its state and its timestamps.
 
-The automation object is returned — wrapped as `{ "automation": … }` — by retrieve, create, update, the lifecycle
-endpoints and delete, and in `automations[]` by the [list endpoints](/docs/api/resource/automation/manage). Its three
-substantive blocks — [trigger](/docs/api/resource/automation/reference/triggers),
-[filter](/docs/api/resource/automation/reference/filters) and
-[actions](/docs/api/resource/automation/reference/actions) — each have their own reference page.
+Retrieve, create, update, the lifecycle endpoints and delete return it wrapped as `{ "automation": … }`. The [list endpoints](/docs/api/resource/automation/manage) return it in `automations[]`.
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "automation": {
     "id": 4021,
@@ -42,50 +35,68 @@ substantive blocks — [trigger](/docs/api/resource/automation/reference/trigger
       ]
     },
     "actions": [
-      { "id": "3f9a2c", "type": "send_email", "group": "action", "config": { "subject": ["A new lead was created"] } }
+      { "id": "3f9a2c", "type": "send_email", "group": "action", "config": { "to_address": ["juliet@acme.com"], "subject": ["A new lead was created"] } }
     ],
-    "created_at": "2024-05-14 09:12:31",
-    "updated_at": "2024-05-20 16:03:08"
+    "created_at": "2024-05-14 11:12:31",
+    "created_at_utc": "2024-05-14 09:12:31",
+    "updated_at": "2024-05-20 18:03:08",
+    "updated_at_utc": "2024-05-20 16:03:08"
   }
 }`}
 </ContextCodeBlock>
 
-## Fields
+The example comes from a user whose timezone is two hours ahead of UTC.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `id` | `integer` | ID of the automation. |
-| `app_id` | `integer` | The app the automation belongs to. Only database apps can have automations. |
-| `workspace_id` | `integer` | The workspace the app belongs to. |
-| `name` | `string` | Name of the automation. |
-| `description` | `string` | Optional. Absent when the automation has none. |
-| `paused` | `boolean` | Whether the automation is paused. See [status](/docs/api/resource/automation/overview#status-and-lifecycle). |
-| `broken` | `boolean` | Whether the definition is not executable. Reflects the last verdict the platform **stored**, not the current edit — see the note below. |
-| `broken_reason` | `object` \| `null` | `{ errors: [...] }` when there are recorded reasons, else `null` — and it can be `null` even when `broken` is `true` (see the note below). Same entry shape as [validate](/docs/api/resource/automation/reference/errors). |
-| `trigger` | `object` \| `null` | The single [trigger](/docs/api/resource/automation/reference/triggers) `{ type, config }`, or `null`. |
-| `filter` | `object` \| `null` | The root [filter group](/docs/api/resource/automation/reference/filters), or `null` when there is no filter. |
-| `actions` | `array` | The ordered [action](/docs/api/resource/automation/reference/actions) list. `[]` when none. |
-| `created_at` | `string` | Creation time, UTC `YYYY-MM-DD HH:mm:ss`. |
-| `updated_at` | `string` | Last-modified time, UTC `YYYY-MM-DD HH:mm:ss`. |
+## Automation object properties {#fields}
 
-There is **no `status` field** (state is the `paused` + `broken` pair) and **no `owner`/author field** in this
-release.
+| Property | Type | Description | Example value |
+| -------- | ---- | ----------- | ------------- |
+| `id` | `integer` | ID of the automation. | `4021` |
+| `app_id` | `integer` | The app the automation belongs to. Only database apps can have automations. | `87` |
+| `workspace_id` | `integer` | The workspace the app belongs to. | `12` |
+| `name` | `string` | Name of the automation. | `"Email the owner on a new high-priority lead"` |
+| `description` | `string` | Optional. Absent when the automation has none. | `"Notifies the record owner whenever a lead is created."` |
+| `paused` | `boolean` | Whether the automation is paused. See [Status and lifecycle](/docs/api/resource/automation/overview#status-and-lifecycle). | `false` |
+| `broken` | `boolean` | Whether the definition can't run. Shows the last verdict Tape *stored*, not your current edit. See [The `broken` flag](#the-broken-flag). | `false` |
+| `broken_reason` | `object` \| `null` | `{ errors: [...] }` when Tape recorded reasons, otherwise `null`. Can be `null` even when `broken` is `true`, see [The `broken` flag](#the-broken-flag). The entries have the same shape as in [validate](/docs/api/resource/automation/reference/errors). | `null` |
+| `trigger` | `object` \| `null` | The single [trigger](/docs/api/resource/automation/reference/triggers) `{ type, config }`, or `null`. | `{ "type": "record_created", "config": {} }` |
+| `filter` | `object` \| `null` | The root [filter group](/docs/api/resource/automation/reference/filters), or `null` when there is no filter. | See the example above. |
+| `actions` | `array` | The ordered list of [actions](/docs/api/resource/automation/reference/actions). `[]` when there are none. | See the example above. |
+| `created_at` | `string` | Creation time, `YYYY-MM-DD HH:mm:ss`, in your timezone. | `"2024-05-14 11:12:31"` |
+| `created_at_utc` | `string` | Same instant as `created_at`, in UTC. | `"2024-05-14 09:12:31"` |
+| `updated_at` | `string` | Last-modified time, `YYYY-MM-DD HH:mm:ss`, in your timezone. | `"2024-05-20 18:03:08"` |
+| `updated_at_utc` | `string` | Same instant as `updated_at`, in UTC. | `"2024-05-20 16:03:08"` |
 
-:::note `broken` reflects the last stored verdict, not the current definition
-`broken` reflects the last verdict the platform **stored**. Create, update, `activate` and `validate` never write it —
-a failed `activate` returns `409` without changing the object, and `validate` is a read-only check. Call
-[`validate`](/docs/api/resource/automation/execution) for a current verdict. So a freshly written, non-executable
-definition still reads `broken: false`, and `broken_reason` on the object can differ from what `validate` returns.
+The object has *no `status` field*. The state is the pair `paused` and `broken`. It also has *no owner or author field* in this release.
 
-The platform **does** set `broken: true` when a previously-valid automation is later invalidated — for example its
-filter can no longer be built, a field it watches is deleted, or a connected authentication provider is removed. A
-broken automation is not fired by its trigger, and a manual run returns `409`. In that case `broken_reason` may be
-`null`.
-:::
+## The `broken` flag
+
+`broken` shows the last verdict Tape *stored*. Create, update, `activate` and `validate` never write it, and a failed `activate` returns `409` with the object unchanged. So a newly saved definition that can't run still reads `broken: false`, and `broken_reason` can differ from what [`validate`](/docs/api/resource/automation/execution) returns.
+
+Tape *does* set `broken: true` when a run finds that a valid automation stopped working, for example because:
+
+- its filter can't be built anymore,
+- a field it watches is deleted,
+- a connection it uses is removed.
+
+Until such a run, the object still reads `broken: false`: `activate` refuses with `409`, but a manual run or a simulation is accepted and fails. Once `broken` is `true`:
+
+- the trigger doesn't fire the automation,
+- a manual run or a simulation returns `409`,
+- `broken_reason` can be `null`.
+
+Call [`validate`](/docs/api/resource/automation/execution) for a current verdict.
 
 ## Identifiers
 
-`id`, `app_id` and `workspace_id` are plain JSON **integers**. The only string-wrapped ID in this resource is a
-**[revision](/docs/api/resource/automation/revisions) ID** (a 64-bit value). Node IDs inside `filter` and `actions`
-are opaque **strings** — a caller-supplied id is preserved verbatim; server-minted ones (when you omit an id) are
-UUIDs. Treat them as handles, not numbers.
+`id`, `app_id` and `workspace_id` are plain JSON *integers*. A [revision](/docs/api/resource/automation/revisions) ID is a 64-bit value, sent as a string.
+
+Node IDs inside `filter` and `actions` are opaque *strings*: treat them as handles, not numbers. Tape keeps an ID you send and creates a UUID when you leave it out.
+
+## Next steps
+
+- [Automation API](/docs/api/resource/automation/overview): concepts, capabilities and the lifecycle.
+- [Triggers](/docs/api/resource/automation/reference/triggers): the `trigger` block.
+- [Filters](/docs/api/resource/automation/reference/filters): the `filter` block.
+- [Actions](/docs/api/resource/automation/reference/actions): the `actions` block.
+- [Errors & broken reasons](/docs/api/resource/automation/reference/errors): what `broken_reason` can contain.

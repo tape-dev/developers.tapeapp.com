@@ -2,31 +2,22 @@
 id: clear-record-collection
 title: clear_record_collection
 sidebar_label: clear_record_collection
-description: Config reference for the Tape automation clear_record_collection action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation clear_record_collection action, with its config key and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to empty a record collection from an earlier action.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Clear collection** — clears a record collection produced by an earlier action. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Clear collected records** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to clear — an action-variable reference to a prior action's collection output. Omitted when unset. |
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+An earlier action collected job candidates from database app `100`. This action empties that collection:
 
 ```json
 {
@@ -37,13 +28,31 @@ An action entry inside an automation definition's `actions[]`:
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `record_collection` is the only member and is **optional** — omitting it yields an internal action with no collection reference (no canonical default is applied).
-- As a consumer, this action needs a `record_collection` reference to a prior action's collection output; without one there is nothing to clear.
-- Reference an upstream collection variable (for example a `record_collection` action's output), not a one-element field variable.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection to empty, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 100 }` |
 
-## See also
+## General behavior {#validation--behavior}
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Actions catalog](/docs/api/resource/automation/reference/actions) · [Action examples](/docs/api/resource/automation/action-examples)
+- `record_collection` is the only key. It has no default.
+- Without `record_collection`, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`.
+- Reference a collection from a collect action, not a single field value.
+- Later actions that reference the same collection get an empty list.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [filter_record_collection](/docs/api/resource/automation/reference/actions/filter-record-collection): keep only some records instead of none.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build the `record_collection` reference.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

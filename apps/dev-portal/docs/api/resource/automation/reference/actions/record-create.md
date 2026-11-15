@@ -2,62 +2,104 @@
 id: record-create
 title: record_create
 sidebar_label: record_create
-description: Config reference for the Tape automation record_create action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation record_create action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to create a record in a database app from an automation.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Create record** — creates a record in an app. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Create a record** in the [Current record](/docs/api/resource/automation/reference/actions#current-record) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [Current record](/docs/api/resource/automation/reference/actions#current-record) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `app_id` | integer | no | Target app the record is created in. |
-| `field_assignments` | array of typed per-field-type field assignments (discriminated by `field_type`), new in the typed schema | no | Field assignments applied to the new record. Omitted means the app's default assignments. |
-| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | no | User the mutation is attributed to — a literal user id or a reference. Omitted → the automation itself. |
-| `trigger_webhooks` | boolean | no | Whether the mutation fires outbound webhooks. |
-| `trigger_other_flows` | boolean | no | Whether the mutation triggers other automations. |
-| `silent` | boolean | no | Whether the mutation is silent (no notifications). |
-
-`field_assignments` is a discriminated union of 20 per-field-type entry shapes; its populated encoding is **beta** and
-its exact per-type members are still settling. An empty list `[]` (no-op) is always accepted. For the assignment shapes,
-see [Action examples](/docs/api/resource/automation/action-examples).
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+When a deal is won in a CRM, this action creates a kick-off task in the **Tasks** database app:
 
 ```json
 {
   "type": "record_create",
   "config": {
     "app_id": 4021,
-    "field_assignments": [],
-    "author_id": { "kind": "variable", "source": "meta", "meta_type": "created_by" },
-    "silent": true
+    "field_assignments": [
+      {
+        "field_type": "single_text",
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 51207, "field_type": "single_text", "previous": false, "collection": false, "triggering": false },
+        "assignment_type": "set",
+        "field_value": ["Kick-off call for deal ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 87 }]
+      },
+      {
+        "field_type": "single_category",
+        "variable_def": { "kind": "variable", "source": "field", "field_id": 51208, "field_type": "single_category", "previous": false, "collection": false, "triggering": false },
+        "assignment_type": "set",
+        "field_category_option_id": 3
+      }
+    ],
+    "author_id": { "kind": "variable", "source": "meta", "meta_type": "created_by", "app_id": 87 },
+    "trigger_other_flows": false
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- No member is required — with an empty `config` the action creates a record in the automation's own app context using default assignments.
-- `field_assignments` omitted means the app's default assignments; `[]` is an accepted no-op, and its populated encoding is still beta (see meta/action).
-- `author_id` omitted attributes the mutation to the automation itself; supply a user id or a reference to attribute it to a specific user.
-- `trigger_webhooks`, `trigger_other_flows`, and `silent` default to the internal defaults when omitted — set them to control the created record's side effects.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `app_id` | integer | ID of the database app Tape creates the record in. | `4021` |
+| `field_assignments` | array of [field assignments](#field-assignments) | Values Tape writes into the new record, one entry per field. Left out or `[]`, Tape creates an empty record. | `[]` |
+| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | User Tape attributes the new record to: a user ID, or a reference to the creator, the last modifier or a user field. Left out, the automation itself is the author. | `812` |
+| `trigger_webhooks` | boolean | Whether the new record fires outbound webhooks. Default `false`. | `false` |
+| `trigger_other_flows` | boolean | Whether the new record starts other automations. Default `false`. | `false` |
+| `silent` | boolean | Whether Tape sends no notifications for the new record. Default `false`. | `true` |
 
-## See also
+To find `app_id` and the field IDs, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids). To find the option ID for `field_category_option_id`, see [Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app). It returns the options in `config.settings.options` of the field.
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Action examples](/docs/api/resource/automation/action-examples) — field-assignment shapes used by `field_assignments`
-- [Actions catalog](/docs/api/resource/automation/reference/actions)
+`author_id`, `trigger_webhooks`, `trigger_other_flows` and `silent` are shared by every action that changes records. In the action menu of the automation editor, they are **Author**, **Trigger webhooks**, **Trigger automations** and **Silent**. To find a user ID for `author_id`, see [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users).
+
+### Field assignments
+
+Each entry of `field_assignments` sets one field of the new record. There are 20 assignment shapes, one per field type. They share these members:
+
+- `field_type` (*required*): the type of the target field, for example `single_text` or `single_category`. It selects the shape of the entry.
+- `variable_def` (*required*): a field [reference](/docs/api/resource/automation/dynamic-values) to the target field, with `source: "field"`, `field_id` and `field_type`.
+- `assignment_type`: how Tape produces the value. The modes depend on the field type. A `single_text` entry takes `set`, `unset` or `set_code`.
+- A value member that fits the mode: `field_value` for `set` on a text field, `field_category_option_id` for `set` on a category field, `code` for `set_code`. `unset` carries no value.
+- `id`: stable ID of the entry. Tape creates one when you leave it out and returns it on read.
+
+[`meta/action`](/docs/api/resource/automation/discovery) describes the populated shape only loosely. Copy the shapes from the example above and check the live `config_schema` before you send filled assignments.
+
+## Use the new record in a later action
+
+A later action reads the new record with a `created_record` reference. With `"property": "id"`, it returns the record ID:
+
+```json
+{ "kind": "variable", "source": "action", "action_type": "created_record", "app_id": 4021, "property": "id" }
+```
+
+## General behavior {#validation--behavior}
+
+- No key is required by the schema. Send `app_id` anyway. Without it, the action saves but creates no record.
+- An `app_id` of a deleted app gives the [broken reason](/docs/api/resource/automation/reference/errors#broken-reason-codes) `action_app_missing`. An `app_id` that never existed makes `validate` and activate return `404`.
+- Tape refuses an entry with `400` when its mode needs a value that the entry doesn't send. For example, `set` without `field_value` on a text field.
+- Without `author_id`, the automation itself is the author. A user ID that Tape can't find gives the broken reason `action_user_missing`.
+- Tape returns `silent` on every read. It's `false` when you left it out.
+- Keep `trigger_other_flows` at `false` to avoid a loop when the automation triggers on the same database app.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- The target database app must exist in your organization.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [current_record_update](/docs/api/resource/automation/reference/actions/current-record-update): change the record the run works on.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build template values and references.
+- [Errors & broken reasons](/docs/api/resource/automation/reference/errors#broken-reason-codes): what each broken reason means.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

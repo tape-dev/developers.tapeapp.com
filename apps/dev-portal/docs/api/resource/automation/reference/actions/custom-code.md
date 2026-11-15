@@ -2,62 +2,87 @@
 id: custom-code
 title: custom_code
 sidebar_label: custom_code
-description: Config reference for the Tape automation custom_code action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation custom_code action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to run your own JavaScript in an automation.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Run code** — runs custom code (JavaScript) in the automation sandbox. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Execute a script** in the [Code & variables](/docs/api/resource/automation/reference/actions#code--variables) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [Code & variables](/docs/api/resource/automation/reference/actions#code--variables) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `code` | [code value](/docs/api/resource/automation/dynamic-values) | **yes** | The code the action runs — JavaScript executed in the automation sandbox. A code value of string literals and variable references only. |
-| `custom_variable_defs` | array of [variable declarations](/docs/api/resource/automation/dynamic-values) | no | Custom variables this action declares (e.g. its result variable) for its own code or later actions. Empty when omitted. |
-
-**`custom_variable_defs[].custom_type` tokens** (lower-case): `any`, `single_file`, `multi_file`, `single_link`,
-`html_table_rows`. Each declaration also carries a `label`; a `custom` variable reference resolves only when its
-`custom_type` + `label` match a declaration.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action reads the deal value of a sales record and stores a 3 % commission in the variable `Commission`:
 
 ```json
 {
   "type": "custom_code",
   "config": {
     "code": [
-      "return { greeting: 'Hello ' + ",
-      { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 1234 },
-      " };"
+      "const dealValue = Number(",
+      { "kind": "variable", "source": "field", "field_id": 601, "field_type": "number", "previous": false, "collection": false, "triggering": false },
+      ");\n",
+      { "kind": "variable", "source": "custom", "custom_type": "any", "label": "Commission" },
+      " = Math.round(dealValue * 0.03);"
     ],
     "custom_variable_defs": [
-      { "custom_type": "any", "label": "result" }
+      { "custom_type": "any", "label": "Commission" }
     ]
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `code` is the only required member; it runs in the automation sandbox and carries the action's code envelope.
-- `code` is a code value — string literals interleaved with variable references only; it does not resolve template values.
-- `code` is a **statement block**: it is inlined into the generated program, so statements — including a top-level `return` — are legal (unlike [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable)'s `assignment_code`, which is a bare expression where `return` throws). The write path does not syntax-check it, so a malformed script still persists and passes `validate`; the error surfaces only in the run log.
-- `custom_variable_defs` defaults to `[]` when omitted, so a caller that omits it still yields a complete internal action.
-- A `custom` variable reference (from this action's code or a later action) resolves only when its `custom_type` + `label` match a declaration in `custom_variable_defs`; otherwise the definition validates as `WORKFLOW_ACTION_VARIABLE_DEF_MISSING`.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `code` | [code value](/docs/api/resource/automation/dynamic-values) | **Required.** The JavaScript the action runs. String literals mixed with variable references. A plain string works too. | `["const total = 1 + 1;"]` |
+| `custom_variable_defs` | array of [variable declarations](/docs/api/resource/automation/dynamic-values) | Custom variables this action declares. Its own code and later actions can use them. Empty when left out. | `[{ "custom_type": "any", "label": "Commission" }]` |
 
-## See also
+### Variable types
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — code values, variable references, and custom-variable declarations
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+Each entry of `custom_variable_defs` needs a `label` and a `custom_type`. `custom_type` takes one of these lower-case tokens:
+
+- `any`
+- `single_file`
+- `multi_file`
+- `single_link`
+- `html_table_rows`
+
+## Use the variable in a later action
+
+Assign the result to a declared variable, as in the example. A later action reads it with a `custom` reference that has the same `custom_type` and `label`:
+
+```json
+{ "kind": "variable", "source": "custom", "custom_type": "any", "label": "Commission" }
+```
+
+## General behavior {#validation--behavior}
+
+- `code` is the only required key.
+- `code` is a code value. It holds string literals and variable references only. Tape doesn't resolve template values in it.
+- Tape runs `code` as a block of statements inside the automation's script. It isn't a single expression like the `assignment_code` of [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable).
+- The write path doesn't check the syntax. A broken script saves and passes `validate`. The error shows up only in the run log.
+- `custom_variable_defs` defaults to `[]`. On read, Tape leaves it out when the action declares no variables.
+- A `custom` reference resolves only when this action or an earlier one declares a variable with the same `custom_type` and `label`. Otherwise validation reports `action_variable_missing`. See [Errors & broken reasons](/docs/api/resource/automation/reference/errors).
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [custom_variable](/docs/api/resource/automation/reference/actions/custom-variable): compute one value with a single expression.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): code values, variable references and variable declarations.
+- [Libraries](/docs/automations/libraries): Node.js libraries you can call in `code` without importing them.
+- [Run & simulate](/docs/api/resource/automation/execution): validate and simulate the automation before it goes live.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

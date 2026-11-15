@@ -1,7 +1,7 @@
 ---
 id: record-permissions
-title: Record Sharing & Permissions
-sidebar_label: Record Sharing & Permissions
+title: Record sharing & permissions
+sidebar_label: Record sharing & permissions
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
@@ -9,37 +9,28 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-Records are the place where work gets done inside a Tape organization. Records can be shared and permissions can be changed (removed, added, elevated and restricted) via the developer API.
+Use this endpoint to share records with individual users and to change or remove their access.
+
+In the Podio API, a record permission is a grant.
+
+:::info Which capability do I need?
+This endpoint needs `records:share`. See [Capabilities](/docs/api/capabilities).
+:::
 
 ## Batch update multiple records' permissions
 
+Use this endpoint to add, change and remove the permissions of users on up to 50 records in one request.
+
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/permission/batch" isNew="true" />
 
-To share a record to individual users or update record permissions, issue a PUT request to this endpoint. The PUT body has to contain the `inputs` property with an array of objects that have a `record_id` property to specify for which record permissions should be altered, and arrays `add_permissions`, `update_permissions` and `remove_permissions`.
-
-Optionally specifying `add_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, a new one will be created and an invitation to join Tape will be sent. Additionally, a numeric `permission_level` needs to be specified.
-
-Optionally specifying `update_permissions`, each entry must contain either a `user_id` or an `email` property for the respective organization user to be added. If there is no user inside the organization that matches `email`, nothing will happen. A numeric `permission_level` needs to be specified and will update existing permissions for that user. As opposed to `add_permissions`, no new invite email will be sent, so this is useful to silently update a user's permissions.
-
-Valid permission levels to be specified for the `permission_level` property are:
-
-- 5 / (full access)
-- 4 / (can share)
-- 3 / (can edit)
-- 2 / (can comment)
-- 1 / (can view)
-- 0 / (no access)
-
-Optionally specifying `remove_permissions`, each entry must be either a user ID or an email. Access for the respective user will be removed if it was added prior. This does not affect access that a user might have via workspace memberships or app permissions.
-
-Currently, only for a maximum of **50 records** the permissions can be batch updated at the same time. An error will be thrown if the `inputs` array exceeds that limit. If you need more, issue separate requests.
+Send one object per record in the `inputs` array. Each object has a `record_id` and up to three lists: `add_permissions`, `update_permissions` and `remove_permissions`.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X PUT #BASE_URL/v1/record/permission/batch \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "inputs": [
@@ -61,21 +52,21 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
             "permission_level": 5
           },
           {
-            "email": "john@doe.com",
+            "email": "juliet@acme.com",
             "permission_level": 4
           }
         ],
         "remove_permissions": [101]
       }
     ]
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "inputs": [
     {
@@ -96,7 +87,7 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
           "permission_level": 5
         },
         {
-          "email": "john@doe.com",
+          "email": "juliet@acme.com",
           "permission_level": 4
         }
       ],
@@ -109,8 +100,66 @@ Currently, only for a maximum of **50 records** the permissions can be batch upd
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {}
 ```
 
-The example above alters permissions for two records with id `1` and `2`, adding the user with ID `100` to both records with full access, and additionally adding a second user gaining access to record with ID `2` via email. The user would be created and invited if there is no user matching the email in the active organization. Further, user with ID `101` is revoked the access to both records.
+The example changes the permissions of records `1` and `2`:
+
+- User `100` gets **Full access** to both records.
+- `juliet@acme.com` gets access to record `2` with the level **Can share**.
+- User `101` loses access to both records.
+
+**General behavior**
+
+- One request changes at most 50 records. A longer `inputs` array returns an error. For more records, send several requests.
+- All records of one request must belong to the same database app.
+- A personal access token with limited content access shares only records in apps its content access includes. If one record lies outside, the whole request returns `404`.
+
+**Requirements:** `records:share`, and **Can share** or **Full access** on each record. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- A permission level that isn't a number from `0` to `5`, or records from more than one database app, return `400` with `validation`.
+- An `email` in `update_permissions` that belongs to no user in your organization returns `500` with `unknown` and the message `User with email … not found`.
+- A request without a credential returns `401`.
+- A token without `records:share` returns `403`.
+- A record outside the content access of a personal access token returns `404`.
+
+See [Errors](/docs/api/errors) for all error codes.
+
+### Add permissions
+
+Each entry in `add_permissions` has a `user_id` or an `email`, and a `permission_level`. If no user in your organization has the `email`, Tape creates a new user and sends an invitation to join Tape. To find a user ID, see [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users).
+
+### Update permissions
+
+Each entry in `update_permissions` has a `user_id` or an `email`, and a `permission_level`. Tape changes the existing permission of that user. The `email` must belong to a user in your organization.
+
+Unlike `add_permissions`, `update_permissions` sends no invitation email. Use it to change a user's permission without notifying them.
+
+### Remove permissions
+
+Each entry in `remove_permissions` is a user ID or an email address. Tape removes the access you gave this user on the record. Access through a workspace membership or app permissions stays.
+
+### Permission levels
+
+Send `permission_level` as a number:
+
+| Number | Level |
+| :-- | :-- |
+| `5` | Full access |
+| `4` | Can share |
+| `3` | Can edit |
+| `2` | Can comment |
+| `1` | Can view |
+| `0` | No access |
+
+A name such as `CAN_SHARE` or any other value returns `400` with `validation`. The message reads `expected a valid permission level (3, 4 or 5)`, but all six numbers work.
+
+## Next steps
+
+- [Record](/docs/api/resource/record): create and update the records you share.
+- [User](/docs/api/resource/user): find the `user_id` of an organization user.
+- [Capabilities](/docs/api/capabilities): what `records:share` allows.
+- [Personal access tokens](/docs/api/personal-access-tokens): choose the content a token can reach.

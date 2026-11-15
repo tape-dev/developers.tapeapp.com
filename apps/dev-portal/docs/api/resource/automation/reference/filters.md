@@ -2,45 +2,16 @@
 id: filters
 title: Filters
 sidebar_label: Filters
-description: The Tape automation filter model — the recursive and/or condition tree, 22 operators, and the tagged value union.
+description: The Tape automation filter model — the recursive and/or condition tree, the operators, and the tagged value union.
 ---
 
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+Use a filter to decide *whether* an automation runs.
 
-A filter decides **whether** an automation runs: a recursive `and`/`or` tree of conditions the triggering record must
-match. An automation's `filter` is `null` when it has none (it always runs); to run unfiltered, send `filter: null`
-explicitly — an explicitly **empty** top-level group (`rows: []`) is **rejected with a `400`**, since it narrows
-nothing and would otherwise fire on every record. (An empty group is still allowed *inside* an action — e.g. an
-always-true `conditional` `condition` or a keep-everything `match_condition` — because the trigger filter already bounds
-what the automation runs against.) The same tree shape is reused for a `conditional` action's `condition` and a
-`for_loop`'s break/continue conditions — see [actions](/docs/api/resource/automation/reference/actions).
-
-:::note The same tree is used everywhere conditions appear
-This public tree (`operator: "and" | "or"`, `rows`) is used for an automation's `filter`, a control-flow action's
-`condition` / `break_condition` / `continue_condition`, **and** a condition embedded inside an action's `config` (e.g. a
-`collect_app_records` / `filter_record_collection` `match_condition`) — all with the same lower-case `operator` + `rows`
-shape.
-:::
+A filter is a recursive `and`/`or` tree of conditions that the triggering record must match.
 
 ## The tree: groups and conditions
-
-A **group** combines its `rows` with `and` (match all) or `or` (match any); rows are nested groups or leaf conditions.
-The **root** group has no `id`; nested nodes carry one.
-
-| Field | Type | On | Description |
-| --- | --- | --- | --- |
-| `id` | `string` | nested nodes | Opaque node ID. Optional on input (server-minted when omitted); always present on read. |
-| `operator` | `string` | group | `and` or `or`. |
-| `rows` | `array` | group | Nested groups and/or conditions. |
-| `subject` | `object` | condition | A field [reference](/docs/api/resource/automation/dynamic-values) — the value being tested. |
-| `operator` | `string` | condition | One of the operators below. |
-| `value` | `object` | condition | The tagged comparison value (below). Absent for value-less operators. |
-| `code` | `array` | condition | A raw code predicate — a [code dynamic value](/docs/api/resource/automation/dynamic-values). A **script condition** carries `code` *instead of* `subject`/`operator`/`value`. |
 
 <ContextCodeBlock language="json" title='Filter — "Priority is High AND Amount ≥ 1000"'>
 {`{
@@ -60,78 +31,125 @@ The **root** group has no `id`; nested nodes carry one.
 }`}
 </ContextCodeBlock>
 
+A *group* combines its `rows`, nested groups or conditions, with `and` (match all) or `or` (match any). The *root* group has no `id`.
+
+| Property   | Type     | On           | Description                                                                                                                                                         |
+| ---------- | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`       | `string` | Nested nodes | Opaque node ID. Optional on input, Tape creates one when you leave it out. Present on every read.                                                                    |
+| `operator` | `string` | Group        | `and` or `or`.                                                                                                                                                      |
+| `rows`     | `array`  | Group        | Nested groups and conditions.                                                                                                                                       |
+| `subject`  | `object` | Condition    | A [reference](/docs/api/resource/automation/dynamic-values) to the value being tested: a field, record metadata, a trigger output or an action's file collection. See [v1 limitations](#v1-limitations). |
+| `operator` | `string` | Condition    | One of the [operators](#operators) below.                                                                                                                           |
+| `value`    | `object` | Condition    | The tagged comparison value, see [The value union](#the-value-union). Absent for operators without a value.                                                        |
+| `code`     | `array`  | Condition    | A raw code condition, a [code dynamic value](/docs/api/resource/automation/dynamic-values). A *script condition* has `code` *instead of* `subject`, `operator` and `value`. |
+
+**General behavior**
+
+- An automation without a filter has `filter: null` and runs every time.
+- To run without a filter, send `filter: null` explicitly. An explicitly *empty* top-level group (`rows: []`) returns `400`. It narrows nothing and would fire on every record.
+- An empty group is still allowed *inside* an action, for example a `conditional` `condition` that is true every time, or a `match_condition` that keeps everything. The trigger filter already limits which records the automation runs on.
+
+:::note Where else is this tree used?
+The same public tree (`operator: "and" | "or"`, `rows`) appears everywhere conditions do:
+
+- an automation's `filter`,
+- a control-flow action's `condition`, `break_condition` and `continue_condition`,
+- a condition inside an action's `config`, for example the `match_condition` of `collect_app_records` or `filter_record_collection`.
+
+All of them use the same lower-case `operator` and `rows`. See [Actions](/docs/api/resource/automation/reference/actions).
+:::
+
 ## Operators
 
-There are **22** operators. Each has a `value_arity` — `none` (no value, e.g. `is_empty`), `single`, or `multiple`.
-The operators valid for a given field type differ; the authoritative per-field-type set is returned by
-[`GET /v1/automation/meta/filter?field_type=…`](/docs/api/resource/automation/discovery).
+Each operator has a `value_arity`: `none` (no value, for example `is_empty`), `single` or `multiple`. The valid operators differ per field type. [`GET /v1/automation/meta/filter?field_type=…`](/docs/api/resource/automation/discovery) returns the exact set.
 
-| Operator | Arity | | Operator | Arity |
-| --- | --- | --- | --- | --- |
-| `is` | single | | `has_any_of` | multiple |
-| `is_not` | single | | `has_all_of` | multiple |
-| `contains` | single | | `has_none_of` | multiple |
-| `does_not_contain` | single | | `is_exactly` | multiple |
-| `starts_with` | single | | `is_any_of` | multiple |
-| `ends_with` | single | | `is_none_of` | multiple |
-| `greater_than` | single | | `is_empty` | none |
-| `greater_or_equal_than` | single | | `is_not_empty` | none |
-| `less_than` | single | | `is_completed` | none |
-| `less_or_equal_than` | single | | `is_incomplete` | none |
-| `is_before` | single | | | |
-| `is_after` | single | | | |
+| Operator                | Arity    |     | Operator                | Arity    |
+| ----------------------- | -------- | --- | ----------------------- | -------- |
+| `is`                    | single   |     | `has_any_of`            | multiple |
+| `is_not`                | single   |     | `has_all_of`            | multiple |
+| `contains`              | single   |     | `has_none_of`           | multiple |
+| `does_not_contain`      | single   |     | `is_exactly`            | multiple |
+| `starts_with`           | single   |     | `is_any_of`             | multiple |
+| `ends_with`             | single   |     | `is_none_of`            | multiple |
+| `greater_than`          | single   |     | `has_changed_to_any_of` | multiple |
+| `greater_or_equal_than` | single   |     | `is_empty`              | none     |
+| `less_than`             | single   |     | `is_not_empty`          | none     |
+| `less_or_equal_than`    | single   |     | `is_completed`          | none     |
+| `is_before`             | single   |     | `is_incomplete`         | none     |
+| `is_after`              | single   |     | `has_changed`           | none     |
+| `glob_pattern`          | single   |     |                         |          |
+| `has_changed_to`        | single   |     |                         |          |
+
+### File name patterns
+
+`glob_pattern` (label **Matches pattern**) checks whether file names match a glob pattern, for example `"*.pdf"`.
+
+- It works only on subjects that carry files: `single_attachment`, `multi_attachment`, `multi_image`, an action's file collection, webhook payload files and comment attachments.
+- Tape rejects it in `collect_app_records`, `collect_referenced_records`, `collected_records_collect_referenced_records` and in the `search_condition` of a relation field assignment.
+
+### Change tracking
+
+`has_changed`, `has_changed_to` and `has_changed_to_any_of` compare a field with the previous revision of the record.
+
+- They're valid only under a `record_updated` trigger, or after a `current_record_get_previous_revision` action on the same app. Otherwise `validate` reports the automation as invalid.
+- `has_changed` (label **Has changed**) takes no value.
+- `has_changed_to` (label **Has changed to**) works on subjects with a single choice: status, single category, single user, single relation, last modified by, and on a checklist.
+- `has_changed_to_any_of` (label **Has changed to any of**) works on subjects with multiple choices: multi category, multi user, multi relation.
 
 ## The value union
 
-The condition `value` is tagged by `type` so you can read it without the per-field rules:
+The condition `value` is tagged by `type`, so you can read it without knowing the rules for each field:
 
-| `type` | Payload | Meaning |
-| --- | --- | --- |
-| `text` | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values) | Text / template comparison. |
-| `number` | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values) | Numeric comparison as a code expression. |
-| `ids` | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values) | Option / status / relation / user ID set. |
-| `date` | `date`: `{ base?, operator: "plus"\|"minus", unit: "hour"\|"day"\|"week"\|"month", amount }` | Relative date. `base` is **optional** — omitted, it defaults to the `current_date` global (materialized at write, so it reads back and re-submits verbatim). Supply a `base` reference to offset from something other than today. `operator` / `unit` are **enum-enforced**: an out-of-set token is rejected with a `400` (omit them to keep the `plus` / `day` defaults). `amount` is a [code dynamic value](/docs/api/resource/automation/dynamic-values): an **array of string** (e.g. `["1"]`) or a bare **string** (`"1"`, normalized to `["1"]` on read) — a bare **number** (`1`) is rejected with a `400`. Read-back is always the array form, so a retrieved definition re-submits verbatim. |
-| `boolean` | `boolean` | Boolean comparison — arises from a webhook-payload-property subject. Round-trips on write. |
-| `entity_type` | `entity_type`: `string` | Comment/reply entity-type comparison. Round-trips on write. |
+| `type`        | Payload                                                                                      | Meaning                                                                                       |
+| ------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `text`        | `text`: a [template dynamic value](/docs/api/resource/automation/dynamic-values)             | Text or template comparison.                                                                  |
+| `number`      | `number`: a [code dynamic value](/docs/api/resource/automation/dynamic-values)               | Number comparison as a code expression.                                                       |
+| `ids`         | `ids`: array of `number` or [reference](/docs/api/resource/automation/dynamic-values)        | A set of option, status, relation or user IDs.                                                |
+| `date`        | `date`: `{ base?, operator, unit, amount }` | Relative date. `operator` is `"plus"` or `"minus"`, `unit` is `"hour"`, `"day"`, `"week"` or `"month"`. See [Relative dates](#relative-dates). |
+| `boolean`     | `boolean`                                                                                    | Boolean comparison. Comes from a webhook payload property subject. Sends back without change. |
+| `entity_type` | `entity_type`: `string`                                                                      | Comparison of the comment or reply entity type. Sends back without change.                    |
 
-:::caution On write, the `type` tag must match the field
-Reading a value is tag-driven, but **writing** one is field-driven. On create/update the server picks the value
-channel from the subject **field's type** — number / unique-id → `number`; date fields → `date`; category / status /
-relation / user → `ids`; text → `text`. A value whose `type` doesn't match the field's channel is **rejected with a
-`400`** on both create and update. The check is **recursive** — a bad condition nested any number of groups deep is
-caught — and the response names the offending condition (by its `id`, else its JSON path, e.g. `filter.rows[1].rows[0]`)
-and the tag it expected. The accepted tag for a field type is not served by
-[`meta/filter`](/docs/api/resource/automation/discovery) (which returns operators only), so match the tag to the field
-yourself. An **empty** comparison value, and a **value-arity** mismatch (a value on a `none`-arity operator such as
-`is_empty`, or a missing value on an operator that needs one), are rejected with a `400` the same way.
+[Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app) returns the option IDs for `ids` in `config.settings.options` of each field.
 
-By contrast, an **operator** that is outside the field type's channel but otherwise well-formed (e.g. a text operator on
-a number field, carrying a number value) is **not** rejected — it is accepted, passes `validate`, and silently
-never-matches at run time. Use only the operators [`meta/filter`](/docs/api/resource/automation/discovery) advertises
-for the field's type.
+### Relative dates
 
-**The empty-match hazard is caught at write, but not at run time.** A *literal* empty comparison can no longer be stored
-through the API. But the leaf still compiles to a match-all short-circuit at run time, so a value built from a
-**reference** (a field, variable, or prior action's output) — accepted on write because the reference is present — can
-still resolve to **empty for a given record**, making the filter match **every** record under the default `and` group.
-Definitions stored before this check, or through the in-app editor, can carry an empty comparison too (create/update do
-not re-validate existing rows). Guard references that can be empty, and
-[`simulate`](/docs/api/resource/automation/execution) a new filter before activating it. See
-[Troubleshooting → Filter values](/docs/automations/troubleshooting/filter-values).
+- `base` is *optional*. Without it, Tape uses the `current_date` global. Tape stores it on write, so it reads back and sends back unchanged. Set a `base` reference to count from something other than today.
+- `operator` and `unit` only accept the listed values. Anything else returns `400`. Leave them out to keep the defaults `plus` and `day`.
+- `amount` is a code dynamic value: an *array of strings* (for example `["1"]`) or a plain *string* (`"1"`, returned as `["1"]`). A plain *number* (`1`) returns `400`. A read returns the array form, so a retrieved definition sends back unchanged.
+
+### Match the value type to the field
+
+Tape reads a value by its tag, but *writes* it by field. On create and update, Tape picks the value channel from the *type of the subject field*:
+
+- number and unique ID → `number`
+- date fields → `date`
+- category, status, relation and user → `ids`
+- text → `text`
+
+On create and update:
+
+- A value whose `type` doesn't match the field's channel returns `400`. The check goes through *all levels* of nested groups. The response names the condition (by its `id`, or by its JSON path, for example `filter.rows[1].rows[0]`) and the tag it expected.
+- An *empty* comparison value returns `400` the same way. So does an *arity* mismatch: a value on an operator with arity `none` such as `is_empty`, or a missing value on an operator that needs one.
+- Existing rows aren't checked again. Definitions saved before this check, or in the automation editor in Tape, can still hold an empty comparison.
+- An *operator* outside the field type's channel is *not* rejected if it's otherwise well-formed, for example a text operator on a number field with a number value. It passes `validate` and never matches when the automation runs.
+
+`meta/filter` returns only operators, not the accepted tag. Match the tag to the field yourself, and use only the operators it returns for the field's type.
+
+:::caution Why does my filter match every record?
+A value built from a *reference* (a field, a variable or the output of an earlier action) passes the write check, but it can resolve to *empty* for a record. An empty value matches everything, so under the default `and` group the filter matches *every* record. [Guard such references](/docs/automations/troubleshooting/filter-values). A [simulation](/docs/api/resource/automation/execution) skips the filter, a manual run applies it.
 :::
 
 ## v1 limitations
 
-- **A subject must have a boolean-expression leaf.** On create/update, a structured condition's `subject` may be a
-  **field** reference, most **record-metadata** references (`app_record_id`, `created_at`, `last_modified_at`,
-  `created_by`, `last_modified_by`), a **trigger-output** reference (e.g. `webhook_payload_property`) or a prior
-  action's **file collection** — all of these are writable and round-trip. Value-only tokens that have no filter leaf
-  (`meta_type` `record_id` / `record_url` / `revision` / `all_comments`, the raw `webhook_payload`) and `global` /
-  `custom` references are rejected with a `400` on write.
-- **Change-tracking conditions are read-only.** A "has changed" style condition has no public operator, so it reads as
-  an operator-less `{ id, subject }` and **cannot be re-submitted** verbatim.
+- **A subject needs a condition it can be tested with.** On create and update, a condition's `subject` can be a *field* reference, most *record metadata* references (`app_record_id`, `created_at`, `last_modified_at`, `created_by`, `last_modified_by`), a *trigger output* reference (for example `webhook_payload_property`) or the *file collection* of an earlier action. All of these are writable and send back unchanged. Tokens that only carry a value and can't be tested (`meta_type` `record_id`, `record_url`, `revision`, `all_comments`, the raw `webhook_payload`) and `global` or `custom` references return `400` on write.
+- **Collection-change conditions are read-only.** **Has been added** and **Has been deleted** on an attachment, image or checklist field, and **Changed item contains** on a checklist field, have no public operator. They read as an `{ id, subject }` without an operator and *can't be sent back* unchanged. Other change-tracking conditions use the public operators `has_changed`, `has_changed_to` and `has_changed_to_any_of` and send back without problems.
 
-A verbatim `GET` → `PUT` still fails only for an automation that carries a **change-tracking condition** — strip those
-first. Ordinary field / metadata / trigger / action-file subjects (including the `boolean` / `entity_type` value kinds)
-round-trip.
-This is a known v1 limitation, not a bug.
+A `GET` followed by an unchanged `PUT` fails only for an automation with such a collection-change condition, so remove these conditions first. All other subjects send back unchanged, including the `boolean` and `entity_type` value kinds.
+
+## Next steps
+
+- [Discovery](/docs/api/resource/automation/discovery): the operators for each field type.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): subjects and values as references.
+- [Actions](/docs/api/resource/automation/reference/actions#control-flow-actions): conditions in `conditional` and `for_loop`.
+- [Revisions](/docs/api/resource/automation/revisions): roll back a definition with filters.
+- [Run & simulate](/docs/api/resource/automation/execution): run one record by hand or as a simulation.

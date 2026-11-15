@@ -8,49 +8,33 @@ description: Every automation edit appends an immutable revision — list and re
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+Use these endpoints to read the version history of an automation and to roll its definition back.
 
-Every change to an automation appends an immutable **revision** — a frozen snapshot of its definition. There is no
-"active version" pointer; to roll back, retrieve a revision and [`PUT`](/docs/api/resource/automation/manage) its
-definition back. Both endpoints require a **user API key** and workspace-admin access, and cost `1x` base credits.
+Every change to an automation adds a *revision*: a frozen, unchangeable snapshot of its definition. There is no pointer to an "active version". To [roll back](#roll-back-to-a-revision), retrieve a revision and send its definition back with [`PUT`](/docs/api/resource/automation/manage#update-an-automation).
 
-:::note Rolling back is not always a verbatim re-`PUT`
-A revision is a **read** snapshot with a wider envelope than the [update](/docs/api/resource/automation/manage) body
-accepts. Two things make a whole-object `PUT` fail with a `400`: the envelope keys `id`, `automation_id`,
-`created_at`, `paused` and `broken` are not writable (the update body is closed to stray keys), and a `filter` (or
-action condition) that uses a **change-tracking condition** has no writable form (see
-[filters](/docs/api/resource/automation/reference/filters#v1-limitations)). Re-submit only the definition members the
-revision carries — `name`, `trigger`, `filter` and `actions` — and strip any change-tracking condition first. A
-revision has **no `description`** (see the field table below), so **rollback cannot restore it**: `description` keeps
-its current value and must be reset separately if you need to revert it too. Ordinary field / metadata / trigger /
-action subjects round-trip fine.
-
-Note that a `webhook_received` trigger's server-assigned `webhook_url` is present on the live
-[automation object](/docs/api/resource/automation/reference/object) but is **not** included in a revision snapshot, so
-it is never the cause of a rollback `400`.
+:::info Which capability do I need?
+Both endpoints need **Read automations** (`automations:read`) and the **Admin** role in the app's workspace. They work with a [personal access token](/docs/api/personal-access-tokens), an [OAuth access token](/docs/api/oauth/overview) or a [user API key](/docs/api/authentication#user-api-key). Each request costs `1x` base credits.
 :::
 
 ## List revisions
 
+Use this endpoint to list the full history of an automation.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/{automation_id}/revision" />
 
-Returns the automation's full history, **newest-first**. This listing is **unpaginated** — there is no `cursor` or
-`total`. Simulation snapshots are excluded.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/automation/4021/revision -u #USER_API_KEY:`}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl #BASE_URL/v1/automation/4021/revision \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "revisions": [
     {
       "id": "90071992547409929",
       "automation_id": 4021,
-      "created_at": "2024-05-20 16:03:08",
+      "created_at": "2024-05-20 18:03:08",
+      "created_at_utc": "2024-05-20 16:03:08",
       "name": "Email the owner on a new high-priority lead",
       "paused": false,
       "broken": false,
@@ -62,33 +46,80 @@ Returns the automation's full history, **newest-first**. This listing is **unpag
 }`}
 </ContextCodeBlock>
 
+**General behavior**
+
+- Revisions are sorted *newest first*.
+- The list has *no pagination*: no `cursor` and no `total`.
+- Simulation snapshots aren't included.
+
+**Requirements:** `automations:read`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Retrieve a revision
+
+Use this endpoint to read one revision of an automation.
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/{automation_id}/revision/{revision_id}" />
 
-Returns one frozen revision, which must belong to this automation. A `revision_id` that is unknown, malformed, or
-belongs to another automation answers the same `404` (never an existence oracle).
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/automation/4021/revision/90071992547409929 -u #USER_API_KEY:`}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl #BASE_URL/v1/automation/4021/revision/90071992547409929 \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-Returns `{ revision }`.
+The response is `{ revision }`.
+
+**General behavior**
+
+- The revision must belong to this automation.
+- The endpoint never reveals which revision IDs exist. See [Errors](#errors).
+
+**Requirements:** `automations:read`, and the **Admin** role in the app's workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+## Roll back to a revision
+
+A revision is a *read* snapshot. Its envelope is wider than the [update](/docs/api/resource/automation/manage) body accepts, so a `PUT` of the whole revision fails with `400`.
+
+The first revision in the list is the current state. Pausing and activating add revisions too. Pick the revision whose `filter` and `actions` you want back.
+
+Send back only its definition members: `name`, `trigger`, `filter` and `actions`. The `PUT` needs `automations:edit`. Then [validate](/docs/api/resource/automation/execution#validate-an-automation) the automation: an older definition can point to fields that no longer exist.
+
+- The envelope keys `id`, `automation_id`, `created_at`, `created_at_utc`, `paused` and `broken` aren't writable. The update body rejects unknown keys.
+- A `filter` or action condition with a *collection-change condition* (**Has been added**, **Has been deleted** or **Changed item contains**) has no writable form. Remove it first. See [Filters](/docs/api/resource/automation/reference/filters#v1-limitations).
+- Conditions with `has_changed`, `has_changed_to` and `has_changed_to_any_of` are writable. So are conditions on fields, record metadata, trigger outputs and action outputs.
+- The server-assigned `webhook_url` of a `webhook_received` trigger is on the live automation object, but not in a revision. It never causes a `400` on rollback.
+
+:::note Why doesn't a rollback restore the description?
+A revision has *no `description`*. `description` keeps its current value, so reset it separately if you need to revert it too.
+:::
 
 ## The revision object
 
-A revision snapshots the automation's **definition** as of one edit.
+A revision is a snapshot of the automation's *definition* at one edit.
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `id` | `string` | The revision ID — a 64-bit value, returned as a string. |
-| `automation_id` | `integer` | The automation this revision belongs to. |
-| `created_at` | `string` | When the revision was created, UTC `YYYY-MM-DD HH:mm:ss`. |
-| `name` | `string` | The name as of this revision. |
-| `paused` / `broken` | `boolean` | State as of this revision. |
-| `trigger` | `object` \| `null` | The [trigger](/docs/api/resource/automation/reference/triggers) as of this revision. |
-| `filter` | `object` \| `null` | The [filter](/docs/api/resource/automation/reference/filters) as of this revision. |
-| `actions` | `array` | The [actions](/docs/api/resource/automation/reference/actions) as of this revision. |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `id` | `string` | The revision ID, a 64-bit value returned as a string. | `"90071992547409929"` |
+| `automation_id` | `integer` | The automation this revision belongs to. | `4021` |
+| `created_at` | `string` | When the revision was created, `YYYY-MM-DD HH:mm:ss`, in your timezone. | `"2024-05-20 18:03:08"` |
+| `created_at_utc` | `string` | Same instant as `created_at`, in UTC. | `"2024-05-20 16:03:08"` |
+| `name` | `string` | The name at this revision. | `"Email the owner on a new high-priority lead"` |
+| `paused` / `broken` | `boolean` | The state at this revision. | `false` |
+| `trigger` | `object` \| `null` | The [trigger](/docs/api/resource/automation/reference/triggers) at this revision. | `{ "type": "record_created", "config": {} }` |
+| `filter` | `object` \| `null` | The [filter](/docs/api/resource/automation/reference/filters) at this revision. | `null` |
+| `actions` | `array` | The [actions](/docs/api/resource/automation/reference/actions) at this revision. | `[]` |
 
-A revision is deliberately narrower than the [automation object](/docs/api/resource/automation/reference/object): it
-has no `description`, `broken_reason`, `updated_at`, `app_id` or `workspace_id`.
+A revision has fewer fields than the [automation object](/docs/api/resource/automation/reference/object). It has no `description`, `broken_reason`, `updated_at`, `app_id` or `workspace_id`.
+
+## Errors
+
+- An automation ID that isn't an integer returns `400`.
+- A credential that doesn't act on behalf of a user, for example an automation API key, returns `401`.
+- A token without `automations:read` returns `403`.
+- An automation or revision that isn't available to you returns `404`. A `revision_id` that is unknown, malformed or belongs to another automation returns the same `404`.
+
+See [Errors & broken reasons](/docs/api/resource/automation/reference/errors) for the Automation API and [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Manage](/docs/api/resource/automation/manage): send a revision's definition back with update.
+- [Filters](/docs/api/resource/automation/reference/filters#v1-limitations): which conditions can't be written back.
+- [Automation object](/docs/api/resource/automation/reference/object): the full live object.

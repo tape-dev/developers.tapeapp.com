@@ -8,74 +8,181 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
+import Link from '@docusaurus/Link';
 
-An **app** holds records of one kind, and belongs to exactly one workspace. Apps can be created, retrieved, updated and deleted via the API. To find an app by name across every workspace at once, use the [Search resource](/docs/api/resource/search).
+Use these endpoints to create, read, update and delete the apps of a workspace.
+
+An *app* belongs to exactly one workspace. A database app holds records of one kind. To find an app by name across all workspaces, use the [Search resource](/docs/api/resource/search).
+
+:::info Which capability do I need?
+Endpoints that read apps need `apps:read`. Endpoints that change apps need `apps:edit`. See [Capabilities](/docs/api/capabilities).
+:::
+
+<Link id="find-app-and-field-ids" />
+
+:::tip Where do I find the app ID and field IDs?
+In Tape, open the app menu (**Follow, export and more…**) and select **Developer**. It shows the **Workspace ID**, the **App ID** and, for each field, its **Field ID** and **External ID** (the field's slug). Through the API, [Retrieve all available apps](#retrieve-all-available-apps) returns every `app_id`, and [Retrieve a single app](#retrieve-a-single-app) returns the `field_id` and `slug` of every field.
+:::
+
+## The app object
+
+[Retrieve a single app](#retrieve-a-single-app), [Create an app](#create-an-app) and [Update an app](#update-an-app) return the full app object with all its fields:
+
+```json title="App"
+{
+  "app_id": 1,
+  "workspace_id": 1,
+  "workspace_name": "CRM",
+  "slug": "contacts",
+  "external_id": "contacts",
+  "name": "Contacts",
+  "record_name": "Contact",
+  "item_name": "Contact",
+  "type": "database",
+  "description": "A simple contact app.",
+  "position": 0,
+  "config": {
+    "description": "A simple contact app.",
+    "item_name": "Contact",
+    "name": "Contacts",
+    "icon": {
+      "type": "graphic",
+      "id": "contacts"
+    },
+    "item_icon": {
+      "type": "graphic",
+      "id": "person"
+    }
+  },
+  "fields": [
+    {
+      "field_id": 1,
+      "slug": "name",
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "slug": "name",
+        "external_id": "name",
+        "description": "The full name of the contact.",
+        "show_description": true,
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": true,
+        "settings": {
+          "formatted": false,
+          "format": "plain"
+        }
+      }
+    }
+  ]
+}
+```
+
+The list endpoints [Retrieve apps for a workspace](#retrieve-apps-for-a-workspace) and [Retrieve all available apps](#retrieve-all-available-apps) return a preview of each app: the same properties without `fields`, and `config` without `icon` and `item_icon`.
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `app_id` | number | The app ID. | `1` |
+| `workspace_id` | number | The workspace the app belongs to. | `1` |
+| `workspace_name` | string | Name of that workspace. | `"CRM"` |
+| `slug` | string | Slug of the app, unique in its workspace. | `"contacts"` |
+| `external_id` | string | *Deprecated.* Same as `slug`. | `"contacts"` |
+| `name` | string | Name of the app. | `"Contacts"` |
+| `record_name` | string | Name of one record, for example `Contact`. | `"Contact"` |
+| `item_name` | string | *Deprecated.* Same as `record_name`. | `"Contact"` |
+| `type` | `"database"` \| `"dashboard"` \| `"form"` | The kind of app. Untyped and legacy apps return `"database"`. | `"database"` |
+| `description` | string | Description of the app. Missing when the app has no description. | `"A simple contact app."` |
+| `position` | number | Position of the app in its workspace. | `0` |
+| `config` | object | Copy of `description`, `item_name` and `name`, plus `icon` and `item_icon` when set. See [Icon](/docs/api/resource/icon). | `{ "name": "Contacts", "item_name": "Contact" }` |
+| `fields` | array | Every field of the app, in the order of the app. See [The field object](#the-field-object). | `[{ "field_id": 1, … }]` |
+
+### The field object
+
+Each entry in `fields` describes one field. The format of `config.settings` depends on the field type. See [Fields](/docs/api/resource/field/overview).
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `field_id` | number | The field ID. | `1` |
+| `slug` | string | Slug of the field, unique in its app. Use it as a key in the `fields` of a record. | `"name"` |
+| `external_id` | string | *Deprecated.* Same as `slug`. | `"name"` |
+| `label` | string | Name of the field. | `"Name"` |
+| `field_type` | string | The field type. It tells single and multi fields apart, for example `single_category` and `multi_category`. | `"single_text"` |
+| `type` | string | The data type, the same for single and multi fields. Prefer `field_type`. | `"text"` |
+| `config.label` | string | Same as `label`. | `"Name"` |
+| `config.slug` | string | Same as `slug`. | `"name"` |
+| `config.external_id` | string | *Deprecated.* Same as `slug`. | `"name"` |
+| `config.description` | string | Help text of the field. Missing when the field has none. | `"The full name of the contact."` |
+| `config.show_description` | boolean | `true` if records show the help text. A new `single_text` or `multi_text` field with a `description` gets `true`, a new field of another type gets `false`. For updates, see [Fields](/docs/api/resource/field/overview). | `true` |
+| `config.required` | boolean | `true` if every record needs a value. | `true` |
+| `config.always_hidden` | boolean | `true` if every record hides the field. | `false` |
+| `config.hidden_if_empty` | boolean | `true` if records hide the field while it has no value. | `false` |
+| `config.primary` | boolean | `true` for the primary field. Its value names each record. Some database apps have no primary field. | `true` |
+| `config.settings` | object | Settings of the field type. | `{ "formatted": false, "format": "plain" }` |
 
 ## Retrieve apps for a workspace
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspaceId}" />
+Use this endpoint to list all apps of one workspace.
 
-Retrieve all apps for the workspace with ID `200` (Note that the response does not contain the fields):
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/workspace/{workspace_id}" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/app/workspace/200 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
-{
-  `{
+<ContextCodeBlock language="json" title='Response'>
+{`{
   "total": 2,
   "apps": [
     {
       "app_id": 1,
       "workspace_id": 200,
       "name": "Tasks",
+      "record_name": "Task",
       "slug": "tasks",
       "type": "database",
       "config": {
         "item_name": "Task",
-        "name": "Tasks",
-        "description": ""
+        "name": "Tasks"
       }
     },
     {
       "app_id": 2,
       "workspace_id": 200,
       "name": "Projects",
+      "record_name": "Project",
       "slug": "projects",
       "type": "database",
-      "config": { 
+      "config": {
         "item_name": "Project",
-        "name": "Projects",
-        "description": ""
+        "name": "Projects"
       }
     }
   ]
-}`
-}
+}`}
 </ContextCodeBlock>
 
-:::info App type
+The example lists the apps of the workspace with ID `200`, without their fields. To read the fields, retrieve the app by its ID.
 
-The read-only `type` property reports the kind of app — one of `"database"`, `"dashboard"`, or `"form"`. Untyped/legacy apps are reported as `"database"`.
-
-:::
+**Requirements:** `apps:read`. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Retrieve all available apps
 
+Use this endpoint to list the apps of all workspaces you have access to.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app" />
 
-Retrieve all apps inside the workspaces that you have access to (Note that the response does not contain the fields):
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/app \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
-{
-  `{
+<ContextCodeBlock language="json" title='Response'>
+{`{
   "total": 3,
   "apps": [
     {
@@ -83,12 +190,12 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "workspace_id": 200,
       "workspace_name": "Task management",
       "name": "Tasks",
+      "record_name": "Task",
       "slug": "tasks",
       "type": "database",
       "config": {
         "item_name": "Task",
-        "name": "Tasks",
-        "description": ""
+        "name": "Tasks"
       }
     },
     {
@@ -96,89 +203,97 @@ Retrieve all apps inside the workspaces that you have access to (Note that the r
       "workspace_id": 200,
       "workspace_name": "Task management",
       "name": "Projects",
+      "record_name": "Project",
       "slug": "projects",
       "type": "database",
-      "config": { 
+      "config": {
         "item_name": "Project",
-        "name": "Projects",
-        "description": ""
+        "name": "Projects"
       }
     },
     {
-    "app_id": 3,
-    "workspace_id": 300,
-    "workspace_name": "CRM",
-    "name": "Contacts",
-    "slug": "contacts",
-    "type": "database",
-    "config": { 
-      "item_name": "Contact",
+      "app_id": 3,
+      "workspace_id": 300,
+      "workspace_name": "CRM",
       "name": "Contacts",
-      "description": ""
+      "record_name": "Contact",
+      "slug": "contacts",
+      "type": "database",
+      "config": {
+        "item_name": "Contact",
+        "name": "Contacts"
+      }
     }
-  }
-]
+  ]
 }`}
 </ContextCodeBlock>
 
+Every app carries `workspace_id` and `workspace_name`. The response doesn't contain the fields.
+
+**Requirements:** `apps:read`. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Retrieve a single app
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}" />
+Use this endpoint to read one app together with all its fields.
 
-Retrieve an app with fields by its ID `1`:
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{app_id}" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/app/1 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
-{`
-  {
-    "app_id": 1,
-    "workspace_id": 200,
-    "name": "Tasks",
-    "slug": "tasks",
-    "type": "database",
-    "config": {
-      "item_name": "Task",
-      "name": "Tasks",
-      "description": ""
-    },
-    "fields": [
-      {
-        "field_id": 1,
-        "external_id": "full_name",
+<ContextCodeBlock language="json" title='Response'>
+{`{
+  "app_id": 1,
+  "workspace_id": 200,
+  "name": "Tasks",
+  "record_name": "Task",
+  "slug": "tasks",
+  "type": "database",
+  "config": {
+    "item_name": "Task",
+    "name": "Tasks"
+  },
+  "fields": [
+    {
+      "field_id": 1,
+      "slug": "full_name",
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
         "label": "Full Name",
-        "type": "text",
-        "field_type": "single_text",
-        "config": {
-          "description": null,
-          "required": false,
-          "label": "FST",
-          "settings": {
-            "format": "plain",
-            "size": "small"
-          }
+        "show_description": false,
+        "required": false,
+        "primary": true,
+        "settings": {
+          "formatted": false,
+          "format": "plain"
         }
       }
-    ]
-  }
-`}
+    }
+  ]
+}`}
 </ContextCodeBlock>
+
+The response is the full [app object](#the-app-object), with every field of the app.
+
+**Requirements:** `apps:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
 
 ## Retrieve views for an app
 
-<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{appId}/views" />
+Use this endpoint to list the public views of an app.
 
-Retrieve the public views of an app via the app ID `1`. Each entry is a **preview** — its id, name, layout and default flag. To retrieve a view's full definition, or to create, update, promote or delete views, see the [View resource](/docs/api/resource/view).
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/app/{app_id}/views" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/app/1/views \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "views": [
     {
@@ -204,48 +319,39 @@ Retrieve the public views of an app via the app ID `1`. Each entry is a **previe
 }`}
 </ContextCodeBlock>
 
+Each entry is a *preview* with the ID, name, layout and default flag of the view. To read the full definition of a view, or to create, update, promote or delete views, use the [View resource](/docs/api/resource/view).
+
+**Requirements:** `apps:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
+
+<a id="create-app"></a>
+
 ## Create an app
+
+Use this endpoint to create an app in a workspace, with or without fields.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-Create a new app within a workspace. The request body contains the following fields:
-
-- workspace_id (required): The ID of the workspace to create the app in. The requesting user needs to have permission to "create and edit" apps in this workspace.
-- name (required): Name of the app.
-- item_name (optional): Name of the records within the app. Defaults to the app `name` if omitted.
-- description (optional): Description of the app.
-- fields (optional): An array of fields to create with the app. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array.
-- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
-- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
-
-:::caution Limit — 500 apps per workspace
-A workspace can hold at most **500 apps**. Once a workspace has reached this limit, further create
-requests are rejected with an error until you delete an existing app.
-:::
-
-Here is an example request body for creating a contacts app within a workspace with ID 1.
-The app contains a `single_text` field "Name", and a `multi_text` field "Notes"
+The example creates a contacts app in the workspace with ID `1`. The app gets a `single_text` field "Name" and a `multi_text` field "Notes".
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`
-curl -X POST #BASE_URL/v1/app/ \\
-   -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \\
-   --data '{
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/app/ \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "workspace_id": 1,
     "name": "Contacts",
     "item_name": "Contact",
     "description": "A simple contact app.",
     "icon": {
-      "id": "person",
+      "id": "contacts",
       "type": "graphic"
     },
     "item_icon": {
-      "emoji": "🧑",
-      "type": "emoji"
+      "id": "person",
+      "type": "graphic"
     },
     "fields": [
       {
@@ -264,7 +370,7 @@ curl -X POST #BASE_URL/v1/app/ \\
           "required": false
         }
       }
-    ] 
+    ]
   }'
 `}
 </ContextCodeBlock>
@@ -272,19 +378,19 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "workspace_id": 1,
   "name": "Contacts",
   "item_name": "Contact",
   "description": "A simple contact app.",
   "icon": {
-    "id": "person",
+    "id": "contacts",
     "type": "graphic"
   },
   "item_icon": {
-    "emoji": "🧑",
-    "type": "emoji"
+    "id": "person",
+    "type": "graphic"
   },
   "fields": [
     {
@@ -310,7 +416,7 @@ curl -X POST #BASE_URL/v1/app/ \\
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
@@ -328,11 +434,11 @@ curl -X POST #BASE_URL/v1/app/ \\
     "name": "Contacts",
     "icon": {
       "type": "graphic",
-      "id": "person"
+      "id": "contacts"
     },
     "item_icon": {
-      "emoji": "🧑",
-      "type": "emoji"
+      "type": "graphic",
+      "id": "person"
     }
   },
   "fields": [
@@ -347,12 +453,12 @@ curl -X POST #BASE_URL/v1/app/ \\
         "label": "Name",
         "slug": "name",
         "external_id": "name",
-        "delta": "O1",
-        "position": "O1",
         "description": "The full name of the contact.",
+        "show_description": true,
         "required": true,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": true,
         "settings": {
           "formatted": false
         }
@@ -369,12 +475,12 @@ curl -X POST #BASE_URL/v1/app/ \\
         "label": "Notes",
         "slug": "notes",
         "external_id": "notes",
-        "delta": "f{",
-        "position": "f{",
         "description": "Notes about the contact.",
+        "show_description": true,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
           "formatted": true
         }
@@ -384,34 +490,51 @@ curl -X POST #BASE_URL/v1/app/ \\
 }
 ```
 
+The response has status `201` and contains the new app with all its fields.
+
+**General behavior**
+
+- Tape creates the fields in the order of the `fields` array.
+- Set the record name with `item_name`. The response returns it as `record_name`.
+- Without `position`, the new app goes after the last app of the workspace.
+
+:::caution Workspace has 500 apps?
+A workspace holds at most 500 apps. Further create requests then return an error. Delete an existing app to create a new one.
+:::
+
+**Requirements:** `apps:edit`, and a workspace role that may edit apps in the workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+**Body parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `workspace_id` | `integer` | Required. ID of the workspace to create the app in. |
+| `name` | `string` | Required. Name of the app. |
+| `item_name` | `string` | Name of one record, for example `Contact` (default: the app `name`). |
+| `description` | `string` | Description of the app. |
+| `position` | `number` | Position of the app in the workspace, the same `position` value apps return (default: after the last app of the workspace). |
+| `fields` | `Array` | Fields to create with the app, in this order. See [Fields](/docs/api/resource/field/overview). |
+| `icon` | `object` | Icon of the app. See [Icon](/docs/api/resource/icon). |
+| `item_icon` | `object` | Icon of the records. See [Icon](/docs/api/resource/icon). |
+
+<a id="update-app"></a>
+
 ## Update an app
 
-<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
+Use this endpoint to rename an app, change its icons, or add, change and delete fields.
 
-Update an existing app. The request body contains the following fields:
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{app_id}" />
 
-- name (optional): Name of the app.
-- item_name (optional): Name of the records within the app.
-- description (optional): Description of the app.
-- fields (optional): An array of fields to create/update. See the [field documentation](/docs/api/resource/field/overview) for more information. The provided fields will be created with the same order as provided in the array. Existing fields that specify a `field_id` will be updated.
-- fields_to_delete (optional): An array of fields to delete within the request. Existing elements from the fields property can be added to this array to delete them. The field_id of the field to delete needs to be provided.
-- icon (optional): Icon of the app. See the [icon documentation](/docs/api/resource/icon) for more information.
-- item_icon (optional): Icon of the records within the app. See the [icon documentation](/docs/api/resource/icon) for more information.
-
-Here is an example request body for updating the previously created contacts app.
-
-The request removes the "Name" field and adds a new `single_text` field "First Name" and a `single_text` field "Last Name".
-The Notes field is neither provided within the fields array nor the fields_to_delete array, so it will not be changed.
+The example updates the contacts app from [Create an app](#create-an-app). It deletes the "Name" field and adds two `single_text` fields, "First Name" and "Last Name". The "Notes" field is in neither `fields` nor `fields_to_delete`, so it stays unchanged.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`
-curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \\
-   --data '{
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X PUT #BASE_URL/v1/app/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "fields": [
       {
         "field_type": "single_text",
@@ -429,7 +552,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
           "required": true
         }
       }
-    ], 
+    ],
     "fields_to_delete": [
       {
         "field_id": 10
@@ -442,7 +565,7 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": [
     {
@@ -473,12 +596,13 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
   "slug": "contacts",
   "name": "Contacts",
+  "record_name": "Contact",
   "item_name": "Contact",
   "type": "database",
   "description": "A simple contact app.",
@@ -489,47 +613,10 @@ curl -X PUT #BASE_URL/v1/app/1 \\
     "name": "Contacts",
     "icon": {
       "type": "graphic",
-      "id": "person"
+      "id": "contacts"
     }
   },
   "fields": [
-    {
-      "field_id": 3,
-      "slug": "first_name",
-      "label": "First Name",
-      "type": "text",
-      "field_type": "single_text",
-      "config": {
-        "label": "First Name",
-        "slug": "first_name",
-        "description": "The first name of the contact.",
-        "required": true,
-        "always_hidden": false,
-        "hidden_if_empty": false,
-        "settings": {
-          "formatted": false
-        }
-      }
-    },
-    {
-      "field_id": 4,
-      "external_id": "last_name",
-      "slug": "last_name",
-      "label": "Last Name",
-      "type": "text",
-      "field_type": "single_text",
-      "config": {
-        "label": "Last Name",
-        "slug": "last_name",
-        "description": "The last name of the contact.",
-        "required": true,
-        "always_hidden": false,
-        "hidden_if_empty": false,
-        "settings": {
-          "formatted": false
-        }
-      }
-    },
     {
       "field_id": 20,
       "external_id": "notes",
@@ -541,11 +628,55 @@ curl -X PUT #BASE_URL/v1/app/1 \\
         "label": "Notes",
         "slug": "notes",
         "description": "Notes about the contact.",
+        "show_description": true,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": true,
         "settings": {
           "formatted": true
+        }
+      }
+    },
+    {
+      "field_id": 30,
+      "external_id": "first_name",
+      "slug": "first_name",
+      "label": "First Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "First Name",
+        "slug": "first_name",
+        "description": "The first name of the contact.",
+        "show_description": true,
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": false,
+        "settings": {
+          "formatted": false
+        }
+      }
+    },
+    {
+      "field_id": 40,
+      "external_id": "last_name",
+      "slug": "last_name",
+      "label": "Last Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Last Name",
+        "slug": "last_name",
+        "description": "The last name of the contact.",
+        "show_description": true,
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": false,
+        "settings": {
+          "formatted": false
         }
       }
     }
@@ -553,34 +684,75 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 }
 ```
 
+The response contains the updated app with all its fields.
+
+**General behavior**
+
+- Send only the properties you want to change.
+- A field in `fields` with a `field_id` updates that existing field. A field without `field_id` creates a new field. Tape adds new fields after the existing ones, in the order of the array.
+- To delete a field, add it to `fields_to_delete` with its `field_id`. This also deletes its values in every record. Entries copied from the app's `fields` property work too.
+- Fields that are in neither array stay unchanged.
+- To delete options of a category or status field, send `options_to_delete` in the `config.settings` of that field. See [Category](/docs/api/resource/field/category#app-update) and [Status](/docs/api/resource/field/status#app-update).
+- Want to make sure a request never deletes anything? Set `reject_deletions` to `true`.
+
+**Requirements:** `apps:edit`, and **Full access** to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+With `reject_deletions=true`, a request that deletes a field (`fields_to_delete`) or an option (`options_to_delete`) returns `400` with `deletions_rejected`. Tape applies nothing from that request, not even the other changes in the body:
+
+<ContextCodeBlock language="json">
+{`{
+  "status_code": 400,
+  "endpoint": "/v1/app/1",
+  "error_code": "deletions_rejected",
+  "error_message": "This request asks for something to be deleted ('fields_to_delete' names 1 field(s)), and it was sent with 'reject_deletions=true'. Nothing was applied — not the deletions, and not the rest of the body. Remove the deletion from the request, or send it without 'reject_deletions'."
+}`}
+</ContextCodeBlock>
+
+**Query parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `reject_deletions` | `boolean` | Reject the request with `400` (`deletions_rejected`) if it deletes a field (`fields_to_delete`) or an option (`options_to_delete`). Nothing is applied then (default: `false`). |
+
+**Body parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `name` | `string` | Name of the app. |
+| `item_name` | `string` | Name of one record, for example `Contact`. |
+| `description` | `string` | Description of the app. |
+| `fields` | `Array` | Fields to create or update. A field with `field_id` is updated, a field without one is created. See [Fields](/docs/api/resource/field/overview). |
+| `fields_to_delete` | `Array` | Fields to delete, each with its `field_id`. |
+| `icon` | `object` | Icon of the app. See [Icon](/docs/api/resource/icon). |
+| `item_icon` | `object` | Icon of the records. See [Icon](/docs/api/resource/icon). |
+
 ## Update an app's field order
 
-<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}/fields/order" />
+Use this endpoint to change the order of the fields in an app.
 
-Update an existing app's field order. The request body contains the following fields:
+<EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{app_id}/fields/order" />
 
-- fields (optional): An array of fields to update the position for within the request. The field_id of the fields to be reordered needs to be provided. Specify a full list of all fields to set a dedicated field order.
-
-Here is an example request body for updating the fields of the previously created contacts app, moving the `notes` field to the first position.
+The example moves the `notes` field of the contacts app to the first position.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`
-curl -X PUT #BASE_URL/v1/app/1/fields/order \\
-   -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \\
-   --data '{
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X PUT #BASE_URL/v1/app/1/fields/order \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "fields": [
       {
         "field_id": 20
       },
       {
-        "field_id": 3
+        "field_id": 30
       },
       {
-        "field_id": 4
+        "field_id": 40
       }
     ]
   }'
@@ -590,17 +762,17 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": [
     {
       "field_id": 20
     },
     {
-      "field_id": 3
+      "field_id": 30
     },
     {
-      "field_id": 4
+      "field_id": 40
     }
   ]
 }
@@ -609,12 +781,13 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
   "slug": "contacts",
   "name": "Contacts",
+  "record_name": "Contact",
   "item_name": "Contact",
   "type": "database",
   "description": "A simple contact app.",
@@ -625,7 +798,7 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
     "name": "Contacts",
     "icon": {
       "type": "graphic",
-      "id": "person"
+      "id": "contacts"
     }
   },
   "fields": [
@@ -640,16 +813,19 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
         "label": "Notes",
         "slug": "notes",
         "description": "Notes about the contact.",
+        "show_description": true,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": true,
         "settings": {
           "formatted": true
         }
       }
     },
     {
-      "field_id": 3,
+      "field_id": 30,
+      "external_id": "first_name",
       "slug": "first_name",
       "label": "First Name",
       "type": "text",
@@ -658,16 +834,18 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
         "label": "First Name",
         "slug": "first_name",
         "description": "The first name of the contact.",
+        "show_description": true,
         "required": true,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
           "formatted": false
         }
       }
     },
     {
-      "field_id": 4,
+      "field_id": 40,
       "external_id": "last_name",
       "slug": "last_name",
       "label": "Last Name",
@@ -677,9 +855,11 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
         "label": "Last Name",
         "slug": "last_name",
         "description": "The last name of the contact.",
+        "show_description": true,
         "required": true,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
           "formatted": false
         }
@@ -689,20 +869,58 @@ curl -X PUT #BASE_URL/v1/app/1/fields/order \\
 }
 ```
 
+The response contains the app with its fields in the new order.
+
+**General behavior**
+
+- Identify each field by its `field_id`.
+- To set the complete order, list all fields of the app.
+
+**Requirements:** `apps:edit`, and **Full access** to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Body parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| `fields` | `Array` | Fields in the new order, each with its `field_id`. |
+
+<a id="delete-app"></a>
+
 ## Delete an app
 
-<EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/app/{appId}" />
+Use this endpoint to delete an app.
 
-Deleting an existing app. ATTENTION: This action cannot be undone. All records and fields will be deleted as well.
+<EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/app/{app_id}" />
+
+:::caution Can you undo deleting an app?
+No. Deleting an app also deletes all its records and fields.
+:::
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`
-curl -X DELETE #BASE_URL/v1/app/1 \\
-   -u #USER_API_KEY: `}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X DELETE #BASE_URL/v1/app/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 </TabItem>
 
 </Tabs>
+
+```json title="Response"
+{
+  "app_id": 1
+}
+```
+
+**Requirements:** `apps:edit`, and **Full access** to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+## Next steps
+
+- [Workspace](/docs/api/resource/workspace#retrieve-workspaces): find the `workspace_id` to create an app in.
+- [Field](/docs/api/resource/field/overview): the format of every field type in an app.
+- [Record](/docs/api/resource/record): create and read the records of a database app.
+- [View](/docs/api/resource/view): read and change the views of an app.
+- [Icon](/docs/api/resource/icon): set the icons of an app and its records.
+- [Webhook](/docs/api/resource/webhook): get notified when an app or its records change.
+- [Capabilities](/docs/api/capabilities): what `apps:read` and `apps:edit` allow.

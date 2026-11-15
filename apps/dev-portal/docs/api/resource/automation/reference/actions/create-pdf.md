@@ -2,102 +2,149 @@
 id: create-pdf
 title: create_pdf
 sidebar_label: create_pdf
-description: Config reference for the Tape automation create_pdf action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation create_pdf action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to render an HTML template to a PDF file that later actions can use.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Create PDF** — renders an HTML template to a PDF. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Create a PDF** in the [Email & documents](/docs/api/resource/automation/reference/actions#email--documents) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [Email & documents](/docs/api/resource/automation/reference/actions#email--documents) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-Every member is optional — each carries a canonical editor default, so a caller that omits them still yields a complete
-action.
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `options_expanded` | boolean | no | Editor-only UI flag: whether the advanced options section is expanded. Default `false`. |
-| `filename` | [template value](/docs/api/resource/automation/dynamic-values) | no | The generated file's name. Empty when omitted. |
-| `custom_variable_def` | object | no | The custom variable the action outputs (the generated PDF file). `{ single_file, PDF }` when omitted. |
-| `page_numbers_enabled` | boolean | no | Whether page numbers are rendered. Default `false`. |
-| `header_and_footer_enabled` | boolean | no | Whether the PDF header and footer are rendered. Default `false`. |
-| `page_size` | enum | no | Page size. Default `a4`. |
-| `page_custom_width` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom page width, used only when `page_size` is `custom_size`. Empty when omitted. |
-| `page_custom_height` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom page height, used only when `page_size` is `custom_size`. Empty when omitted. |
-| `page_orientation` | enum | no | Page orientation. Default `portrait`. |
-| `page_margins` | enum | no | Page margins preset. Default `normal`. |
-| `page_custom_margin_top` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom top margin, used only when `page_margins` is `custom_margins`. Empty when omitted. |
-| `page_custom_margin_right` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom right margin, used only when `page_margins` is `custom_margins`. Empty when omitted. |
-| `page_custom_margin_bottom` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom bottom margin, used only when `page_margins` is `custom_margins`. Empty when omitted. |
-| `page_custom_margin_left` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom left margin, used only when `page_margins` is `custom_margins`. Empty when omitted. |
-| `pdf_header_custom_margin_top` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom header top margin. Empty when omitted. |
-| `pdf_footer_custom_margin_bottom` | [code value](/docs/api/resource/automation/dynamic-values) | no | Custom footer bottom margin. Empty when omitted. |
-| `page_number_style` | enum | no | Page-number numbering style. Default `decimal`. |
-| `page_number_start` | [code value](/docs/api/resource/automation/dynamic-values) | no | The number the first page's number starts at. Empty when omitted. |
-| `pdf_header` | [template value](/docs/api/resource/automation/dynamic-values) | no | Header HTML template rendered on the first page. Empty when omitted. |
-| `pdf_header_expanded` | boolean | no | Editor-only UI flag: whether the header section is expanded. Default `false`. |
-| `pdf_header_following_pages` | [template value](/docs/api/resource/automation/dynamic-values) | no | Header HTML template rendered on following pages. Empty when omitted. |
-| `pdf_header_following_pages_enabled` | boolean | no | Whether a distinct following-pages header is used. Default `false`. |
-| `pdf_footer` | [template value](/docs/api/resource/automation/dynamic-values) | no | Footer HTML template rendered on the first page. Empty when omitted. |
-| `pdf_footer_expanded` | boolean | no | Editor-only UI flag: whether the footer section is expanded. Default `false`. |
-| `pdf_footer_following_pages` | [template value](/docs/api/resource/automation/dynamic-values) | no | Footer HTML template rendered on following pages. Empty when omitted. |
-| `pdf_footer_following_pages_enabled` | boolean | no | Whether a distinct following-pages footer is used. Default `false`. |
-| `pdf_body_expanded` | boolean | no | Editor-only UI flag: whether the body section is expanded. Default `false`. |
-| `pdf_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | Body HTML template rendered as the PDF content. Empty when omitted. |
-
-**`page_size` tokens** (lower-case): `letter`, `tabloid`, `legal`, `a3`, `a4`, `a5`, `envelope_10`, `custom_size`.
-Custom dimensions apply only under `custom_size`.
-
-**`page_orientation` tokens** (lower-case): `portrait`, `landscape`.
-
-**`page_margins` tokens** (lower-case): `normal`, `narrow`, `moderate`, `wide`, `custom_margins`. Custom margins apply
-only under `custom_margins`.
-
-**`page_number_style` tokens** (lower-case): `decimal`, `decimal_leading_zero`, `lower_latin`, `upper_latin`,
-`lower_roman`, `upper_roman`.
-
-The four `*_expanded` members are editor-only UI layout flags. They are **advertised in the live discovery
-`config_schema`** and round-trip on both read and write, so a read-modify-write preserves them.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action renders an invoice for the current record:
 
 ```json
 {
   "type": "create_pdf",
   "config": {
-    "filename": ["invoice-", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }, ".pdf"],
+    "filename": ["invoice-", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 87 }, ".pdf"],
     "page_size": "a4",
     "page_orientation": "portrait",
     "page_margins": "normal",
-    "pdf_body": ["<h1>Invoice</h1><p>Thank you for your order.</p>"]
+    "pdf_body": ["<h1>Invoice</h1><p>Thank you for your order.</p>"],
+    "custom_variable_def": { "custom_type": "single_file", "label": "Invoice PDF" }
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- No member is required — each carries a canonical editor default. The four page enums default to `page_size` → `a4`,
-  `page_orientation` → `portrait`, `page_margins` → `normal`, and `page_number_style` → `decimal`; every boolean
-  defaults to `false`, and every template / code string defaults to the empty definition.
-- `custom_variable_def` is the action's output (the generated PDF file); omitting it yields the canonical
-  `{ single_file, PDF }` variable.
-- Custom dimensions (`page_custom_*`) apply only under the matching `custom_size` / `custom_margins` presets and are
-  ignored otherwise.
-- The action renders an HTML template to a PDF and produces no reliable per-action success log — do not rely on a
-  success log entry to confirm the render.
+Every key is optional. Tape fills in the same defaults as the editor, so a short config still gives a complete action.
 
-## See also
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `filename` | [template value](/docs/api/resource/automation/dynamic-values) | Name of the generated file. Empty when left out. | `["invoice.pdf"]` |
+| `custom_variable_def` | object | The output variable that holds the generated PDF file. Default `{ "custom_type": "single_file", "label": "PDF" }`. | `{ "custom_type": "single_file", "label": "Invoice PDF" }` |
+| `pdf_body` | [template value](/docs/api/resource/automation/dynamic-values) | HTML template for the PDF content. Empty when left out. | `["<h1>Invoice</h1>"]` |
+| `page_size` | enum | Page size. Default `a4`. See [Page sizes](#page-sizes). | `"a4"` |
+| `page_custom_width` | [code value](/docs/api/resource/automation/dynamic-values) | Custom page width. Used only when `page_size` is `custom_size`. Empty when left out. | `["210"]` |
+| `page_custom_height` | [code value](/docs/api/resource/automation/dynamic-values) | Custom page height. Used only when `page_size` is `custom_size`. Empty when left out. | `["297"]` |
+| `page_orientation` | enum | Page orientation: `portrait` or `landscape`. Default `portrait`. | `"portrait"` |
+| `page_margins` | enum | Page margin preset. Default `normal`. See [Page margins](#page-margins). | `"normal"` |
+| `page_custom_margin_top` | [code value](/docs/api/resource/automation/dynamic-values) | Custom top margin. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["20"]` |
+| `page_custom_margin_right` | [code value](/docs/api/resource/automation/dynamic-values) | Custom right margin. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["15"]` |
+| `page_custom_margin_bottom` | [code value](/docs/api/resource/automation/dynamic-values) | Custom bottom margin. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["20"]` |
+| `page_custom_margin_left` | [code value](/docs/api/resource/automation/dynamic-values) | Custom left margin. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["15"]` |
+| `pdf_header_custom_margin_top` | [code value](/docs/api/resource/automation/dynamic-values) | Custom top margin of the header. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["10"]` |
+| `pdf_footer_custom_margin_bottom` | [code value](/docs/api/resource/automation/dynamic-values) | Custom bottom margin of the footer. Used only when `page_margins` is `custom_margins`. Empty when left out. | `["10"]` |
+| `page_numbers_enabled` | boolean | Whether Tape adds page numbers. Default `false`. | `true` |
+| `page_number_style` | enum | Numbering style of the page numbers. Default `decimal`. See [Page number styles](#page-number-styles). | `"decimal"` |
+| `page_number_start` | [code value](/docs/api/resource/automation/dynamic-values) | The number of the first page. Empty when left out. | `["1"]` |
+| `header_and_footer_enabled` | boolean | Whether Tape adds the header and footer. Default `false`. | `true` |
+| `pdf_header` | [template value](/docs/api/resource/automation/dynamic-values) | HTML template for the header on the first page. Empty when left out. | `["<p>Acme Inc.</p>"]` |
+| `pdf_header_following_pages_enabled` | boolean | Whether the following pages get their own header. Default `false`. | `false` |
+| `pdf_header_following_pages` | [template value](/docs/api/resource/automation/dynamic-values) | HTML template for the header on the following pages. Empty when left out. | `["<p>Invoice, continued</p>"]` |
+| `pdf_footer` | [template value](/docs/api/resource/automation/dynamic-values) | HTML template for the footer on the first page. Empty when left out. | `["<p>Thank you for your business.</p>"]` |
+| `pdf_footer_following_pages_enabled` | boolean | Whether the following pages get their own footer. Default `false`. | `false` |
+| `pdf_footer_following_pages` | [template value](/docs/api/resource/automation/dynamic-values) | HTML template for the footer on the following pages. Empty when left out. | `["<p>Acme Inc.</p>"]` |
+| `options_expanded` | boolean | Editor only: whether the advanced options section shows expanded. Default `false`. | `false` |
+| `pdf_header_expanded` | boolean | Editor only: whether the header section shows expanded. Default `true`. | `true` |
+| `pdf_footer_expanded` | boolean | Editor only: whether the footer section shows expanded. Default `true`. | `true` |
+| `pdf_body_expanded` | boolean | Editor only: whether the body section shows expanded. Default `true`. Stays `true` while `header_and_footer_enabled` is `false`. | `true` |
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and code values
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+### Page sizes
+
+`page_size` takes one of these lower-case tokens:
+
+- `letter`
+- `tabloid`
+- `legal`
+- `a3`
+- `a4`
+- `a5`
+- `envelope_10`
+- `custom_size`: uses `page_custom_width` and `page_custom_height`.
+
+### Page margins
+
+`page_margins` takes one of these lower-case tokens:
+
+- `normal`
+- `narrow`
+- `moderate`
+- `wide`
+- `custom_margins`: uses the four `page_custom_margin_*` values and the header and footer margins.
+
+### Page number styles
+
+`page_number_style` takes one of these lower-case tokens:
+
+- `decimal`: 1, 2, 3
+- `decimal_leading_zero`: 01, 02, 03
+- `lower_latin`: a, b, c
+- `upper_latin`: A, B, C
+- `lower_roman`: i, ii, iii
+- `upper_roman`: I, II, III
+
+### Editor-only flags
+
+The four `*_expanded` keys only control which sections the automation editor shows expanded. They don't change the PDF.
+
+- `meta/action` lists them in the `config_schema`.
+- Tape keeps them on read and write, so a read-modify-write preserves them.
+- While `header_and_footer_enabled` is `false`, Tape sets `pdf_body_expanded` to `true`. In that state the editor has no control to open a closed body section.
+
+## Use the file in a later action
+
+The action stores the file in the variable from `custom_variable_def`. A later action reads it with a `custom` reference that has the same `custom_type` and `label`. This `send_email` entry attaches the invoice:
+
+```json
+{
+  "type": "send_email",
+  "config": {
+    "to_address": ["juliet@acme.com"],
+    "subject": ["Your invoice"],
+    "attach_files_variable_defs": [
+      { "kind": "variable", "source": "custom", "custom_type": "single_file", "label": "Invoice PDF" }
+    ]
+  }
+}
+```
+
+## General behavior {#validation--behavior}
+
+- The defaults are the ones in the [Config](#config) table. Without `custom_variable_def`, the output variable has the label `PDF`.
+- Tape ignores the custom sizes and margins unless `page_size` is `custom_size` or `page_margins` is `custom_margins`.
+- Code values for sizes, margins and `page_number_start` must resolve to a number.
+- Tape reads custom sizes and margins in millimeters, so `["210"]` by `["297"]` is A4.
+- The action writes no reliable success entry to the run log. Don't use the log to confirm that the PDF was rendered.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [send_email](/docs/api/resource/automation/reference/actions/send-email): attach the generated PDF to an email.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build template values and code values, and use the PDF output variable.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

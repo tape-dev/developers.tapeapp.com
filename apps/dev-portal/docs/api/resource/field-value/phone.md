@@ -1,6 +1,6 @@
 ---
 id: phone
-title: Phone Field Value
+title: Phone field value
 sidebar_label: Phone
 ---
 
@@ -9,46 +9,89 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A phone field value consists of its `value` property, which holds one or multiple phone number entries. An entry contains the phone number itself, plus its type, e.g. `work` or `home`.
+Use a phone field value to read and write the phone numbers of a record.
 
-Currently the following values are allowed as type: `work`, `work_fax`, `home`, `home_fax`, `main`, `mobile`, `pager`, and `other`. If no type is provided, phone entries always default to `work`.
+The value of a [phone field](/docs/api/resource/field/phone) is a list of phone numbers in `values`. Each phone number has an `id`, the number in `value` and a type label in `type`.
+
+```json title="Phone field value object"
+{
+  "field_id": 3,
+  "external_id": "phone",
+  "label": "Phone",
+  "type": "phone",
+  "field_type": "multi_phone",
+  "values": [
+    {
+      "id": 100,
+      "value": "+1 202 555 0143",
+      "type": "mobile",
+      "created_at": "2026-11-11 10:15:00",
+      "created_at_utc": "2026-11-11 09:15:00",
+      "last_modified_at": "2026-11-11 10:15:00",
+      "last_modified_at_utc": "2026-11-11 09:15:00",
+      "created_by_user_id": 1,
+      "created_by_workflow_def_id": null,
+      "created_by_share_session_id": null,
+      "last_modified_by_user_id": 1,
+      "last_modified_by_workflow_def_id": null,
+      "last_modified_by_share_session_id": null
+    }
+  ]
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"phone"` for a phone field. | `"phone"` |
+| `field_type` | `string` | `"multi_phone"`. | `"multi_phone"` |
+| `values[].id` | `number` | ID of the phone number. Send it with the phone number in an update to keep the ID. | `100` |
+| `values[].value` | `string` | The phone number as it was entered. | `"+1 202 555 0143"` |
+| `values[].type` | `string` | Type label: `"mobile"`, `"work"`, `"home"`, `"main"`, `"work_fax"`, `"home_fax"`, `"pager"`, `"other"` or the text of a custom label of the field. | `"mobile"` |
+| `values[].created_at`, `values[].last_modified_at` | `string` | When the phone number was added and last changed, in your timezone. | `"2026-11-11 10:15:00"` |
+| `values[].created_at_utc`, `values[].last_modified_at_utc` | `string` | The same times in UTC. | `"2026-11-11 09:15:00"` |
+| `values[].created_by_user_id`, `values[].last_modified_by_user_id` | `number` or `null` | ID of the user who added or last changed the phone number. | `1` |
+| `values[].created_by_workflow_def_id`, `values[].last_modified_by_workflow_def_id` | `number` or `null` | ID of the automation that added or last changed the phone number. | `null` |
+| `values[].created_by_share_session_id`, `values[].last_modified_by_share_session_id` | `string` or `null` | Session ID (UUID) of an anonymous visitor who added or changed the phone number through a shared link. | `null` |
+
+Each field in a record response also contains the field's `config`. The examples on this page leave it out. They also leave out the times and author IDs of each phone number.
 
 ## Record creation
 
+Use the [create record endpoint](/docs/api/resource/record#create-a-record) to set phone numbers on a new record.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A phone field value can be created as part of a record creation. It is possible to provide either a string, an object following the phone number entry structure or an array of those two. It is advised to use an array of objects for the best accuracy of the provided data.
-
-Here is an example request body for creating a record with a value for the "Customer phone" field with ID 2, type `multi_phone` and external ID `customer_phone`:
+The example sets two phone numbers in the "Phone" field (ID `3`, type `multi_phone`, slug `phone`) of a new lead.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "customer_phone": 
-        [
-          {"type": "work", "phone": "+1 444 555"},
-          {"type": "home", "phone": "+1 777 111"}
-        ]
+      "name": "Juliet Adams",
+      "phone": [
+        { "type": "mobile", "phone": "+1 202 555 0143" },
+        { "type": "work", "phone": "+1 202 555 0178" }
+      ]
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "customer_phone": [
-      { "type": "work", "phone": "+1 444 555" },
-      { "type": "home", "phone": "+1 777 111" }
+    "name": "Juliet Adams",
+    "phone": [
+      { "type": "mobile", "phone": "+1 202 555 0143" },
+      { "type": "work", "phone": "+1 202 555 0178" }
     ]
   }
 }
@@ -57,109 +100,133 @@ Here is an example request body for creating a record with a value for the "Cust
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
-      "field_id": 2,
-      "external_id": "customer_phone",
-      "label": "Customer phone",
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
+      "field_id": 3,
+      "external_id": "phone",
+      "label": "Phone",
       "type": "phone",
       "field_type": "multi_phone",
       "values": [
-        {
-          "id": 100,
-          "value": "+1 444 555",
-          "type": "work"
-        },
-        {
-          "id": 101,
-          "value": "+1 777 111",
-          "type": "home"
-        }
+        { "id": 100, "value": "+1 202 555 0143", "type": "mobile" },
+        { "id": 101, "value": "+1 202 555 0178", "type": "work" }
       ]
     }
   ]
 }
 ```
 
-Note that the individual phone number entries contain an ID. Be sure to include them in updates, to keep existing phone entries. If you omit the ID, new entries will be created instead and the respective existing ones will be removed.
+**General behavior**
+
+- Use the field ID or the field's slug (returned as `external_id` in records) as the key in `fields`.
+- Send an array of phone numbers. Each one is an object `{ "phone": "...", "type": "..." }` or a string. `value` works in place of `phone`.
+- Send `type` in lowercase. Without `type`, or with a `type` Tape doesn't know, the phone number gets the label `work`.
+- The API accepts all eight built-in labels, even if the field's `label_setting` offers fewer.
+- A `type` that matches the text of a custom label of the field (not case-sensitive) gets that label.
+- If the field's `label_setting` is `"none"`, Tape ignores `type`.
+- Tape stores the phone number as you send it. It removes spaces at the start and the end and skips empty phone numbers.
+- A required phone field needs at least one phone number on a new record. An empty array `[]` counts as missing.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- A `type` that matches more than one custom label of the field returns `400`. Use a unique label.
+
+See [Errors](/docs/api/errors) for all error codes.
 
 ## Record retrieval
 
+Use the [retrieve record endpoint](/docs/api/resource/record#retrieve-a-record) to read the phone numbers of a record.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-A phone field value can be retrieved as part of a record retrieval:
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
-      "field_id": 2,
-      "external_id": "customer_phone",
-      "label": "Customer phone",
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
+      "field_id": 3,
+      "external_id": "phone",
+      "label": "Phone",
       "type": "phone",
       "field_type": "multi_phone",
       "values": [
-        {
-          "id": 100,
-          "value": "+1 444 555",
-          "type": "work"
-        },
-        {
-          "id": 101,
-          "value": "+1 777 111",
-          "type": "home"
-        }
+        { "id": 100, "value": "+1 202 555 0143", "type": "mobile" },
+        { "id": 101, "value": "+1 202 555 0178", "type": "work" }
       ]
     }
   ]
 }
 ```
 
+**General behavior**
+
+- A phone number without a label shows `"type": "work"`. This includes all phone numbers of a field with `"label_setting": "none"`.
+
+**Requirements:** `records:read`. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Record update
+
+Use the [update record endpoint](/docs/api/resource/record#update-a-record) to change the phone numbers of a record.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more phone field values can be updated as part of a record update, and individual entries can be updated via their ID. Here is an example request body for updating the phone entries of a phone field with external ID `customer_phone` of a record:
+The example changes the mobile number with ID `100`, removes the work number and adds a main number.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X PUT #BASE_URL/v1/record/1  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X PUT #BASE_URL/v1/record/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "customer_phone": 
-      [
-        { "id": 100, "type": "work", "phone": "+1 444 333" },
-        { "type": "other", "phone": "+1 888 888" }
+      "phone": [
+        { "id": 100, "type": "mobile", "phone": "+1 202 555 0199" },
+        { "type": "main", "phone": "+1 202 555 0100" }
       ]
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "customer_phone": [
-      { "id": 100, "type": "work", "phone": "+1 444 333" },
-      { "type": "other", "phone": "+1 888 888" }
+    "phone": [
+      { "id": 100, "type": "mobile", "phone": "+1 202 555 0199" },
+      { "type": "main", "phone": "+1 202 555 0100" }
     ]
   }
 }
@@ -168,30 +235,65 @@ One or more phone field values can be updated as part of a record update, and in
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
-      "field_id": 2,
-      "external_id": "customer_phone",
-      "label": "Customer phone",
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
+      "field_id": 3,
+      "external_id": "phone",
+      "label": "Phone",
       "type": "phone",
       "field_type": "multi_phone",
       "values": [
-        {
-          "id": 100,
-          "value": "+1 444 333",
-          "type": "work"
-        },
-        {
-          "id": 102,
-          "value": "+1 888 888",
-          "type": "other"
-        }
+        { "id": 100, "value": "+1 202 555 0199", "type": "mobile" },
+        { "id": 102, "value": "+1 202 555 0100", "type": "main" }
       ]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- The new list replaces the old list. Tape removes phone numbers that aren't in the request.
+- A phone number sent with its `id` keeps that ID. Tape removes an entry with only `id`. A phone number without `id` becomes a new one.
+- To clear the field, send `null` or an empty array `[]`. This also works for a required phone field.
+- Fields that aren't in the request keep their values.
+
+```json title="Request: clear the field"
+{
+  "fields": {
+    "phone": null
+  }
+}
+```
+
+A cleared field isn't in the `fields` of the response.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+Same errors as under [Record creation](#record-creation). An update also returns these errors:
+
+- A phone number that isn't a string, like `{ "phone": 5 }`, returns `400` with `validation` and the message `Invalid input for Phone field with ID …`.
+- An entry that's `null`, or an object without `phone`, `value`, `type` or `id`, returns the same error.
+
+See [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Phone field](/docs/api/resource/field/phone): create and change phone fields.
+- [Field value](/docs/api/resource/field-value/overview): how all field values work.
+- [Record](/docs/api/resource/record): create, read, update and delete records.
+- [Filter](/docs/api/resource/filter#multi-phone): find records by their phone numbers.

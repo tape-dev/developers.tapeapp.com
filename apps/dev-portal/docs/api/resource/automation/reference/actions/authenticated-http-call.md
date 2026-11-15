@@ -2,66 +2,94 @@
 id: authenticated-http-call
 title: authenticated_http_call
 sidebar_label: authenticated_http_call
-description: Config reference for the Tape automation authenticated_http_call action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation authenticated_http_call action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to send an HTTP request through an OAuth 2.0 connection and keep the response for later actions.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Authenticated HTTP request** — makes an HTTP request signed by an authentication provider. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Send an API request** in the [HTTP requests](/docs/api/resource/automation/reference/actions#http-requests) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [HTTP requests](/docs/api/resource/automation/reference/actions#http-requests) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `http_call_type` | enum | **yes** | HTTP method. |
-| `http_call_url` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Request URL. |
-| `http_call_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | Request body. Empty when omitted. |
-| `http_call_headers` | array of header objects | no | Request headers — each a `{ key, value }` pair whose `value` is a [template value](/docs/api/resource/automation/dynamic-values). Empty `[]` when omitted. |
-| `http_call_follow_redirects` | boolean | no | Whether to follow 3xx redirects. `false` when omitted. |
-| `authentication_provider_id` | integer | no | Authentication provider that signs the request. Absent when omitted → the action is skipped at run time. |
-| `custom_variable_defs` | array of custom variable defs | no | Custom variables the action declares (e.g. its response variable) for its own code or later actions. Empty `[]` when omitted. |
-
-**`http_call_type` tokens** (lower-case): `get`, `post`, `put`, `patch`, `delete`.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+When a deal is won, this action sends the deal to a sales system through a connection and saves the response:
 
 ```json
 {
   "type": "authenticated_http_call",
   "config": {
     "http_call_type": "post",
-    "http_call_url": ["https://api.example.com/records/", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
+    "http_call_url": ["https://crm.acme.com/api/v2/deals"],
     "http_call_headers": [
       { "key": "Content-Type", "value": ["application/json"] }
     ],
-    "http_call_body": ["{\"status\":\"synced\"}"],
+    "http_call_body": ["{\"deal\": \"", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 87 }, "\", \"stage\": \"won\"}"],
     "http_call_follow_redirects": false,
-    "authentication_provider_id": 44
+    "authentication_provider_id": 44,
+    "custom_variable_defs": [
+      { "custom_type": "any", "label": "API response" }
+    ]
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `http_call_type` and `http_call_url` are the only required members; `http_call_body` defaults to empty, `http_call_headers` and `custom_variable_defs` default to `[]`, and `http_call_follow_redirects` defaults to `false`.
-- Like `http_call`, this action signs the request with the referenced `authentication_provider_id`. The id is optional in the schema, but the action is **skipped at run time** when it is absent — an authenticated call cannot be made without a provider.
-- Authentication providers are **not creatable through this API**; reference one configured in the Tape UI.
-- Requests are SSRF-protected.
-- Each header entry requires both `key` and `value`; send `""` (or `[]`) for a deliberately blank value.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `http_call_type` | enum | **Required.** HTTP method: `get`, `post`, `put`, `patch` or `delete`. | `"post"` |
+| `http_call_url` | [template value](/docs/api/resource/automation/dynamic-values) | **Required.** Request URL. | `["https://crm.acme.com/api/v2/deals"]` |
+| `authentication_provider_id` | integer | ID of the connection that signs the request. Optional in the schema, but without it Tape skips the action when the automation runs. | `44` |
+| `http_call_body` | [template value](/docs/api/resource/automation/dynamic-values) | Request body. Empty when left out. | `["{\"stage\": \"won\"}"]` |
+| `http_call_headers` | array of headers | Request headers. Each entry is `{ "key", "value" }`, both required, with an optional `id`. Empty when left out. | `[]` |
+| `http_call_follow_redirects` | boolean | Follows `3xx` redirects. Default `false`. | `false` |
+| `custom_variable_defs` | array of variable declarations | Variables this action declares. Empty when left out. | `[{ "custom_type": "any", "label": "API response" }]` |
 
-## See also
+The headers and `custom_variable_defs` work the same way as in [`http_call`](/docs/api/resource/automation/reference/actions/http-call#headers).
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Filters](/docs/api/resource/automation/reference/filters) — the filter-group shape used by other actions
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+## Connections
+
+In the editor, the connection is the **Connection** field of the action. It's an OAuth 2.0 connection that an organization admin sets up in Tape.
+
+- The public API has *no endpoint to create or list connections*.
+- To find `authentication_provider_id`, select the connection in this action in the automation editor, then [retrieve the automation](/docs/api/resource/automation/manage#retrieve-an-automation).
+- You can define the action through the API without a valid ID. Tape saves it, and validation doesn't report it. When the automation runs, Tape skips the action without a per-action log.
+
+## Use the response in a later action
+
+Tape stores the response body in the first variable of `custom_variable_defs`. A later action reads it with a `custom` reference that has the same `custom_type` and `label`:
+
+```json
+{ "kind": "variable", "source": "custom", "custom_type": "any", "label": "API response" }
+```
+
+Without a declared variable, Tape sends the request and keeps no response. The editor declares one variable called **API response**.
+
+## General behavior {#validation--behavior}
+
+- `http_call_type` and `http_call_url` are required. Neither has a default.
+- Every other key except `authentication_provider_id` has a default: an empty body, no headers, no redirects and no declared variables.
+- With an empty `http_call_url`, Tape skips the action when the automation runs.
+- Outbound requests have [SSRF protection](https://help.tapeapp.com/en/articles/18448976-automation-ip-addresses). Tape refuses hosts that resolve to private or internal addresses.
+- Each header needs `key` and `value`. Send `""` or `[]` for a blank value.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An organization admin has set up the connection in Tape.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [http_call](/docs/api/resource/automation/reference/actions/http-call): send a request without a connection.
+- [IP addresses](https://help.tapeapp.com/en/articles/18448976-automation-ip-addresses): where requests come from and which hosts Tape refuses.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): template values and `custom` references.
+- [Action examples](/docs/api/resource/automation/action-examples): why an action can save but do nothing.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

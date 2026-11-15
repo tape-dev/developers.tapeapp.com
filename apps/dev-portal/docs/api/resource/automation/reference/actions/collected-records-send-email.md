@@ -2,72 +2,89 @@
 id: collected-records-send-email
 title: collected_records_send_email
 sidebar_label: collected_records_send_email
-description: Config reference for the Tape automation collected_records_send_email action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation collected_records_send_email action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to send one email for each record in a collection that an earlier action built.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Send email for collected records** — sends one email per record in a collection produced by an earlier action. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Send an email to all collected records** in the [Email & documents](/docs/api/resource/automation/reference/actions#email--documents) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Email & documents](/docs/api/resource/automation/reference/actions#email--documents) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `to_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Recipient address(es). Empty when omitted. |
-| `subject` | [template value](/docs/api/resource/automation/dynamic-values) | no | Email subject. Empty when omitted. |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to send one email for each of — a prior action's `record_collection` output. Omitted → the enclosing for-loop's collection. |
-| `reply_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Reply-to address. Empty when omitted. |
-| `cc_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | CC address(es). Empty when omitted. |
-| `bcc_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | BCC address(es). Empty when omitted. |
-| `from_address` | [template value](/docs/api/resource/automation/dynamic-values) | no | Sender address. Empty when omitted. |
-| `from_name` | [template value](/docs/api/resource/automation/dynamic-values) | no | Sender display name. Empty when omitted. |
-| `message_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | HTML email body. Empty when omitted. |
-| `smtp_account_id` | integer | no | ID of the SMTP account to send from. Omitted → the organization's **default** SMTP account. |
-| `attach_files_variable_defs` | array of [references](/docs/api/resource/automation/dynamic-values) | no | File variables whose files are candidates for attachment. Empty when omitted. |
-| `attach_files_match_type` | enum | no | Which candidate files are attached. Default `all`. |
-| `attach_files_match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Restricts attached files for the `filtered` / `most_recent_filtered` modes. Empty condition ("match all") when omitted or `null`. |
-| `fields_expanded` | boolean | no | Editor-only UI flag: whether the address fields are expanded in the editor. **Advertised in the live discovery schema** (like `create_pdf`'s `*_expanded` flags); round-trips on read and write. |
-
-**`attach_files_match_type` tokens** (lower-case): `all`, `filtered`, `most_recent`, `most_recent_filtered`. `all` and
-`most_recent` ignore the condition; `filtered` and `most_recent_filtered` restrict to files matching
-`attach_files_match_condition`.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action reminds the buyer of every collected viewing, using the email field of each record:
 
 ```json
 {
   "type": "collected_records_send_email",
   "config": {
-    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 812 },
-    "to_address": ["someone@example.com"],
-    "subject": ["Record update: ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
-    "message_body": ["<p>One of the collected records changed.</p>"],
+    "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 640 },
+    "to_address": [{ "kind": "variable", "source": "field", "field_id": 6120, "field_type": "multi_email", "previous": false, "collection": true, "triggering": false }],
+    "subject": ["Your viewing tomorrow"],
+    "message_body": ["<p>See you at the property tomorrow. Reply to this email to reschedule.</p>"],
+    "reply_address": ["juliet@acme.com"],
     "smtp_account_id": 812
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- Structurally identical to [`send_email`](/docs/api/resource/automation/reference/actions/send-email), plus the optional `record_collection` reference: the action sends one email per record in the collection.
-- Unlike top-level `send_email`, this action's `to_address` and `subject` are **not** marked required by the discovery schema — both are optional template fields, defaulting to the empty template (`[]`) when omitted (though a send needs them populated to be useful).
-- With `record_collection` omitted, the action consumes the record collection bound by the enclosing for-loop.
-- Every other address/name/body template defaults to empty; `attach_files_variable_defs` defaults to `[]`, `attach_files_match_type` to `all`, and `attach_files_match_condition` to the empty "match all" condition.
-- With `smtp_account_id` omitted, the send uses the organization's default SMTP account. Automation email sends draw down the organization's shared 24-hour send quota.
+The config matches [`send_email`](/docs/api/resource/automation/reference/actions/send-email), plus `record_collection` and `fields_expanded`.
 
-## See also
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection whose records get one email each, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 640 }` |
+| `to_address` | [template value](/docs/api/resource/automation/dynamic-values) | Recipient address or addresses. Empty when left out. Without it, Tape skips the action when the automation runs. | `["romeo@acme.com"]` |
+| `subject` | [template value](/docs/api/resource/automation/dynamic-values) | Subject line. Empty when left out. | `["Your viewing tomorrow"]` |
+| `reply_address` | [template value](/docs/api/resource/automation/dynamic-values) | Reply-to address. Empty when left out. | `["juliet@acme.com"]` |
+| `cc_address` | [template value](/docs/api/resource/automation/dynamic-values) | CC address or addresses. Empty when left out. | `["romeo@acme.com"]` |
+| `bcc_address` | [template value](/docs/api/resource/automation/dynamic-values) | BCC address or addresses. Empty when left out. | `["archive@acme.com"]` |
+| `from_address` | [template value](/docs/api/resource/automation/dynamic-values) | Sender address. Empty when left out. | `["sales@acme.com"]` |
+| `from_name` | [template value](/docs/api/resource/automation/dynamic-values) | Sender display name. Empty when left out. | `["Acme Realty"]` |
+| `message_body` | [template value](/docs/api/resource/automation/dynamic-values) | HTML body. Empty when left out. | `["<p>Hello</p>"]` |
+| `smtp_account_id` | integer | ID of the SMTP account to send from. Left out, Tape uses the organization's *default* SMTP account. See [Sender address](/docs/api/resource/email#sender-address). Same ID as `smtp_settings_id` of the [email endpoint](/docs/api/resource/email#sending-an-email). | `812` |
+| `attach_files_variable_defs` | array of [references](/docs/api/resource/automation/dynamic-values) | File variables Tape can attach: attachment or image fields, file custom variables such as the PDF from [`create_pdf`](/docs/api/resource/automation/reference/actions/create-pdf), or the files of the trigger. Empty when left out. | `[]` |
+| `attach_files_match_type` | enum | Which of those files Tape attaches. Default `all`. See [Attachment modes](#attachment-modes). | `"all"` |
+| `attach_files_match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | Limits the attached files in the `filtered` and `most_recent_filtered` modes. An empty AND group when left out or `null`. | `null` |
+| `fields_expanded` | boolean | Editor only: whether the address fields show expanded in the automation editor. Tape keeps it on read and write. Left out when not set. | `false` |
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Filters](/docs/api/resource/automation/reference/filters) — the filter-group shape used by `attach_files_match_condition`
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+To find `smtp_account_id`, select the account in this action in the automation editor, then [retrieve the automation](/docs/api/resource/automation/manage#retrieve-an-automation). The API has no endpoint that lists SMTP accounts.
+
+### Attachment modes
+
+`attach_files_match_type` takes one of these lower-case tokens:
+
+- `all`: attaches every candidate file. Ignores the condition.
+- `most_recent`: attaches the most recent file. Ignores the condition.
+- `filtered`: attaches the files that match `attach_files_match_condition`.
+- `most_recent_filtered`: attaches the most recent file that matches `attach_files_match_condition`.
+
+## General behavior {#validation--behavior}
+
+- Tape sends one email for each record in the collection. A field or meta reference with `collection: true` reads that record's value, like the email field in the example.
+- Unlike `send_email`, the schema marks no key as required. Without `record_collection`, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`.
+- Without `to_address`, Tape skips the action when the automation runs. Set `to_address` and `subject` for a useful email.
+- Every other address, name and body defaults to empty.
+- Every email an automation sends counts against the organization's shared 24-hour send quota.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [send_email](/docs/api/resource/automation/reference/actions/send-email): send a single email.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build template values and references.
+- [Filters](/docs/api/resource/automation/reference/filters): the filter group used by `attach_files_match_condition`.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

@@ -4,8 +4,16 @@ title: Versioning
 sidebar_label: Versioning
 ---
 
-The Tape API is versioned. A new API version is released when we introduce a **backwards-incompatible** change to the API. For example, changing a property's name. The current version is `v1`.
+Find out which API version to use and when Tape releases a new one.
 
-:::info Versioning is only for backwards incompatible changes
-For new features and additions to the API, such as adding a new API endpoint, or including a new property in an existing API endpoint's response, there won't be a new version. You'll be able to take advantage of any new functionality on the version of the API you're currently using.
+The current version is `v1`. It's part of every path, for example `/v1/record/{record_id}`.
+
+:::info When does Tape release a new version?
+Tape releases a new API version only for a *backwards-incompatible* change, for example a renamed property. Additions, such as new endpoints or new response properties, don't get a new version. Use them right away on `v1`.
 :::
+
+## Next steps
+
+- [Introduction](/docs/api/introduction): conventions every request follows.
+- [Errors](/docs/api/errors): handle error responses.
+- [Request limits](/docs/api/request-limits): stay within the request budget.

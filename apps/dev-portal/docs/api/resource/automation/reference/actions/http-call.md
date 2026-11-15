@@ -2,67 +2,105 @@
 id: http-call
 title: http_call
 sidebar_label: http_call
-description: Config reference for the Tape automation http_call action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation http_call action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to send an HTTP request from an automation and keep the response for later actions.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**HTTP request** — makes an outbound HTTP request. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Send a HTTP request** in the [HTTP requests](/docs/api/resource/automation/reference/actions#http-requests) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [HTTP requests](/docs/api/resource/automation/reference/actions#http-requests) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `http_call_type` | enum | **yes** | HTTP method. |
-| `http_call_url` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Request URL. |
-| `http_call_body` | [template value](/docs/api/resource/automation/dynamic-values) | no | Request body. Empty when omitted. |
-| `http_call_headers` | array of objects | no | Request headers. Each entry is `{ key, value }` (plus an optional `id` that defaults to an empty string `""` when omitted — header entries are not server-minted). `value` is a [template value](/docs/api/resource/automation/dynamic-values). Empty when omitted. |
-| `http_call_follow_redirects` | boolean | no | Whether to follow 3xx redirects. Default `false`. |
-| `custom_variable_defs` | array of [variable declarations](/docs/api/resource/automation/dynamic-values) | no | Custom variables this action declares (e.g. the response variable) for its own code or later actions. Empty when omitted. |
-
-**`http_call_type` tokens** (lower-case): `get`, `post`, `put`, `patch`, `delete`.
-
-**`custom_variable_defs[].custom_type` tokens** (lower-case): `any`, `single_file`, `multi_file`, `single_link`,
-`html_table_rows`. Each declaration also carries a `label`; a `custom` variable reference resolves only when its
-`custom_type` + `label` match a declaration.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+When an invoice in database app `87` is approved, this action posts the invoice number to the accounting system and saves the response:
 
 ```json
 {
   "type": "http_call",
   "config": {
     "http_call_type": "post",
-    "http_call_url": ["https://api.example.com/records/", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
+    "http_call_url": ["https://accounting.acme.com/api/invoices"],
     "http_call_headers": [
       { "key": "Content-Type", "value": ["application/json"] }
     ],
-    "http_call_body": ["{\"status\":\"created\"}"],
-    "http_call_follow_redirects": false
+    "http_call_body": ["{\"invoice\": \"", { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "app_id": 87 }, "\", \"status\": \"approved\"}"],
+    "http_call_follow_redirects": false,
+    "custom_variable_defs": [
+      { "custom_type": "any", "label": "HTTP response" }
+    ]
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `http_call_type` and `http_call_url` are the only required members — neither has a canonical default. Everything else fills a default (`http_call_body` → empty, `http_call_headers` → `[]`, `http_call_follow_redirects` → `false`, `custom_variable_defs` → `[]`), so a caller that omits them still yields a complete internal action.
-- Each `http_call_headers` entry requires both `key` and `value`; a header without a value is meaningless — send `""` (or `[]`) for a deliberately blank value. `http_call_url`, `http_call_body`, and each header `value` are template values that resolve against the record / run at execution time.
-- The request is SSRF-protected: private and internal hosts are refused.
-- With `http_call_follow_redirects` `false` (the default), 3xx responses are not followed.
-- A `custom` variable reference (from this action or a later action) resolves only when its `custom_type` + `label` match a declaration in `custom_variable_defs`.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `http_call_type` | enum | **Required.** HTTP method: `get`, `post`, `put`, `patch` or `delete`. | `"post"` |
+| `http_call_url` | [template value](/docs/api/resource/automation/dynamic-values) | **Required.** Request URL. | `["https://accounting.acme.com/api/invoices"]` |
+| `http_call_body` | [template value](/docs/api/resource/automation/dynamic-values) | Request body. Empty when left out. | `["{\"status\": \"approved\"}"]` |
+| `http_call_headers` | array of [headers](#headers) | Request headers. Empty when left out. | `[]` |
+| `http_call_follow_redirects` | boolean | Follows `3xx` redirects. Default `false`. | `false` |
+| `custom_variable_defs` | array of variable declarations | Variables this action declares. Empty when left out. | `[{ "custom_type": "any", "label": "HTTP response" }]` |
 
-## See also
+`custom_variable_defs[].custom_type` takes one of `any`, `single_file`, `multi_file`, `single_link`, `html_table_rows`. Each declaration also needs a `label`.
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values, references, and custom-variable declarations
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+### Headers
+
+Each entry in `http_call_headers` is one request header:
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `key` | string | **Required.** Header name. | `"Content-Type"` |
+| `value` | [template value](/docs/api/resource/automation/dynamic-values) | **Required.** Header value. Send `""` or `[]` for a blank value. | `["application/json"]` |
+| `id` | string | Stable ID of the entry. Tape creates one when you leave it out and returns it on read. | `"h1"` |
+
+## Use the response in a later action
+
+Tape stores the response body in the first variable of `custom_variable_defs`. A later action reads it with a `custom` reference that has the same `custom_type` and `label`:
+
+```json
+{ "kind": "variable", "source": "custom", "custom_type": "any", "label": "HTTP response" }
+```
+
+Without a declared variable, Tape sends the request and keeps no response. The editor declares one variable called **HTTP response**.
+
+A response with `Content-Type: application/json` arrives as parsed JSON. Any other response arrives as a string.
+
+- To loop over a JSON array in the response, pass the reference as `iterable` of a [`for_loop`](/docs/api/resource/automation/reference/actions/for-loop). When the array sits inside an object, first pick it out with a [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable), for example `[<reference>, ".items"]`, and loop over that variable.
+- To branch on the response, give a [`conditional`](/docs/api/resource/automation/reference/actions/conditional) a [filter](/docs/api/resource/automation/reference/filters) row with `code`, for example `{ "code": [<reference>, " != null"] }`. A `custom` reference as `subject` returns `400`.
+
+## General behavior {#validation--behavior}
+
+- `http_call_type` and `http_call_url` are required. Neither has a default.
+- Every other key has a default: an empty body, no headers, no redirects and no declared variables.
+- `http_call_url`, `http_call_body` and each header `value` are template values. References in them resolve when the automation runs.
+- With an empty `http_call_url`, Tape skips the action when the automation runs.
+- Outbound requests have [SSRF protection](https://help.tapeapp.com/en/articles/18448976-automation-ip-addresses). Tape refuses hosts that resolve to private or internal addresses.
+- With `http_call_follow_redirects` set to `false`, Tape doesn't follow `3xx` responses.
+- Tape keeps only the response body, not the status code. A `4xx` or `5xx` response doesn't fail the action. A network error does.
+- Tape sends `http_call_body` as text and adds no `Content-Type`. Set the header yourself, as in the example.
+- A `custom` reference resolves only when its `custom_type` and `label` match a declaration in `custom_variable_defs`.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- The target server accepts requests from Tape's IP addresses.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [authenticated_http_call](/docs/api/resource/automation/reference/actions/authenticated-http-call): send a request through an OAuth 2.0 connection.
+- [IP addresses](https://help.tapeapp.com/en/articles/18448976-automation-ip-addresses): where requests come from and which hosts Tape refuses.
+- [for_loop](/docs/api/resource/automation/reference/actions/for-loop): loop over a list in the response.
+- [custom_variable](/docs/api/resource/automation/reference/actions/custom-variable): pick one value out of the response.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): template values and `custom` references.
+- [Action examples](/docs/api/resource/automation/action-examples): the smallest `http_call` config to copy.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

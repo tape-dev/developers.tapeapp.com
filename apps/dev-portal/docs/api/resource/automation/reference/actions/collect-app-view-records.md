@@ -2,41 +2,22 @@
 id: collect-app-view-records
 title: collect_app_view_records
 sidebar_label: collect_app_view_records
-description: Config reference for the Tape automation collect_app_view_records action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation collect_app_view_records action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to collect the records of a view into a record collection that later actions can use.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Collect app view records** — collects the records of an app view into a record collection. `group: "action"`. No
-specific trigger context is required.
+In the automation editor, this action is **Get records of a view** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `app_id` | integer | no | ID of the app to collect records from. |
-| `app_view_id` | integer | no | ID of the app view to collect records from. |
-| `limit` | integer | no | Maximum number of records to collect. Defaults to the editor default when omitted. |
-| `limit_enabled` | boolean | no | Whether `limit` is applied. `false` when omitted. |
-
-:::note `app_id` / `app_view_id` are effectively required
-Both ids are optional in the discovery schema and the typed DTO (a not-yet-configured action may have neither), but
-validation reports `action_app_missing` / `action_app_view_missing` when either is absent — a usable action must supply
-both. Treat `app_id` + `app_view_id` as effectively required, enforced at validate/activate rather than at write.
-:::
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action collects up to 100 records from an **Open deals** view:
 
 ```json
 {
@@ -50,21 +31,51 @@ An action entry inside an automation definition's `actions[]`:
 }
 ```
 
-## Validation & behavior
+## Config
 
-- This is a producer: it needs a real `app_id` and `app_view_id` to collect anything, and validation rejects an action
-  missing either.
-- `app_view_id` is only checked for presence at validate time — a syntactically valid but non-existent view passes
-  validation and then fails at run time.
-- `limit` defaults to the editor default when omitted, and `limit_enabled` defaults to `false`, so a caller that omits them
-  still yields a complete action.
-- Every collect is capped at **1000 records** at run time **regardless of `limit_enabled`**. A configured `limit` above
-  1000 — or with `limit_enabled: false` — is stored and read back **unchanged** (there is no write-time or `validate`
-  warning); the collection is truncated to 1000 only when the run executes. See
-  [Limitations](/docs/automations/limitations).
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `app_id` | integer | ID of the database app the view belongs to. Without it, Tape skips the action when the automation runs. | `4201` |
+| `app_view_id` | integer | **Required.** ID of the view to collect records from. The schema lets you save without it, but validation then reports `action_view_missing`. | `9317` |
+| `limit` | integer | Maximum number of records to collect. Takes effect only when `limit_enabled` is `true`. Default `1`, like a new action in the editor. | `100` |
+| `limit_enabled` | boolean | Whether Tape applies `limit`. Default `false`. | `true` |
 
-## See also
+To find `app_id`, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids). To find `app_view_id`, see [Retrieve views for an app](/docs/api/resource/app#retrieve-views-for-an-app). It returns the ID of each public view as `view_id`.
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Filters](/docs/api/resource/automation/reference/filters) — filter-group shape used by other record-collection actions
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+## Use the collection in later actions
+
+This action creates a `record_collection` for the database app in `app_id`. A later action references it with this object:
+
+```json
+{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 4201 }
+```
+
+- Tape resolves the reference to the nearest earlier action that creates a collection for the same `app_id`.
+- Use it in `filter_record_collection`, `sort_record_collection`, `clear_record_collection`, the `collected_records_*` actions and the `iterable` of a `for_loop`.
+- See [Record collections](/docs/api/resource/automation/reference/actions#record-collections) for the pattern.
+
+## General behavior {#validation--behavior}
+
+- Tape collects the records that the view returns, with the view's own filters.
+- Validation checks `app_view_id` for presence only. A view ID that doesn't exist passes validation and fails when the automation runs.
+- Without `app_id`, the action saves and passes validation. When the automation runs, Tape skips it.
+- An `app_id` of a deleted app fails validation with `action_app_missing`. An `app_id` that never existed makes `validate` and activate return `404`.
+- Without `limit` and `limit_enabled`, Tape fills in the defaults.
+- Every collect stops at 1000 records when the automation runs, with or without `limit_enabled`.
+- Tape stores a `limit` above 1000, or one with `limit_enabled: false`, and reads it back unchanged. Neither the write nor `validate` warns. See [Limits and throttling](/docs/automations/limitations).
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- The view in `app_view_id` must exist in the database app in `app_id`.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [collect_app_records](/docs/api/resource/automation/reference/actions/collect-app-records): collect records with your own filter instead of a view.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build references to fields and collections.
+- [Errors & broken reasons](/docs/api/resource/automation/reference/errors): what `action_view_missing` and `action_app_missing` mean.
+- [Action examples](/docs/api/resource/automation/action-examples): a collect action followed by an update of the collection.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

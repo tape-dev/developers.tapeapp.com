@@ -9,26 +9,40 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
+Use these endpoints to read the current user, list and search the users of your organization, and invite new users.
+
+Use a `user_id` to set a [user field](/docs/api/resource/field-value/user) or to [add a workspace member](/docs/api/resource/workspace#add-a-workspace-member).
+
+:::info Which capability do I need?
+Retrieving the current user needs no capability. Listing and searching organization users needs `organization:read`. Adding users and resending invitations needs `organization.members:manage`. See [Capabilities](/docs/api/capabilities).
+:::
+
+:::info Coming from the Podio API?
+The Tape API has no contacts endpoints, because a user is a person in your organization. Keep external contacts as records in a database app.
+:::
+
 ## Retrieve the current user
+
+Use this endpoint to check which user a credential belongs to and what it may do.
 
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/user" />
 
-Retrieve the user the credential belongs to, the name of their organization, and what the credential may do. This endpoint requires no [capability](/docs/api/capabilities), and can only ever return the credential's own user.
+The response contains the user, the name of their organization and the `authentication` block of the credential. The endpoint returns only the credential's own user. Use it to find your own `user_id`.
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/user \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "user_id": 10000,
   "org_id": 1337,
   "org_name": "Acme Inc.",
-  "name": "John Doe",
+  "name": "Juliet Adams",
   "status": "active",
   "role": "owner",
-  "email": "john@doe.com",
+  "email": "juliet@acme.com",
   "phone": "555 123 456",
   "job_description": "Founder & CEO",
   "authentication": {
@@ -43,34 +57,40 @@ Retrieve the user the credential belongs to, the name of their organization, and
 }`}
 </ContextCodeBlock>
 
-The `authentication` block describes the credential used for the request:
+`phone` and `job_description` appear only when the user has set them.
 
-| `method`                | `scopes`                              | `content_access`                                                                                     |
-| ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `personal_access_token` | The token's capabilities              | `scope` is `all`, or `selected` with the selected `workspace_ids` and `app_ids`                      |
-| `oauth_access_token`    | The scopes the access token holds     | Always `{"scope": "all", "workspace_ids": [], "app_ids": []}`                                        |
-| `user_key`              | `null` — a user API key is unrestricted | `null`                                                                                             |
+The `authentication` block describes the credential of the request:
+
+| `method` | `scopes` | `content_access` |
+| --- | --- | --- |
+| `personal_access_token` | The token's capabilities | `scope` is `all`, or `selected` with the selected `workspace_ids` and `app_ids` |
+| `oauth_access_token` | The scopes of the access token | `{"scope": "all", "workspace_ids": [], "app_ids": []}` |
+| `user_key` | `null`. A user API key has no restrictions | `null` |
+
+**Requirements:** none. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Retrieve organization users
 
+Use this endpoint to list all users of your organization.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org/user" />
 
-Retrieve your current organization's users (e.g. the organization with ID `1337`):
+Tape takes the organization from your credential. The example lists the users of the organization with ID `1337`.
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/org/user \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "users": [
     {
       "user_id": 10000,
-      "name": "John Doe",
+      "name": "Juliet Adams",
       "org_id": 1337,
       "status": "active",
-      "email": "john@doe.com",
+      "email": "juliet@acme.com",
       "phone": "555 123 456",
       "role": "owner",
       "job_description": "Founder & CEO"
@@ -80,7 +100,7 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
       "name": "Zoe Maxwell",
       "org_id": 1337,
       "status": "active",
-      "email": "zoemaxwell10001@me.com",
+      "email": "zoe@acme.com",
       "phone": "555 123 457",
       "role": "member",
       "job_description": "Executive"
@@ -90,80 +110,153 @@ Retrieve your current organization's users (e.g. the organization with ID `1337`
 }`}
 </ContextCodeBlock>
 
+**General behavior**
+
+- The list includes deactivated users. Their `status` is `deactivated`.
+- `phone` and `job_description` appear only when the user has set them.
+
+**Requirements:** `organization:read`. Works with a personal access token, an OAuth access token or a user API key. Guests of the organization can't list its users.
+
+## Search organization users
+
+Use this endpoint to find users of your organization by name.
+
+<EndpointBadge method="GET" url="https://api.tapeapp.com/v1/org/user/search?query={query}" />
+
+<ContextCodeBlock language="shell" title='Request'>
+{`curl "#BASE_URL/v1/org/user/search?query=zoe" \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
+</ContextCodeBlock>
+
+<ContextCodeBlock language="json" title='Response'>
+{`{
+  "users": [
+    {
+      "user_id": 10001,
+      "name": "Zoe Maxwell",
+      "org_id": 1337,
+      "status": "active",
+      "email": "zoe@acme.com",
+      "phone": "555 123 457",
+      "role": "member",
+      "job_description": "Executive"
+    }
+  ],
+  "total": 1
+}`}
+</ContextCodeBlock>
+
+**General behavior**
+
+- Tape returns every user whose name or short name contains `query`. Upper and lower case don't matter.
+- Deactivated users aren't returned.
+- `total` is the number of users in this response, not the number of all matches.
+
+**Requirements:** `organization:read`. Works with a personal access token, an OAuth access token or a user API key. Guests of the organization can't search its users.
+
+**Errors**
+
+A missing or empty `query`, or a `limit` out of range, returns `400`.
+
+**Query parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `query` | `string` | Text to search for in names and short names. |
+| `limit` | `integer` | Number of users to return. Optional. |
+
 ## Add user to organization
+
+Use this endpoint to add a new user to your organization.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user" />
 
-Add a new user to your current organization (e.g. the organization with ID `1337`). Include the `skip_invitation` flag in your request body to skip sending the invitation email upon user creation.
+Tape sends the new user an invitation email. To skip it, set `skip_invitation` to `true` and send the invitation later with [Resend user invitation email](#resend-user-invitation-email).
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/org/user \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
-    "name": "Roger Sterling",
-    "email": "rsterling-sc@me.com",
+    "name": "Roger Klein",
+    "email": "roger@acme.com",
     "role": "admin",
     "skip_invitation": true
-  }' 
-  `}
+  }'
+`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
-    "user_id": 10002,
-    "name": "Roger Sterling",
-    "org_id": 1337,
-    "status": "active",
-    "email": "rsterling-sc@me.com",
-    "phone": "555 123 458",
-    "role": "admin",
-    "job_description": "VP"
+  "user_id": 10002,
+  "name": "Roger Klein",
+  "org_id": 1337,
+  "status": "active",
+  "email": "roger@acme.com",
+  "role": "admin"
 }`}
 </ContextCodeBlock>
 
-:::info User Organization Role
-
-The `role` property to create users needs to be one of `"admin"`, `"member"` and `"guest"`. This corresponds to the user organization roles [documented in the help center](https://help.tapeapp.com/en/articles/8000930-intro-to-workspaces). Note that adding admin and member users is a billable event. 💲
+:::info Which organization roles can I give?
+Set `role` to `"owner"`, `"admin"`, `"member"` or `"guest"`. These are the organization roles [described in the Help Center](https://help.tapeapp.com/en/articles/6453902-manage-members-admins-guests-groups). You can't give a role higher than your own, and adding admins and members is billable.
 :::
+
+**Requirements:** `organization.members:manage`, and the **Owner** or **Admin** role in the organization. Works with a personal access token, an OAuth access token or a user API key.
+
+**Body parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | Required. Name of the user. |
+| `email` | `string` | Required. Email address of the user. |
+| `role` | `string` | Required. One of `owner`, `admin`, `member` or `guest`. |
+| `skip_invitation` | `boolean` | Don't send the invitation email (default: `false`). |
 
 ## Resend user invitation email
 
-<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user/{userId}/resend-invitation" />
+Use this endpoint to send the invitation email to an organization user again.
 
-Resend an invitation email for an organization user. This will be important when skipping invitations during user creation, and allows sending the invitation email at a dedicated point in time later or repetitively.
+<EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/user/{user_id}/resend-invitation" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/org/user/10000/resend-invitation \\
-  -u #USER_API_KEY:
-  `}
+Use it to invite a user you created with `skip_invitation`. You can send it more than once.
+
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/org/user/10002/resend-invitation \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
-{`{
-}`}
+<ContextCodeBlock language="json" title='Response'>
+{`{}`}
 </ContextCodeBlock>
 
-## Update or delete users
-
-:::caution Not available
-
-Endpoints for modifying existing **User** resources are not available yet. [Create a community feature request](https://community.tapeapp.com/c/requests/8) if those are important for your integrations.
-:::
+**Requirements:** `organization.members:manage`, and the **Owner** or **Admin** role in the organization. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Resend pending invitations
 
+Use this endpoint to send all pending invitation emails of your organization again.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/org/invitation/resend-pending" />
 
-Resend all pending invitation emails for an organization. Needs the active user's organization role to be owner or admin.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/org/invitation/resend-pending \\
-  -u #USER_API_KEY:
-  `}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
-{`{
-}`}
+<ContextCodeBlock language="json" title='Response'>
+{`{}`}
 </ContextCodeBlock>
+
+**Requirements:** `organization.members:manage`, and the **Owner** or **Admin** role in the organization. Works with a personal access token, an OAuth access token or a user API key.
+
+<a id="update-or-delete-users"></a>
+
+:::info Need to change or delete users?
+The API has no endpoints to change or delete existing users. [Create a feature request in the Tape Community](https://community.tapeapp.com/c/requests/8).
+:::
+
+## Next steps
+
+- [Organization](/docs/api/resource/organization): read the details of your organization.
+- [Workspace](/docs/api/resource/workspace): add users to workspaces.
+- [Capabilities](/docs/api/capabilities): what `organization:read` and `organization.members:manage` allow.
+- [Personal access tokens](/docs/api/personal-access-tokens): create a credential with only the capabilities you need.
