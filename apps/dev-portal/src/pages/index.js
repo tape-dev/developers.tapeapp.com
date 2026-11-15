@@ -87,7 +87,7 @@ const features = [
     ),
     badge: '',
     linkLabel: 'Learn more',
-    link: 'docs/calculation/introduction',
+    link: 'https://help.tapeapp.com/en/articles/18449157-calculation-syntax-examples',
   },
 ];
 

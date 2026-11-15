@@ -69,7 +69,7 @@ module.exports = {
             },
             {
               label: 'Calculation Field',
-              to: 'docs/calculation/introduction',
+              href: 'https://help.tapeapp.com/en/articles/18449157-calculation-syntax-examples',
             },
             {
               label: 'Automations',
