@@ -1,66 +1,73 @@
 ---
 id: request-limits
-title: Request Limits
-sidebar_label: Request Limits
+title: Request limits
+sidebar_label: Request limits
 ---
 
-To ensure a consistent developer experience for all API users, the Tape API is rate limited and basic size limits apply to request parameters.
+Handle rate limits and size limits so your integration keeps working under load.
 
 ## Rate limits
 
-Rate-limited requests will return a `too_many_requests` error code (HTTP response status 429). **The base rate limit for incoming requests is an average of 3 requests per second**. Some bursts beyond the average rate are allowed.
+A rate-limited request returns HTTP status `429` with the error code `user_too_many_requests`.
 
-Integrations should accommodate variable rate limits by handling HTTP 429 responses and backing off (or slowing down) the speed of future requests. A common way to implement this is using one or several queues for pending requests, which can be consumed by sending requests as long as Tape does not respond with an HTTP 429.
+The base rate limit is an average of 3 requests per second. Short bursts above the average are allowed.
+
+Handle `429` responses and slow down your following requests. After a `429`, wait the number of seconds in the `Retry-After` header before you retry.
+
+A common pattern is one or more queues for pending requests. Keep sending from the queue as long as Tape doesn't respond with `429`.
 
 :::caution Rate limits may change
-In the future, Tape plans to adjust rate limits to balance for demand and reliability. Tape may also introduce distinct rate limits for organizations in different pricing plans.
+Tape plans to adjust rate limits to balance demand and reliability. Tape may also introduce distinct rate limits for organizations on different pricing plans.
 :::
 
 ### Rate limit credits
 
-Tape uses a credit-based system to enforce rate limits. Each user has a certain number of credits per time interval (currently 2,000 credits per minute). All of a user's credentials — their user API key, every [personal access token](/docs/api/personal-access-tokens) they own, and every app or MCP client they connected with [OAuth](/docs/api/oauth/overview) — draw from that same budget, so creating more tokens does not increase throughput. After the time interval, the credits are replenished. By default, each request costs 10 credits. Certain requests can cost more credits if they are expensive to execute. An example would be a request that fetches records with the maximum page size with all their fields or the deletion of a workspace. Each endpoint documentation includes the number of credits required for each request.
+Tape enforces rate limits with credits:
 
-You can see how many credits you have left, when your credits will be replenished, and how many credits are required for a request via the rate limit headers.
+- Each user has 2,000 credits per minute. After the minute, the credits refill.
+- A request costs 10 credits by default. Expensive requests cost more, for example creating a record or creating, updating or deleting an app. Some endpoint pages list their cost. The `X-Retry-Cost` header shows the cost of every request.
+- All credentials of a user share the same budget: the user API key, every [personal access token](/docs/api/personal-access-tokens) they own, and every app or MCP client they connected with [OAuth](/docs/api/oauth/overview). More tokens don't mean more throughput.
+- A request that authenticates but lacks a capability, or falls outside a token's content access, still costs credits. Tape checks both after rate limiting.
+
+Coming from the [Podio API](/docs/guide/api/coming-from-podio)? Tape counts credits per minute, not calls per hour.
 
 ### Rate limit headers
 
-Rate limit headers are sent **with every response**. This allows the integration to prevent rate limiting errors and back off before the actual rate limit is hit.
-
-| HTTP Header          | Description                                                                 | Example               |
-| :------------------- | :-------------------------------------------------------------------------- | :-------------------- |
-| `X-RateLimit-Limit`  | Total credits that can be used per time interval                            | `1000`                |
-| `X-Retry-Remaining`  | Credits remaining for the application in this time interval                 | `400`                 |
-| `X-Retry-Cost`       | The number of credits consumed by the current request                       | `20`                  |
-| `X-Retry-Reset`      | The date and time at which the credits will be reset                        | `2022-03-01 12:00:00` |
-| `Retry-After`        | The number of seconds remaining in this interval until credits are reset    | `60`                  |
-
-:::info `X-Retry-Reset` is a UTC datetime
-`X-Retry-Reset` is formatted `YYYY-MM-DD HH:mm:ss` — the same datetime format used throughout the API, with
-no `Z` suffix and no numeric offset. Unlike the temporal properties in response bodies, it is a header and so
-has no local counterpart: **it is always UTC**. See [Date & Timezone](/docs/api/date-timezone).
-:::
-
-Here is an example for the response headers of a valid request:
+Tape sends rate limit headers *with every response*. Use them to slow down before you hit the limit. These are the response headers of a valid request:
 
 ```http
 HTTP/1.1 200 OK
 Retry-After: 57
-X-RateLimit-Limit: 50
-X-Retry-Remaining: 46
-X-Retry-Cost: 2
+X-RateLimit-Limit: 2000
+X-Retry-Remaining: 1990
+X-Retry-Cost: 10
 X-Retry-Reset: 2022-03-01 12:00:00
+X-RateLimit-Scope: user
 ```
 
-If the rate limit is exceeded, the error response body will also include all rate limit information:
+| HTTP header          | Description                                                                 | Example               |
+| :------------------- | :-------------------------------------------------------------------------- | :-------------------- |
+| `X-RateLimit-Limit`  | Total credits per time interval.                           | `2000`                |
+| `X-Retry-Remaining`  | Credits left in this time interval.                | `1980`                |
+| `X-Retry-Cost`       | Credits the current request used.                      | `10`                  |
+| `X-Retry-Reset`      | Date and time at which the credits reset.                       | `2022-03-01 12:00:00` |
+| `Retry-After`        | Seconds left in this interval until the credits reset.   | `60`                  |
+| `X-RateLimit-Scope`  | Which budget the request counts against: `user` for a user's credentials, `workflow` for an automation API key. | `user` |
+
+:::info Which timezone does `X-Retry-Reset` use?
+`X-Retry-Reset` uses the format `YYYY-MM-DD HH:mm:ss`, the same datetime format as the rest of the API, with no `Z` suffix and no numeric offset. Unlike the temporal properties in response bodies, it's a header and has no local counterpart: *it's in UTC*. See [Date & timezone](/docs/api/date-timezone).
+:::
+
+When you exceed the rate limit, the error response body also contains all rate limit information:
 
 ```json
 {
   "status_code": 429,
   "endpoint": "/v1/record/123",
-  "error_code": "too_many_requests",
-  "error_message": "Too many requests (0/50 points left), retry after 58 seconds (2022-03-01 12:00:00). Your current request costs 10 points. Check https://developers.tapeapp.com/ for more info",
+  "error_code": "user_too_many_requests",
+  "error_message": "Too many requests (0/2000 credits left) for user with ID 1, retry after 58 seconds (2022-03-01 12:00:00). Your current request costs 10 credits. Check https://developers.tapeapp.com/docs/api/request-limits for more info",
   "retry_after": 58,
-  "rate_limit": 50,
+  "rate_limit": 2000,
   "rate_limit_remaining": 0,
   "rate_limit_cost": 10,
   "rate_limit_reset": "2022-03-01 12:00:00"
@@ -69,17 +76,26 @@ If the rate limit is exceeded, the error response body will also include all rat
 
 ### Tips for reducing API usage
 
-- Avoid making API requests inside loops. Instead of loading individual objects inside a loop, load a collection of objects in one API operation.
-- Use result caching where applicable.
-- Do not poll for changed data. Use webhooks to react to changes instead.
-- Use logging to see how many requests you're making.
+- Avoid API requests inside loops. Load a collection of objects in one request instead of one object per request.
+- Cache results where you can.
+- Don't poll for changed data. Use [webhooks](/docs/api/resource/webhook) to react to changes.
+- Log your requests to see how many you make.
 
 ### Getting more credits
 
-If your integration needs more credits per time interval, you can always ask the Tape team to increase your rate limit credits. It is discouraged to do key rotations, or to create additional personal access tokens, to get around this problem — neither adds credits.
+Need more credits per time interval, for example for a large partner integration? Ask the [Tape team](mailto:team@tapeapp.com) to raise your limit.
 
 ## Size limits
 
-Tape limits the size of certain parameters. A request that exceeds any of these limits will return a `validation_error` error code (HTTP response status 400) and contain more specific details in the `error_message` property.
+Tape limits the size of some parameters. A request above a limit returns HTTP status `400` with the error code `validation`. The `error_message` property says which limit applies.
 
-Integrations should avoid sending requests beyond these limits proactively. It may be helpful to use test data in your own test suite which intentionally contains large parameters to verify that the errors are handled appropriately. For example, if the integration reads a URL from an external system to put into a Tape record, the integration should have a plan to deal with URLs that are beyond the length limit. The integration might choose to log the error, or send an alert to the user who set up the integration via an email, or some other action.
+Stay below the size limits in your integration. Add test data with deliberately large parameters to your test suite to check that you handle the errors.
+
+For example, if your integration copies a URL from another system into a Tape record, plan for URLs above the length limit. Log the error, alert the user who set up the integration, or take another action.
+
+## Next steps
+
+- [Errors](/docs/api/errors): handle `429` and other error responses.
+- [Pagination](/docs/api/pagination): load collections in fewer requests.
+- [Webhook](/docs/api/resource/webhook): react to changes instead of polling.
+- [Personal access tokens](/docs/api/personal-access-tokens): create and limit a token.

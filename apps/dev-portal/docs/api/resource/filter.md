@@ -9,31 +9,43 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-Filter inputs select which Records are returned from an App. The **same filter object** is used in two places:
+Use filters to choose which records of a database app a request returns.
 
-- to [retrieve filtered Records](/docs/api/resource/record#retrieve-filtered-records-for-an-app) (`POST /v1/record/filter/app/{app_id}`), and
-- to define the filters of an [app view](/docs/api/resource/view).
+The same filter object works in two places:
 
-Anything documented here applies to both, unchanged. Multiple filters can be provided; they are combined with the boolean `AND` operator (there is no `OR`) — a Record is returned only if it matches **every** filter.
+- [Retrieve filtered records for an app](/docs/api/resource/record#retrieve-filtered-records-for-an-app) (`POST /v1/record/filter/app/{app_id}`) returns the records that match.
+- A [view](/docs/api/resource/view) stores filters and shows only the records that match.
 
-Each **field filter** is a JSON object with:
+Everything on this page applies to both, except the [metadata filters](#record-metadata-filters): a view stores only field filters. [View filters](/docs/api/resource/view#filters) lists the rules that apply to views only.
 
-| Key          | Description                                                                                                                     |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `field_id`   | The id of the field to filter on. **Required.**                                                                               |
-| `field_type` | The field's type, e.g. `single_text`, `status`, `single_date` (see the sections below). Required for [view](/docs/api/resource/view) filters; optional for record filtering, where the field is identified by `field_id` (sending it is still recommended). |
-| `type`       | The legacy data-type discriminator that goes with the field type, e.g. `text`, `status`, `date`. **Required** — a filter without it returns a `400`. |
-| `match_type` | The operator, e.g. `contains`, `equal`, `before`. The operators each field type accepts are listed per section below.         |
-| `values`     | The operand(s), as an array of `{ "value": … }` objects. Omitted for the `empty` / `not_empty` operators.                     |
+**Requirements:** `records:read` to retrieve filtered records, `apps:edit` and share access to the app to save filters in a view. Works with a personal access token, an OAuth access token or a user API key.
 
-Some field types accept additional optional operand keys (for relative dates, weekdays, the "@me" flag, checklist sub-properties, …). These are documented under [Operand keys](#operand-keys).
+:::info Coming from the Podio API?
+Send `filters` as an array with one filter object and a `match_type` per field. Use the field ID: the slug (`external_id`) doesn't work here. Several category options go in one filter with `any`. A date range with `from` and `to` becomes `within` with `exact_range` and `end_date`, see [Single date](#single-date). Send `sort_by` (field ID or slug), `sort_desc`, `limit` and `cursor` in the query string, not in the body. There is no `offset`.
+:::
 
-The following example matches all records whose field `1` contains the text `"John"` **and** whose field `2` (a status field) references option `123`:
+## The filter object
+
+Send your filters as an array in `filters`. A record matches only if it matches *every* filter (`AND`). There is no `OR`.
+
+Each *field filter* is a JSON object with these keys:
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `field_id` | integer or string | ID of the field to filter on. **Required.** The slug (`external_id`) returns a `400`. | `"1"` |
+| `field_type` | string | Type of the field, for example `single_text`, `status` or `single_date`. Required for view filters. Optional for filtered records, where `field_id` identifies the field, but send it anyway. | `"single_text"` |
+| `type` | string | Legacy data type that goes with the field type, for example `text`, `status` or `date`. **Required.** A filter without it returns a `400`. | `"text"` |
+| `match_type` | string | The operator, for example `contains`, `equal` or `before`. Each section below lists the operators a field type accepts. | `"contains"` |
+| `values` | array | The operands, as `{ "value": … }` objects. Leave it out for `empty` and `not_empty`. | `[{ "value": "John" }]` |
+
+Some field types accept more optional keys, for example for relative dates, weekdays, the "@me" flag or task list entries. See [Operand keys](#operand-keys).
+
+This example matches all records whose field `1` contains the text `"John"` *and* whose status field `2` is set to option `123`:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Combined Filter"
+```json title="Combined filter"
 {
   "filters": [
     {
@@ -57,16 +69,18 @@ The following example matches all records whose field `1` contains the text `"Jo
 </TabItem>
 </Tabs>
 
-Tape also supports a few field-less [metadata filters](#record-metadata-filters) — by creation date, modification date, or record id — that need no field on the App.
+Send this body to `POST /v1/record/filter/app/{app_id}`. Every field in a record or in [Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app) carries its `field_id` and `field_type`. Category and status fields list their option IDs there, in `config.settings.options`.
 
-## Single Text
+Sort and page in the query string with `sort_by`, `sort_desc`, `limit` and `cursor`, see [Pagination](/docs/api/pagination). To filter by creation date, last change or record number without a field, use the [metadata filters](#record-metadata-filters).
 
-This is an example of how to filter records by a `single_text` field:
+## Single text
+
+Use this filter for **Single line text** fields (`single_text`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Text Filter"
+```json title="Single text filter"
 {
   "filters": [
     {
@@ -83,9 +97,14 @@ This is an example of how to filter records by a `single_text` field:
 </TabItem>
 </Tabs>
 
-`contains`, `not_contains`, `starts_with` and `ends_with` compare **case-insensitively**; `equal` and `not_equal` are **case-sensitive** exact matches. Leading and trailing whitespace in the match value is trimmed for every operator. The `empty` and `not_empty` match types take no `values`.
+**General behavior**
 
-The following `match_type` values are supported for `single_text` fields:
+- `contains`, `not_contains`, `starts_with` and `ends_with` ignore case.
+- `equal` and `not_equal` are exact matches and case-sensitive.
+- Every operator trims leading and trailing whitespace from the match value.
+- `empty` and `not_empty` take no `values`.
+
+**Match types**
 
 |   Match type   | Description                                                              |
 | :------------: | ----------------------------------------------------------------------- |
@@ -98,14 +117,14 @@ The following `match_type` values are supported for `single_text` fields:
 |    `empty`     | Matches all records whose field value is empty.                         |
 |  `not_empty`   | Matches all records whose field value is not empty.                     |
 
-## Multi Text
+## Multi text
 
-This is an example of how to filter records by a `multi_text` field:
+Use this filter for **Multi line text** fields (`multi_text`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Text Filter"
+```json title="Multi text filter"
 {
   "filters": [
     {
@@ -122,9 +141,15 @@ This is an example of how to filter records by a `multi_text` field:
 </TabItem>
 </Tabs>
 
-`multi_text` filters match against the field's unformatted (plain-text) value. `contains`, `not_contains`, `starts_with` and `ends_with` compare **case-insensitively**; `equal` and `not_equal` are **case-sensitive** exact matches. Leading and trailing whitespace is trimmed for every operator. The `empty` and `not_empty` match types take no `values`.
+**General behavior**
 
-The following `match_type` values are supported for `multi_text` fields:
+- The filter matches against the unformatted (plain text) value of the field.
+- `contains`, `not_contains`, `starts_with` and `ends_with` ignore case.
+- `equal` and `not_equal` are exact matches and case-sensitive.
+- Every operator trims leading and trailing whitespace.
+- `empty` and `not_empty` take no `values`.
+
+**Match types**
 
 |   Match type   | Description                                                                          |
 | :------------: | ----------------------------------------------------------------------------------- |
@@ -139,12 +164,12 @@ The following `match_type` values are supported for `multi_text` fields:
 
 ## Number
 
-This is an example of how to filter records by a `number` field:
+Use this filter for **Number** fields (`number`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Number Filter"
+```json title="Number filter"
 {
   "filters": [
     {
@@ -161,29 +186,29 @@ This is an example of how to filter records by a `number` field:
 </TabItem>
 </Tabs>
 
-Provide the number to compare against as a bare numeric scalar in `values[0].value`. Omit `values` entirely for `empty` / `not_empty`.
+Send the number to compare against as a bare numeric value in `values[0].value`. Leave out `values` for `empty` and `not_empty`.
 
-The following `match_type` values are supported for `number` fields:
+**Match types**
 
 |     Match type     | Description                                                                        |
 | :----------------: | --------------------------------------------------------------------------------- |
-|      `equal`       | Matches all records whose field value is equal to the provided match value        |
-|    `not_equal`     | Matches all records whose field value is not equal to the provided match value    |
-|     `smaller`      | Matches all records whose field value is smaller than the provided match value    |
-| `smaller_or_equal` | Matches all records whose field value is smaller than or equal to the match value |
-|      `larger`      | Matches all records whose field value is larger than the provided match value     |
-| `larger_or_equal`  | Matches all records whose field value is larger than or equal to the match value  |
-|      `empty`       | Matches all records whose field value is empty                                    |
-|    `not_empty`     | Matches all records whose field value is not empty                                |
+|      `equal`       | Matches all records whose field value is equal to the provided match value.        |
+|    `not_equal`     | Matches all records whose field value is not equal to the provided match value.    |
+|     `smaller`      | Matches all records whose field value is smaller than the provided match value.    |
+| `smaller_or_equal` | Matches all records whose field value is smaller than or equal to the match value. |
+|      `larger`      | Matches all records whose field value is larger than the provided match value.     |
+| `larger_or_equal`  | Matches all records whose field value is larger than or equal to the match value.  |
+|      `empty`       | Matches all records whose field value is empty.                                    |
+|    `not_empty`     | Matches all records whose field value is not empty.                                |
 
-## Unique ID
+## Unique ID {#unique-id}
 
-This is an example of how to filter records by a `unique_id` field:
+Use this filter for **Unique ID** fields (`unique_id`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Unique ID Filter"
+```json title="Unique ID filter"
 {
   "filters": [
     {
@@ -200,33 +225,42 @@ This is an example of how to filter records by a `unique_id` field:
 </TabItem>
 </Tabs>
 
-A Unique ID field surfaces a record's auto-generated, App-specific record number (its [`app_record_id`](/docs/api/resource/field/unique-id) — the first record created in an App is `1`, the second `2`, and so on). The match value is a **bare numeric scalar** with no prefix, and `unique_id` filters compare on the underlying number, so this field uses the numeric `type` discriminator `"number"` (not `"unique_id"`). Omit `values` for `empty` / `not_empty` — though, because every record always has an App-specific number, `empty` matches no records and `not_empty` matches every record.
+A Unique ID field shows the record number Tape counts up per database app. This is the record's [`app_record_id`](/docs/api/resource/field/unique-id): the first record in a database app is `1`, the second `2`, and so on.
 
-:::note
-To filter by the record number on an App that has **no** Unique ID field, use the field-less [`app_record_id` metadata filter](#app-record-id-metadata) instead — it targets the same underlying value without requiring a field.
+**General behavior**
+
+- Send the match value as a *bare number* without a prefix.
+- The filter compares the underlying number, so `type` is `"number"`, not `"unique_id"`.
+- Leave out `values` for `empty` and `not_empty`.
+- Every record has a record number. `empty` matches no records, and `not_empty` matches every record.
+
+:::note Your database app has no Unique ID field?
+Use the [`app_record_id` metadata filter](#app-record-id-metadata). It filters on the same number without a field.
 :::
 
-The following `match_type` values are supported for `unique_id` fields (identical to the `number` set):
+**Match types**
+
+The match types are the same as for `number`:
 
 |     Match type     | Description                                                                        |
 | :----------------: | --------------------------------------------------------------------------------- |
-|      `equal`       | Matches the record whose ID is equal to the provided match value                  |
-|    `not_equal`     | Matches all records whose ID is not equal to the provided match value             |
-|     `smaller`      | Matches all records whose ID is smaller than the provided match value             |
-| `smaller_or_equal` | Matches all records whose ID is smaller than or equal to the provided match value |
-|      `larger`      | Matches all records whose ID is larger than the provided match value              |
-| `larger_or_equal`  | Matches all records whose ID is larger than or equal to the provided match value  |
-|      `empty`       | Matches all records whose field value is empty                                    |
-|    `not_empty`     | Matches all records whose field value is not empty                                |
+|      `equal`       | Matches the record whose number is equal to the provided match value.              |
+|    `not_equal`     | Matches all records whose number is not equal to the provided match value.         |
+|     `smaller`      | Matches all records whose number is smaller than the provided match value.         |
+| `smaller_or_equal` | Matches all records whose number is smaller than or equal to the provided match value. |
+|      `larger`      | Matches all records whose number is larger than the provided match value.          |
+| `larger_or_equal`  | Matches all records whose number is larger than or equal to the provided match value. |
+|      `empty`       | Matches no records, because every record has a number.                             |
+|    `not_empty`     | Matches every record.                                                              |
 
-## Single Category
+## Single category
 
-This is an example of how to filter records by a `single_category` field:
+Use this filter for **Single select** fields (`single_category`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Category Filter"
+```json title="Single category filter"
 {
   "filters": [
     {
@@ -243,9 +277,16 @@ This is an example of how to filter records by a `single_category` field:
 </TabItem>
 </Tabs>
 
-Provide either the numeric id of a category option or its label as the match value. Label matching is case-insensitive and ignores leading and trailing whitespace; if a label matches more than one option the request is rejected — use the id in that case. On read, operands are always returned as option ids. The `empty` and `not_empty` match types take no `values`.
+**General behavior**
 
-The following `match_type` values are supported for `single_category` fields:
+- Send the numeric ID of an option or its label as the match value.
+- Label matching ignores case and leading and trailing whitespace.
+- A label that matches more than one option returns an error. Use the option ID instead.
+- `equal` takes exactly one option. More than one returns a `400`. Use `any` for several options.
+- When you read the filter back, operands come as option IDs.
+- `empty` and `not_empty` take no `values`.
+
+**Match types**
 
 | Match type  | Description                                                                     |
 | :---------: | ------------------------------------------------------------------------------ |
@@ -256,14 +297,14 @@ The following `match_type` values are supported for `single_category` fields:
 |   `empty`   | Matches all records whose field value is empty.                                |
 | `not_empty` | Matches all records whose field value is not empty.                            |
 
-## Multi Category
+## Multi category
 
-This is an example of how to filter records by a `multi_category` field:
+Use this filter for **Multiple select** fields (`multi_category`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Category Filter"
+```json title="Multi category filter"
 {
   "filters": [
     {
@@ -280,9 +321,21 @@ This is an example of how to filter records by a `multi_category` field:
 </TabItem>
 </Tabs>
 
-A `multi_category` field holds a set of options, so the match types compare sets: `equal` requires the field's set to be exactly the given options (order ignored), `contains` requires the field to include all of the given options (it may hold more), while `any` and `none` test for overlap with the given options. Provide either the numeric id of an option or its label; label matching is case-insensitive and ignores leading and trailing whitespace (an ambiguous label is rejected — use the id). On read, operands are always returned as option ids. The `empty` and `not_empty` match types take no `values`.
+A `multi_category` field holds a set of options, so the match types compare sets:
 
-The following `match_type` values are supported for `multi_category` fields:
+- `equal` needs exactly the given options. Order doesn't matter.
+- `contains` needs all given options. The field may hold more.
+- `any` and `none` test for overlap with the given options.
+
+**General behavior**
+
+- Send the numeric ID of an option or its label.
+- Label matching ignores case and leading and trailing whitespace.
+- An ambiguous label returns an error. Use the option ID instead.
+- When you read the filter back, operands come as option IDs.
+- `empty` and `not_empty` take no `values`.
+
+**Match types**
 
 | Match type  | Description                                                                                              |
 | :---------: | ------------------------------------------------------------------------------------------------------- |
@@ -295,12 +348,12 @@ The following `match_type` values are supported for `multi_category` fields:
 
 ## Status
 
-This is an example of how to filter records by a `status` field:
+Use this filter for **Status** fields (`status`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Status Filter"
+```json title="Status filter"
 {
   "filters": [
     {
@@ -317,9 +370,16 @@ This is an example of how to filter records by a `status` field:
 </TabItem>
 </Tabs>
 
-Provide either the numeric id of a status option or its label as the match value. Label matching is case-insensitive and ignores leading and trailing whitespace (an ambiguous label is rejected — use the id). On read, operands are always returned as option ids. The `completed`, `incomplete`, `empty` and `not_empty` match types take no `values` — `completed`/`incomplete` test the completion state of the record's currently referenced status option.
+**General behavior**
 
-The following `match_type` values are supported for `status` fields:
+- Send the numeric ID of a status option or its label.
+- Label matching ignores case and leading and trailing whitespace.
+- An ambiguous label returns an error. Use the option ID instead.
+- When you read the filter back, operands come as option IDs.
+- `completed`, `incomplete`, `empty` and `not_empty` take no `values`.
+- `completed` and `incomplete` test whether the status option the record has is marked as completed.
+
+**Match types**
 
 |  Match type  | Description                                                                            |
 | :----------: | ------------------------------------------------------------------------------------- |
@@ -332,14 +392,14 @@ The following `match_type` values are supported for `status` fields:
 | `completed`  | Matches all records whose referenced status option is marked as completed.            |
 | `incomplete` | Matches all records whose referenced status option is not marked as completed.        |
 
-## Single Relation
+## Single relation
 
-This is an example of how to filter records by a `single_relation` field:
+Use this filter for **Relation** fields that hold one record (`single_relation`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Relation Filter"
+```json title="Single relation filter"
 {
   "filters": [
     {
@@ -356,9 +416,9 @@ This is an example of how to filter records by a `single_relation` field:
 </TabItem>
 </Tabs>
 
-Provide the related record ids as match values. On read, operands are always returned as record ids. The `empty` and `not_empty` match types take no `values`.
+Send the IDs of the related records as match values. When you read the filter back, operands come as record IDs. `empty` and `not_empty` take no `values`.
 
-The following `match_type` values are supported for `single_relation` fields:
+**Match types**
 
 | Match type  | Description                                                                     |
 | :---------: | ------------------------------------------------------------------------------ |
@@ -369,14 +429,14 @@ The following `match_type` values are supported for `single_relation` fields:
 |   `empty`   | Matches all records whose field value is empty.                                |
 | `not_empty` | Matches all records whose field value is not empty.                            |
 
-## Multi Relation
+## Multi relation
 
-This is an example of how to filter records by a `multi_relation` field:
+Use this filter for **Relation** fields that hold several records (`multi_relation`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Relation Filter"
+```json title="Multi relation filter"
 {
   "filters": [
     {
@@ -393,9 +453,15 @@ This is an example of how to filter records by a `multi_relation` field:
 </TabItem>
 </Tabs>
 
-A `multi_relation` field holds a set of related records, so the match types compare sets: `equal` requires the field's set to be exactly the given records (order ignored), `contains` requires the field to include all of the given records (it may hold more), while `any` and `none` test for overlap. Provide the related record ids as match values. On read, operands are always returned as record ids. The `empty` and `not_empty` match types take no `values`.
+A `multi_relation` field holds a set of related records, so the match types compare sets:
 
-The following `match_type` values are supported for `multi_relation` fields:
+- `equal` needs exactly the given records. Order doesn't matter.
+- `contains` needs all given records. The field may hold more.
+- `any` and `none` test for overlap.
+
+Send the IDs of the related records as match values. When you read the filter back, operands come as record IDs. `empty` and `not_empty` take no `values`.
+
+**Match types**
 
 | Match type  | Description                                                                                              |
 | :---------: | ------------------------------------------------------------------------------------------------------- |
@@ -406,14 +472,14 @@ The following `match_type` values are supported for `multi_relation` fields:
 |   `empty`   | Matches all records whose field value is empty.                                                         |
 | `not_empty` | Matches all records whose field value is not empty.                                                     |
 
-## Single User
+## Single user
 
-This is an example of how to filter records by a `single_user` field:
+Use this filter for **Member** fields that hold one member (`single_user`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single User Filter"
+```json title="Single user filter"
 {
   "filters": [
     {
@@ -430,9 +496,14 @@ This is an example of how to filter records by a `single_user` field:
 </TabItem>
 </Tabs>
 
-Provide the user ids to filter by. The acting user can be added to the filter's referenced users with the `include_active_user` operand (the "@me" reference) — see [Operand keys](#operand-keys). On read, operands are always returned as user ids. The `empty` and `not_empty` match types take no `values` (and cannot be combined with `include_active_user`).
+**General behavior**
 
-The following `match_type` values are supported for `single_user` fields:
+- Send the user IDs to filter by. [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users) lists them.
+- To add yourself, set `include_active_user` (the "@me" reference). See [Operand keys](#operand-keys).
+- When you read the filter back, operands come as user IDs.
+- `empty` and `not_empty` take no `values` and don't work with `include_active_user`.
+
+**Match types**
 
 | Match type  | Description                                                                  |
 | :---------: | --------------------------------------------------------------------------- |
@@ -443,14 +514,14 @@ The following `match_type` values are supported for `single_user` fields:
 |   `empty`   | Matches all records whose field value is empty.                             |
 | `not_empty` | Matches all records whose field value is not empty.                         |
 
-## Multi User
+## Multi user
 
-This is an example of how to filter records by a `multi_user` field:
+Use this filter for **Member** fields that hold several members (`multi_user`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi User Filter"
+```json title="Multi user filter"
 {
   "filters": [
     {
@@ -467,9 +538,20 @@ This is an example of how to filter records by a `multi_user` field:
 </TabItem>
 </Tabs>
 
-A `multi_user` field holds a set of users, so the match types compare sets: `equal` requires the field's set to be exactly the given users (order ignored), `contains` requires the field to include all of the given users (it may hold more), while `any` and `none` test for overlap. Provide the user ids to filter by. The acting user can be added with the `include_active_user` operand (the "@me" reference) — see [Operand keys](#operand-keys). On read, operands are always returned as user ids. The `empty` and `not_empty` match types take no `values` (and cannot be combined with `include_active_user`).
+A `multi_user` field holds a set of users, so the match types compare sets:
 
-The following `match_type` values are supported for `multi_user` fields:
+- `equal` needs exactly the given users. Order doesn't matter.
+- `contains` needs all given users. The field may hold more.
+- `any` and `none` test for overlap.
+
+**General behavior**
+
+- Send the user IDs to filter by.
+- To add yourself, set `include_active_user` (the "@me" reference). See [Operand keys](#operand-keys).
+- When you read the filter back, operands come as user IDs.
+- `empty` and `not_empty` take no `values` and don't work with `include_active_user`.
+
+**Match types**
 
 | Match type  | Description                                                                                          |
 | :---------: | --------------------------------------------------------------------------------------------------- |
@@ -480,14 +562,14 @@ The following `match_type` values are supported for `multi_user` fields:
 |   `empty`   | Matches all records whose field value is empty.                                                     |
 | `not_empty` | Matches all records whose field value is not empty.                                                 |
 
-## Created By
+## Created by
 
-This is an example of how to filter records by a `created_by` field:
+Use this filter for **Created by** fields (`created_by`). The field holds the user who created the record.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Created By Filter"
+```json title="Created by filter"
 {
   "filters": [
     {
@@ -504,9 +586,15 @@ This is an example of how to filter records by a `created_by` field:
 </TabItem>
 </Tabs>
 
-A `created_by` field references the user who created the record. Provide the user ids to filter by. The acting user can be added with the `include_active_user` operand (the "@me" reference) — see [Operand keys](#operand-keys) — so `any` with `include_active_user` selects the records you created. On read, operands are always returned as user ids. Note the `type` discriminator is `contact` (the same as a user field), not `created_by`. The `empty` and `not_empty` match types take no `values` (and cannot be combined with `include_active_user`).
+**General behavior**
 
-The following `match_type` values are supported for `created_by` fields:
+- Send the user IDs to filter by.
+- To add yourself, set `include_active_user` (the "@me" reference). See [Operand keys](#operand-keys). `any` with `include_active_user` selects the records you created.
+- When you read the filter back, operands come as user IDs.
+- The `type` is `contact`, as for a user field. It's not `created_by`.
+- `empty` and `not_empty` take no `values` and don't work with `include_active_user`.
+
+**Match types**
 
 | Match type  | Description                                                |
 | :---------: | --------------------------------------------------------- |
@@ -517,14 +605,14 @@ The following `match_type` values are supported for `created_by` fields:
 |   `empty`   | Matches all records whose field value is empty.           |
 | `not_empty` | Matches all records whose field value is not empty.       |
 
-## Last Modified By
+## Last modified by
 
-This is an example of how to filter records by a `last_modified_by` field:
+Use this filter for **Last edited by** fields (`last_modified_by`). The field holds the user who last changed the record.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Last Modified By Filter"
+```json title="Last modified by filter"
 {
   "filters": [
     {
@@ -541,9 +629,15 @@ This is an example of how to filter records by a `last_modified_by` field:
 </TabItem>
 </Tabs>
 
-A `last_modified_by` field references the user who last modified the record. Provide the user ids to filter by. The acting user can be added with the `include_active_user` operand (the "@me" reference) — see [Operand keys](#operand-keys) — so `any` with `include_active_user` selects the records you last modified. On read, operands are always returned as user ids. Note the `type` discriminator is `contact` (the same as a user field), not `last_modified_by`. The `empty` and `not_empty` match types take no `values` (and cannot be combined with `include_active_user`).
+**General behavior**
 
-The following `match_type` values are supported for `last_modified_by` fields:
+- Send the user IDs to filter by.
+- To add yourself, set `include_active_user` (the "@me" reference). See [Operand keys](#operand-keys). `any` with `include_active_user` selects the records you changed last.
+- When you read the filter back, operands come as user IDs.
+- The `type` is `contact`, as for a user field. It's not `last_modified_by`.
+- `empty` and `not_empty` take no `values` and don't work with `include_active_user`.
+
+**Match types**
 
 | Match type  | Description                                                     |
 | :---------: | -------------------------------------------------------------- |
@@ -554,14 +648,14 @@ The following `match_type` values are supported for `last_modified_by` fields:
 |   `empty`   | Matches all records whose field value is empty.                |
 | `not_empty` | Matches all records whose field value is not empty.            |
 
-## Single Date
+## Single date
 
-This is an example of how to filter records by a `single_date` field:
+Use this filter for **Date** fields with one date (`single_date`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Date Filter"
+```json title="Single date filter"
 {
   "filters": [
     {
@@ -579,46 +673,52 @@ This is an example of how to filter records by a `single_date` field:
 </TabItem>
 </Tabs>
 
-The date operand is nested: the target date is `values[0].value.date` (an ISO-8601 string), with an optional integer `values[0].value.offset_amount` used by the relative `num_*` types. A bare scalar (`values[0].value: "2020-01-01"`) is also accepted on input, but the nested object is the canonical form a `GET` emits and re-accepts. Omit `values` for `empty` / `not_empty`.
+Put the target date in the nested `values[0].value.date` as an ISO 8601 string. A bare value (`values[0].value: "2020-01-01"`) also works on input, but a `GET` returns the nested form, which you can send back unchanged. Leave out `values` for `empty` and `not_empty`.
 
-The date actually matched against is computed from `values[0].value.date`, the `relative_date_type`, and — for the `num_days_*` / `num_weeks_*` / `num_months_*` types — `values[0].value.offset_amount`. For example, `relative_date_type: "num_days_before"` with an offset of `1` and a date of `2020-01-01` resolves to `2019-12-31`. The zero-argument relative types (`today`, `tomorrow`, `yesterday`) need no value at all. See [Operand keys](#operand-keys) for the full list of `relative_date_type` values.
+Tape resolves the date to match from `values[0].value.date`, the `relative_date_type` and, for the `num_days_*`, `num_weeks_*` and `num_months_*` types, `values[0].value.offset_amount`. For example, `num_days_before` with an offset of `1` and a date of `2020-01-01` resolves to `2019-12-31`. `today`, `tomorrow` and `yesterday` need no value ([all values](#operand-keys)).
 
-Four operators select a period rather than a single day and read a dedicated operand key (values enumerated under [Operand keys](#operand-keys)):
+Four operators select a period instead of a single day. Each reads its own operand key (values under [Operand keys](#operand-keys)):
 
-- `within` — pairs with `relative_date_range_type` to match a named or bounded range (e.g. `current_week`, `past_num_days`, `exact_range`). For `exact_range`, supply the window start via `values[0].value.date` and the window end via the top-level `end_date`; for `next_num_days` / `past_num_days`, supply the count via `offset_amount`.
-- `on_weekday` — pairs with `weekday` (`monday`–`sunday`).
-- `in_quarter_of_year` — pairs with `quarter_of_year` (`q1`–`q4`).
-- `in_month_of_year` — pairs with `month_of_year` (`january`–`december`).
+- `within` pairs with `relative_date_range_type` and matches a named or bounded range, for example `current_week`, `past_num_days` or `exact_range`. For `exact_range`, send the start in `values[0].value.date` and the end in the top-level `end_date`. For `next_num_days` and `past_num_days`, send the count in `offset_amount`.
+- `on_weekday` pairs with `weekday` (`monday` to `sunday`).
+- `in_quarter_of_year` pairs with `quarter_of_year` (`q1` to `q4`).
+- `in_month_of_year` pairs with `month_of_year` (`january` to `december`).
 
-:::caution Date field filters are day-granular
-The supplied date is expanded to a full day — `[start of day, end of day]` in the caller's timezone — and the time of day in the value is ignored. As a result the boundary operators are **not** all inclusive: `before` matches strictly before the **start** of the target day and `after` strictly after its **end** (both exclude the day itself), while `on_or_before` includes the whole day through its **end** and `on_or_after` includes it from its **start**. `equal` matches the whole target day; `not_equal` matches everything outside it.
+:::caution Does a date filter include the target day?
+Tape expands the date to a full day, from start of day to end of day in your timezone. The time of day in the value doesn't count. So not all boundary operators include the day:
+
+- `before` matches strictly before the *start* of the target day. The day itself is excluded.
+- `after` matches strictly after the *end* of the target day. The day itself is excluded.
+- `on_or_before` includes the whole day up to its *end*.
+- `on_or_after` includes the whole day from its *start*.
+- `equal` matches the whole target day. `not_equal` matches everything outside it.
 :::
 
-The following `match_type` values are supported for `single_date` fields:
+**Match types**
 
 |      Match type      | Description                                                                                        |
 | :------------------: | ------------------------------------------------------------------------------------------------- |
-|       `equal`        | Matches all records whose field date falls on the target day                                      |
-|     `not_equal`      | Matches all records whose field date does not fall on the target day                              |
-|       `before`       | Matches all records whose field date is before the **start** of the target day (day excluded)     |
-|    `on_or_before`    | Matches all records whose field date is on or before the target day (whole day included)          |
-|       `after`        | Matches all records whose field date is after the **end** of the target day (day excluded)        |
-|    `on_or_after`     | Matches all records whose field date is on or after the target day (whole day included)           |
-|       `within`       | Matches all records whose field date falls within the range selected by `relative_date_range_type`|
-|     `on_weekday`     | Matches all records whose field date falls on the supplied `weekday`                              |
-| `in_quarter_of_year` | Matches all records whose field date falls in the supplied `quarter_of_year`                      |
-|  `in_month_of_year`  | Matches all records whose field date falls in the supplied `month_of_year`                        |
-|       `empty`        | Matches all records whose field value is empty                                                    |
-|     `not_empty`      | Matches all records whose field value is not empty                                                |
+|       `equal`        | Matches all records whose field date falls on the target day.                                      |
+|     `not_equal`      | Matches all records whose field date does not fall on the target day.                              |
+|       `before`       | Matches all records whose field date is before the *start* of the target day (day excluded).     |
+|    `on_or_before`    | Matches all records whose field date is on or before the target day (whole day included).          |
+|       `after`        | Matches all records whose field date is after the *end* of the target day (day excluded).        |
+|    `on_or_after`     | Matches all records whose field date is on or after the target day (whole day included).           |
+|       `within`       | Matches all records whose field date falls within the range selected by `relative_date_range_type`.|
+|     `on_weekday`     | Matches all records whose field date falls on the supplied `weekday`.                              |
+| `in_quarter_of_year` | Matches all records whose field date falls in the supplied `quarter_of_year`.                      |
+|  `in_month_of_year`  | Matches all records whose field date falls in the supplied `month_of_year`.                        |
+|       `empty`        | Matches all records whose field value is empty.                                                    |
+|     `not_empty`      | Matches all records whose field value is not empty.                                                |
 
-## Range Date
+## Range date
 
-This is an example of how to filter records by a `range_date` field:
+Use this filter for **Date** fields with a start and an end date (`range_date`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Range Date Filter"
+```json title="Range date filter"
 {
   "filters": [
     {
@@ -637,41 +737,46 @@ This is an example of how to filter records by a `range_date` field:
 </TabItem>
 </Tabs>
 
-A Range Date field stores a start date and an end date, so its operators test that **interval** for **overlap** with the target day or window rather than testing point equality. It otherwise accepts exactly the same operand shape, operators and operand keys as [Single Date](#single-date) above — the nested `values[0].value.date` (+ optional `offset_amount`), `relative_date_type`, `relative_date_range_type`, `weekday`, `quarter_of_year` and `month_of_year` (see [Operand keys](#operand-keys)). The distinctive combination is `within` + `relative_date_range_type: "exact_range"`, which tests the stored range against an explicit window whose bounds are `values[0].value.date` (start) and the top-level `end_date` (end). Omit `values` for `empty` / `not_empty`.
+The field stores a start and an end date. Operands and [operand keys](#operand-keys) are the same as for [Single date](#single-date). Leave out `values` for `empty` and `not_empty`.
 
-:::caution Range operators use interval-overlap semantics
-Each supplied date is expanded to a full day (`[start of day, end of day]` in the caller's timezone; the time of day is ignored). A range operator then tests the stored `[start, end]` interval against the target day or window: `equal` and `within` match any range that **overlaps** it (not only ranges that equal it or sit inside it), while `before` / `after` / `on_or_before` / `on_or_after` compare the range's endpoints to the day boundary.
+The typical combination is `within` with `relative_date_range_type: "exact_range"`. It tests the stored range against a window from `values[0].value.date` (start) to the top-level `end_date` (end).
+
+:::caution How do range operators compare dates?
+Tape expands each date to a full day, from start of day to end of day in your timezone. The time of day doesn't count. Each operator then tests the stored `[start, end]` interval against the target day or window:
+
+- `equal` and `within` match any range that *overlaps* it, not only ranges that equal it or sit inside it.
+- `before`, `after`, `on_or_before` and `on_or_after` compare the ends of the range with the day boundary.
 :::
 
-The following `match_type` values are supported for `range_date` fields:
+**Match types**
 
 |      Match type      | Description                                                                                    |
 | :------------------: | --------------------------------------------------------------------------------------------- |
-|       `equal`        | Matches all records whose range **overlaps** the target day                                   |
-|     `not_equal`      | Matches all records whose range does **not** overlap the target day                           |
-|       `before`       | Matches all records whose range starts before the **start** of the target day                 |
-|    `on_or_before`    | Matches all records whose range falls on or before the target day                             |
-|       `after`        | Matches all records whose range falls after the **end** of the target day                      |
-|    `on_or_after`     | Matches all records whose range falls on or after the target day                              |
-|       `within`       | Matches all records whose range **overlaps** the range selected by `relative_date_range_type`  |
-|     `on_weekday`     | Matches all records whose range falls on the supplied `weekday`                                |
-| `in_quarter_of_year` | Matches all records whose range falls in the supplied `quarter_of_year`                        |
-|  `in_month_of_year`  | Matches all records whose range falls in the supplied `month_of_year`                          |
-|       `empty`        | Matches all records whose field value is empty                                                 |
-|     `not_empty`      | Matches all records whose field value is not empty                                             |
+|       `equal`        | Matches all records whose range *overlaps* the target day.                                   |
+|     `not_equal`      | Matches all records whose range does *not* overlap the target day.                           |
+|       `before`       | Matches all records whose range starts before the *start* of the target day.                 |
+|    `on_or_before`    | Matches all records whose range falls on or before the target day.                             |
+|       `after`        | Matches all records whose range falls after the *end* of the target day.                      |
+|    `on_or_after`     | Matches all records whose range falls on or after the target day.                              |
+|       `within`       | Matches all records whose range *overlaps* the range selected by `relative_date_range_type`.  |
+|     `on_weekday`     | Matches all records whose range falls on the supplied `weekday`.                                |
+| `in_quarter_of_year` | Matches all records whose range falls in the supplied `quarter_of_year`.                        |
+|  `in_month_of_year`  | Matches all records whose range falls in the supplied `month_of_year`.                          |
+|       `empty`        | Matches all records whose field value is empty.                                                 |
+|     `not_empty`      | Matches all records whose field value is not empty.                                             |
 
-## Created At
+## Created at
 
-:::note Filtering without a Created-At field
-This filter targets an App that has a dedicated Created-At field (it references a `field_id`). To filter by a record's creation time on **any** App — including those without such a field — use the field-less [`created_at` metadata filter](#created-at-metadata) instead.
+Use this filter for **Created on** fields (`created_on`). It filters by the creation date of the record.
+
+:::note Your database app has no Created on field?
+Use the [`created_at` metadata filter](#created-at-metadata). It works in every database app, with or without the field.
 :::
-
-This is an example of how to filter records by a `created_on` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Created At Filter"
+```json title="Created at filter"
 {
   "filters": [
     {
@@ -689,41 +794,41 @@ This is an example of how to filter records by a `created_on` field:
 </TabItem>
 </Tabs>
 
-This filters the record's creation date. Note the `field_type` is `created_on` (and the `type` discriminator is `date`). It uses the identical operand shape and operators as [Single Date](#single-date): the nested `values[0].value.date` (+ optional `offset_amount`), `relative_date_type`, and the `within` / `on_weekday` / `in_quarter_of_year` / `in_month_of_year` operators with their `relative_date_range_type` / `weekday` / `quarter_of_year` / `month_of_year` operands (see [Operand keys](#operand-keys)). Omit `values` for `empty` / `not_empty`.
+The `field_type` is `created_on`, and the `type` is `date`. Operands, operators and [operand keys](#operand-keys) are the same as for [Single date](#single-date). Leave out `values` for `empty` and `not_empty`.
 
-:::caution Day-granular, and distinct from the metadata filter
-The supplied date is expanded to a full day in the caller's timezone (time of day ignored), so `before` / `after` are strict at the day boundary (excluding the target day) while `on_or_before` / `on_or_after` include the whole day. This differs from the field-less [`created_at` metadata filter](#created-at-metadata), which is instant-based (it compares exact timestamps) and treats all four bounds as inclusive.
+:::caution Need exact timestamps?
+Tape ignores the time of day and expands the date to a full day in your timezone. `before` and `after` exclude that day, `on_or_before` and `on_or_after` include it. The [`created_at` metadata filter](#created-at-metadata) compares exact timestamps and includes the bound for all four operators.
 :::
 
-The following `match_type` values are supported for `created_on` fields:
+**Match types**
 
 |      Match type      | Description                                                                                    |
 | :------------------: | --------------------------------------------------------------------------------------------- |
-|       `equal`        | Matches all records whose creation date falls on the target day                               |
-|     `not_equal`      | Matches all records whose creation date does not fall on the target day                       |
-|       `before`       | Matches all records created before the **start** of the target day (day excluded)             |
-|    `on_or_before`    | Matches all records created on or before the target day (whole day included)                  |
-|       `after`        | Matches all records created after the **end** of the target day (day excluded)                |
-|    `on_or_after`     | Matches all records created on or after the target day (whole day included)                   |
-|       `within`       | Matches all records whose creation date falls within the range selected by `relative_date_range_type`|
-|     `on_weekday`     | Matches all records whose creation date falls on the supplied `weekday`                        |
-| `in_quarter_of_year` | Matches all records whose creation date falls in the supplied `quarter_of_year`                |
-|  `in_month_of_year`  | Matches all records whose creation date falls in the supplied `month_of_year`                  |
-|       `empty`        | Matches all records with no creation date                                                      |
-|     `not_empty`      | Matches all records that have a creation date                                                  |
+|       `equal`        | Matches all records whose creation date falls on the target day.                               |
+|     `not_equal`      | Matches all records whose creation date does not fall on the target day.                       |
+|       `before`       | Matches all records created before the *start* of the target day (day excluded).             |
+|    `on_or_before`    | Matches all records created on or before the target day (whole day included).                  |
+|       `after`        | Matches all records created after the *end* of the target day (day excluded).                |
+|    `on_or_after`     | Matches all records created on or after the target day (whole day included).                   |
+|       `within`       | Matches all records whose creation date falls within the range selected by `relative_date_range_type`.|
+|     `on_weekday`     | Matches all records whose creation date falls on the supplied `weekday`.                        |
+| `in_quarter_of_year` | Matches all records whose creation date falls in the supplied `quarter_of_year`.                |
+|  `in_month_of_year`  | Matches all records whose creation date falls in the supplied `month_of_year`.                  |
+|       `empty`        | Matches all records with no creation date.                                                      |
+|     `not_empty`      | Matches all records that have a creation date.                                                  |
 
-## Last Modified At
+## Last modified at
 
-:::note Filtering without a Last-Modified field
-This filter targets an App that has a dedicated Last-Modified field (it references a `field_id`). To filter by a record's last-modified time on **any** App — including those without such a field — use the field-less [`last_modified_at` metadata filter](#last-modified-at-metadata) instead.
+Use this filter for **Last edited on** fields (`last_modified_on`). It filters by the date of the last change to the record.
+
+:::note Your database app has no Last edited on field?
+Use the [`last_modified_at` metadata filter](#last-modified-at-metadata). It works in every database app, with or without the field.
 :::
-
-This is an example of how to filter records by a `last_modified_on` field:
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Last Modified At Filter"
+```json title="Last modified at filter"
 {
   "filters": [
     {
@@ -741,37 +846,37 @@ This is an example of how to filter records by a `last_modified_on` field:
 </TabItem>
 </Tabs>
 
-This filters the record's last-modified date. Note the `field_type` is `last_modified_on` (and the `type` discriminator is `date`). The example above uses a relative date: `num_weeks_before` with `offset_amount: 1` resolves to "one week ago". It uses the identical operand shape and operators as [Single Date](#single-date) — nested `values[0].value.date` (+ optional `offset_amount`), `relative_date_type`, and the `within` / `on_weekday` / `in_quarter_of_year` / `in_month_of_year` operands (see [Operand keys](#operand-keys)). Omit `values` for `empty` / `not_empty`.
+The `field_type` is `last_modified_on`, and the `type` is `date`. In the example, `num_weeks_before` with `offset_amount: 1` resolves to one week ago. Operands, operators and [operand keys](#operand-keys) are the same as for [Single date](#single-date). Leave out `values` for `empty` and `not_empty`.
 
-:::caution Day-granular, and distinct from the metadata filter
-The supplied date is expanded to a full day in the caller's timezone (time of day ignored), so `before` / `after` are strict at the day boundary (excluding the target day) while `on_or_before` / `on_or_after` include the whole day. This differs from the field-less [`last_modified_at` metadata filter](#last-modified-at-metadata), which is instant-based (it compares exact timestamps) and treats all four bounds as inclusive.
+:::caution Need exact timestamps?
+Tape ignores the time of day and expands the date to a full day in your timezone. `before` and `after` exclude that day, `on_or_before` and `on_or_after` include it. The [`last_modified_at` metadata filter](#last-modified-at-metadata) compares exact timestamps and includes the bound for all four operators.
 :::
 
-The following `match_type` values are supported for `last_modified_on` fields:
+**Match types**
 
 |      Match type      | Description                                                                                          |
 | :------------------: | --------------------------------------------------------------------------------------------------- |
-|       `equal`        | Matches all records whose last-modified date falls on the target day                                |
-|     `not_equal`      | Matches all records whose last-modified date does not fall on the target day                        |
-|       `before`       | Matches all records last modified before the **start** of the target day (day excluded)             |
-|    `on_or_before`    | Matches all records last modified on or before the target day (whole day included)                  |
-|       `after`        | Matches all records last modified after the **end** of the target day (day excluded)                |
-|    `on_or_after`     | Matches all records last modified on or after the target day (whole day included)                   |
-|       `within`       | Matches all records whose last-modified date falls within the range selected by `relative_date_range_type`|
-|     `on_weekday`     | Matches all records whose last-modified date falls on the supplied `weekday`                          |
-| `in_quarter_of_year` | Matches all records whose last-modified date falls in the supplied `quarter_of_year`                 |
-|  `in_month_of_year`  | Matches all records whose last-modified date falls in the supplied `month_of_year`                   |
-|       `empty`        | Matches all records with no last-modified date                                                       |
-|     `not_empty`      | Matches all records that have a last-modified date                                                   |
+|       `equal`        | Matches all records whose last-modified date falls on the target day.                                |
+|     `not_equal`      | Matches all records whose last-modified date does not fall on the target day.                        |
+|       `before`       | Matches all records last modified before the *start* of the target day (day excluded).             |
+|    `on_or_before`    | Matches all records last modified on or before the target day (whole day included).                  |
+|       `after`        | Matches all records last modified after the *end* of the target day (day excluded).                |
+|    `on_or_after`     | Matches all records last modified on or after the target day (whole day included).                   |
+|       `within`       | Matches all records whose last-modified date falls within the range selected by `relative_date_range_type`.|
+|     `on_weekday`     | Matches all records whose last-modified date falls on the supplied `weekday`.                          |
+| `in_quarter_of_year` | Matches all records whose last-modified date falls in the supplied `quarter_of_year`.                 |
+|  `in_month_of_year`  | Matches all records whose last-modified date falls in the supplied `month_of_year`.                   |
+|       `empty`        | Matches all records with no last-modified date.                                                       |
+|     `not_empty`      | Matches all records that have a last-modified date.                                                   |
 
 ## Calculation
 
-This is an example of how to filter records by a `calculation` field:
+Use this filter for **Calculation** fields (`calculation`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Calculation Filter"
+```json title="Calculation filter"
 {
   "filters": [
     {
@@ -788,54 +893,62 @@ This is an example of how to filter records by a `calculation` field:
 </TabItem>
 </Tabs>
 
-A calculation field is **polymorphic**: depending on its script, it yields a **text**, a **number**, or a **date** result. Which match types are meaningful therefore depends on the calculation's result type, and you supply the same operand shape as the corresponding scalar field type:
+A calculation field returns a *text*, a *number* or a *date*, depending on its script. The result type decides which match types make sense. Send the same operand as for the matching field type:
 
-- **Number result** — use the numeric comparison operators with a bare numeric `values[0].value`, exactly as for a [Number](#number) field.
-- **Text result** — use the text operators with a string `values[0].value`, exactly as for a [Single Text](#single-text) field.
-- **Date result** — use the date operators with the nested `values[0].value.date` (+ optional `offset_amount`) and the temporal operand keys, exactly as for a [Single Date](#single-date) field (see [Operand keys](#operand-keys)).
+- **Number result:** use the number operators with a bare number in `values[0].value`, as for a [Number](#number) field.
+- **Text result:** use the text operators with a string in `values[0].value`, as for a [Single text](#single-text) field.
+- **Date result:** use the date operators with the nested `values[0].value.date` (with optional `offset_amount`) and the date operand keys, as for a [Single date](#single-date) field (see [Operand keys](#operand-keys)).
 
-`empty` / `not_empty` apply to every result type (omit `values`). The calendar operators (`within`, `on_weekday`, `in_quarter_of_year`, `in_month_of_year`) and the zero-argument relative dates (`today`, `tomorrow`, `yesterday`) are only valid when the calculation returns a date — using them against a text- or number-typed calculation returns a `400`.
+**General behavior**
 
-The following `match_type` values are supported for `calculation` fields (the union across all result types):
+- `empty` and `not_empty` work for every result type. Leave out `values`.
+- `within`, `on_weekday`, `in_quarter_of_year` and `in_month_of_year` work only when the calculation returns a date.
+- The relative dates `today`, `tomorrow` and `yesterday` work only when the calculation returns a date.
+- Using a date-only operator on a text or number calculation returns a `400`.
+- A text operator on a number calculation, for example `contains`, returns a `500` with `unknown`. The date comparisons `before`, `after`, `on_or_before` and `on_or_after` can do the same. Use only the operators of the result type.
+
+**Match types**
+
+The table lists the match types of all result types together.
 
 |     Match type       | Applies to   | Description                                                                     |
 | :------------------: | ------------ | ------------------------------------------------------------------------------ |
-|      `empty`         | any          | Matches all records whose field value is empty                                 |
-|    `not_empty`       | any          | Matches all records whose field value is not empty                             |
-|      `equal`         | number, text, date | Matches all records whose field value is equal to the provided match value (day-granular for a date result) |
-|    `not_equal`       | number, text, date | Matches all records whose field value is not equal to the provided match value |
-|     `smaller`        | number       | Matches all records whose field value is smaller than the provided match value |
-| `smaller_or_equal`   | number       | Matches all records whose field value is smaller than or equal to the match value |
-|      `larger`        | number       | Matches all records whose field value is larger than the provided match value  |
-| `larger_or_equal`    | number       | Matches all records whose field value is larger than or equal to the match value |
-|     `contains`       | text         | Matches all records whose field value contains the provided match value        |
-|   `not_contains`     | text         | Matches all records whose field value does not contain the provided match value|
-|   `starts_with`      | text         | Matches all records whose field value starts with the provided match value     |
-|    `ends_with`       | text         | Matches all records whose field value ends with the provided match value       |
-|      `before`        | date         | Matches all records whose field date is before the **start** of the target day (day excluded) |
-|   `on_or_before`     | date         | Matches all records whose field date is on or before the target day (whole day included) |
-|      `after`         | date         | Matches all records whose field date is after the **end** of the target day (day excluded) |
-|   `on_or_after`      | date         | Matches all records whose field date is on or after the target day (whole day included) |
-|      `within`        | date         | Matches all records whose field date falls within the range selected by `relative_date_range_type` |
-|    `on_weekday`      | date         | Matches all records whose field date falls on the supplied `weekday`           |
-| `in_quarter_of_year` | date         | Matches all records whose field date falls in the supplied `quarter_of_year`   |
-|  `in_month_of_year`  | date         | Matches all records whose field date falls in the supplied `month_of_year`     |
+|      `empty`         | any          | Matches all records whose field value is empty.                                 |
+|    `not_empty`       | any          | Matches all records whose field value is not empty.                             |
+|      `equal`         | number, text, date | Matches all records whose field value is equal to the provided match value (day-granular for a date result). |
+|    `not_equal`       | number, text, date | Matches all records whose field value is not equal to the provided match value. |
+|     `smaller`        | number       | Matches all records whose field value is smaller than the provided match value. |
+| `smaller_or_equal`   | number       | Matches all records whose field value is smaller than or equal to the match value. |
+|      `larger`        | number       | Matches all records whose field value is larger than the provided match value.  |
+| `larger_or_equal`    | number       | Matches all records whose field value is larger than or equal to the match value. |
+|     `contains`       | text         | Matches all records whose field value contains the provided match value.        |
+|   `not_contains`     | text         | Matches all records whose field value does not contain the provided match value.|
+|   `starts_with`      | text         | Matches all records whose field value starts with the provided match value.     |
+|    `ends_with`       | text         | Matches all records whose field value ends with the provided match value.       |
+|      `before`        | date         | Matches all records whose field date is before the *start* of the target day (day excluded). |
+|   `on_or_before`     | date         | Matches all records whose field date is on or before the target day (whole day included). |
+|      `after`         | date         | Matches all records whose field date is after the *end* of the target day (day excluded). |
+|   `on_or_after`      | date         | Matches all records whose field date is on or after the target day (whole day included). |
+|      `within`        | date         | Matches all records whose field date falls within the range selected by `relative_date_range_type`. |
+|    `on_weekday`      | date         | Matches all records whose field date falls on the supplied `weekday`.           |
+| `in_quarter_of_year` | date         | Matches all records whose field date falls in the supplied `quarter_of_year`.   |
+|  `in_month_of_year`  | date         | Matches all records whose field date falls in the supplied `month_of_year`.     |
 
-## Multi Email
+## Multi email
 
-This is an example of how to filter records by a `multi_email` field:
+Use this filter for **Email** fields (`multi_email`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Email Filter"
+```json title="Multi email filter"
 {
   "filters": [
     {
       "field_id": "1",
       "field_type": "multi_email",
       "match_type": "fully_includes",
-      "values": [{ "value": "john.doe@gmail.com" }],
+      "values": [{ "value": "juliet@acme.com" }],
       "type": "email"
     }
   ]
@@ -845,28 +958,32 @@ This is an example of how to filter records by a `multi_email` field:
 </TabItem>
 </Tabs>
 
-An email field can hold several addresses. Most match types quantify over those entries — a record matches when **at least one** email entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
+**General behavior**
 
-The following `match_type` values are supported for `multi_email` fields:
+- An email field can hold several addresses. A record matches when *at least one* address meets the condition.
+- `not_contains` matches when *no* address contains the value. `empty` matches when there are no addresses.
+- Matching ignores case and leading and trailing whitespace in the match value.
+
+**Match types**
 
 |    Match type    | Description                                                                       |
 | :--------------: | -------------------------------------------------------------------------------- |
-| `fully_includes` | Matches records that have at least one email entry **equal to** the match value in full. |
-|    `contains`    | Matches records that have at least one email entry **containing** the match value.|
-|  `not_contains`  | Matches records where **none** of the email entries contain the match value.      |
-|  `starts_with`   | Matches records that have at least one email entry **starting with** the match value. |
-|   `ends_with`    | Matches records that have at least one email entry **ending with** the match value. |
+| `fully_includes` | Matches records that have at least one email entry *equal to* the match value in full. |
+|    `contains`    | Matches records that have at least one email entry *containing* the match value.|
+|  `not_contains`  | Matches records where *none* of the email entries contain the match value.      |
+|  `starts_with`   | Matches records that have at least one email entry *starting with* the match value. |
+|   `ends_with`    | Matches records that have at least one email entry *ending with* the match value. |
 |     `empty`      | Matches records whose field value is empty (no email entries). Omit `values`.     |
 |   `not_empty`    | Matches records whose field value is not empty (at least one email entry). Omit `values`. |
 
-## Multi Phone
+## Multi phone
 
-This is an example of how to filter records by a `multi_phone` field:
+Use this filter for **Phone** fields (`multi_phone`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Phone Filter"
+```json title="Multi phone filter"
 {
   "filters": [
     {
@@ -883,28 +1000,32 @@ This is an example of how to filter records by a `multi_phone` field:
 </TabItem>
 </Tabs>
 
-A phone field can hold several numbers. Most match types quantify over those entries — a record matches when **at least one** phone entry satisfies the criterion (`not_contains` matches when **no** entry contains the value; `empty` when there are no entries). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
+**General behavior**
 
-The following `match_type` values are supported for `multi_phone` fields:
+- A phone field can hold several numbers. A record matches when *at least one* number meets the condition.
+- `not_contains` matches when *no* number contains the value. `empty` matches when there are no numbers.
+- Matching ignores case and leading and trailing whitespace in the match value.
+
+**Match types**
 
 |    Match type    | Description                                                                       |
 | :--------------: | -------------------------------------------------------------------------------- |
-| `fully_includes` | Matches records that have at least one phone entry **equal to** the match value in full. |
-|    `contains`    | Matches records that have at least one phone entry **containing** the match value.|
-|  `not_contains`  | Matches records where **none** of the phone entries contain the match value.      |
-|  `starts_with`   | Matches records that have at least one phone entry **starting with** the match value. |
-|   `ends_with`    | Matches records that have at least one phone entry **ending with** the match value. |
+| `fully_includes` | Matches records that have at least one phone entry *equal to* the match value in full. |
+|    `contains`    | Matches records that have at least one phone entry *containing* the match value.|
+|  `not_contains`  | Matches records where *none* of the phone entries contain the match value.      |
+|  `starts_with`   | Matches records that have at least one phone entry *starting with* the match value. |
+|   `ends_with`    | Matches records that have at least one phone entry *ending with* the match value. |
 |     `empty`      | Matches records whose field value is empty (no phone entries). Omit `values`.     |
 |   `not_empty`    | Matches records whose field value is not empty (at least one phone entry). Omit `values`. |
 
-## Multi Link
+## Multi link
 
-This is an example of how to filter records by a `multi_link` field:
+Use this filter for **Link** fields (`multi_link`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Link Filter"
+```json title="Multi link filter"
 {
   "filters": [
     {
@@ -921,29 +1042,32 @@ This is an example of how to filter records by a `multi_link` field:
 </TabItem>
 </Tabs>
 
-Note that the data `type` for a link field is `embed`, not `link`. A link field can hold several links; matching is performed over each entry's **URL** (case-insensitive, surrounding whitespace ignored), and a record matches when at least one URL satisfies the criterion.
+**General behavior**
 
-Link fields have **no exact-match arm** — `equal` and `fully_includes` are not supported and return a `400`. Use `contains` (or `starts_with` / `ends_with`) instead.
+- The `type` for a link field is `embed`, not `link`.
+- A link field can hold several links. The filter matches the **URL** of each link and ignores case and surrounding whitespace.
+- A record matches when at least one URL meets the condition.
+- Link fields have *no exact match*. `equal` and `fully_includes` return a `400`. Use `contains`, `starts_with` or `ends_with` instead.
 
-The following `match_type` values are supported for `multi_link` fields:
+**Match types**
 
 |   Match type   | Description                                                                       |
 | :------------: | -------------------------------------------------------------------------------- |
-|   `contains`   | Matches records that have at least one link whose URL **contains** the match value.|
-| `not_contains` | Matches records where **none** of the link URLs contain the match value.          |
-| `starts_with`  | Matches records that have at least one link whose URL **starts with** the match value. |
-|  `ends_with`   | Matches records that have at least one link whose URL **ends with** the match value. |
+|   `contains`   | Matches records that have at least one link whose URL *contains* the match value.|
+| `not_contains` | Matches records where *none* of the link URLs contain the match value.          |
+| `starts_with`  | Matches records that have at least one link whose URL *starts with* the match value. |
+|  `ends_with`   | Matches records that have at least one link whose URL *ends with* the match value. |
 |    `empty`     | Matches records whose field value is empty (no links). Omit `values`.             |
 |  `not_empty`   | Matches records whose field value is not empty (at least one link). Omit `values`.|
 
-## Single Location
+## Single location
 
-This is an example of how to filter records by a `single_location` field:
+Use this filter for **Location** fields (`single_location`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Location Filter"
+```json title="Single location filter"
 {
   "filters": [
     {
@@ -960,25 +1084,29 @@ This is an example of how to filter records by a `single_location` field:
 </TabItem>
 </Tabs>
 
-A location filter matches **free text over the formatted address** — the street address, postal code, city, state, country and original formatted address concatenated together. There is no component-level filtering (you cannot filter on city or country in isolation). Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
+**General behavior**
 
-The following `match_type` values are supported for `single_location` fields:
+- The filter matches *free text in the formatted address*. This is street address, postal code, city, state, country and the original formatted address, joined together.
+- You can't filter on a single part, such as the city or the country alone.
+- Matching ignores case and leading and trailing whitespace in the match value.
+
+**Match types**
 
 |   Match type   | Description                                                                                                            |
 | :------------: | -------------------------------------------------------------------------------------------------------------------- |
-|   `contains`   | Matches records whose formatted address **contains** the match value.                                                 |
-| `not_contains` | Matches records whose formatted address does **not** contain the match value (records with no address set also match).|
-|    `empty`     | Matches records whose field value is empty (no address set). A coordinate-only value counts as **not** empty. Omit `values`. |
+|   `contains`   | Matches records whose formatted address *contains* the match value.                                                 |
+| `not_contains` | Matches records whose formatted address does *not* contain the match value (records with no address set also match).|
+|    `empty`     | Matches records whose field value is empty (no address set). A coordinate-only value counts as *not* empty. Omit `values`. |
 |  `not_empty`   | Matches records whose field value is not empty (an address or coordinates are set). Omit `values`.                    |
 
-## Single Attachment
+## Single attachment
 
-This is an example of how to filter records by a `single_attachment` field:
+Use this filter for **Files** fields that hold one file (`single_attachment`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Single Attachment Filter"
+```json title="Single attachment filter"
 {
   "filters": [
     {
@@ -995,29 +1123,33 @@ This is an example of how to filter records by a `single_attachment` field:
 </TabItem>
 </Tabs>
 
-Note that the data `type` for an attachment field is `file`. Attachment filters match on the file **name**, never on file ids — the match value must be a **string** file name. Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
+**General behavior**
 
-The following `match_type` values are supported for `single_attachment` fields:
+- The `type` for an attachment field is `file`.
+- The filter matches the file *name*, never the file ID. Send the match value as a *string*.
+- Matching ignores case and leading and trailing whitespace in the match value.
+
+**Match types**
 
 |   Match type   | Description                                                                    |
 | :------------: | ----------------------------------------------------------------------------- |
-|    `equal`     | Matches records whose attached file name **equals** the match value.           |
-|  `not_equal`   | Matches records whose attached file name does **not** equal the match value.   |
-|   `contains`   | Matches records whose attached file name **contains** the match value.         |
-| `not_contains` | Matches records whose attached file name does **not** contain the match value. |
-| `starts_with`  | Matches records whose attached file name **starts with** the match value.      |
-|  `ends_with`   | Matches records whose attached file name **ends with** the match value.        |
+|    `equal`     | Matches records whose attached file name *equals* the match value.           |
+|  `not_equal`   | Matches records whose attached file name does *not* equal the match value.   |
+|   `contains`   | Matches records whose attached file name *contains* the match value.         |
+| `not_contains` | Matches records whose attached file name does *not* contain the match value. |
+| `starts_with`  | Matches records whose attached file name *starts with* the match value.      |
+|  `ends_with`   | Matches records whose attached file name *ends with* the match value.        |
 |    `empty`     | Matches records with no file attached. Omit `values`.                          |
 |  `not_empty`   | Matches records with a file attached. Omit `values`.                           |
 
-## Multi Attachment
+## Multi attachment
 
-This is an example of how to filter records by a `multi_attachment` field:
+Use this filter for **Files** fields that hold several files (`multi_attachment`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Attachment Filter"
+```json title="Multi attachment filter"
 {
   "filters": [
     {
@@ -1034,29 +1166,33 @@ This is an example of how to filter records by a `multi_attachment` field:
 </TabItem>
 </Tabs>
 
-Like Single Attachment, the data `type` is `file` and matching is on file **names** (provide a string). A multi-attachment field can hold several files, so every match type quantifies over them. `equal` / `not_equal` reach the exact-match arm over the file-name set.
+**General behavior**
 
-The following `match_type` values are supported for `multi_attachment` fields:
+- As for Single attachment, the `type` is `file` and the filter matches file *names*. Send a string.
+- The field can hold several files, so every match type checks all of them.
+- `equal` and `not_equal` compare the match value with each file name exactly.
+
+**Match types**
 
 |   Match type   | Description                                                                                       |
 | :------------: | ------------------------------------------------------------------------------------------------ |
-|    `equal`     | Matches records where at least one attached file name **equals** the match value.                 |
-|  `not_equal`   | Matches records where **no** attached file name equals the match value (records with no attachments also match). |
-|   `contains`   | Matches records where an attached file name **contains** the match value.                         |
-| `not_contains` | Matches records where **none** of the attached file names contain the match value.                |
-| `starts_with`  | Matches records where at least one attached file name **starts with** the match value.            |
-|  `ends_with`   | Matches records where at least one attached file name **ends with** the match value.              |
+|    `equal`     | Matches records where at least one attached file name *equals* the match value.                 |
+|  `not_equal`   | Matches records where *no* attached file name equals the match value (records with no attachments also match). |
+|   `contains`   | Matches records where an attached file name *contains* the match value.                         |
+| `not_contains` | Matches records where *none* of the attached file names contain the match value.                |
+| `starts_with`  | Matches records where at least one attached file name *starts with* the match value.            |
+|  `ends_with`   | Matches records where at least one attached file name *ends with* the match value.              |
 |    `empty`     | Matches records with no files attached. Omit `values`.                                            |
 |  `not_empty`   | Matches records with at least one file attached. Omit `values`.                                   |
 
-## Multi Image
+## Multi image
 
-This is an example of how to filter records by a `multi_image` field:
+Use this filter for **Image** fields (`multi_image`).
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Multi Image Filter"
+```json title="Multi image filter"
 {
   "filters": [
     {
@@ -1073,31 +1209,34 @@ This is an example of how to filter records by a `multi_image` field:
 </TabItem>
 </Tabs>
 
-Image fields share the `file` data `type` with attachment fields — the discriminant is `field_type`. Matching is on the image file **name** (provide a string). An image field can hold several images, so every match type quantifies over them; `equal` / `not_equal` reach the exact-match arm over the file-name set. Comparison is case-insensitive and leading/trailing whitespace in the match value is ignored.
+**General behavior**
 
-The following `match_type` values are supported for `multi_image` fields:
+- Image fields share the `type` `file` with attachment fields. `field_type` tells them apart.
+- The filter matches the image file *name*. Send a string.
+- The field can hold several images, so every match type checks all of them. `equal` and `not_equal` compare the match value with each file name exactly.
+- Matching ignores case and leading and trailing whitespace in the match value.
+
+**Match types**
 
 |   Match type   | Description                                                                                    |
 | :------------: | --------------------------------------------------------------------------------------------- |
-|    `equal`     | Matches records where at least one image file name **equals** the match value.                 |
-|  `not_equal`   | Matches records where **no** image file name equals the match value (records with no images also match). |
-|   `contains`   | Matches records where an image file name **contains** the match value.                         |
-| `not_contains` | Matches records where **none** of the image file names contain the match value.                |
-| `starts_with`  | Matches records where at least one image file name **starts with** the match value.            |
-|  `ends_with`   | Matches records where at least one image file name **ends with** the match value.              |
+|    `equal`     | Matches records where at least one image file name *equals* the match value.                 |
+|  `not_equal`   | Matches records where *no* image file name equals the match value (records with no images also match). |
+|   `contains`   | Matches records where an image file name *contains* the match value.                         |
+| `not_contains` | Matches records where *none* of the image file names contain the match value.                |
+| `starts_with`  | Matches records where at least one image file name *starts with* the match value.            |
+|  `ends_with`   | Matches records where at least one image file name *ends with* the match value.              |
 |    `empty`     | Matches records with no images. Omit `values`.                                                 |
 |  `not_empty`   | Matches records with at least one image. Omit `values`.                                        |
 
 ## Checklist
 
-A checklist field holds a list of entries, each with a **title**, an optional **assignee**, a completion **status**, and an optional **due date**. A checklist filter targets one of these entry properties through the `entry_property` operand (`title`, `assignee`, `status`, or `due_date`). Every checklist match type quantifies over the entries — e.g. `entry_property: "title"` with `contains` matches a record when **any** entry's title contains the value.
-
-When `entry_property` is **omitted**, the filter applies to the field as a whole and supports only `empty` / `not_empty` (i.e. "the checklist has no entries at all" / "has at least one entry").
+Use this filter for **Task list** fields (`checklist`). Choose the entry property to filter on with `entry_property`: `title`, `assignee`, `status` or `due_date`.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Checklist Filter"
+```json title="Task list filter"
 {
   "filters": [
     {
@@ -1115,28 +1254,32 @@ When `entry_property` is **omitted**, the filter applies to the field as a whole
 </TabItem>
 </Tabs>
 
-The data `type` is always `checklist`. The following table lists which match types each `entry_property` accepts and the operand shape it expects (any other combination returns a `400`):
+A task list holds entries (subtasks in Tape). Each entry has a *title*, an optional *assignee*, a completion *status* and an optional *due date*. Every match type checks all entries: `title` with `contains` matches a record when *any* entry title contains the value.
+
+Without `entry_property`, the filter applies to the whole field and supports only `empty` and `not_empty`: the task list has no entries, or at least one entry.
+
+The `type` is `checklist` for every task list filter. This table shows the match types and the operand for each `entry_property`. Any other combination returns a `400`.
 
 | `entry_property` | Allowed `match_type`                                                          | Operand                                                                                                                            |
 | ---------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| _(omitted)_      | `empty`, `not_empty`                                                          | none — omit `values`                                                                                                              |
-| `title`          | `contains`, `not_contains`, `empty`, `not_empty`                             | `values: [{ "value": "<text>" }]` (a string); omit `values` for `empty` / `not_empty`                                             |
-| `assignee`       | `equal`, `not_equal`, `empty`, `not_empty`                                   | `values: [{ "value": <user_id> }, …]` (one or more user ids) and/or `include_active_user: true`; omit `values` for `empty` / `not_empty` |
-| `status`         | `equal`                                                                       | `values: [{ "value": <boolean> }]` — `true` = completed, `false` = incomplete                                                     |
-| `due_date`       | `equal`, `not_equal`, `empty`, `not_empty`, `before`, `after`, `on_or_before`, `on_or_after`, `within` | a date operand — see [Operand keys](#operand-keys); omit `values` for `empty` / `not_empty`                       |
+| _(omitted)_      | `empty`, `not_empty`                                                          | none, leave out `values`                                                                                                          |
+| `title`          | `contains`, `not_contains`, `empty`, `not_empty`                             | `values: [{ "value": "<text>" }]` (a string); leave out `values` for `empty` / `not_empty`                                        |
+| `assignee`       | `equal`, `not_equal`, `empty`, `not_empty`                                   | `values: [{ "value": <user_id> }, …]` (one or more user IDs) and/or `include_active_user: true`; leave out `values` for `empty` / `not_empty` |
+| `status`         | `equal`                                                                       | `values: [{ "value": <boolean> }]`: `true` = completed, `false` = incomplete                                                      |
+| `due_date`       | `equal`, `not_equal`, `empty`, `not_empty`, `before`, `after`, `on_or_before`, `on_or_after`, `within` | a date operand, see [Operand keys](#operand-keys); leave out `values` for `empty` / `not_empty`                  |
 
-A few rules that are easy to miss:
+**General behavior**
 
-- **`status` uses a boolean, not a match type.** Unlike the top-level [Status](#status) field (which uses the `completed` / `incomplete` match types), a checklist status filter is `match_type: "equal"` with a boolean value: `false` for incomplete entries, `true` for completed entries.
-- **`include_active_user` is assignee-only.** The `include_active_user: true` "@me" flag is valid only with `entry_property: "assignee"`, and only alongside `equal` / `not_equal` (not `empty` / `not_empty`). See [Operand keys](#operand-keys).
-- **Checklist `due_date` has no `exact_range`.** The `within` match type requires a `relative_date_range_type`, and — unlike date fields — the checklist variant does not support `exact_range` (there is no exact end date to store). Use a bounded range such as `next_num_days` or `current_week`.
+- **`status` uses a boolean, not a match type.** The [Status](#status) field uses the match types `completed` and `incomplete`. A task list status filter uses `match_type: "equal"` with a boolean: `false` for incomplete entries, `true` for completed entries.
+- **`include_active_user` works only for the assignee.** Use the "@me" flag `include_active_user: true` only with `entry_property: "assignee"`, and only with `equal` or `not_equal`, not with `empty` or `not_empty`. See [Operand keys](#operand-keys).
+- **`due_date` has no `exact_range`.** `within` needs a `relative_date_range_type`. Unlike date fields, task lists don't support `exact_range`, because there is no exact end date to store. Use a bounded range such as `next_num_days` or `current_week`.
 
-**Example — incomplete entries** (status, boolean value):
+**Example: incomplete entries** (status with a boolean value)
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Checklist Filter — incomplete entries"
+```json title="Task list filter: incomplete entries"
 {
   "filters": [
     {
@@ -1154,12 +1297,12 @@ A few rules that are easy to miss:
 </TabItem>
 </Tabs>
 
-**Example — due within the next 7 days** (due_date + `within`, using a relative range):
+**Example: due within the next 7 days** (`due_date` with `within` and a relative range)
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Checklist Filter — due within the next 7 days"
+```json title="Task list filter: due within the next 7 days"
 {
   "filters": [
     {
@@ -1178,12 +1321,12 @@ A few rules that are easy to miss:
 </TabItem>
 </Tabs>
 
-**Example — assigned to me** (assignee + `include_active_user`):
+**Example: assigned to me** (`assignee` with `include_active_user`)
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Checklist Filter — assigned to me"
+```json title="Task list filter: assigned to me"
 {
   "filters": [
     {
@@ -1201,7 +1344,7 @@ A few rules that are easy to miss:
 </TabItem>
 </Tabs>
 
-The following `match_type` values are supported for `checklist` fields. Which ones are valid depends on `entry_property` (see the matrix above):
+**Match types**
 
 |   Match type   | Valid `entry_property`                          | Description                                                                                      |
 | :------------: | ----------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -1209,7 +1352,7 @@ The following `match_type` values are supported for `checklist` fields. Which on
 |  `not_equal`   | `assignee`, `due_date`                          | Negation of `equal`.                                                                             |
 |   `contains`   | `title`                                         | An entry title contains the match value.                                                         |
 | `not_contains` | `title`                                         | No entry title contains the match value.                                                         |
-|    `empty`     | _(omitted)_, `title`, `assignee`, `due_date`    | Field-level: the checklist has no entries. Entry-level: an entry's title / assignee / due date is empty. Omit `values`. |
+|    `empty`     | _(omitted)_, `title`, `assignee`, `due_date`    | Field level: the task list has no entries. Entry level: the title, assignee or due date of an entry is empty. Omit `values`. |
 |  `not_empty`   | _(omitted)_, `title`, `assignee`, `due_date`    | Complement of `empty`. Omit `values`.                                                            |
 |    `before`    | `due_date`                                      | An entry's due date is before the resolved date.                                                 |
 |    `after`     | `due_date`                                      | An entry's due date is after the resolved date.                                                  |
@@ -1219,10 +1362,12 @@ The following `match_type` values are supported for `checklist` fields. Which on
 
 ## Operand keys
 
-Beyond `values`, some filters carry optional **operand keys** that refine the criterion. They apply mainly to the temporal filters — every filter with `type: "date"` (Single Date, Range Date, Created At, Last Modified At, and date-typed Calculation) — and to Checklist filters with `entry_property: "due_date"`. Each key is validated per field type: supplying one where it is not accepted returns a `400`.
+Operand keys are optional properties next to `values` that refine the condition. Most apply to date filters: Single date, Range date, Created at, Last modified at, calculations that return a date, and task list `due_date` filters.
 
-:::caution `offset_amount` is nested; the other keys are top-level
-Every operand key below is a **top-level** property of the filter object — except `offset_amount`, which lives **inside** the value at `values[0].value.offset_amount`. Placing it at the top-level has no effect.
+Use each key only with the field types listed below. Tape ignores a key that doesn't fit, without an error: `weekday` on a text filter changes nothing.
+
+:::caution Where does `offset_amount` go?
+All operand keys below are *top-level* properties of the filter object, except `offset_amount`. It goes *inside* the value at `values[0].value.offset_amount`. At the top level, Tape ignores it, so a `num_days_before` filter with only a top-level `offset_amount` returns a `400`.
 :::
 
 | Operand key                | Where it goes               | Applies to                           | Used with                                             |
@@ -1239,7 +1384,7 @@ Every operand key below is a **top-level** property of the filter object — exc
 
 ### `relative_date_type`
 
-Resolves a comparison (`equal`, `before`, `after`, `on_or_before`, `on_or_after`, …) to a single date. Supported values:
+Resolves a comparison (`equal`, `before`, `after`, `on_or_before`, `on_or_after` and so on) to a single date. Supported values:
 
 | `relative_date_type`                    | Value to provide                           | Meaning                   |
 | --------------------------------------- | ------------------------------------------ | ------------------------- |
@@ -1249,74 +1394,80 @@ Resolves a comparison (`equal`, `before`, `after`, `on_or_before`, `on_or_after`
 | `num_weeks_before`, `num_weeks_after`   | `values[0].value.offset_amount` (integer)  | N weeks before / after    |
 | `num_months_before`, `num_months_after` | `values[0].value.offset_amount` (integer)  | N months before / after   |
 
-For `single_date` and `range_date` fields the `num_*` offset is applied to the anchor `date` you pass in `values[0].value.date`. For `created_on`, `last_modified_on` and checklist `due_date` filters the offset is resolved relative to the current date (any anchor `date` is ignored). The `exact_date` value accepts only an ISO-8601 **string** — a numeric epoch is not honored (`end_date`, however, does accept an epoch number).
+**General behavior**
+
+- For `single_date` and `range_date` fields, Tape applies the `num_*` offset to the date in `values[0].value.date`.
+- For `created_on`, `last_modified_on` and task list `due_date` filters, Tape applies the offset to the current date and ignores any date you send.
+- `exact_date` accepts only an ISO 8601 *string*. A numeric epoch doesn't work. `end_date` accepts an epoch number.
 
 ### `relative_date_range_type`
 
-Used with `match_type: within` to select a date range. Supported values:
+Selects a date range for `match_type: within`. Supported values:
 
 | `relative_date_range_type`                                                                                                     | Value to provide                                        |
 | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `current_week`, `current_month`, `current_year`, `past_week`, `past_month`, `past_year`, `next_week`, `next_month`, `next_year` | none                                                    |
 | `next_num_days`, `past_num_days`                                                                                               | `values[0].value.offset_amount` (integer)               |
-| `exact_range`                                                                                                                  | `values[0].value.date` (start) **and** `end_date` (end) |
+| `exact_range`                                                                                                                  | `values[0].value.date` (start) *and* `end_date` (end) |
 
-`exact_range` is available on `date` fields only. Checklist `due_date` filters support every value **except** `exact_range`.
+`exact_range` works only on `date` fields. Task list `due_date` filters support every value *except* `exact_range`.
 
 ### `end_date`
 
-An ISO date string (or epoch number) giving the **end** of the range for a `within` + `exact_range` filter on a `date` field. The range **start** is taken from `values[0].value.date`.
+The *end* of the range for a `within` filter with `exact_range` on a `date` field. Send an ISO date string or an epoch number. The *start* of the range comes from `values[0].value.date`.
 
 ### `weekday`
 
-One of `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`. Used with `match_type: on_weekday` on `date` fields to match records whose date falls on the given weekday.
+One of `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`. Use it with `match_type: on_weekday` on `date` fields to match records whose date falls on this weekday.
 
 ### `quarter_of_year`
 
-One of `q1`, `q2`, `q3`, `q4`. Used with `match_type: in_quarter_of_year` on `date` fields.
+One of `q1`, `q2`, `q3`, `q4`. Use it with `match_type: in_quarter_of_year` on `date` fields.
 
 ### `month_of_year`
 
-One of `january`, `february`, `march`, `april`, `may`, `june`, `july`, `august`, `september`, `october`, `november`, `december`. Used with `match_type: in_month_of_year` on `date` fields.
+One of `january`, `february`, `march`, `april`, `may`, `june`, `july`, `august`, `september`, `october`, `november`, `december`. Use it with `match_type: in_month_of_year` on `date` fields.
 
 ### `include_active_user`
 
-A boolean "@me" flag that resolves to the current API key's owner. Set `include_active_user: true` to match against the calling user without hard-coding a user id. It is used by user-based filters (`single_user`, `multi_user`, `created_by`, `last_modified_by`) and by checklist `assignee` filters. For a checklist it is valid **only** with `entry_property: "assignee"` and **only** with `equal` / `not_equal` (not `empty` / `not_empty`); it may be combined with explicit user ids in `values`.
+A boolean "@me" flag for the user your credential belongs to. Set `include_active_user: true` to match that user without a fixed user ID.
+
+- It works with user filters (`single_user`, `multi_user`, `created_by`, `last_modified_by`) and with task list `assignee` filters.
+- For a task list, it works *only* with `entry_property: "assignee"` and *only* with `equal` or `not_equal`, not with `empty` or `not_empty`.
+- You can combine it with user IDs in `values`.
 
 ### `entry_property`
 
-Checklist-only sub-discriminator: `title`, `assignee`, `status`, or `due_date`. Selects which checklist entry property the filter applies to; when omitted, the filter applies to the field as a whole (`empty` / `not_empty` only). See [Checklist](#checklist).
+Only for task lists: the entry property the filter applies to (`title`, `assignee`, `status` or `due_date`). Without it, the filter applies to the whole field and supports only `empty` and `not_empty` (see [Checklist](#checklist)).
 
 ### `offset_amount`
 
-An integer supplied **inside** the value object at `values[0].value.offset_amount` (not as a top-level key). It provides the count for the `num_days_*` / `num_weeks_*` / `num_months_*` relative date types and for the `next_num_days` / `past_num_days` range types.
+An integer *inside* the value object at `values[0].value.offset_amount`, not a top-level key. It gives the count for the `num_days_*`, `num_weeks_*` and `num_months_*` relative date types and for the `next_num_days` and `past_num_days` range types.
 
 ## Record metadata filters {#record-metadata-filters}
 
-All of the filters above target a **field** — each one carries a `field_id` and a `field_type`. Tape additionally supports a small set of **metadata filters** that match on a record's intrinsic properties. Because every record has these properties, a metadata filter needs **no field** on the App.
-
-A metadata filter is identified by its `type` alone and omits `field_id` and `field_type`:
+Metadata filters match properties every record has, so they need *no field* in the database app. Set only `type` and leave out `field_id` and `field_type`:
 
 | `type`             | Filters on                                                                      | Match `value`                |
 | ------------------ | ------------------------------------------------------------------------------- | ---------------------------- |
-| `created_at`       | When the record was created                                                     | nested — `{ "date": "…" }`   |
-| `last_modified_at` | When the record was last modified                                               | nested — `{ "date": "…" }`   |
-| `app_record_id`    | The record's App-specific ID (the [`app_record_id`](/docs/api/resource/field/unique-id) property)  | bare scalar — e.g. `123`     |
+| `created_at`       | When the record was created                                                     | nested, `{ "date": "…" }`    |
+| `last_modified_at` | When the record was last modified                                               | nested, `{ "date": "…" }`    |
+| `app_record_id`    | The app-specific ID of the record (the `app_record_id` property)  | bare value, for example `123` |
 
-Metadata filters go in the same `filters` array as field filters and are combined with the same boolean `AND`.
+Put metadata filters in the same `filters` array as field filters. They combine with the same `AND`.
 
-:::caution The timestamp match value is nested
-`created_at` and `last_modified_at` read the match value from `values[0].value.date` — a nested object. Field filters and `app_record_id` use a bare scalar at `values[0].value`. This asymmetry is an easy integration mistake to make.
+:::caution Where does the timestamp match value go?
+`created_at` and `last_modified_at` read the match value from `values[0].value.date`, a nested object. Field filters and `app_record_id` use a bare value at `values[0].value`.
 :::
 
-### Created At (metadata) {#created-at-metadata}
+### Created at (metadata) {#created-at-metadata}
 
-Filter records by their creation time, without the App having a Created-At field:
+Use this filter to find records by creation time, without a Created on field in the database app.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Created At Meta Filter — bounded window"
+```json title="Created at metadata filter: bounded window"
 {
   "filters": [
     {
@@ -1336,30 +1487,32 @@ Filter records by their creation time, without the App having a Created-At field
 </TabItem>
 </Tabs>
 
-- **Absolute UTC dates only.** Provide a full ISO-8601 timestamp as `value.date`. `relative_date_type` may be omitted or set to `exact_date`; any genuinely relative value (`num_days_before`, `num_weeks_after`, …) returns a `400`. The `offset_amount` sub-field is accepted by the type but ignored — do not rely on it.
-- **All bounds are inclusive.** Every supported match type compares with `>=` or `<=`: `after` behaves exactly like `on_or_after`, and `before` like `on_or_before`.
-- **Express a window with two filters** — one lower bound and one upper bound, as shown above. Repeating a bound in the same direction _narrows_ the window (the latest lower bound and the earliest upper bound win); it never widens it.
-- **Invalid input fails loudly** with a `400` rather than being silently dropped — an unsupported `match_type`, a missing or unparseable `date`, or a calendar year outside `1`–`9999`.
+**General behavior**
 
-The following `match_type` values are supported for `created_at`:
+- **Absolute UTC dates only.** Send a full ISO 8601 timestamp as `value.date`. Leave out `relative_date_type` or set it to `exact_date`. A relative value such as `num_days_before` or `num_weeks_after` returns a `400`. Tape accepts `offset_amount` but ignores it. Don't rely on it.
+- **All bounds are inclusive.** Every match type compares with `>=` or `<=`. `after` works like `on_or_after`, and `before` like `on_or_before`.
+- **Use two filters for a window:** one lower bound and one upper bound, as in the example. Repeating a bound in the same direction _narrows_ the window: the latest lower bound and the earliest upper bound win. It never widens it.
+- **Invalid input returns a `400`** instead of being dropped: an unsupported `match_type`, a missing or unreadable `date`, or a year outside `1` to `9999`.
+
+**Match types**
 
 | Match type                                              | Description                                        |
 | ------------------------------------------------------- | -------------------------------------------------- |
-| `after`, `on_or_after`, `larger`, `larger_or_equal`     | Matches records created **on or after** the value  |
-| `before`, `on_or_before`, `smaller`, `smaller_or_equal` | Matches records created **on or before** the value |
+| `after`, `on_or_after`, `larger`, `larger_or_equal`     | Matches records created *on or after* the value.  |
+| `before`, `on_or_before`, `smaller`, `smaller_or_equal` | Matches records created *on or before* the value. |
 
-Any other match type (`equal`, `empty`, `not_empty`, …) returns a `400`.
+Any other match type (`equal`, `empty`, `not_empty` and so on) returns a `400`.
 
-For filtering an App that has a dedicated Created-At field, see [Created At](#created-at) above.
+For a database app with a Created on field, see [Created at](#created-at).
 
-### Last Modified At (metadata) {#last-modified-at-metadata}
+### Last modified at (metadata) {#last-modified-at-metadata}
 
-Identical to [Created At (metadata)](#created-at-metadata) in every respect — same match types, inclusive bounds, absolute-date rule and `400` behavior — using `type: "last_modified_at"`:
+Use this filter to find records by the time of their last change. It works like [Created at (metadata)](#created-at-metadata) in every respect: same match types, inclusive bounds, absolute dates only and the same `400` behavior. Use `type: "last_modified_at"`.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Last Modified At Meta Filter"
+```json title="Last modified at metadata filter"
 {
   "filters": [
     {
@@ -1374,18 +1527,18 @@ Identical to [Created At (metadata)](#created-at-metadata) in every respect — 
 </TabItem>
 </Tabs>
 
-:::caution Never-modified records are excluded
-A record that has not been edited since it was created has no last-modified timestamp, and matches **no** `last_modified_at` filter — not even a far-past `on_or_after`. To retrieve everything created **or** modified since a point in time, query `created_at` and `last_modified_at` separately and merge the results (see [Pattern: incremental sync](#pattern-incremental-sync)).
+:::caution Why don't unedited records match?
+A record nobody edited after creating it has no last-modified timestamp, so *no* `last_modified_at` filter matches it. To get everything created *or* modified since a point in time, merge two requests as in [Pattern: incremental sync](#pattern-incremental-sync).
 :::
 
-### App Record ID (metadata) {#app-record-id-metadata}
+### App record ID (metadata) {#app-record-id-metadata}
 
-Filter records by their App-specific ID — the sequential [`app_record_id`](/docs/api/resource/field/unique-id) returned on every record (the first record created in an App is `1`, the second `2`, and so on):
+Use this filter to find records by their app-specific ID. This is the sequential [`app_record_id`](/docs/api/resource/field/unique-id) every record returns: the first record in a database app is `1`, the second `2`, and so on.
 
 <Tabs defaultValue="json">
 <TabItem value="json" label="JSON">
 
-```json title="➡️      App Record ID Meta Filter"
+```json title="App record ID metadata filter"
 {
   "filters": [
     {
@@ -1400,33 +1553,36 @@ Filter records by their App-specific ID — the sequential [`app_record_id`](/do
 </TabItem>
 </Tabs>
 
-The match value is a **bare scalar** (`values[0].value`), not a nested object, and must be numeric — a missing or non-numeric value returns a `400` for every match type, including `empty` / `not_empty`.
+**General behavior**
 
-The following `match_type` values are supported for `app_record_id`:
+- The match value is a *bare value* at `values[0].value`, not a nested object.
+- The value must be a number. A missing or non-numeric value returns a `400` for every match type, including `empty` and `not_empty`.
+- Any match type not in the table returns a `400`.
+- Every record has an `app_record_id`. `empty` matches nothing, and `not_empty` matches every record.
+
+**Match types**
 
 |    Match type      | Description                                                        |
 | ------------------ | ----------------------------------------------------------------- |
-| `equal`            | Matches the record whose App ID equals the value                  |
-| `not_equal`        | Matches all records whose App ID does not equal the value         |
-| `larger`           | Matches all records whose App ID is larger than the value         |
-| `larger_or_equal`  | Matches all records whose App ID is larger than or equal to the value    |
-| `smaller`          | Matches all records whose App ID is smaller than the value        |
-| `smaller_or_equal` | Matches all records whose App ID is smaller than or equal to the value   |
-| `empty`            | Matches records that have no App ID                               |
-| `not_empty`        | Matches records that have an App ID                               |
-
-Any other match type returns a `400`. Note that every record always has an `app_record_id`, so in practice `empty` matches nothing and `not_empty` matches every record.
+| `equal`            | Matches the record whose `app_record_id` equals the value.         |
+| `not_equal`        | Matches all records whose `app_record_id` does not equal the value. |
+| `larger`           | Matches all records whose `app_record_id` is larger than the value. |
+| `larger_or_equal`  | Matches all records whose `app_record_id` is larger than or equal to the value. |
+| `smaller`          | Matches all records whose `app_record_id` is smaller than the value. |
+| `smaller_or_equal` | Matches all records whose `app_record_id` is smaller than or equal to the value. |
+| `empty`            | Matches no records, because every record has an `app_record_id`.   |
+| `not_empty`        | Matches every record.                                              |
 
 ### Pattern: incremental sync {#pattern-incremental-sync}
 
-A common use of the timestamp metadata filters is an **incremental sync** — pulling only the records that changed since your last run, without having to add Created-At or Last-Modified fields to every App.
+Use the timestamp metadata filters to get only the records that changed since your last run. You don't need Created on or Last edited on fields.
 
-Because filters combine with `AND` (there is no `OR`), "created **or** modified since `T`" cannot be expressed in a single request. Issue two requests and union the results:
+Filters have no `OR`, so "created *or* modified since `T`" takes two requests:
 
 <Tabs defaultValue="created">
 <TabItem value="created" label="Created since T">
 
-```json title="➡️      Request 1 — records created since T"
+```json title="Request 1: records created since T"
 {
   "filters": [
     {
@@ -1441,7 +1597,7 @@ Because filters combine with `AND` (there is no `OR`), "created **or** modified 
 </TabItem>
 <TabItem value="modified" label="Modified since T">
 
-```json title="➡️      Request 2 — records modified since T"
+```json title="Request 2: records modified since T"
 {
   "filters": [
     {
@@ -1456,8 +1612,17 @@ Because filters combine with `AND` (there is no `OR`), "created **or** modified 
 </TabItem>
 </Tabs>
 
-De-duplicate the combined result by record `id`. Request 2 only returns records edited since creation (see the caveat above), which is why Request 1 is still needed to catch brand-new records.
+Merge the results and remove duplicates by `record_id`. Request 2 misses records nobody edited after creation. Request 1 catches them.
 
-:::info These filters previously had no effect
-Before this change, the API accepted `created_at` and `last_modified_at` metadata filters but silently **ignored** them, returning the full unfiltered record set. They are now applied. An integration that was unknowingly relying on the old no-op behavior will see its result sets shrink.
+:::info Why does my sync return fewer records now?
+Earlier, the API accepted the `created_at` and `last_modified_at` metadata filters but ignored them and returned all records. Now it applies them, so an integration that relied on the old behavior gets fewer records.
 :::
+
+## Next steps
+
+- [Record](/docs/api/resource/record#retrieve-filtered-records-for-an-app): send your filters and get the records that match.
+- [View](/docs/api/resource/view): store filters in a view.
+- [Field value](/docs/api/resource/field-value/overview): the value format of every field type.
+- [Date & timezone](/docs/api/date-timezone): how the API reads and returns dates.
+- [Search](/docs/api/resource/search): find records by text in any field, across all your database apps or only in some (`app_ids`).
+- [Capabilities](/docs/api/capabilities): what `records:read` and `apps:edit` allow.

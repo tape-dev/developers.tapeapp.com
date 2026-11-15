@@ -28,9 +28,10 @@ module.exports = {
           items: [
             'api/resource/search',
             'api/resource/record',
+            'api/resource/filter',
             {
               type: 'category',
-              label: 'Field Value',
+              label: 'Field value',
               collapsed: true,
               items: [
                 'api/resource/field-value/overview',
@@ -85,6 +86,7 @@ module.exports = {
             'api/resource/workspace',
             'api/resource/organization',
             'api/resource/user',
+            'api/resource/webhook',
             {
               type: 'category',
               label: 'Automation',
@@ -94,8 +96,8 @@ module.exports = {
                 'api/resource/automation/quickstart',
                 'api/resource/automation/discovery',
                 'api/resource/automation/manage',
-                'api/resource/automation/revisions',
                 'api/resource/automation/execution',
+                'api/resource/automation/revisions',
                 'api/resource/automation/advanced',
                 'api/resource/automation/dynamic-values',
                 'api/resource/automation/action-examples',
@@ -159,36 +161,16 @@ module.exports = {
             'api/resource/automation-usage-report',
             'api/resource/file',
             'api/resource/icon',
-            'api/resource/webhook',
             'api/resource/email',
-            'api/resource/filter',
           ],
         },
       ],
     },
     {
       type: 'category',
-      label: 'MCP Server',
+      label: 'MCP server',
       collapsed: true,
       items: ['mcp/overview', 'mcp/connect', 'mcp/connect-with-token', 'mcp/supported-tools', 'mcp/security', 'mcp/build-a-client'],
-    },
-    {
-      type: 'category',
-      label: 'Calculation Field',
-      collapsed: true,
-      items: [
-        'calculation/introduction',
-        'calculation/editors',
-        'calculation/libraries',
-        'calculation/markdown',
-        'calculation/html',
-        {
-          type: 'category',
-          label: 'Components',
-          collapsed: false,
-          items: ['calculation/component/link', 'calculation/component/button', 'calculation/component/collapsible'],
-        },
-      ],
     },
     {
       type: 'category',
@@ -196,29 +178,21 @@ module.exports = {
       collapsed: true,
       items: [
         'automations/introduction',
-        'automations/code-editor',
         'automations/execution-types',
         'automations/libraries',
         'automations/date-timezone',
+        'automations/limitations',
         {
           type: 'category',
           label: 'Troubleshooting',
           collapsed: true,
           items: [
             'automations/troubleshooting/filter-values',
-            'automations/troubleshooting/ip-addresses',
             'automations/troubleshooting/automations-troubleshooting-errors',
           ],
         },
-        'automations/limitations',
       ],
     },
-    // {
-    //   type: 'category',
-    //   label: 'Forms',
-    //   collapsed: true,
-    //   items: ['forms/custom-css'],
-    // },
     'contribute',
     {
       type: 'link',
@@ -231,7 +205,7 @@ module.exports = {
       type: 'category',
       label: 'Developer API',
       collapsed: false,
-      items: ['guide/api/getting-started'],
+      items: ['guide/api/getting-started', 'guide/api/coming-from-podio', 'guide/api/working-with-webhooks'],
     },
     {
       type: 'category',
@@ -240,8 +214,6 @@ module.exports = {
       items: [
         'guide/automations/automation-showcase',
         'guide/automations/convert-pdf-to-text',
-        'guide/automations/save-google-form-responses-to-tape',
-        'guide/automations/save-jotform-responses-to-tape',
       ],
     },
     'contribute',

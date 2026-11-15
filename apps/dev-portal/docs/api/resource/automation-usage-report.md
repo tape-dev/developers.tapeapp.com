@@ -1,8 +1,8 @@
 ---
 id: automation-usage-report
-title: Automation Usage Report
-sidebar_label: Automation Usage Report
-description: Retrieve your organization's automation consumption — actions consumed and run outcomes — aggregated into time buckets.
+title: Automation usage report
+sidebar_label: Automation usage report
+description: Retrieve your organization's automation consumption, with actions consumed and run outcomes, aggregated into time buckets.
 ---
 
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
@@ -11,43 +11,35 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Admonition from '@theme/Admonition';
 
-Retrieve your organization's historical automation consumption — actions consumed and automation run
-outcomes — aggregated into time buckets.
+Use this endpoint to see how many actions and automation runs your organization used, per hour, day, week, month or year.
 
-The report is always scoped to the organization of the API key making the request. There is no way
-to read another organization's usage.
+The report covers the organization of your credential. You can't read the usage of another organization.
 
 ## Retrieve an automation usage report
 
+Use this endpoint to get usage buckets for your organization, newest first.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation-usage-report" />
 
-Returns usage buckets for the calling key's organization, most-recent first. Both query parameters
-are required.
+The example requests the 30 most recent daily buckets.
 
-**Query Parameters**
-
-| Parameter             | Type      | Required | Description                                                                                              |
-| --------------------- | --------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| `limit`               | `integer` | Yes      | Maximum number of buckets to return. Must be between `0` and `100` inclusive. `0` returns an empty list. |
-| `interval_resolution` | `string`  | Yes      | Bucket size. One of `hourly`, `daily`, `weekly`, `monthly`, `yearly`.                                    |
-
-The example below requests the 30 most recent daily buckets.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -G #BASE_URL/v1/automation-usage-report \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   --data-urlencode "limit=30" \\
   --data-urlencode "interval_resolution=daily"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "organization_id": 1337,
   "usage_reports": [
     {
       "organization_id": 1337,
       "from": "2024-01-18 08:12:04",
+      "from_utc": "2024-01-18 08:12:04",
       "to": "2024-01-18 22:47:51",
+      "to_utc": "2024-01-18 22:47:51",
       "num_consumed_actions": 320,
       "num_succeeded_runs": 540,
       "num_failed_runs": 12,
@@ -56,7 +48,9 @@ The example below requests the 30 most recent daily buckets.
     {
       "organization_id": 1337,
       "from": "2024-01-17 00:03:11",
+      "from_utc": "2024-01-17 00:03:11",
       "to": "2024-01-17 23:58:40",
+      "to_utc": "2024-01-17 23:58:40",
       "num_consumed_actions": 412,
       "num_succeeded_runs": 690,
       "num_failed_runs": 20,
@@ -65,7 +59,9 @@ The example below requests the 30 most recent daily buckets.
     {
       "organization_id": 1337,
       "from": "2024-01-15 09:30:00",
+      "from_utc": "2024-01-15 09:30:00",
       "to": "2024-01-15 17:05:22",
+      "to_utc": "2024-01-15 17:05:22",
       "num_consumed_actions": 88,
       "num_succeeded_runs": 130,
       "num_failed_runs": 4,
@@ -75,47 +71,30 @@ The example below requests the 30 most recent daily buckets.
 }`}
 </ContextCodeBlock>
 
-(Note that 2024-01-16 is absent above: buckets with no underlying activity are not returned.)
+The response has no bucket for 2024-01-16, because nothing ran that day.
 
-**Response fields**
+<a id="ordering--bucketing"></a>
 
-Each entry in `usage_reports` describes a single time bucket:
+**General behavior**
 
-| Field                         | Type      | Description                                                                                                                                |
-| ----------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `organization_id`             | `integer` | The organization the report belongs to.                                                                                                    |
-| `from`                        | `string`  | Earliest underlying record time in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). May be later than the nominal start of the calendar bucket. |
-| `to`                          | `string`  | Latest underlying record time in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). May be earlier than the nominal end of the calendar bucket.   |
-| `num_consumed_actions`        | `integer` | Total action credits consumed in the bucket.                                                                                               |
-| `num_succeeded_runs`          | `integer` | Number of automation runs that finished successfully (`completed` status).                                                                 |
-| `num_failed_runs`             | `integer` | Number of automation runs that finished with a failed status.                                                                              |
-| `num_cancelled_runs`          | `integer` | Number of automation runs that finished with a cancelled status.                                                                           |
+- Buckets come *newest first* (by bucket start), up to `limit`.
+- Tape returns only buckets with activity. Periods without activity don't appear as empty buckets.
+- Bucket boundaries follow the calendar in UTC. `weekly` uses the ISO week: a week starts on Monday at `00:00` UTC.
+- A personal access token limited to some apps still returns the totals of the whole organization. The report has no per-app breakdown.
 
-The top-level `organization_id` mirrors the organization of every bucket and is provided for
-convenience. `from` and `to` use the Tape API datetime format described under
-[Date & Timezone](/docs/api/date-timezone) — always UTC, with no `T` separator, no `Z` suffix and no
-milliseconds.
-
-### Ordering & bucketing
-
-- Buckets are returned **most-recent first** (descending by bucket start), capped at `limit`.
-- Only buckets that contain at least one underlying record are returned — there are no zero-filled
-  gaps for periods without activity.
-- Bucket boundaries follow the calendar in UTC. `weekly` uses the ISO week, anchored to Monday — a
-  week starts on Monday at `00:00` UTC.
-
-:::info
-The figures are **not real-time**. They are built from periodic snapshots written by a background
-reporting job, so the most recent bucket can lag live activity until the next reporting interval
-runs. Treat this endpoint as historical / near-real-time usage reporting rather than live metering.
+:::info Don't see the latest activity?
+A background job builds the report from regular snapshots. The newest bucket can lag behind live activity until the job runs again. Use the endpoint for usage history, not for live metering.
 :::
 
-## Validation errors
+**Requirements:** `automations:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
 
-A missing, out-of-range or non-integer `limit`, or an unknown `interval_resolution`, returns a
-`400` validation error. For example, requesting `limit=250`:
+<a id="validation-errors"></a>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+**Errors**
+
+A missing, out-of-range or non-integer `limit`, or an unknown `interval_resolution`, returns `400` with `validation`. For example, `limit=250` returns:
+
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "status_code": 400,
   "endpoint": "/v1/automation-usage-report",
@@ -124,9 +103,40 @@ A missing, out-of-range or non-integer `limit`, or an unknown `interval_resoluti
 }`}
 </ContextCodeBlock>
 
-See [Errors](/docs/api/errors) for the full list of error codes.
+See [Errors](/docs/api/errors) for all error codes.
+
+**Query parameters**
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `limit` | `integer` | Yes | Number of buckets to return, from `0` to `100`. `0` returns an empty list. |
+| `interval_resolution` | `string` | Yes | Size of a bucket. One of `hourly`, `daily`, `weekly`, `monthly` or `yearly`. |
+
+**Response fields**
+
+Each entry in `usage_reports` describes one time bucket:
+
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `organization_id` | `integer` | The organization of the report. | `1337` |
+| `from` | `string` | Start of the earliest reporting interval with activity in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). Can be later than the start of the calendar bucket. | `"2024-01-18 08:12:04"` |
+| `from_utc` | `string` | Same value as `from`, in UTC. | `"2024-01-18 08:12:04"` |
+| `to` | `string` | End of the latest reporting interval with activity in the bucket, in UTC (`YYYY-MM-DD HH:mm:ss`). Can be earlier or later than the end of the calendar bucket. | `"2024-01-18 22:47:51"` |
+| `to_utc` | `string` | Same value as `to`, in UTC. | `"2024-01-18 22:47:51"` |
+| `num_consumed_actions` | `integer` | Action credits consumed in the bucket. | `320` |
+| `num_succeeded_runs` | `integer` | Automation runs that finished successfully (status `completed`). | `540` |
+| `num_failed_runs` | `integer` | Automation runs that finished with a failed status. | `12` |
+| `num_cancelled_runs` | `integer` | Automation runs that finished with a cancelled status. | `3` |
+
+The top-level `organization_id` repeats the organization of every bucket. `from` and `to` stay in UTC, unlike most dates in the API, because they define the UTC buckets. They use the format described in [Date & timezone](/docs/api/date-timezone): no `T` separator, no `Z` suffix, no milliseconds.
 
 ## Rate limit credits
 
-Each call to this endpoint costs `2x` the base credits. See
-[Request limits](/docs/api/request-limits) for details on how rate limiting works.
+Each request to this endpoint costs `2x` the base credits. See [Request limits](/docs/api/request-limits) for how credits work.
+
+## Next steps
+
+- [Automation run](/docs/api/resource/automation-run): list single runs and their logs.
+- [Request limits](/docs/api/request-limits): how credits work.
+- [Date & timezone](/docs/api/date-timezone): the date format of the API.
+- [Capabilities](/docs/api/capabilities): what `automations:read` allows.

@@ -5,28 +5,24 @@ sidebar_label: Action examples
 description: Copy-paste config for the most common Tape automation actions — records, email, HTTP, code, control flow, and collections.
 ---
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
+import CreateRecordSettingsPng from '@site/static/docs/api/resource/automation/action-examples/create-record-settings.png';
 
-Copy-paste `config` for the most common [action types](/docs/api/resource/automation/reference/actions). Each is a
-**minimal, faithful** example — the smallest `config` that persists, validates and runs — and each `config` shape is
-taken from the automation API's own end-to-end action suite. Every action type's full `config_schema` is served by
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery); build against that for the complete field
-list.
+Use these examples to copy a working `config` for the most common automation actions.
 
-A few conventions used below:
+Each example is the *smallest `config`* that Tape saves, validates and runs for that [action type](/docs/api/resource/automation/reference/actions). [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) returns the full `config_schema` of every action type. Build against it for the complete list of fields.
 
-- Drop these objects into the `actions` array on [create or update](/docs/api/resource/automation/manage).
-- Node `id`s are **omitted** — the server mints them. (Stable `id`s are shown only where an action nests others.)
-- `group` is **derived from `type`** and optional on input; it's shown for clarity.
-- Values that pull in live record data are [dynamic values](/docs/api/resource/automation/dynamic-values) — an
-  **array** (template/code). Plain settings (an `app_id`, a boolean) are scalars. Each example notes which is which.
+How to read the examples:
+
+- Put these objects into the `actions` array when you [create or update](/docs/api/resource/automation/manage) an automation.
+- Node `id`s are *left out*. Tape creates them. Stable `id`s appear only where an action nests other actions.
+- `group` *follows from `type`* and is optional on input. It's shown to make the examples clearer.
+- Values that pull in live record data are [dynamic values](/docs/api/resource/automation/dynamic-values), an *array* (template or code). Plain settings, such as an `app_id` or a boolean, are scalars. Each example says which is which.
+- All config enum values are *lower-case*, for example `http_call_type: "post"`, `weblink_expiration: "never"`, `exit_type: "success"`, and on `collect_referenced_records` both `ref_collection_defs[].direction` (`outgoing`, `incoming`, `both`) and `match_type` (`all`, `filtered`). Send them as the `config_schema` lists them.
 
 ## Create a record — `record_create`
 
-Creates a record in an app. With no `field_assignments`, it creates an **empty** record.
+Creates a record in a database app. Without `field_assignments`, it creates an *empty* record.
 
 ```json
 {
@@ -40,14 +36,16 @@ Creates a record in an app. With no `field_assignments`, it creates an **empty**
 }
 ```
 
-- `app_id` (**required**) — the target app; it is not defaulted, so always send it.
-- `field_assignments` omitted → an empty record. Populated assignments are a **typed, per-field-type union** discriminated by `field_type`, with lower-case `field_type` / `assignment_type` tokens (e.g. `single_text` / `set`); `meta/action` advertises the array items opaquely, so treat this shape as **beta** and still stabilizing. `[]` is always accepted (see **Update the current record**, below).
-- `trigger_other_flows: false` stops the new record from re-firing automations — set it to avoid a recursion when this automation triggers on the same app.
-- All three keys are plain scalars (no dynamic-value arrays here).
+- `app_id`: the target database app. Send it in every config. The schema doesn't mark it as required, and validation doesn't report it when it's missing. Without it, the action saves but Tape skips it when the automation runs.
+- `field_assignments`: `[]` is accepted in every case. A filled assignment has the same shape as in [Update the current record](#update-the-current-record--current_record_update) below.
+- `trigger_other_flows` is the option **Trigger automations** in the automation editor. `false` keeps the new record from starting other automations. Keep it at `false` to avoid a loop when this automation triggers on the same database app.
+- All three keys are plain scalars, with no dynamic-value arrays.
+
+<MediaFrame><img src={CreateRecordSettingsPng} alt="Settings of the action that creates a record, with the options Silent, Trigger automations and Trigger webhooks" /></MediaFrame>
 
 ## Update the current record — `current_record_update`
 
-Updates the record the run is executing on, applying a list of `field_assignments`.
+Updates the record the run works on, with a list of `field_assignments`.
 
 ```json
 {
@@ -60,13 +58,14 @@ Updates the record the run is executing on, applying a list of `field_assignment
 }
 ```
 
-- `field_assignments` (optional) — omitted or `[]` is a valid **no-op** update (changes no fields, still logs success). A populated assignment is a **typed, per-field-type object** discriminated by `field_type` (lower-case `field_type` / `assignment_type` tokens, plus any nested match/search conditions in the public [filter tree](/docs/api/resource/automation/reference/filters)); since `meta/action` advertises the items opaquely, treat this shape as **beta** and still stabilizing.
-- Targets the **current record** implicitly — no `app_id` (that's `referenced_records_update`) and no `record_collection` (that's `collected_records_update`).
-- `silent` / `trigger_webhooks` / `trigger_other_flows` / `author_id` are optional mutation flags; omitting `author_id` runs the update as the automation's default author.
+- `field_assignments` (optional): left out or `[]` is a valid update that *changes no field value* and still logs success. The record's `last_modified_on` and `last_modified_by` still change.
+- A filled assignment is a *typed object per field type*, with lower-case `field_type` and `assignment_type` values (for example `single_text` and `set`) plus any nested match or search conditions in the public [filter tree](/docs/api/resource/automation/reference/filters). `meta/action` describes the items only loosely. [`current_record_update`](/docs/api/resource/automation/reference/actions/current-record-update) shows filled assignments to copy.
+- It targets the *current record*, with no `app_id` (that's `referenced_records_update`) and no `record_collection` (that's `collected_records_update`). It needs a trigger with a record, such as `record_created`. With no trigger, or with `periodic` or `webhook_received`, `validate` reports `action_invalid`. See [Trigger context](/docs/api/resource/automation/reference/actions#trigger-context).
+- `silent`, `trigger_webhooks`, `trigger_other_flows` and `author_id` are optional. `trigger_webhooks` and `trigger_other_flows` are the options **Trigger webhooks** and **Trigger automations** in the editor. Without `author_id`, the automation itself is the author.
 
 ## Run code — `custom_code`
 
-Runs custom code in the automation sandbox. The most self-contained action — no referenced entities, no external service.
+Runs your own code in the automation sandbox. This is the most self-contained action: no referenced entities and no external service.
 
 ```json
 {
@@ -78,12 +77,12 @@ Runs custom code in the automation sandbox. The most self-contained action — n
 }
 ```
 
-- `code` (**required**) — a **code dynamic value**: an array of literal strings interleaved with variable/value reference tokens to embed record data. A plain string is accepted and coerced to array form.
-- `custom_variable_defs` omitted → the script declares no variables for later actions.
+- `code` (*required*): a *code dynamic value*, an array of literal strings mixed with variable references that pull in record data. Value references aren't allowed here. See [Dynamic values](/docs/api/resource/automation/dynamic-values). Tape also accepts a plain string and turns it into an array.
+- `custom_variable_defs` left out means the script declares no variables for later actions.
 
 ## Declare a variable — `custom_variable`
 
-Computes a value and stores it under a declared variable that later actions can reference.
+Computes a value and stores it in a declared variable that later actions can reference.
 
 ```json
 {
@@ -96,33 +95,37 @@ Computes a value and stores it under a declared variable that later actions can 
 }
 ```
 
-- `custom_variable_defs` — the **declaration**: each entry is `{ "custom_type", "label" }` (`custom_type` ∈ `any` / `single_file` / `multi_file` / `single_link` / `html_table_rows`). Later actions reference the variable by `{ "kind": "variable", "source": "custom", "custom_type", "label" }`.
-- `assignment_code` — a **code dynamic value** (array) computing the value. It is evaluated as a single **expression**, not a function body — write `1 + 1`, **not** `return 1 + 1;` (a top-level `return` throws at run time). This differs from [`custom_code`](/docs/api/resource/automation/reference/actions/custom-code), whose `code` is a statement block where `return` is legal. See [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable).
-- **Silent no-op trap:** with an empty/omitted `custom_variable_defs` this action still *validates and persists*, but at run time it silently skips — no per-action log. The same trap applies to a `for_loop` with no `iterable` and an `authenticated_http_call` with no `authentication_provider_id`.
+- `custom_variable_defs`: the *declaration*. Each entry is `{ "custom_type", "label" }`. `custom_type` is one of `any`, `single_file`, `multi_file`, `single_link`, `html_table_rows`. Later actions reference the variable with `{ "kind": "variable", "source": "custom", "custom_type", "label" }`.
+- `assignment_code`: a *code dynamic value* (array) that computes the value. Tape evaluates it as one *expression*: write `1 + 1`, *not* `return 1 + 1;`. A top-level `return` fails when the automation runs. See [`custom_variable`](/docs/api/resource/automation/reference/actions/custom-variable).
+- [`custom_code`](/docs/api/resource/automation/reference/actions/custom-code) is different: its `code` is a block of statements. Don't use a top-level `return` there either. Tape runs the code of all actions as one script, so a `return` stops every later action.
+
+:::caution Why does my action save but do nothing?
+With an empty or missing `custom_variable_defs`, this action still *validates and saves*. When the automation runs, Tape skips it without a per-action log. The same happens to a `for_loop` without `iterable` and to an `authenticated_http_call` without `authentication_provider_id`.
+:::
 
 ## Send an email — `send_email`
 
-Sends one email through the organization's SMTP account.
+Sends one email from the automation.
 
 ```json
 {
   "type": "send_email",
   "group": "action",
   "config": {
-    "to_address": ["recipient@example.com"],
+    "to_address": ["juliet@acme.com"],
     "subject": ["Email from the automation"],
     "message_body": ["<p>Sent by the send_email automation action.</p>"]
   }
 }
 ```
 
-- `to_address` and `subject` are **required**; `message_body` is **optional** — omit it and the email still sends, with an empty body. Provide it for a non-empty message.
-- All three are **template dynamic values** (arrays); the HTML body round-trips verbatim.
-- `smtp_account_id` omitted → the organization's **default** SMTP account. Pin an id only if you need a specific account.
+- `to_address` and `subject` are *required*. `message_body` is *optional*. Without it, Tape sends the email with an empty body.
+- All three are *template dynamic values* (arrays). The HTML body comes back unchanged.
+- Without `smtp_account_id`, Tape uses the organization's *default* SMTP account. Set an ID only if you need a specific account. [`send_email`](/docs/api/resource/automation/reference/actions/send-email) shows where to find it.
 
 ## Make an HTTP request — `http_call`
 
-Makes an outbound HTTP request from the automation sandbox.
+Sends an HTTP request from the automation sandbox.
 
 ```json
 {
@@ -135,13 +138,13 @@ Makes an outbound HTTP request from the automation sandbox.
 }
 ```
 
-- `http_call_type` (**required**) — a lower-case enum scalar: `get` / `post` / `put` / `patch` / `delete`.
-- `http_call_url` (**required**) — a **template dynamic value** (array), so you can interpolate record data into the URL.
-- Outbound requests run from Tape's worker IPs and are subject to network restrictions — see [Troubleshooting → IP addresses](/docs/automations/troubleshooting/ip-addresses). Private/internal hosts are refused.
+- `http_call_type` (*required*): a lower-case enum scalar, one of `get`, `post`, `put`, `patch`, `delete`.
+- `http_call_url` (*required*): a *template dynamic value* (array), so you can put record data into the URL.
+- Requests leave from Tape's worker IP addresses and are subject to network restrictions. See [Troubleshooting › IP addresses](https://help.tapeapp.com/en/articles/18448976-automation-ip-addresses). Tape refuses private and internal hosts.
 
 ## Branch on a condition — `conditional`
 
-A control-flow action: runs its nested `action_rows` (the then-branch) only when `condition` holds.
+A control-flow action. It runs its nested `action_rows` (the then-branch) only when `condition` is true.
 
 ```json
 {
@@ -166,13 +169,13 @@ A control-flow action: runs its nested `action_rows` (the then-branch) only when
 }
 ```
 
-- The branch structure lives **inside `config`** (`condition`, `action_rows`, and an optional `else_action_rows`) — like every action, a `conditional` carries its whole shape in `config`. See [`conditional`](/docs/api/resource/automation/reference/actions/conditional).
-- `condition` is a [filter group](/docs/api/resource/automation/reference/filters); the row above is a **script condition** (`code` instead of `subject`/`operator`/`value`).
-- `action_rows` is the then-branch — full nested action nodes. Add `else_action_rows` (inside `config`) for an else-branch; omit it to disable.
+- The branch structure lives *inside `config`*: `condition`, `action_rows` and the optional `else_action_rows`. Like every action, a `conditional` keeps its whole shape in `config`. See [`conditional`](/docs/api/resource/automation/reference/actions/conditional).
+- `condition` is a filter group. The row above is a *script condition*, with `code` instead of `subject`, `operator` and `value`.
+- `action_rows` is the then-branch, with full nested action nodes. Add `else_action_rows` inside `config` for an else-branch. Leave it out to switch the else-branch off.
 
 ## Loop over items — `for_loop`
 
-A control-flow action: runs its nested `action_rows` (the loop body) once per item of an iterable.
+A control-flow action. It runs its nested `action_rows` (the loop body) once for each item of an iterable.
 
 ```json
 {
@@ -197,12 +200,12 @@ A control-flow action: runs its nested `action_rows` (the loop body) once per it
 }
 ```
 
-- The loop lives **inside `config`**: `iterable` (what to loop over), `action_rows` (the body), and optional `break_condition` / `continue_condition`. Like every action, `for_loop` carries its whole shape in `config`.
-- The [`iterable`](/docs/api/resource/automation/reference/actions/for-loop) is a [reference](/docs/api/resource/automation/dynamic-values) to a collection (or custom variable) produced by an earlier `collect_*` or `custom_variable` action. With no iterable set, the loop body doesn't run (see the collection pattern below for how to produce and reference a collection).
+- The loop lives *inside `config`*: `iterable` (what to loop over), `action_rows` (the body), and the optional `break_condition` and `continue_condition`.
+- The [`iterable`](/docs/api/resource/automation/reference/actions/for-loop) is a `record_collection` from an earlier `collect_*` action, a multi-value field or a custom variable. Without an iterable, the loop body doesn't run. [The collection pattern](#collect-and-update-a-collection--collect_app_records--collected_records_update) shows how to create and reference a collection. On its own, the example doesn't validate (`action_variable_missing`): put a `collect_app_records` action before it.
 
 ## Collect and update a collection — `collect_app_records` → `collected_records_update`
 
-The collection pattern: an upstream **collect** action publishes a `record_collection`; a downstream action references it. Order matters — the producer comes first.
+The collection pattern: a *collect* action earlier in the list creates a `record_collection`, and a later action references it. Order matters. The action that creates the collection comes first.
 
 ```json
 {
@@ -231,6 +234,13 @@ The collection pattern: an upstream **collect** action publishes a `record_colle
 }
 ```
 
-- `record_collection` is an **object reference**, never a string. It resolves by `action_type` + `app_id` to the nearest upstream producer, so it doesn't name the collect action's `id`.
-- The same reference shape feeds any collection consumer — `filter_record_collection`, `sort_record_collection`, `collected_records_comment_create`, a `for_loop`'s `iterable`, and so on.
-- **Enum casing:** all config enum tokens are **lower-case** — `http_call_type: "post"`, `weblink_expiration: "never"`, `exit_type: "success"`, and on `collect_referenced_records` both `ref_collection_defs[].direction` (`outgoing` / `incoming` / `both`) and `match_type` (`all` / `filtered`). Send them as the `config_schema` gives them.
+- `record_collection` is an *object reference*, never a string. Tape resolves it by `action_type` and `app_id` to the nearest earlier action that creates such a collection. It doesn't name the `id` of the collect action.
+- Every action that uses a collection takes the same reference shape: `filter_record_collection`, `sort_record_collection`, `collected_records_comment_create`, the `iterable` of a `for_loop`, and so on.
+
+## Next steps
+
+- [Actions](/docs/api/resource/automation/reference/actions): every action, with a page per type.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): how references pull in record data.
+- [Filters](/docs/api/resource/automation/reference/filters): conditions for `conditional` and collection actions.
+- [Manage](/docs/api/resource/automation/manage): add the actions to an automation.
+- [Run & simulate](/docs/api/resource/automation/execution): simulate the automation before it goes live.

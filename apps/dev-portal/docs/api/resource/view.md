@@ -9,94 +9,104 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A **view** is a saved way of looking at an app's records. Every view belongs to exactly one app and stores:
+Use these endpoints to read, create, update, promote and delete the views of an app.
 
-- a **layout** — `table`, `list` or `board` — and its layout-specific **display configuration** (table row height, board grouping and card preview, …);
-- an ordered list of **filters** — which records the view shows;
-- a **sort** — one field and a direction, or none (which means the app's manual record order);
-- per-**field** display settings — which fields are visible, and how wide the columns are;
-- an optional **split by** — the field the view groups its records into sections by;
-- how it renders **progress bars** (`show_progress`).
+A *view* is a saved way of looking at the records of a database app. Every view belongs to exactly one app and stores:
 
-Every app has exactly one **default view**, which is what a user lands on when they open the app. Views created and managed through this API are always **public** — shared with everyone who can see the app.
+- a *layout* (`table`, `list` or `board`) and its layout-specific *display configuration*, such as table row height, board grouping and card preview;
+- an ordered list of *filters*: which records the view shows;
+- a *sort*: one field and a direction, or none, which means the manual record order of the app;
+- per-*field* display settings: which fields are visible and how wide the columns are;
+- an optional *split by*: the field the view groups its records into sections by;
+- how it renders *progress bars* (`show_progress`).
 
-The view resource exists so that an integration can **read a view's definition from one app and recreate it on another** — for example when migrating a workspace between organizations. See [Copy a view to another app](#copy-a-view-to-another-app) for that walkthrough.
+Every app has exactly one *default view*, the one users land on when they open the app. Views you create through this API are *public*: everyone who can see the app can see them.
 
-This resource never returns records. To read the records of a view, use [`GET /v1/record/view/{view_id}`](/docs/api/resource/record#retrieve-records-for-a-view) on the record resource. It also never returns computed data — no section lists, no per-section counts, no column totals. Only the view's _definition_.
+A common use is to read a view in one app and recreate it in another, for example when you migrate a workspace between organizations. See [Copy a view to another app](#copy-a-view-to-another-app).
 
-:::caution `PUT` replaces `filters` and `fields` wholesale
-An update **replaces** the `filters` array and the `fields` map entirely — it never merges them. Omitting a key preserves it, but sending one overwrites what was stored. This is the most likely way to lose data with this resource. Read [Update a view](#update-a-view) before you write.
+This resource returns no records and no computed data, such as sections, counts per section or column totals. To read the records of a view, use [`GET /v1/record/view/{view_id}`](/docs/api/resource/record#retrieve-records-for-a-view).
+
+To find a view ID, see [Retrieve views for an app](/docs/api/resource/app#retrieve-views-for-an-app), which lists the public views of an app. In Tape, open the view: its ID is the number after `/views/` in the address.
+
+:::info Which capability do I need?
+Reading a view needs `apps:read`. Creating, updating, promoting and deleting a view need `apps:edit`. See [Capabilities](/docs/api/capabilities).
+:::
+
+:::caution Changing `filters` or `fields` with `PUT`?
+An update *replaces* the `filters` array and the `fields` map and never merges them. A key you leave out keeps its stored value. Read [Update a view](#update-a-view) before you write.
 :::
 
 ## Authentication and permissions
 
-The five `/v1/view/...` endpoints require a **user API key**, sent as a bearer token. Automation ("workflow") API keys are rejected with `401` (`App views can only be accessed with a user API key.`) — the view permission model depends on user identity. The one exception is the [list endpoint](/docs/api/resource/app#retrieve-views-for-an-app) (which lives on the app resource): it also accepts an automation API key, subject to view access.
+The five `/v1/view/...` endpoints need a credential that acts on behalf of a user: a [user API key](/docs/api/authentication#user-api-key), a [personal access token](/docs/api/personal-access-tokens) or an [OAuth access token](/docs/api/oauth/overview). Send it as a bearer token. Permissions depend on that user.
 
-Permissions are checked in two layers against the app the view belongs to:
+An automation API key returns `401` with the message `App views can only be accessed with a user API key.` The message names only the user API key, but a personal access token or an OAuth access token works too.
 
-- **Reading** a view requires **view access** to the app.
-- **Creating, updating, deleting or promoting** a view requires **share access** to the app — one level above edit access. Being able to edit records is deliberately not enough to reconfigure how everyone in the app sees them.
+The list endpoint on the app resource is the one exception. It also accepts an automation API key, subject to view access.
 
-Views carry no `created_at` / `last_modified_at` timestamps.
+Tape checks permissions in two layers against the app the view belongs to:
+
+- **Reading** a view needs *view access* to the app.
+- **Creating, updating, deleting or promoting** a view needs *share access* to the app (**Can share** or **Full access**), one level above edit access. Edit access to records is not enough to change how everyone in the app sees them.
 
 ### Rate limit credits
 
 The [base request cost](/docs/api/request-limits) is 10 credits. This resource charges:
 
-| Endpoint                                                              | Credits          |
-| --------------------------------------------------------------------- | ---------------- |
-| [`GET /v1/app/{app_id}/views`](/docs/api/resource/app#retrieve-views-for-an-app)         | 50 (5× base)     |
-| [`GET /v1/view/{view_id}`](#retrieve-a-single-view)                    | 20 (2× base)     |
-| [`POST /v1/view/app/{app_id}`](#create-a-view)                        | 50 (5× base)     |
-| [`PUT /v1/view/{view_id}`](#update-a-view)                            | 50 (5× base)     |
-| [`POST /v1/view/{view_id}/default`](#set-the-default-view)            | 50 (5× base)     |
-| [`DELETE /v1/view/{view_id}`](#delete-a-view)                         | 50 (5× base)     |
+| Endpoint                                                                        | Credits      |
+| ------------------------------------------------------------------------------- | ------------ |
+| `GET /v1/app/{app_id}/views`                                                    | 50 (5× base) |
+| [`GET /v1/view/{view_id}`](#retrieve-a-single-view)                              | 20 (2× base) |
+| [`POST /v1/view/app/{app_id}`](#create-a-view)                                   | 50 (5× base) |
+| [`PUT /v1/view/{view_id}`](#update-a-view)                                       | 50 (5× base) |
+| [`POST /v1/view/{view_id}/default`](#set-the-default-view)                       | 50 (5× base) |
+| [`DELETE /v1/view/{view_id}`](#delete-a-view)                                    | 50 (5× base) |
 
 ## The view object
 
-Two shapes exist. The **preview** is what the [list endpoint](/docs/api/resource/app#retrieve-views-for-an-app) returns; the **detail** object extends it with the full definition and is what every other endpoint returns, wrapped in a `{ "view": … }` envelope.
+The list endpoint returns a *preview* of each view. Every other endpoint returns the *detail* object, which adds the full definition, inside a `{ "view": … }` envelope.
 
 ### Preview
 
-| Field        | Type                               | Notes                                                                     |
-| ------------ | ---------------------------------- | ------------------------------------------------------------------------- |
-| `id`         | number                             | The view id.                                                              |
-| `view_id`    | number                             | Identical to `id`; present for consistency with the rest of the API.      |
-| `name`       | string \| null                     | `null` for a view that has never been named.                              |
-| `app_id`     | number                             | The app the view belongs to.                                              |
-| `is_default` | boolean                            | Exactly one view per app is `true`.                                       |
-| `layout`     | `"table"` \| `"list"` \| `"board"` | See [Field settings](#field-settings).                                    |
-| `private`    | boolean                            | `false` for every view this API can create. See [Limitations](#known-limitations). |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `id` | number | The view ID. | `88123` |
+| `view_id` | number | Same as `id`. Present for consistency with the rest of the API. | `88123` |
+| `name` | string \| null | Name of the view. `null` for a view that was never named. | `"Open tickets"` |
+| `app_id` | number | The app the view belongs to. | `4711` |
+| `is_default` | boolean | Exactly one view per app is `true`. | `false` |
+| `layout` | `"table"` \| `"list"` \| `"board"` | Layout of the view. See [Field settings](#field-settings). | `"table"` |
+| `private` | boolean | `false` for every view this API can create. See [Limitations](#known-limitations). | `false` |
 
 ### Detail
 
 Everything in the preview, plus:
 
-| Field       | Type           | Notes                                                                                        |
-| ----------- | -------------- | -------------------------------------------------------------------------------------------- |
-| `sort_by`   | number \| null | The `field_id` the view is sorted by. `null` means manual record order.                      |
-| `sort_desc` | boolean        | `true` for descending. `false` when there is no sort.                                        |
-| `filters`   | array          | The view's filters, flat and implicitly ANDed. See [Filters](#filters).                      |
-| `fields`    | object         | Per-field display settings, keyed by `field_id`, for the view's current layout. See [Field settings](#field-settings). |
-| `split_by`  | object \| null | The split-by definition, or `null`. See [Split by](#split-by).                               |
-| `show_progress` | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | How the view renders progress bars. See [Display configuration](#display-configuration). |
-| `table`     | object \| null | Table-layout display settings, or `null` unless `layout` is `table`. See [Display configuration](#display-configuration). |
-| `board`     | object \| null | Board grouping, card preview and display settings, or `null` unless `layout` is `board`. See [Display configuration](#display-configuration). |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `sort_by` | number \| null | The `field_id` the view is sorted by. `null` means manual record order. | `55204` |
+| `sort_desc` | boolean | `true` for descending. `false` when there is no sort. | `false` |
+| `filters` | array | The filters of the view, flat and combined with AND. See [Filters](#filters). | `[{ "field_id": 55203, … }]` |
+| `fields` | object | Display settings per field, keyed by `field_id`, for the current layout of the view. See [Field settings](#field-settings). | `{ "55207": { "hidden": true } }` |
+| `split_by` | object \| null | The split-by definition, or `null`. See [Split by](#split-by). | `null` |
+| `show_progress` | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | How the view renders progress bars. See [Display configuration](#display-configuration). | `"none"` |
+| `table` | object \| null | Display settings of the table layout, or `null` unless `layout` is `table`. See [Display configuration](#display-configuration). | `{ "row_height": "medium", "wrap_cells": false }` |
+| `board` | object \| null | Board grouping, card preview and display settings, or `null` unless `layout` is `board`. See [Display configuration](#display-configuration). | `null` |
 
-The `fields` object always contains an entry for **every** field of the app — including fields the view has no stored setting for, which are reported with their effective default. That completeness is what makes a `GET` → `PUT` round-trip faithful: a detail response can be sent straight back to [Update a view](#update-a-view) unchanged.
+The `fields` object contains an entry for *every* field of the app. Fields without a stored setting appear with their effective default. This makes a `GET` → `PUT` round trip faithful: you can send a detail response back to [Update a view](#update-a-view) unchanged.
 
 ## Retrieve a single view
 
+Use this endpoint to read a view with its full definition.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/view/{view_id}" />
 
-Retrieve a view with its full definition. Requires view access to the app it belongs to.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/view/88123 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "view": {
     "id": 88123,
@@ -138,40 +148,28 @@ Retrieve a view with its full definition. Requires view access to the app it bel
 }
 ```
 
-- `width` appears only for `table` views, and only for fields that carry a stored width.
-- `table` is present only for `table` views and `board` only for `board` views; the other is `null`.
-- Filter operands come back **normalized to ids** — a status or category filter written with option names comes back as `{ "value": <option_id> }`, and a relation filter as `{ "value": <record_id> }`.
-- The response body is directly re-`PUT`-able — see [Update a view](#update-a-view).
+**General behavior**
+
+- `width` appears only for `table` views, and only for fields with a stored width.
+- `table` is present only for `table` views, and `board` only for `board` views. The other one is `null`.
+- Filter operands come back *normalized to IDs*. A status or category filter written with option names comes back as `{ "value": <option_id> }`. A relation filter comes back as `{ "value": <record_id> }`.
+
+**Requirements:** `apps:read`, and view access to the app. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Create a view
 
+Use this endpoint to add a view to an app.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/view/app/{app_id}" />
 
-Create a view on the app with the specified `app_id`. Requires share access to the app.
-
-`name` and `layout` are **required**; everything else is optional. The created view is always public and is never the default view — [promote it](#set-the-default-view) afterwards if you need it to be.
-
-| Key         | Required | Type                               | Constraint                                             |
-| ----------- | -------- | ---------------------------------- | ------------------------------------------------------ |
-| `name`      | ✅       | string                             | max **200** characters; empty string allowed           |
-| `layout`    | ✅       | `"table"` \| `"list"` \| `"board"` | no default — you must send one                         |
-| `filters`   | –        | array                              | max **100** entries; see [Filters](#filters)           |
-| `sort_by`   | –        | number (`field_id`)                | must be a field of this app                            |
-| `sort_desc` | –        | boolean                            | defaults to `false`; ignored without `sort_by`         |
-| `fields`    | –        | object keyed by `field_id`         | `hidden` required per entry; see [Field settings](#field-settings) |
-| `split_by`  | –        | object                             | see [Split by](#split-by)                              |
-| `show_progress` | –    | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | defaults to `none`; see [Display configuration](#display-configuration) |
-| `table`     | –        | object                             | `table` layout only; see [Display configuration](#display-configuration) |
-| `board`     | –        | object                             | `board` layout only; see [Display configuration](#display-configuration) |
-
-`null` is **not** accepted for any key on create — nullability is an update-only affordance, because on create there is nothing to clear. Any unknown or misspelled key is rejected with a `400`.
+Send `name` and `layout`. Everything else is optional. The new view is never the default view until you [promote it](#set-the-default-view).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/view/app/4711 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "name": "Open tickets",
@@ -199,7 +197,7 @@ Create a view on the app with the specified `app_id`. Requires share access to t
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "name": "Open tickets",
   "layout": "table",
@@ -226,53 +224,47 @@ Create a view on the app with the specified `app_id`. Requires share access to t
 </TabItem>
 </Tabs>
 
-Responds `201` with the `{ "view": … }` envelope containing the full [detail object](#the-view-object).
+The response is `201` with the `{ "view": … }` envelope and the full [detail object](#the-view-object).
+
+**General behavior**
+
+- `null` is *not* accepted for any key on create. Only an update can clear a value, because on create there is nothing to clear.
+- An unknown or misspelled key returns `400`.
+
+**Requirements:** `apps:edit`, and share access to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Body parameters**
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Max 200 characters; empty string allowed. |
+| `layout` | `"table"` \| `"list"` \| `"board"` | Yes | No default, send one. |
+| `filters` | array | No | Max 100 entries; see [Filters](#filters). |
+| `sort_by` | number (`field_id`) | No | Must be a field of this app. |
+| `sort_desc` | boolean | No | Defaults to `false`; ignored without `sort_by`. |
+| `fields` | object keyed by `field_id` | No | `hidden` required per entry; see [Field settings](#field-settings). |
+| `split_by` | object | No | See [Split by](#split-by). |
+| `show_progress` | `"none"` \| `"view"` \| `"split_by"` \| `"all"` | No | Defaults to `none`; see [Display configuration](#display-configuration). |
+| `table` | object | No | `table` layout only; see [Display configuration](#display-configuration). |
+| `board` | object | No | `board` layout only; see [Display configuration](#display-configuration). |
 
 ## Update a view
 
+Use this endpoint to change a view.
+
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/view/{view_id}" />
 
-Update a view. Every key is optional. Requires share access to the app.
+Every key is optional. Send only what you want to change.
 
-**This is a partial update:**
+**Rename only.** Everything else stays:
 
-| In the body                  | Effect                                                 |
-| ---------------------------- | ------------------------------------------------------ |
-| key **omitted**              | the stored value is **preserved**                      |
-| key present with a **value** | the stored value is **replaced**                       |
-| key present with **`null`**  | the stored value is **cleared** (two exceptions below) |
-
-**Collections are replaced wholesale — never merged.**
-
-- `filters`: sending an array replaces the entire filter list. There is no "add one filter" operation — to append, [retrieve the view](#retrieve-a-single-view), append to the array you got back, and `PUT` the whole array. `null` clears all filters.
-- `fields`: sending the map replaces the display settings of the view's effective layout in full. Fields you leave out lose their stored settings and fall back to the layout's default visibility. `null` clears them all.
-
-**Two exceptions to "`null` clears":**
-
-1. **`name: null` preserves — it does not clear.** An unnamed view reports `name: null` on read, so `null` must be accepted for a read body to be `PUT`-able verbatim; there is no "remove the name" operation, so `null` (and `""` on update) is treated as "leave it alone".
-2. **`width` is ignored on non-`table` layouts** — tolerated rather than rejected, so a client that reads a `table` view, switches `layout` to `"list"` and puts the body back is not forced to strip `width` from every entry.
-
-**Read-only keys are accepted and ignored.** So that a detail response can be `PUT` back verbatim, the update body also tolerates `id`, `view_id`, `app_id`, `is_default`, `private` and `sort_property`. None of them has any effect.
-
-:::caution `is_default: true` in a `PUT` body does nothing
-Promotion is a separate endpoint ([`POST /v1/view/{view_id}/default`](#set-the-default-view)). Setting `is_default` in an update body is silently ignored, not honored.
-:::
-
-**The effective layout.** `fields` is interpreted against `layout ?? the view's current layout`. If you change `layout` and send `fields` in the same request, the map is written to the **new** layout's settings; the other two layouts' settings are preserved untouched. Switching a view's layout back and forth never destroys the settings of the layout you left.
-
-**Display config.** `show_progress` omitted preserves the current mode; it always has a value, so it is only ever replaced, never cleared. `table` and `board` each replace their config wholesale when sent; omitting them — **or sending `null`** — preserves the stored config. `table` is accepted only on a `table` view and `board` only on a `board` view (otherwise a `400`). The `null`-tolerance is what lets a detail `GET` — which reports `table: null` on a board view and `board: null` on a table view — round-trip verbatim. See [Display configuration](#display-configuration).
-
-Beyond the keys this API exposes, a `PUT` reads back and re-writes everything else a view stores — column footer statistics, a board's custom **lane customization**, and the field/display settings of the layouts the view is not currently in — so an update that only renames a view leaves all of it intact. (The one exception is split-by drill-down filters; see [Limitations](#known-limitations).)
-
-**Rename only** — everything else is preserved:
-
-```json title="➡️      Request"
+```json title="Request"
 { "name": "Open tickets — EMEA" }
 ```
 
 **Replace the filters and clear the sort:**
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "filters": [
     {
@@ -287,9 +279,9 @@ Beyond the keys this API exposes, a `PUT` reads back and re-writes everything el
 }
 ```
 
-**Switch layout and give the list layout its own field settings:**
+**Switch the layout and give the list layout its own field settings:**
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "layout": "list",
   "fields": {
@@ -300,56 +292,93 @@ Beyond the keys this API exposes, a `PUT` reads back and re-writes everything el
 }
 ```
 
-Responds `200` with the `{ "view": … }` envelope, post-update, so a client can immediately re-`PUT` it.
+The response is `200` with the `{ "view": … }` envelope after the update.
 
-`sort_desc` on its own flips the direction of the view's existing sort without changing the sort field. Sending `sort_by` without `sort_desc` resets the direction to ascending, because `sort_by` replaces the whole sort.
+**This is a partial update:**
+
+| In the body                  | Effect                                                    |
+| ---------------------------- | --------------------------------------------------------- |
+| key *omitted*              | the stored value is *preserved*                         |
+| key present with a *value* | the stored value is *replaced*                          |
+| key present with `null`      | the stored value is *cleared* (two exceptions below)    |
+
+**Collections are replaced in full, never merged.**
+
+- `filters`: an array replaces the entire filter list. There is no "add one filter" operation. To add a filter, [retrieve the view](#retrieve-a-single-view), add it to the array you got back, and send the whole array with `PUT`. `null` clears all filters.
+- `fields`: the map replaces the display settings of the effective layout of the view in full. Fields you leave out lose their stored settings and fall back to the default visibility of the layout. `null` clears them all.
+
+**Two exceptions to "`null` clears":**
+
+1. **`name: null` preserves the name.** An unnamed view reads as `name: null`, so the update accepts `null` to keep a read body `PUT`-able. There is no way to remove a name: `null` and `""` both mean "leave it alone".
+2. **`width` is ignored on layouts other than `table`.** It is tolerated, not rejected. A client that reads a `table` view, switches `layout` to `"list"` and sends the body back doesn't need to strip `width` from every entry.
+
+**Read-only keys are accepted and ignored.** So that you can send a detail response back as is, the update body also tolerates `id`, `view_id`, `app_id`, `is_default`, `private` and `sort_property`. None of them has any effect.
+
+:::caution Sending `is_default: true` in a `PUT` body?
+Tape ignores `is_default` in an update body without an error. Promotion is a separate endpoint ([`POST /v1/view/{view_id}/default`](#set-the-default-view)).
+:::
+
+**General behavior**
+
+- **The effective layout.** If you change `layout` and send `fields` in the same request, the map goes to the *new* layout. The other layouts keep their settings. See [Field settings](#field-settings).
+- **Display config.** You can replace `show_progress` but never clear it. `table` and `board` each replace their config in full when sent. Leaving them out, *or sending `null`*, keeps the stored config, so a detail `GET` with `table: null` or `board: null` round-trips unchanged. See [Display configuration](#display-configuration).
+- **Settings the API doesn't expose stay intact:** column footer statistics, the *lane customization* of a board, and the settings of the layouts the view is not in. The one exception is split-by drill-down filters (see [Limitations](#known-limitations)).
+- **Sort direction.** `sort_desc` on its own flips the direction of the existing sort and keeps the sort field. `sort_by` without `sort_desc` resets the direction to ascending, because `sort_by` replaces the whole sort.
+
+**Requirements:** `apps:edit`, and share access to the app. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Set the default view
 
+Use this endpoint to make a view the default view of its app.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/view/{view_id}/default" />
 
-Promote a view to be its app's default view. Takes **no request body**. Requires share access to the app.
+The request takes *no body*.
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/view/88123/default \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-Responds `200` with the `{ "view": … }` envelope, with `is_default: true`. The app's previous default view is demoted in the same operation, so the app always has exactly one default view.
+The response is `200` with the `{ "view": … }` envelope and `is_default: true`. The previous default view of the app loses its default flag in the same operation, so the app keeps exactly one default view.
 
-- There is no way to _un_-default a view; you can only promote a different one.
-- Promoting a view that is already the default is a no-op and still returns `200`.
+**General behavior**
+
+- You can't remove the default flag from a view. You can only promote a different one.
+- Promoting a view that is already the default changes nothing and returns `200`.
+
+**Requirements:** `apps:edit`, and share access to the app. Works with a personal access token, an OAuth access token or a user API key.
 
 ## Delete a view
 
+Use this endpoint to delete a view.
+
 <EndpointBadge method="DELETE" url="https://api.tapeapp.com/v1/view/{view_id}" />
 
-Delete a view. Requires share access to the app.
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X DELETE #BASE_URL/v1/view/88123 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title="⬅️      Response"
+```json title="Response"
 { "view_id": 88123 }
 ```
 
-The view is soft-deleted: afterwards every endpoint reports it as `404`. Records are never affected — deleting a view removes only the saved way of looking at them.
+The view is soft-deleted, and every endpoint returns `404` for it afterwards. Records are never affected.
 
-:::caution The current default view cannot be deleted
-Deleting the view that is currently the app's default is rejected with a `400` (`Cannot delete default BlabView …`). To remove it, [promote another view](#set-the-default-view) to default first, then delete it. Every app always keeps exactly one default view.
-:::
+**Requirements:** `apps:edit`, and share access to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+Deleting the current default view of an app returns `400` with the message `The default view of an app cannot be deleted. Set another view as the default first.` [Promote another view](#set-the-default-view) first, then delete it.
 
 ## Filters
 
-A view's filters are a **flat array**, implicitly **ANDed**. There is no `OR`, and no grouping or nesting. If a record must match two conditions, put two entries in the array; a view cannot express "either of two".
+The filters of a view are a *flat array*, combined with `AND`, with no `OR`, grouping or nesting. The array order is the filter order (there is no `position` key). A view holds *at most 100 filters*.
 
-Array order is the filter order; there is no `position` key on the wire. A view holds **at most 100 filters**.
+**A view filter is the same filter object as in `POST /v1/record/filter/app/{app_id}`**, with the same `match_type` values and operand keys. The [filter reference](/docs/api/resource/filter) lists every field type and its match types.
 
-**A view filter is exactly the filter object documented for [`POST /v1/record/filter/app/{app_id}`](/docs/api/resource/filter)** — the same union, the same `match_type` vocabulary, the same operand keys. Anything you can write as a record filter you can write as a view filter, unchanged. See the [filter reference](/docs/api/resource/filter) for every field type and its supported match types.
-
-Every filter entry carries at least a `field_id`, a `field_type`, a `type` discriminator and a `match_type`:
+Every filter entry has at least a `field_id`, a `field_type`, a `type` discriminator and a `match_type`:
 
 ```json
 {
@@ -361,14 +390,14 @@ Every filter entry carries at least a `field_id`, a `field_type`, a `type` discr
 }
 ```
 
-- `field_id`, `field_type` and `match_type` are **required**; `type` is required in practice (omitting it is a `400`).
-- `values` is the operand list; its shape depends on the field type, and it is omitted for `empty` / `not_empty`.
-- Only **field filters** are accepted. The record endpoint's metadata filters (`created_at` / `last_modified_at` / `app_record_id`) are not part of a view's stored filters.
+- `field_id`, `field_type` and `match_type` are *required*. `type` is required in practice: leaving it out returns `400`.
+- `values` is the operand list. Its shape depends on the field type. Leave it out for `empty` and `not_empty`.
+- Only *field filters* are accepted. The metadata filters of the record endpoint (`created_at`, `last_modified_at`, `app_record_id`) are not part of the stored filters of a view.
 
-Three view-specific facts:
+Three facts apply to views only:
 
-- **References must resolve.** A view's filters are **persisted** (a record-filter query, by contrast, is evaluated once and discarded), so operands that name something invalid are rejected with a `400` rather than silently matching nothing: a `single_relation` / `multi_relation` filter naming a record that does not exist (`Record(s) with ID … referenced by filters do not exist.`), or a user-referencing filter (`single_user` / `multi_user` / `created_by` / `last_modified_by` / checklist `assignee`) naming a user outside your organization. Deactivated organization members are still valid operands.
-- **`include_active_user` ("@me")** resolves to the owner of the API key you authenticate with, so a view saved with it is dynamic per viewer — exactly as in the app:
+- **References must resolve.** Tape *stores* view filters, so an operand that names something invalid returns `400` instead of matching nothing. This applies to a `single_relation` or `multi_relation` filter that names a record that doesn't exist (`Record(s) with ID … referenced by filters do not exist.`), and to a user filter (`single_user`, `multi_user`, `created_by`, `last_modified_by`, checklist `assignee`) that names a user outside your organization. Deactivated organization members are still valid operands.
+- **`include_active_user` ("@me")** resolves to the owner of the credential you authenticate with. A view saved with it changes per viewer, as in the app:
 
   ```json
   {
@@ -380,7 +409,7 @@ Three view-specific facts:
   }
   ```
 
-- A relative-date or checklist filter uses the same operand keys as the record filter reference:
+- A relative date filter or a checklist filter uses the same operand keys as in the record filter reference:
 
   ```json
   {
@@ -394,42 +423,43 @@ Three view-specific facts:
 
 ## Field settings
 
-`fields` is a JSON object keyed by `field_id` (a string, because JSON object keys are strings) whose values are `{ "hidden": boolean, "width"?: number }`.
+`fields` is a JSON object keyed by `field_id`. The key is a string, because JSON object keys are strings. Each value is `{ "hidden": boolean, "width"?: number }`.
 
-**It applies to one layout at a time.** A view stores display settings separately for each of its three layouts, and `fields` always addresses the view's current layout (or, on a write that also changes `layout`, the new one). The other two layouts' settings are preserved untouched — switching a view from `table` to `list` and back restores the original column widths and visibility.
+**It applies to one layout at a time.** A view stores display settings separately for each layout. `fields` addresses the current layout, or the new one on a write that also changes `layout`. Switch from `table` to `list` and back, and the original column widths and visibility return.
 
-**`hidden` is required on every entry you write.** Even though it is optional in the response shape, the request requires it. The underlying default means _visible_ on `table` and _hidden_ on `list` / `board`, so an entry like `{ "55201": { "width": 200 } }` on a list view would silently hide that field. Requiring `hidden` makes visibility always explicit. (A `GET` → `PUT` round-trip never trips this, because the read emits `hidden` for every field.)
+**`hidden` is required on every entry you write**, though optional in the response. The default means _visible_ on `table` and _hidden_ on `list` and `board`, so an entry like `{ "55201": { "width": 200 } }` on a list view would silently hide that field. A `GET` → `PUT` round trip is safe, because the read returns `hidden` for every field.
 
-**`width` is meaningful only for `table`.** It is in pixels and must be between **100** and **1500**. On `list` and `board` it is never returned, and on write it is accepted and ignored rather than rejected.
+**`width` matters only for `table`.** It is in pixels and must be between 100 and 1500. On `list` and `board`, it is never returned. On write, it is accepted and ignored there, not rejected.
 
-Defaults for fields you do not configure — which is what a `GET` reports for them:
+Defaults for fields you don't configure, which is what a `GET` reports for them:
 
-| Layout          | A field with no stored setting is…                                             |
-| --------------- | ------------------------------------------------------------------------------ |
-| `table`         | **visible** (`hidden: false`) — every field                                    |
-| `list`, `board` | **visible** for the app's first field (its title field), hidden for all others |
+| Layout          | A field with no stored setting is…                                                    |
+| --------------- | ------------------------------------------------------------------------------------- |
+| `table`         | *visible* (`hidden: false`), every field                                            |
+| `list`, `board` | *visible* for the first field of the app (its title field), hidden for all others  |
 
-Every `field_id` you name must belong to the app the view is on; a foreign or unknown id is a `400`. Field order is not expressible through `fields` — the map is unordered, and stored ordering follows the app's own field order.
+Every `field_id` you name must belong to the app of the view, otherwise the response is `400`. You can't set the field order: it follows the field order of the app.
 
 ## Split by
 
-`split_by` is how a view groups its records into sections. This API exposes the **definition only** — the sections themselves, their record counts and any per-section totals are never returned.
+`split_by` defines how a view groups its records into sections. The API exposes only this definition, never the sections.
 
-| Key        | Type                                                             | Notes                                                          |
-| ---------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
-| `field_id` | number — **required**                                            | the field to split by; must belong to the view's app          |
-| `period`   | `day` \| `weekday` \| `week` \| `month` \| `year` \| null        | bucket granularity; only meaningful for date-valued fields    |
-| `sorting`  | `label_asc` \| `label_desc` \| `value_asc` \| `value_desc` \| null | section order                                                |
-| `limit`    | number **1–100**, or null                                        | maximum number of sections (capped at 100)                    |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `field_id` | number | The field to split by. **Required.** Must belong to the app of the view. | `55203` |
+| `period` | `day` \| `weekday` \| `week` \| `month` \| `year` \| null | Bucket size. Only meaningful for date fields. | `"month"` |
+| `sorting` | `label_asc` \| `label_desc` \| `value_asc` \| `value_desc` \| null | Section order. | `"label_asc"` |
+| `limit` | number 1–100, or null | Maximum number of sections (capped at 100). | `25` |
 
-A view can be split by a field of type `single_category`, `multi_category`, `status`, `single_user`, `multi_user`, `single_relation`, `multi_relation`, `single_date`, `range_date`, `created_on`, `last_modified_on` or `calculation`. Any other field type is a `400` (`Invalid split_by field: a field of type '…' cannot be split by`).
+You can split a view by a field of type `single_category`, `multi_category`, `status`, `single_user`, `multi_user`, `single_relation`, `multi_relation`, `single_date`, `range_date`, `created_on`, `last_modified_on` or `calculation`. Any other field type returns `400` (`Invalid split_by field: a field of type '…' cannot be split by`).
 
-- On update, `"split_by": null` **removes** the split-by; omitting the key preserves it.
-- `sorting` is auto-filled with `label_asc` for `single_category`, `multi_category` and `status` fields, so a `GET` can report a `sorting` you never sent.
+- On update, `"split_by": null` *removes* the split-by. Leaving out the key preserves it.
+- Tape fills in `sorting` with `label_asc` for `single_category`, `multi_category` and `status` fields, so a `GET` can report a `sorting` you never sent.
+- A `GET` can also report a `period` you never sent, for example `month` for a split by a relation field.
 
 ## Display configuration
 
-Beyond filters and per-field settings, a view stores a few display options. `show_progress` applies to any layout; `table` and `board` are layout-specific and are reported as `null` for a view not currently in that layout (like `fields`, they address the **effective** layout only). On write each config is **replaced wholesale** — there is no partial merge — and `table` / `board` are accepted only on a matching-layout view.
+`show_progress` applies to every layout. `table` and `board` are layout-specific: a view in another layout reports them as `null`. Each config is *replaced in full* on write.
 
 ### `show_progress`
 
@@ -438,40 +468,40 @@ How the view renders progress bars:
 | Value      | Meaning                                    |
 | ---------- | ------------------------------------------ |
 | `none`     | No progress bars (the default on create).  |
-| `view`     | A single progress bar for the whole view.  |
-| `split_by` | A progress bar per split-by section.       |
+| `view`     | One progress bar for the whole view.       |
+| `split_by` | One progress bar per split-by section.     |
 | `all`      | Both.                                      |
 
 ### `table` (table views only)
 
-Present on read for a `table` view (`null` otherwise), and accepted on create/update **only** when the effective layout is `table` — otherwise `400 'table' settings are only valid on a 'table' view.` Both fields are required when the object is sent.
+Accepted on create and update *only* when the effective layout is `table`, otherwise the response is `400 'table' settings are only valid on a 'table' view.` When you send the object, both fields are required.
 
-| Key          | Type                                                | Notes                                                   |
-| ------------ | --------------------------------------------------- | ------------------------------------------------------- |
-| `row_height` | `"short"` \| `"medium"` \| `"tall"` \| `"extra_tall"` | Row height.                                             |
-| `wrap_cells` | boolean                                             | Whether cell content wraps onto multiple lines instead of being truncated. |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `row_height` | `"short"` \| `"medium"` \| `"tall"` \| `"extra_tall"` | Row height. | `"medium"` |
+| `wrap_cells` | boolean | Wrap cell content onto several lines instead of cutting it off. | `true` |
 
-```json title="➡️      table config"
+```json title="table config"
 { "row_height": "medium", "wrap_cells": true }
 ```
 
 ### `board` (board views only)
 
-Present on read for a `board` view (`null` otherwise), and accepted on create/update **only** when the effective layout is `board` — otherwise `400 'board' settings are only valid on a 'board' view.` All seven fields are required when the object is sent.
+Accepted on create and update *only* when the effective layout is `board`, otherwise the response is `400 'board' settings are only valid on a 'board' view.` When you send the object, all seven fields are required.
 
-| Key                     | Type            | Notes                                                                                                       |
-| ----------------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
-| `group_by_field_id`     | number \| null  | The field the board groups into lanes by. Must be a `status` or `single_category` field of the app, or `null` for an ungrouped board. |
-| `card_preview_field_id` | number \| null  | The field rendered as each card's preview image. Must be a `single_attachment`, `multi_attachment` or `multi_image` field of the app, or `null` for no preview. |
-| `card_size`             | `"small"` \| `"medium"` \| `"large"` | Card size.                                                                             |
-| `large_text`            | boolean         | Render card text at the larger size.                                                                        |
-| `hide_empty_columns`    | boolean         | Hide lanes that contain no records.                                                                         |
-| `color_columns`         | boolean         | Tint each lane with its group-by option's color.                                                           |
-| `fit_preview_image`     | boolean         | Scale the preview image to fill the card rather than fit inside it.                                          |
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `group_by_field_id` | number \| null | The field the board groups into lanes by. Must be a `status` or `single_category` field of the app, or `null` for a board without groups. | `55203` |
+| `card_preview_field_id` | number \| null | The field shown as the preview image of each card. Must be a `single_attachment`, `multi_attachment` or `multi_image` field of the app, or `null` for no preview. | `55210` |
+| `card_size` | `"small"` \| `"medium"` \| `"large"` | Card size. | `"medium"` |
+| `large_text` | boolean | Show card text in the larger size. | `false` |
+| `hide_empty_columns` | boolean | Hide lanes without records. | `true` |
+| `color_columns` | boolean | Tint each lane with the color of its group-by option. | `true` |
+| `fit_preview_image` | boolean | Scale the preview image to fill the card instead of fitting inside it. | `false` |
 
-A `group_by_field_id` of the wrong type is `400 Invalid board group_by field: a field of type '…' cannot group a board`; a wrong-type `card_preview_field_id` is `400 Invalid board card_preview field: a field of type '…' cannot be a card preview`.
+A `group_by_field_id` of the wrong type returns `400 Invalid board group_by field: a field of type '…' cannot group a board`. A `card_preview_field_id` of the wrong type returns `400 Invalid board card_preview field: a field of type '…' cannot be a card preview`.
 
-```json title="➡️      board config"
+```json title="board config"
 {
   "group_by_field_id": 55203,
   "card_preview_field_id": 55210,
@@ -483,65 +513,79 @@ A `group_by_field_id` of the wrong type is `400 Invalid board group_by field: a 
 }
 ```
 
-A board's **lane customization** and a table's **column footer statistics** are not exposed by this API — they are preserved across updates but cannot be read or set here.
-
 ## Errors
 
-All errors use the API's standard [error envelope](/docs/api/errors).
+All errors use the standard [error envelope](/docs/api/errors) of the API.
 
-**`404 Not Found`.** Anything the caller cannot see is reported as _not found_, with one message shape regardless of cause: the view id does not exist; the view was deleted; the view is private to another user; the caller has no view access to the app; or (on create) the app id does not exist or is not visible to the caller. This is deliberate — a `403` would confirm that an id exists, leaking the existence of other users' private views. Treat `404` as "not found _or_ not yours", not as "the id is wrong".
+- Anything you can't see returns `404`, with one message shape whatever the cause: the view ID doesn't exist, the view was deleted, the view is private to another user, you have no view access to the app, or (on create) the app ID doesn't exist or isn't visible to you. A `403` would confirm that an ID exists, so read `404` as "not found _or_ not yours".
+- A write to a view or app you can see, but without *share access*, returns `403`.
+- A request without a credential, with an invalid one or with an automation API key returns `401`. See [Authentication and permissions](#authentication-and-permissions).
+- A used-up credit budget returns `429`. See [Rate limit credits](#rate-limit-credits).
 
-**`403 Forbidden`** means the caller **can** see the view (or the app) but lacks **share access** for the write they attempted — "you can see it, but you may not change it".
-
-**`401 Unauthorized`** — no key, an invalid key, or an automation API key. Views require a user API key.
-
-**`400 Bad Request`** — the request body is not acceptable. Common causes:
+A request body that isn't acceptable returns `400`. Common causes:
 
 - an unknown or misspelled key anywhere in the body (both request schemas are strict);
 - `name` longer than 200 characters, or (on create) a missing `name` or `layout`;
-- `layout` not one of `table` / `list` / `board`;
-- more than 100 `filters`, or a filter missing `type` or using a `match_type` the field type does not support;
+- `layout` not one of `table`, `list` or `board`;
+- more than 100 `filters`, or a filter without `type` or with a `match_type` the field type doesn't support;
 - a `fields` key that is not a plain non-negative integer, a `fields` entry without `hidden`, or a `width` outside 100–1500;
-- `split_by` without `field_id`, a `limit` outside **1–100**, or a split-by field whose type cannot be split by;
-- an unknown `period`, `sorting`, `field_type`, `match_type`, `show_progress`, `row_height` or `card_size` value, or a `table` / `board` config missing a required field;
-- a `field_id` (in `filters`, `sort_by`, `fields`, `split_by`, or a board `group_by_field_id` / `card_preview_field_id`) that belongs to a different app;
-- a `table` config on a non-`table` view, or a `board` config on a non-`board` view;
-- a board `group_by_field_id` that is not a `status` / `single_category` field, or a `card_preview_field_id` that is not a `single_attachment` / `multi_attachment` / `multi_image` field;
-- a relation filter that references a record which does not exist, or a user-referencing filter that references a user outside your organization;
+- `split_by` without `field_id`, a `limit` outside 1–100, or a split-by field whose type can't be split by;
+- an unknown `period`, `sorting`, `field_type`, `match_type`, `show_progress`, `row_height` or `card_size` value, or a `table` or `board` config without a required field;
+- a `field_id` (in `filters`, `sort_by`, `fields`, `split_by`, or a board `group_by_field_id` or `card_preview_field_id`) that belongs to a different app;
+- a `table` config on a view that is not a `table` view, or a `board` config on a view that is not a `board` view;
+- a board `group_by_field_id` that is not a `status` or `single_category` field, or a `card_preview_field_id` that is not a `single_attachment`, `multi_attachment` or `multi_image` field;
+- a relation filter that names a record that doesn't exist, or a user filter that names a user outside your organization;
 - `null` for any key on create;
-- the app already holds the maximum of **2000** views;
-- deleting the app's current **default** view (`Cannot delete default BlabView`) — promote another view to default first.
-
-**`429 Too Many Requests`** — the [credit budget](/docs/api/request-limits) is exhausted.
+- the app already holds the maximum of 2000 views;
+- deleting the current *default* view of the app (`The default view of an app cannot be deleted.`).
 
 ## Known limitations
 
-Each of these is a deliberate v1 boundary:
+Each of these is a deliberate boundary of version 1:
 
-1. **Checklist sort sub-mode is not exposed.** A view sorted by a checklist field also stores _which_ aspect of the checklist it sorts on (status, title, assignee or due date). This API neither reports nor accepts it, so a `GET` → `PUT` of a checklist-sorted view resets that sub-mode. The `sort_property` key is reserved for a future release and is accepted-and-ignored today. Avoid round-tripping checklist-sorted views until it ships.
-2. **Public views only.** Every view this API creates is public. Your _own_ private views are readable and writable by id and report `"private": true`; other users' private views are `404`; private views never appear in the list endpoint.
-3. **No gallery layout.** `layout` is `table`, `list` or `board`. The legacy gallery layout has no public value and a view still using it cannot be read through this API.
-4. **Board lane customization and column statistics are preserved but not exposed.** A board's custom lane ordering and a table's column footer statistics survive every update untouched, but there is no way to read or set them here. (The board's grouping field, card-preview field and display options, the table's row height and cell wrap, and the `show_progress` mode **are** editable — see [Display configuration](#display-configuration).)
-5. **Split-by drill-down filters are dropped by any update.** When a user clicks into a section of a split view, the app writes temporary filters derived from the split-by. Those are never reported by `GET`, and any `PUT` removes them — the app regenerates them from the split-by, so nothing a user configured is lost.
+1. **The checklist sort mode is not exposed.** A view sorted by a checklist field also stores _which_ part it sorts by (status, title, assignee or due date), and a `GET` → `PUT` resets that mode. The `sort_property` key is reserved for a future release and is accepted and ignored today. Don't round-trip views sorted by a checklist until it ships.
+2. **Public views only.** Every view this API creates is public. Your _own_ private views are readable and writable by ID and report `"private": true`. Private views of other users return `404`, and no private view appears in the list endpoint.
+3. **No gallery layout.** `layout` is `table`, `list` or `board`. The legacy gallery layout has no public value, and you can't read a view that still uses it through this API.
+4. **Board lane customization and column statistics are preserved but not exposed.** Every update keeps the custom lane order of a board and the column footer statistics of a table, but you can't read or set them here. The other display options are in [Display configuration](#display-configuration).
+5. **Any update drops split-by drill-down filters.** When a user clicks into a section of a split view, the app writes temporary filters derived from the split-by. `GET` never reports them, and any `PUT` removes them. The app creates them again from the split-by, so nothing a user set up is lost.
 6. **No timestamps.** Views have no creation or modification metadata.
-7. **No ordering control.** The list endpoint returns views in no guaranteed order, and there is no endpoint to reorder an app's views.
+7. **No order control.** The list endpoint returns views in no guaranteed order. No endpoint changes the order of the views of an app.
 
 ## Copy a view to another app
 
-Recreating a view on a different app — the core migration use case — is a read-then-create sequence. Views reference apps, fields, options, users and records by **id**, and ids are never portable across organizations, so you need a mapping from source ids to target ids for all of them first.
+To recreate a view on another app, read it and then create it. Views reference apps, fields, options, users and records by ID. IDs don't carry over between organizations, so first map every source ID to its target ID.
 
-1. [List the source app's views](/docs/api/resource/app#retrieve-views-for-an-app): `GET /v1/app/{source_app_id}/views`.
-2. For each one, [retrieve the full definition](#retrieve-a-single-view): `GET /v1/view/{view_id}`.
-3. Rewrite the body against the target app:
-   - `sort_by` → the target field id (or drop it);
-   - every `filters[].field_id` → the target field id, **and every operand in `values`** — option ids, user ids and record ids all need remapping;
-   - the keys of `fields` → target field ids;
-   - `split_by.field_id` → the target field id;
-   - `board.group_by_field_id` and `board.card_preview_field_id` → the target field ids;
-   - drop `id`, `view_id`, `app_id`, `is_default` and `private` (a `PUT` tolerates them, but `POST` rejects them).
-4. [Create the view](#create-a-view) on the target app: `POST /v1/view/app/{target_app_id}` with `name`, `layout` and the rewritten fields (including `show_progress` and, for a `table` / `board` view, its `table` / `board` config).
-5. If the source view was the app's default (`is_default: true`), [promote the new view](#set-the-default-view) — it cannot be set in the create body.
+1. List the views of the source app: `GET /v1/app/{source_app_id}/views`.
+2. For each view, [retrieve the full definition](#retrieve-a-single-view): `GET /v1/view/{view_id}`.
+3. Rewrite the body for the target app:
+   - `sort_by` → the target field ID, or drop it;
+   - every `filters[].field_id` → the target field ID, *and every operand in `values`*: option IDs, user IDs and record IDs all need a new mapping;
+   - the keys of `fields` → target field IDs;
+   - `split_by.field_id` → the target field ID;
+   - `board.group_by_field_id` and `board.card_preview_field_id` → the target field IDs;
+   - drop `id`, `view_id`, `app_id`, `is_default` and `private`. A `PUT` tolerates them, but `POST` rejects them;
+   - drop every key whose value is `null`, for example `sort_by`, `split_by` or `board` of a table view. `POST` rejects `null` for any key;
+   - but if `name` is `null`, send a name or `""` instead, because `name` is required on create.
+4. [Create the view](#create-a-view) on the target app: `POST /v1/view/app/{target_app_id}` with `name`, `layout` and the rewritten fields, including `show_progress` and, for a `table` or `board` view, its `table` or `board` config.
+5. If the source view was the default view of its app (`is_default: true`), [promote the new view](#set-the-default-view). You can't set this in the create body.
 
-Two things to plan for: the target app must be one where you hold **share access**, not just edit access; and each app allows at most **2000** views, which a repeated or retried bulk migration can reach.
+You need *share access* to the target app, not only edit access. Each app allows at most 2000 views, which a repeated or retried bulk migration can reach.
 
-What does **not** carry over, and must be replayed by hand: the default-view flag (replay with the promote endpoint), private views (invisible in the source listing), the checklist sort sub-mode, column footer statistics and board lane customization, gallery-layout views (not readable), and field _order_ within a layout (inherited from the target app's own field order).
+These don't carry over. Set them up again by hand:
+
+- the default flag (use the promote endpoint);
+- private views (not visible in the source list);
+- the checklist sort mode;
+- column footer statistics and board lane customization;
+- views in the gallery layout (not readable);
+- the field _order_ within a layout (taken from the field order of the target app).
+
+## Next steps
+
+- [Record](/docs/api/resource/record#retrieve-records-for-a-view): read the records a view shows.
+- [App](/docs/api/resource/app#retrieve-views-for-an-app): list the public views of an app.
+- [Filter](/docs/api/resource/filter): every filter type you can store in a view.
+- [Authentication](/docs/api/authentication): pick the right credential for these endpoints.
+- [Capabilities](/docs/api/capabilities): what `apps:read` and `apps:edit` allow.
+- [Request limits](/docs/api/request-limits): how credits and rate limits work.
+- [Errors](/docs/api/errors): the error envelope and all error codes.

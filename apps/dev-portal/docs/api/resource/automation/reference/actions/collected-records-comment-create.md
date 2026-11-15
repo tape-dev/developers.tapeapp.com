@@ -2,57 +2,69 @@
 id: collected-records-comment-create
 title: collected_records_comment_create
 sidebar_label: collected_records_comment_create
-description: Config reference for the Tape automation collected_records_comment_create action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation collected_records_comment_create action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to add a comment to every record in a collection that an earlier action built.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Comment on collected records** — adds a comment to each record in a collection. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Add a comment to all collected records** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `comment_content` | [template value](/docs/api/resource/automation/dynamic-values) | **yes** | Comment body. |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | Reference to a record collection variable produced by an earlier action. Omitted → the collection bound by the enclosing for-loop. |
-| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | no | User the comment is attributed to — a literal user id or a variable reference. Omitted → the automation itself. |
-| `trigger_webhooks` | boolean | no | Whether the mutation fires outbound webhooks. |
-| `trigger_other_flows` | boolean | no | Whether the mutation triggers other automations. |
-| `silent` | boolean | no | Whether the mutation is silent (no notifications). |
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action asks every collected applicant to pick an interview slot:
 
 ```json
 {
   "type": "collected_records_comment_create",
   "config": {
     "record_collection": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 123 },
-    "comment_content": ["Reviewed by automation on record ", { "kind": "variable", "source": "meta", "meta_type": "app_record_id" }],
+    "comment_content": ["Interview slots for next week are open. Pick one by Friday."],
     "silent": true
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `comment_content` is the only required member; every other member is optional and falls back to its internal default.
-- This is a **consumer** of a record collection: `record_collection` references a collection variable produced by an earlier action. When omitted, the action targets the collection bound by its enclosing for-loop, so it must run inside one.
-- With `author_id` omitted, the comment is attributed to the automation itself.
-- `trigger_webhooks`, `trigger_other_flows`, and `silent` are the shared mutation-control members; omitted = the internal default.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `comment_content` | [template value](/docs/api/resource/automation/dynamic-values) | **Required.** The comment text. | `["Contract signed."]` |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection to comment on, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 123 }` |
+| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | User Tape attributes the comment to: a user ID, or a reference to the creator, the last modifier or a user field. Left out, the automation itself is the author. | `812` |
+| `trigger_webhooks` | boolean | Whether the comment fires outbound webhooks. Default `false`. | `false` |
+| `trigger_other_flows` | boolean | Whether the comment starts other automations. Default `false`. | `false` |
+| `silent` | boolean | Whether Tape sends no notifications for the comment. Default `false`. | `true` |
 
-## See also
+`author_id`, `trigger_webhooks`, `trigger_other_flows` and `silent` are shared by every action that changes records. In the action menu of the automation editor, they are **Author**, **Trigger webhooks**, **Trigger automations** and **Silent**. To find a user ID for `author_id`, see [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users).
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Record collections family](/docs/api/resource/automation/reference/actions#record-collections) — actions that produce and consume collections
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+## General behavior {#validation--behavior}
+
+- `comment_content` is the only key the schema requires. Without `record_collection`, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`. Tape resolves the reference to the nearest earlier action that creates a collection for the same `app_id`.
+- Tape adds the comment to each record in the collection. A field or meta reference with `collection: true` in `comment_content` reads that record's value.
+- With an empty `comment_content`, Tape skips the action when the automation runs.
+- If the references in `comment_content` resolve to empty text when the automation runs, the action fails, and so does the run.
+- Mentions in `comment_content` can only point to members of the workspace that the collection's database app belongs to.
+- Without `author_id`, the automation itself is the author. A user ID that Tape can't find gives the broken reason `action_user_missing`.
+- Tape returns `silent` on every read. It's `false` when you left it out.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [current_record_comment_create](/docs/api/resource/automation/reference/actions/current-record-comment-create): comment on the current record only.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build template values and references.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

@@ -5,58 +5,70 @@ sidebar_label: Triggers
 description: The nine Tape automation trigger types and how to configure them.
 ---
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
+import TriggerPickerPng from '@site/static/docs/api/resource/automation/reference/triggers/trigger-picker.png';
 
-A trigger decides **when** an automation runs. It is a flat object `{ type, config }`; an automation has zero or one.
-The `config` keys are per the trigger type's `config_schema`, which — with the full, always-current catalog — is
-served by [`GET /v1/automation/meta/trigger`](/docs/api/resource/automation/discovery). Build against that rather than
-hard-coding.
+Use one of the nine trigger types to decide *when* an automation runs.
+
+A trigger is a flat object `{ type, config }`, and an automation has zero or one. [`GET /v1/automation/meta/trigger`](/docs/api/resource/automation/discovery) returns the full, current catalog with the `config_schema` of each type. Build against it instead of hard-coding.
 
 ## Trigger types
 
-| `type` | Fires when… |
-| --- | --- |
-| `record_created` | A record is created in the app. |
-| `record_updated` | A record is updated (optionally only when specific fields change). |
-| `record_deleted` | A record is deleted. |
-| `record_comment_or_reply_created` | A comment or reply is added to a record. |
-| `date_field_arrived` | A date field's value arrives, relative to now. |
-| `automation_called` | Another automation calls this one. |
-| `periodic` | On a schedule. |
-| `webhook_received` | An inbound webhook is received. |
-| `weblink_clicked` | A generated weblink is clicked. |
+`Label` is the name that `meta/trigger` returns. **Name in Tape** is the name in the automation editor.
+
+| `type`                            | Label                    | Name in Tape         | Fires when …                                                      |
+| --------------------------------- | ------------------------ | -------------------- | ----------------------------------------------------------------- |
+| `record_created`                  | Record created           | **Record created**   | A record is created in the app.                                   |
+| `record_updated`                  | Record updated           | **Record updated**   | A record is updated, optionally only when specific fields change. |
+| `record_deleted`                  | Record deleted           | **Record deleted**   | A record is deleted.                                              |
+| `record_comment_or_reply_created` | Comment or reply created | **Comment added**    | A comment or reply is added to a record.                          |
+| `date_field_arrived`              | Date arrived             | **Date arrives**     | A date from a field is reached, optionally with an offset.        |
+| `automation_called`               | Automation called        | **Automation calls** | Another automation calls this one.                                |
+| `periodic`                        | Periodic                 | **On schedule**      | A recurring schedule is due.                                      |
+| `webhook_received`                | Webhook received         | **Webhook received** | An inbound webhook comes in.                                      |
+| `weblink_clicked`                 | Weblink clicked          | **Web link clicked** | Someone opens a generated weblink.                                |
+
+<MediaFrame><img src={TriggerPickerPng} alt="Trigger picker in the automation editor with the list of all nine triggers" /></MediaFrame>
 
 ## Config
 
-Each type has its own `config` shape — see the `config_schema` from
-[`GET /v1/automation/meta/trigger`](/docs/api/resource/automation/discovery). Values may be
-[dynamic](/docs/api/resource/automation/dynamic-values) where the type allows it.
+This trigger fires only when the field with ID `512` changes:
 
-:::note Output-only config fields
-Some config fields are **server-assigned and read-only** — for example a `webhook_received` trigger's `webhook_url`.
-They appear on read but are **rejected on input**. In the `config_schema` returned by
-[`GET /v1/automation/meta/trigger`](/docs/api/resource/automation/discovery), each such field is now flagged
-`"readOnly": true` (standard JSON Schema), so you can strip read-only fields programmatically before submitting a
-config on write. The input `config_schema` is the read schema minus these fields.
+```json title="Trigger"
+{ "type": "record_updated", "config": { "trigger_on_changes_field_ids": [512] } }
+```
+
+Each type has its own `config` shape, described by its `config_schema`. Values can be [dynamic](/docs/api/resource/automation/dynamic-values) where the type allows it.
+
+:::note Which field changes fire `record_updated`?
+`trigger_on_changes_field_ids` has three states:
+
+- `null` or left out: fires on a change to *any* field.
+- A list with field IDs: fires only on changes to those fields.
+- An *empty `[]`: never fires*. `validate` reports `trigger_updated_fields_empty`.
 :::
 
-:::note Companion `_enabled` flags
-Some config values are gated by a sibling boolean `<field>_enabled` — the value takes effect only when its `_enabled`
-flag is `true`. The `automation_called` / `weblink_clicked` triggers pair `triggering_app_ids` with
-`triggering_app_ids_enabled` and `custom_variable_defs` with `custom_variable_defs_enabled`. A minimal `{}` config is
-accepted — all members are optional, and `app_id` is **not** a config field (it is stamped from the automation's own
-app); send the paired `_enabled` flag whenever you set its value.
+`app_id` is *not* a config field. Tape takes the app from the automation itself and ignores a legacy `config.app_id`. See [Create an automation](/docs/api/resource/automation/manage#create-an-automation).
+
+:::note Why does Tape reject a config field it returned?
+Some config fields are *set by Tape and read-only*, for example the `webhook_url` of a `webhook_received` trigger. They appear when you read a config, and Tape *rejects them on write*. The `config_schema` marks them with `"readOnly": true` (standard JSON Schema), so remove them before you send a config.
 :::
 
-:::note `record_updated`: which fields fire it
-The `record_updated` trigger's `trigger_on_changes_field_ids` is tri-state: `null` or omitted fires on **any** field
-change; a non-empty list restricts firing to those fields; an **empty `[]` never fires** (the definition validates as
-broken).
+:::note What are the `_enabled` flags for?
+Some config values only take effect when a boolean next to them, `<field>_enabled`, is `true`. The `automation_called` and `weblink_clicked` triggers pair `triggering_app_ids` with `triggering_app_ids_enabled`, and `custom_variable_defs` with `custom_variable_defs_enabled`.
+
+A minimal `{}` config is accepted, because all members are optional. Send the paired `_enabled` flag whenever you set its value.
 :::
 
-To set or replace a trigger, use [`PUT /v1/automation/{automation_id}/trigger`](/docs/api/resource/automation/manage)
-(the whole body is the trigger), or include `trigger` in a [create or update](/docs/api/resource/automation/manage).
-To remove one, send `trigger: null` on update.
+## Set or remove a trigger
+
+- To set or replace a trigger, use [`PUT /v1/automation/{automation_id}/trigger`](/docs/api/resource/automation/manage), where the whole body is the trigger. Or include `trigger` when you [create or update](/docs/api/resource/automation/manage) an automation.
+- To remove a trigger, send `trigger: null` in an update.
+
+## Next steps
+
+- [Discovery](/docs/api/resource/automation/discovery): read the `config_schema` of each trigger.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): the outputs a trigger hands to the run.
+- [Run & simulate](/docs/api/resource/automation/execution): the run body each trigger expects.
+- [Advanced / sandbox](/docs/api/resource/automation/advanced): fire `automation_called` and `weblink_clicked`.
+- [Actions](/docs/api/resource/automation/reference/actions#trigger-context): which actions need which trigger.

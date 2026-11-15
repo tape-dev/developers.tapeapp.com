@@ -1,92 +1,185 @@
 ---
 id: getting-started
-title: Getting Started
+title: Quickstart
+description: Retrieve a record from your Tape organization with a personal access token and a single API request.
 ---
 
 import UserLoginInfo from '@site/src/components/user-login/user-login.component';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTokenPng from '@site/static/docs/guide/api/getting-started/quickstart-token.png';
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
 
 <UserLoginInfo></UserLoginInfo>
 
-If you're new to the Tape API, you've come to the right place. In this guide you'll learn how to use the Tape API by interacting with a record.
+Retrieve your first record with a personal access token and a single API request.
 
-## Authentication
+<a id="the-basics"></a>
 
-The easiest way to authenticate with the Developer API is to use your personal user API key. User API keys have the prefix `user_key_`. If you are not already a Tape user, the first step is to sign up and create an account [here](https://tapeapp.com/signup).
+## Before you begin
 
-> Note that your API key carries the same privileges as your user account, so be sure to keep it secret! However, if your API key gets leaked, you can always deactivate it and generate a new one inside your user settings.
+You need a Tape account and one record you can view. No account yet? [Sign up for Tape](https://tapeapp.com/signup).
 
-Once you move from experimenting to building something real, use a [personal access token](/docs/api/personal-access-tokens) instead. A token can be limited to only the [capabilities](/docs/api/capabilities) your integration actually needs, restricted to particular workspaces and apps, and revoked on its own. User API keys are deprecated for new integrations.
+The API sends and receives JSON over HTTPS. Send every request to `https://api.tapeapp.com`.
 
-## The basics
+Tape keeps data as *records* in *database apps*. Each record has *fields*, such as a name or a status. Apps live in *workspaces*, and workspaces in your *organization*.
 
-The world runs on JSON over HTTP (or HTTPS hopefully). The Tape API is no exception, so if you know how to send and receive JSON data via HTTPS, you are all set.
-The API is RESTful for the most part, meaning that you can use the HTTP verbs `GET`, `POST`, `PUT`, and `DELETE` to interact with resources like records, apps and workspaces.
-The base URL to send all API requests is `https://api.tapeapp.com`.
+:::tip New to APIs?
+Follow the [Tape API guide, first steps](https://community.tapeapp.com/t/tape-api-guide-first-steps/2522) in the Tape Community. It walks you through three requests in Postman, without writing code.
+:::
 
-## Retrieve your first record
+<a id="authentication"></a>
 
-Records are the place where work gets done inside every Tape organization. The endpoint for retrieving a record is `/v1/record/{record_id}`. Let's go ahead and retrieve a record:
+## Step 1: Create a personal access token
+
+1. Select your profile picture, then select **Preferences**.
+2. In the settings window, select **Developer** (under **Features**).
+3. Under **Personal access tokens (PATs)**, select **New token**.
+4. Name the token, for example "Quickstart".
+5. Under **Content access**, clear **All**, then select the workspace that holds your record.
+6. Under **Capabilities**, clear **All**, then select **Read records**. A capability is one thing the token may do.
+7. Select **Create token** and copy the token.
+
+<MediaFrame><img src={QuickstartTokenPng} alt="New personal access token dialog named Quickstart with one workspace and the capability Read records" /></MediaFrame>
+
+:::caution Copy the token now
+Tape shows the token only once. Store it like a password.
+:::
+
+Save the token as an environment variable:
+
+```shell
+export TAPE_TOKEN="tape_pat_..."
+```
+
+:::info Lost your token?
+Revoke it under **Developer** and create a new one.
+:::
+
+<a id="retrieve-your-first-record"></a>
+
+## Step 2: Retrieve a record
+
+Make a `GET` request to `/v1/record/{record_id}`. Send the token as a bearer token in the `Authorization` header.
+
+Signed in to Tape on this site? The examples already contain the ID of one of your records. Otherwise, use the ID of a record you can view: open the record in Tape, select **•••**, then select **Developer** and copy the **Record ID**.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='Get your record "#RECORD_TITLE"'>
+<ContextCodeBlock language="shell" title='Retrieve "#RECORD_TITLE"'>
 {`curl #BASE_URL/v1/record/#RECORD_ID \\
-  -u #USER_API_KEY:
+  -H "Authorization: Bearer $TAPE_TOKEN"
 `}
 </ContextCodeBlock>
 </TabItem>
 
-<TabItem value="js" label="Node.js">
-<ContextCodeBlock language="javascript" title='Get your record "#RECORD_TITLE"'>
-{`let req = https.get(
-  "#BASE_URL/v1/record/#RECORD_ID",
-  {
-    method: "get",
-    headers: {
-      Authorization: "Bearer #USER_API_KEY",
-    },
-  },
-  (res) => {
-    res.on("data", (data) => {
-      console.log(JSON.stringify(JSON.parse(data.toString()), null, 2));
-    });
-  }
-);`}
-</ContextCodeBlock>
-</TabItem>
-
-<TabItem value="php" label="PHP">
-<ContextCodeBlock language="php" title='Get your record "#RECORD_TITLE"'>
-{`<?php
-$opts = array(
-  'http'=>array(
-    'method'=>"GET",
-    'header'=>"Authorization: Bearer #USER_API_KEY"
-  )
-);
+<TabItem value="js" label="JavaScript">
+<ContextCodeBlock language="javascript" title='Retrieve "#RECORD_TITLE"'>
+{`const response = await fetch("#BASE_URL/v1/record/#RECORD_ID", {
+  headers: { Authorization: \`Bearer \${process.env.TAPE_TOKEN}\` },
+});
 \n
-$context = stream_context_create($opts);
-$data = file_get_contents('#BASE_URL/v1/record/20', false, $context);
-$responseContent = json_decode($data, true);
-echo json_encode($responseContent, JSON_PRETTY_PRINT);
-?>`}
+console.log(JSON.stringify(await response.json(), null, 2));`}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="python" label="Python">
-<ContextCodeBlock language="python" title='Get your record "#RECORD_TITLE"'>
-{`
+<ContextCodeBlock language="python" title='Retrieve "#RECORD_TITLE"'>
+{`import json
+import os
 import requests
-import json
 \n
-req = requests.get('#BASE_URL/v1/record/#RECORD_ID', auth=('#USER_API_KEY', ''))
-print(json.dumps(req.json(), indent=2))
-`}
+response = requests.get(
+    "#BASE_URL/v1/record/#RECORD_ID",
+    headers={"Authorization": f"Bearer {os.environ['TAPE_TOKEN']}"},
+)
+print(json.dumps(response.json(), indent=2))`}
+</ContextCodeBlock>
+</TabItem>
+
+<TabItem value="php" label="PHP">
+<ContextCodeBlock language="php" title='Retrieve "#RECORD_TITLE"'>
+{`<?php
+$context = stream_context_create([
+  'http' => [
+    'method' => 'GET',
+    'header' => 'Authorization: Bearer ' . getenv('TAPE_TOKEN'),
+  ],
+]);
+\n
+$data = file_get_contents('#BASE_URL/v1/record/#RECORD_ID', false, $context);
+echo json_encode(json_decode($data, true), JSON_PRETTY_PRINT);`}
 </ContextCodeBlock>
 </TabItem>
 </Tabs>
 
-That's it, you just got your first response from the Tape API :tada: <br /> Explore all you can do with records [here](/docs/api/resource/record).
+The API returns the record as JSON. Your response has the ID, title and fields of your record. This example shows a contact record:
+
+```json title="Response"
+{
+  "record_id": 1,
+  "app_id": 1,
+  "title": "Clara Weber",
+  "created_on": "2022-03-01 12:00:00",
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "full_name",
+      "label": "Full Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [
+        {
+          "value": "Clara Weber"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Key fields**
+
+- `record_id`: the ID of the record.
+- `app_id`: the ID of the record's database app. You need it to create records there.
+- `title`: the record title, as shown in Tape.
+- `fields`: the fields of the record, one entry per field.
+- `field_id` and `external_id`: the field's ID and its slug, a readable ID such as `full_name`. Use either to write values.
+- `values`: the field values. Their shape depends on the field type.
+
+:::info Getting a 400 or 401 error?
+Check that `TAPE_TOKEN` holds the whole token, prefix included. See [Authentication errors](/docs/api/authentication#authentication-errors).
+:::
+
+:::info Getting a 403 error?
+Your token is missing the capability **Read records**. Create a new token that has it.
+:::
+
+:::info Getting a 404 error?
+Check the record ID, then check that your token's content access includes the record's workspace.
+:::
+
+## Build on your first request
+
+Pick your next task. Each page has a complete request and response.
+
+| Task | Page | Capabilities the token needs |
+| --- | --- | --- |
+| Create a record | [Create a record](/docs/api/resource/record#create-a-record) | **Edit records**, plus **Read records** to read it back |
+| Receive a webhook | [Working with webhooks](/docs/guide/api/working-with-webhooks) | **Manage webhooks** and **Read records** |
+| Run an automation | [Run an automation](/docs/api/resource/automation/execution#run-an-automation) | **Run automations**, plus **Read automations** to find its ID |
+| Connect an AI client | [Connect to Tape MCP](/docs/mcp/connect) | None. You sign in with your Tape account |
+
+You can't add capabilities to an existing token. Create a new token for the task. Webhooks and automation runs also need the **Admin** role in the app's workspace.
+
+## Next steps
+
+- [Record](/docs/api/resource/record): create, update, delete and filter records. [Pagination](/docs/api/pagination) pages through long lists.
+- [Coming from the Podio API](/docs/guide/api/coming-from-podio): map items, spaces and hooks to Tape.
+- [Field value](/docs/api/resource/field-value/overview): the value format of every field type.
+- [Personal access tokens](/docs/api/personal-access-tokens): limit a token to the apps it needs.
+- [Capabilities](/docs/api/capabilities): pick the capabilities for your integration.
+- [Authentication](/docs/api/authentication): compare personal access tokens, user API keys and OAuth.
+- [Errors](/docs/api/errors): handle `401`, `403` and `429` responses.
+- [Automations](/docs/automations/introduction): run your own JavaScript inside Tape.

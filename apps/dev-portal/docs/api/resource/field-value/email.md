@@ -1,6 +1,6 @@
 ---
 id: email
-title: Email Field Value
+title: Email field value
 sidebar_label: Email
 ---
 
@@ -9,44 +9,89 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-An email field value consists of its `value` property, which holds one or multiple email address entries. An entry contains the email address itself, plus its type, e.g. `work` or `home`. Currently the following values are allowed as type: `work`, `home` and `other`. If no type is provided, email address entries always default to `work`.
+Use an email field value to read and write the email addresses of a record.
+
+The value of an [email field](/docs/api/resource/field/email) is a list of email addresses in `values`. Each email address has an `id`, the address in `value` and a type label in `type`.
+
+```json title="Email field value object"
+{
+  "field_id": 2,
+  "external_id": "email",
+  "label": "Email",
+  "type": "email",
+  "field_type": "multi_email",
+  "values": [
+    {
+      "id": 100,
+      "value": "juliet@acme.com",
+      "type": "work",
+      "created_at": "2026-11-11 10:15:00",
+      "created_at_utc": "2026-11-11 09:15:00",
+      "last_modified_at": "2026-11-11 10:15:00",
+      "last_modified_at_utc": "2026-11-11 09:15:00",
+      "created_by_user_id": 1,
+      "created_by_workflow_def_id": null,
+      "created_by_share_session_id": null,
+      "last_modified_by_user_id": 1,
+      "last_modified_by_workflow_def_id": null,
+      "last_modified_by_share_session_id": null
+    }
+  ]
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"email"` for an email field. | `"email"` |
+| `field_type` | `string` | `"multi_email"`. | `"multi_email"` |
+| `values[].id` | `number` | ID of the email address. Send it with the email address in an update to keep the ID. | `100` |
+| `values[].value` | `string` | The email address. | `"juliet@acme.com"` |
+| `values[].type` | `string` | Type label: `"work"`, `"home"`, `"other"` or the text of a custom label of the field. | `"work"` |
+| `values[].created_at`, `values[].last_modified_at` | `string` | When the email address was added and last changed, in your timezone. | `"2026-11-11 10:15:00"` |
+| `values[].created_at_utc`, `values[].last_modified_at_utc` | `string` | The same times in UTC. | `"2026-11-11 09:15:00"` |
+| `values[].created_by_user_id`, `values[].last_modified_by_user_id` | `number` or `null` | ID of the user who added or last changed the email address. | `1` |
+| `values[].created_by_workflow_def_id`, `values[].last_modified_by_workflow_def_id` | `number` or `null` | ID of the automation that added or last changed the email address. | `null` |
+| `values[].created_by_share_session_id`, `values[].last_modified_by_share_session_id` | `string` or `null` | Session ID (UUID) of an anonymous visitor who added or changed the email address through a shared link. | `null` |
+
+Each field in a record response also contains the field's `config`. The examples on this page leave it out. They also leave out the times and author IDs of each email address.
 
 ## Record creation
 
+Use the [create record endpoint](/docs/api/resource/record#create-a-record) to set email addresses on a new record.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-An email field value can be created as part of a record creation. It is possible to provide either a string, an object following the email address entry structure or an array of those two. It is advised to use an array of objects for the best accuracy of the provided data.
-
-Here is an example request body for creating a record with a value for the "Customer email" field with ID 2, type `multi_email` and external ID `customer_email`:
+The example sets two email addresses in the "Email" field (ID `2`, type `multi_email`, slug `email`) of a new contact.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/record/app/1  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/record/app/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "customer_email": 
-        [
-          {"type": "work", "email": "johndoe@samplebusiness.com"},
-          {"type": "home", "email": "john@doe.com"}
-        ]
+      "name": "Juliet Adams",
+      "email": [
+        { "type": "work", "email": "juliet@acme.com" },
+        { "type": "home", "email": "juliet.adams@acme.com" }
+      ]
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "customer_email": [
-      { "type": "work", "email": "johndoe@samplebusiness.com" },
-      { "type": "home", "email": "john@doe.com" }
+    "name": "Juliet Adams",
+    "email": [
+      { "type": "work", "email": "juliet@acme.com" },
+      { "type": "home", "email": "juliet.adams@acme.com" }
     ]
   }
 }
@@ -55,109 +100,133 @@ Here is an example request body for creating a record with a value for the "Cust
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "customer_email",
-      "label": "Customer email",
+      "external_id": "email",
+      "label": "Email",
       "type": "email",
       "field_type": "multi_email",
       "values": [
-        {
-          "id": 100,
-          "value": "johndoe@samplebusiness.com",
-          "type": "work"
-        },
-        {
-          "id": 101,
-          "value": "john@doe.com",
-          "type": "home"
-        }
+        { "id": 100, "value": "juliet@acme.com", "type": "work" },
+        { "id": 101, "value": "juliet.adams@acme.com", "type": "home" }
       ]
     }
   ]
 }
 ```
 
-Note that the individual email address entries contain an ID. Be sure to include them in updates, to keep existing email entries. If you omit the ID, new entries will be created instead and the respective existing ones will be removed.
+**General behavior**
+
+- Use the field ID or the field's slug (returned as `external_id` in records) as the key in `fields`.
+- Send an array of email addresses. Each one is an object `{ "email": "...", "type": "..." }` or a string. `value` works in place of `email`.
+- Tape reads `type` case-insensitively. Without `type`, or with a `type` Tape doesn't know, the email address gets the label `work`.
+- A `type` that matches the text of a custom label of the field (not case-sensitive) gets that label.
+- If the field's `label_setting` is `"none"`, Tape ignores `type`.
+- Tape removes spaces at the start and the end of each email address and skips empty ones.
+- Tape doesn't check the format of an email address.
+- A required email field needs at least one email address on a new record. An empty array `[]` counts as missing.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- A `type` that matches more than one custom label of the field returns `400`. Use a unique label.
+
+See [Errors](/docs/api/errors) for all error codes.
 
 ## Record retrieval
 
+Use the [retrieve record endpoint](/docs/api/resource/record#retrieve-a-record) to read the email addresses of a record.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-An email field value can be retrieved as part of a record retrieval:
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "customer_email",
-      "label": "Customer email",
+      "external_id": "email",
+      "label": "Email",
       "type": "email",
       "field_type": "multi_email",
       "values": [
-        {
-          "id": 100,
-          "value": "johndoe@samplebusiness.com",
-          "type": "work"
-        },
-        {
-          "id": 101,
-          "value": "john@doe.com",
-          "type": "home"
-        }
+        { "id": 100, "value": "juliet@acme.com", "type": "work" },
+        { "id": 101, "value": "juliet.adams@acme.com", "type": "home" }
       ]
     }
   ]
 }
 ```
 
+**General behavior**
+
+- An email address without a label shows `"type": "work"`. This includes all email addresses of a field with `"label_setting": "none"`.
+
+**Requirements:** `records:read`. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Record update
+
+Use the [update record endpoint](/docs/api/resource/record#update-a-record) to change the email addresses of a record.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more email field values can be updated as part of a record update, and individual entries can be updated via their ID. Here is an example request body for updating the email entries of an email field with external ID `customer_email` of a record:
+The example changes the work email address with ID `100`, removes the home email address and adds a new one with the label `other`.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X PUT #BASE_URL/v1/record/1  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X PUT #BASE_URL/v1/record/1 \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "customer_email": 
-      [
-        { "id": 100, "type": "work", "email": "johndoeNEW@samplebusiness.com" },
-        { "type": "other", "email": "johndoe@gmail.com" }
+      "email": [
+        { "id": 100, "type": "work", "email": "juliet.adams@acme.com" },
+        { "type": "other", "email": "sales@acme.com" }
       ]
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "customer_email": [
-      { "id": 100, "type": "work", "email": "johndoeNEW@samplebusiness.com" },
-      { "type": "other", "email": "johndoe@gmail.com" }
+    "email": [
+      { "id": 100, "type": "work", "email": "juliet.adams@acme.com" },
+      { "type": "other", "email": "sales@acme.com" }
     ]
   }
 }
@@ -166,30 +235,65 @@ One or more email field values can be updated as part of a record update, and in
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Tape Technologies GmbH",
+  "title": "Juliet Adams",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Juliet Adams" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "customer_email",
-      "label": "Customer email",
+      "external_id": "email",
+      "label": "Email",
       "type": "email",
       "field_type": "multi_email",
       "values": [
-        {
-          "id": 100,
-          "value": "johndoeNEW@samplebusiness.com",
-          "type": "work"
-        },
-        {
-          "id": 102,
-          "value": "johndoe@gmail.com",
-          "type": "other"
-        }
+        { "id": 100, "value": "juliet.adams@acme.com", "type": "work" },
+        { "id": 102, "value": "sales@acme.com", "type": "other" }
       ]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- The new list replaces the old list. Tape removes email addresses that aren't in the request.
+- An email address sent with its `id` keeps that ID. Tape removes an entry with only `id`. An email address without `id` becomes a new one.
+- To clear the field, send `null` or an empty array `[]`. This also works for a required email field.
+- Fields that aren't in the request keep their values.
+
+```json title="Request: clear the field"
+{
+  "fields": {
+    "email": null
+  }
+}
+```
+
+A cleared field isn't in the `fields` of the response.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+Same errors as under [Record creation](#record-creation). An update also returns these errors:
+
+- An email address that isn't a string, like `{ "email": 5 }`, returns `400` with `validation` and the message `Invalid input for email field with ID …`.
+- An entry that's `null`, or an object without `email`, `value`, `type` or `id`, returns the same error.
+
+See [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Email field](/docs/api/resource/field/email): create and change email fields.
+- [Field value](/docs/api/resource/field-value/overview): how all field values work.
+- [Record](/docs/api/resource/record): create, read, update and delete records.
+- [Filter](/docs/api/resource/filter#multi-email): find records by their email addresses.

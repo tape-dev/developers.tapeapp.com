@@ -2,33 +2,22 @@
 id: filter-record-collection
 title: filter_record_collection
 sidebar_label: filter_record_collection
-description: Config reference for the Tape automation filter_record_collection action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation filter_record_collection action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to narrow a record collection from an earlier action down to the records that match a condition.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Filter collection** — filters a record collection produced by an earlier action down to the records matching a
-condition. `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Filter collected records** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | no | The record collection to filter — an action-variable reference to a prior action's collection output. Omitted when unset. |
-| `match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | The filter to apply to the collection. Empty condition ("match all") when omitted or `null`. |
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+An earlier action collected invoices from database app `42`. This action keeps only the invoices whose **Payment status** is **Overdue**:
 
 ```json
 {
@@ -39,8 +28,16 @@ An action entry inside an automation definition's `actions[]`:
       "operator": "and",
       "rows": [
         {
-          "subject": { "kind": "variable", "source": "field", "field_id": 512, "field_type": "status", "previous": false, "collection": false, "triggering": false },
-          "operator": "is",
+          "subject": {
+            "kind": "variable",
+            "source": "field",
+            "field_id": 512,
+            "field_type": "single_category",
+            "previous": false,
+            "collection": true,
+            "triggering": false
+          },
+          "operator": "is_any_of",
           "value": { "type": "ids", "ids": [9001] }
         }
       ]
@@ -49,15 +46,41 @@ An action entry inside an automation definition's `actions[]`:
 }
 ```
 
-## Validation & behavior
+## Config
 
-- Both members are optional in the typed config; the DTO leaves `record_collection` optional and `match_condition` required internally but public-optional.
-- This action is a **consumer**: `record_collection` should reference an upstream producer's collection output. When omitted it is carried through as unset — pair it with a producing action to have something to filter.
-- `match_condition` defaults to the empty condition ("match all") when omitted or `null` — the mapper fills `emptyCondition()`, and it reads back as `null`.
-- Operators available per field type are advertised by [`GET /v1/automation/meta/filter`](/docs/api/resource/automation/discovery); see [Filters](/docs/api/resource/automation/reference/filters) for the group shape.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `record_collection` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The collection to filter, created by an earlier action. The schema lets you save without it, but validation then reports `action_invalid`. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 42 }` |
+| `match_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | The condition the records must match. An empty AND group when left out or `null`. | `{ "operator": "and", "rows": [] }` |
 
-## See also
+To find the field IDs for `match_condition`, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids). To find the option IDs for `ids`, see [Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app). It returns them in `config.settings.options` of the field.
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Filters](/docs/api/resource/automation/reference/filters) — the filter-group shape used by `match_condition`
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+## Build the condition
+
+- Each `subject` is a field of the collection's database app, scoped to the collection: `"collection": true`.
+- A subject outside the collection's database app fails validation with `filter_variable_missing`.
+- [`GET /v1/automation/meta/filter`](/docs/api/resource/automation/discovery) returns the operators for each field type.
+- See [Filters](/docs/api/resource/automation/reference/filters) for the group shape and the value union.
+
+## General behavior {#validation--behavior}
+
+- `record_collection` has no default. Without it, Tape saves the action, and validation reports `action_invalid`.
+- A `record_collection` without a matching earlier action fails validation with `action_variable_missing`.
+- Without `match_condition`, the filter keeps every record. An empty condition reads back as `null`.
+- Later actions that reference the same collection get the filtered records.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must create the collection in `record_collection`, for example [`collect_app_records`](/docs/api/resource/automation/reference/actions/collect-app-records).
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [sort_record_collection](/docs/api/resource/automation/reference/actions/sort-record-collection): put the filtered records in order.
+- [Filters](/docs/api/resource/automation/reference/filters): the filter group used by `match_condition`.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build the `record_collection` reference.
+- [Action examples](/docs/api/resource/automation/action-examples): a collect action followed by an update of the collection.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

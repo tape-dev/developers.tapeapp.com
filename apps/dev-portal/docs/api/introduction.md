@@ -7,23 +7,40 @@ sidebar_label: Introduction
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Admonition from '@theme/Admonition';
 
-Developers use the API to access Tape's core resources like records, apps and workspaces. Developers can connect services to Tape and build interactive experiences for users within Tape. Using the navigation on the left, you'll find details for each endpoint and type of resource used in the API.
+Use the Tape API to read and change records, apps and workspaces, and to connect other services to Tape.
 
-:::info
-If this is your first look at the Tape API, we recommend beginning with the [Getting started guide](/docs/guide/api/getting-started).
+:::info New to the Tape API?
+Start with the [Quickstart](/docs/guide/api/getting-started). It takes you to your first request in two steps.
 :::
 
 ## Conventions
 
-The base URL to send all API requests is `https://api.tapeapp.com`. HTTPS is required for all API requests.
+Send every request to the base URL `https://api.tapeapp.com`. The API requires HTTPS.
 
-The Tape API follows RESTful conventions when possible, with most operations performed via `GET`, `POST`, `PUT`, and `DELETE` requests on all resources. Request and response bodies are encoded as JSON.
+The API follows RESTful conventions where possible. Most operations use `GET`, `POST`, `PUT` and `DELETE` requests. Request and response bodies are JSON.
 
-**JSON conventions**
+### JSON conventions
 
-- Property names are in snake_case (not camelCase or kebab-case).
-- Temporal values (dates and datetimes) are returned as strings in an ISO 8601-like format. Datetimes will include the time value (2020-08-12 02:12:33) while dates will include only the date (2020-08-12). [More details on date and datetimes](/docs/api/date-timezone).
+- Property names use snake_case, not camelCase or kebab-case.
+- Dates and datetimes are strings in an ISO 8601-like format. A datetime includes the time (`2020-08-12 02:12:33`), a date only the date (`2020-08-12`). See [Date & timezone](/docs/api/date-timezone).
 
 ## Code samples
 
-Sample requests and responses are shown for each endpoint. Requests are shown using cURL. To increase readability, we use the `-u` option of cURL to pass the user API key instead of specifying the `Authorization` header. These samples make it easy to copy, paste, and modify as you build your integration.
+Every endpoint shows a sample request and response. Requests use cURL.
+
+The samples use a [personal access token](/docs/api/personal-access-tokens), the recommended credential. Send it as a bearer token in the `Authorization` header, or with the cURL option `-u` (`-u tape_pat_…:`). A user API key works the same way.
+
+Most samples read the token from the environment variable `TAPE_TOKEN` and use example IDs such as `1`. Replace them with your own.
+
+## Next steps
+
+- [Quickstart](/docs/guide/api/getting-started): retrieve your first record.
+- [Coming from the Podio API](/docs/guide/api/coming-from-podio): move an existing integration to Tape.
+- [Tape API guide, first steps](https://community.tapeapp.com/t/tape-api-guide-first-steps/2522): try three requests in Postman, no code needed.
+- [Authentication](/docs/api/authentication): choose between personal access tokens, user API keys and OAuth.
+- [Capabilities](/docs/api/capabilities): what each endpoint requires.
+- [Errors](/docs/api/errors): status codes and error codes.
+- [Request limits](/docs/api/request-limits): stay within the request budget.
+- [Pagination](/docs/api/pagination): page through long lists.
+- In the Help Center: [Tape API](https://help.tapeapp.com/en/articles/18449283-tape-api)
+- In the Help Center: [Intro to Tape for developers](https://help.tapeapp.com/en/articles/6448126-intro-to-tape-for-developers)

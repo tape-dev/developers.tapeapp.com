@@ -9,46 +9,64 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Icons are used to visually represent records, apps and workspaces in the Tape web and mobile applications.
-Currently, Icons can be set on [App creation or update](/docs/api/resource/app#create-an-app) and [Workspace creation or update](/docs/api/resource/workspace#create-a-workspace).
+Use an icon object to set the icon of an app or a workspace.
 
-There are 3 types of icons:
+Icons represent records, apps and workspaces in the Tape web and mobile apps. Set them when you [create or update an app](/docs/api/resource/app#create-an-app) or [create or update a workspace](/docs/api/resource/workspace#create-a-workspace).
+
+Tape has three types of icons:
 
 - graphic icons
 - emoji icons
 - custom icons
 
-Currently, the API only supports graphic icons and emoji icons. Custom icons can only be set via the Tape web application.
+The API supports graphic icons and emoji icons. Set custom icons in the Tape web app. An app or workspace with a custom icon returns no `icon` in the API.
 
 ## Graphic icons
 
-Graphic icons are icons that are provided by Tape. They are identified by their `id` property.
-Currently, most icons from [Google's Material Design Icon Library](https://fonts.google.com/icons) are supported.
-If you want to set an icon you found on the Material Design Icon Library, you can select the icon, click on "Android" and copy the icon id from the text field.
+A graphic icon is an icon provided by Tape. Its `id` identifies it.
 
-An example of a graphic icon id would be [hourglass_empty](https://fonts.google.com/icons?selected=Material+Symbols+Outlined:hourglass_empty:FILL@0;wght@400;GRAD@0;opsz@24&icon.platform=android) for the icon of an hourglass.
+Tape supports most icons of [Google's Material Design icon library](https://fonts.google.com/icons). To find the ID of an icon there, select the icon, select **Android** and copy the ID from the text field.
 
-Some icons are blacklisted and cannot be used.
+For example, [hourglass_empty](https://fonts.google.com/icons?selected=Material+Symbols+Outlined:hourglass_empty:FILL@0;wght@400;GRAD@0;opsz@24&icon.platform=android) is the icon of an hourglass. An `id` Tape doesn't support returns `400` with `validation`.
 
-The following object shows an example of a graphic icon that could be used as an input to set an icon on an app or workspace:
+Send this object to set a graphic icon:
 
-```
+```json title="Icon"
 {
-    "id": "hourglass_empty",
-    "type": "graphic"
+  "id": "hourglass_empty",
+  "type": "graphic"
 }
 ```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"graphic"` for a graphic icon. | `"graphic"` |
+| `id` | `string` | ID of the icon in the Material Design icon library. | `"hourglass_empty"` |
 
 ## Emoji icons
 
-Emoji icons are icons that are provided by the Unicode Consortium. They are identified by their `emoji` property.
-An example of an emoji icon would be 📞 for the icon of a phone.
+An emoji icon is a Unicode emoji. Its `emoji` property identifies it.
 
-The following object shows an example of an emoji icon that could be used as an input to set an icon on an app or workspace:
+Send this object to set an emoji icon, here the telephone receiver emoji (U+1F4DE). The example writes it as a JSON escape. You can also send the emoji character itself.
 
-```
+```json title="Icon"
 {
-    "emoji": "📞",
-    "type": "emoji"
+  "emoji": "\ud83d\udcde",
+  "type": "emoji"
 }
 ```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"emoji"` for an emoji icon. | `"emoji"` |
+| `emoji` | `string` | The emoji, as a JSON escape or as the character itself. | `"\ud83d\udcde"` |
+
+:::info Can I send a string instead of an object?
+Yes. Tape reads an emoji as an emoji icon and any other text as the `id` of a graphic icon.
+:::
+
+## Next steps
+
+- [App](/docs/api/resource/app): set the icon when you create or update an app.
+- [Workspace](/docs/api/resource/workspace): set the icon when you create or update a workspace.
+- [Record](/docs/api/resource/record): read the icon of a record's app in `app.icon`, as a plain string instead of an icon object.

@@ -23,9 +23,9 @@ export default function UserLoginInfo() {
   if (primaryName) {
     return (
       <div style={{ minHeight: STATIC_HEIGHT }}>
-        <Admonition type="tip" title="Logged in" icon="✅">
+        <Admonition type="tip" title="Logged in">
           <span>
-            Hey {primaryName} 👋 Looks like you are already logged into Tape, so
+            Hey {primaryName}, looks like you are already logged into Tape, so
             we were able to pre-fill your user API key and some IDs in the
             examples below. You can use the "copy" button to copy the code to
             your clipboard. Most cURL requests work out of the box and can be
@@ -38,9 +38,9 @@ export default function UserLoginInfo() {
 
   return (
     <div style={{ minHeight: STATIC_HEIGHT }}>
-      <Admonition type="info" title="Log in" icon="👤">
+      <Admonition type="info" title="Log in">
         <span>
-          Hey there 👋 Looks like you are currently not logged into Tape. All
+          Hey there, looks like you are currently not logged into Tape. All
           examples in this guide will be pre-filled with stub data. To change
           this, log into your Tape account and refresh this page.
         </span>

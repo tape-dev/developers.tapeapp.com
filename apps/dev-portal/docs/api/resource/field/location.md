@@ -1,6 +1,6 @@
 ---
 id: location
-title: Location Field
+title: Location field
 sidebar_label: Location
 ---
 
@@ -9,46 +9,88 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-There is only one type of location field: `single_location`.
+Use a location field to store an address in a record, such as the address of a property or a solar site.
 
-`single_location` field-values can only hold a single location, including the address properties and a map preview.
+Tape has one location field type: `single_location` is the **Location** field. It holds one address with its parts and, if you add them, its coordinates.
 
-In addition to the common field properties, a location field has the following settings:
+A location field has the [common field properties](/docs/api/resource/field/overview#common-properties) and its own `settings`. To read and write the address of a record, see [Location field value](/docs/api/resource/field-value/location).
 
-- `has_map` (optional): boolean flag, whether the google maps embed should be shown in the location field values of this field. (default: false)
+```json title="Location field object"
+{
+  "field_id": 2,
+  "external_id": "address",
+  "slug": "address",
+  "label": "Address",
+  "type": "location",
+  "field_type": "single_location",
+  "config": {
+    "label": "Address",
+    "slug": "address",
+    "external_id": "address",
+    "description": "The address of the property.",
+    "show_description": true,
+    "required": false,
+    "always_hidden": false,
+    "hidden_if_empty": false,
+    "primary": false,
+    "settings": {
+      "has_map": true
+    }
+  }
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"location"` for a location field. | `"location"` |
+| `field_type` | `string` | `"single_location"`. | `"single_location"` |
+| `config.settings.has_map` | `boolean` | If `true`, Tape shows a map with the address in the record. Default: `false`. | `true` |
+
+The map needs coordinates. Tape doesn't look them up for an address from the API. Send `latitude` and `longitude` with the [field value](/docs/api/resource/field-value/location#record-creation).
 
 ## App creation
 
+Use the [create app endpoint](/docs/api/resource/app#create-an-app) to create location fields together with a new app.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A location field can be created as part of an app creation. Here is an example request body for creating an excerpt of a meetings app within a workspace with ID 1.
-The app contains a `single_location` field "Location". Other useful fields for a meetings app, like "Date", "Participants" or "Notes", are omitted for brevity.
+The example creates a properties app in the workspace with ID `1`. The app gets a `single_text` field "Name" and a `single_location` field "Address" with a map.
+
+Find the workspace ID with [Retrieve workspaces](/docs/api/resource/workspace#retrieve-workspaces).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`
 curl -X POST #BASE_URL/v1/app/ \\
-   -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \\
-   --data '{
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "workspace_id": 1,
-    "name": "Meetings",
-    "item_name": "Meeting",
+    "name": "Properties",
+    "item_name": "Property",
     "fields": [
+      {
+        "field_type": "single_text",
+        "config": {
+          "label": "Name",
+          "description": "The name of the property.",
+          "required": true
+        }
+      },
       {
         "field_type": "single_location",
         "config": {
-          "label": "Location",
-          "description": "The location of the meeting.",
+          "label": "Address",
+          "description": "The address of the property.",
           "required": false,
           "settings": {
             "has_map": true
           }
         }
       }
-    ] 
+    ]
   }'
 `}
 </ContextCodeBlock>
@@ -56,17 +98,25 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "workspace_id": 1,
-  "name": "Meetings",
-  "item_name": "Meeting",
+  "name": "Properties",
+  "item_name": "Property",
   "fields": [
+    {
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "description": "The name of the property.",
+        "required": true
+      }
+    },
     {
       "field_type": "single_location",
       "config": {
-        "label": "Location",
-        "description": "The location of the meeting.",
+        "label": "Address",
+        "description": "The address of the property.",
         "required": false,
         "settings": {
           "has_map": true
@@ -80,34 +130,61 @@ curl -X POST #BASE_URL/v1/app/ \\
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
-  "slug": "meetings",
-  "name": "Meetings",
-  "record_name": "Meeting",
-  "item_name": "Meeting",
+  "slug": "properties",
+  "external_id": "properties",
+  "name": "Properties",
+  "record_name": "Property",
+  "item_name": "Property",
   "type": "database",
-  "position": 0,
   "config": {
-    "item_name": "Meeting",
-    "name": "Meetings"
+    "item_name": "Property",
+    "name": "Properties"
   },
   "fields": [
     {
       "field_id": 1,
-      "slug": "location",
-      "label": "Location",
+      "external_id": "name",
+      "slug": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "slug": "name",
+        "external_id": "name",
+        "description": "The name of the property.",
+        "show_description": true,
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": true,
+        "settings": {
+          "formatted": false,
+          "format": "plain"
+        }
+      }
+    },
+    {
+      "field_id": 2,
+      "external_id": "address",
+      "slug": "address",
+      "label": "Address",
       "type": "location",
       "field_type": "single_location",
       "config": {
-        "label": "Location",
-        "slug": "location",
-        "description": "The location of the meeting.",
+        "label": "Address",
+        "slug": "address",
+        "external_id": "address",
+        "description": "The address of the property.",
+        "show_description": false,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
           "has_map": true
         }
@@ -117,38 +194,46 @@ curl -X POST #BASE_URL/v1/app/ \\
 }
 ```
 
+**General behavior**
+
+- Without `has_map`, the field shows no map.
+- Without `primary`, Tape makes the first field of the request the primary field. Here, that's "Name".
+- A new location field doesn't show its `description` as help text yet (`show_description` is `false`). To show it, send the `description` again in a field update.
+
+**Requirements:** `apps:edit`, and a workspace role that may edit apps in the workspace. Works with a personal access token, an OAuth access token or a user API key.
+
 ## App update
+
+Use the [update app endpoint](/docs/api/resource/app#update-an-app) to create new location fields in an app or to change existing ones.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A location field can be created or updated as part of an app update. Here is an example request body for updating the previously created meetings app with ID 1.
-The update sets the `has_map` flag to false.
+The example turns off the map of the "Address" field (ID `2`) of the properties app.
+
+Find the app ID and the field IDs in the [Developer view of the app](/docs/api/resource/app#find-app-and-field-ids).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-  -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \
-   --data '{
-    "app_id": 1,
-    "name": "Meetings",
-    "item_name": "Meeting",
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "fields": [
       {
-        "field_id": 1,
+        "field_id": 2,
         "config": {
-          "label": "Location",
-          "description": "The location of the meeting.",
+          "label": "Address",
+          "description": "The address of the property.",
           "required": false,
           "settings": {
             "has_map": false
           }
         }
       }
-    ] 
+    ]
   }'
 `}
 </ContextCodeBlock>
@@ -156,17 +241,14 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
-  "app_id": 1,
-  "name": "Meetings",
-  "item_name": "Meeting",
   "fields": [
     {
-      "field_id": 1,
+      "field_id": 2,
       "config": {
-        "label": "Location",
-        "description": "The location of the meeting.",
+        "label": "Address",
+        "description": "The address of the property.",
         "required": false,
         "settings": {
           "has_map": false
@@ -180,40 +262,86 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 </TabItem>
 </Tabs>
 
-````json title="⬅️      Response"
+```json title="Response"
 {
-    "app_id": 1,
-    "workspace_id": 1,
-    "slug": "meetings",
-    "name": "Meetings",
-    "record_name": "Meeting",
-    "item_name": "Meeting",
-    "type": "database",
-    "position": 0,
-    "config": {
-      "item_name": "Meeting",
-      "name": "Meetings"
-    },
-    "fields": [
-      {
-        "field_id": 1,
-        "external_id": "location",
-        "slug": "location",
-        "label": "Location",
-        "type": "location",
-        "field_type": "single_location",
-        "config": {
-          "label": "Location",
-          "slug": "location",
-          "description": "The location of the meeting.",
-          "required": false,
-          "always_hidden": false,
-          "hidden_if_empty": false,
-          "settings": {
-            "has_map": false
-          }
+  "app_id": 1,
+  "workspace_id": 1,
+  "slug": "properties",
+  "external_id": "properties",
+  "name": "Properties",
+  "record_name": "Property",
+  "item_name": "Property",
+  "type": "database",
+  "config": {
+    "item_name": "Property",
+    "name": "Properties"
+  },
+  "fields": [
+    {
+      "field_id": 1,
+      "external_id": "name",
+      "slug": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "config": {
+        "label": "Name",
+        "slug": "name",
+        "external_id": "name",
+        "description": "The name of the property.",
+        "show_description": true,
+        "required": true,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": true,
+        "settings": {
+          "formatted": false,
+          "format": "plain"
         }
       }
-    ]
+    },
+    {
+      "field_id": 2,
+      "external_id": "address",
+      "slug": "address",
+      "label": "Address",
+      "type": "location",
+      "field_type": "single_location",
+      "config": {
+        "label": "Address",
+        "slug": "address",
+        "external_id": "address",
+        "description": "The address of the property.",
+        "show_description": true,
+        "required": false,
+        "always_hidden": false,
+        "hidden_if_empty": false,
+        "primary": false,
+        "settings": {
+          "has_map": false
+        }
+      }
+    }
+  ]
 }
-````
+```
+
+**General behavior**
+
+- A field with `field_id` updates that field. A field without `field_id` creates a new field and needs a `field_type`.
+- Without `has_map`, the setting stays as it is.
+- Send `required`, `always_hidden`, `hidden_if_empty` and `description` with every field you update. Tape sets left-out switches to `false` and hides the help text without `description`. See [Create and update fields](/docs/api/resource/field/overview#create-and-update-fields).
+- Fields that aren't in the request stay unchanged.
+
+**Requirements:** `apps:edit`, and **Full access** to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- Every field you update needs `config.label`, even if the label stays the same. Without it, Tape rejects the request with `400` and `input_validation`. The message reads, for example, `Invalid input: data/fields/0/config must have required property 'label'`.
+
+## Next steps
+
+- [Location field value](/docs/api/resource/field-value/location): read and write the address of a record.
+- [Field](/docs/api/resource/field/overview): the properties all field types share.
+- [App](/docs/api/resource/app): create, update and delete apps with their fields.
+- [Capabilities](/docs/api/capabilities): what `apps:edit` allows.

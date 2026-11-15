@@ -8,31 +8,32 @@ description: Discover the live Automation catalog — trigger types, action type
 import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.component'
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-:::caution Internal beta — not released yet
-The **Automation** API is an internal beta and is **not released yet**. Its endpoints and payloads are not final and
-may change or be withdrawn at any time without notice.
-:::
+Use these endpoints to read the live catalog of trigger types, action types and filter operators that automations are built from.
 
-The discovery endpoints publish the live catalog an automation is built from — the trigger types, action types and
-filter operators, each with the `config` it accepts. **Build against these rather than hard-coding the vocabulary**:
-new types appear here without a change to this API.
+Each entry in the catalog comes with the `config` it accepts. Build against it instead of hard-coding the list: new types show up here without an API change.
 
-:::info No workspace scope
-Unlike the rest of the resource, the discovery endpoints accept a valid API key of **either** kind (user or
-automation) and carry no workspace scope — the catalog is the same for everyone. All three responses (trigger, action
-and filter) are cacheable for an hour (`Cache-Control: public, max-age=3600`, set on the successful `200`). Each costs
-`1x` base credits.
+**General behavior**
+
+- The catalog is the same for everyone. The endpoints have no workspace scope.
+- Each successful `200` response can be cached for an hour (`Cache-Control: public, max-age=3600`).
+- Each request costs `1x` base credits.
+
+:::info Which capability do I need?
+All three endpoints need **Read automations** (`automations:read`). They work with a [personal access token](/docs/api/personal-access-tokens), an [OAuth access token](/docs/api/oauth/overview), a [user API key](/docs/api/authentication#user-api-key) or an automation API key. See [Capabilities](/docs/api/capabilities).
 :::
 
 ## List trigger types
 
+Use this endpoint to list every public trigger type with its config schema.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/meta/trigger" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/automation/meta/trigger -u #USER_API_KEY:`}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl #BASE_URL/v1/automation/meta/trigger \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "triggers": [
     {
@@ -50,33 +51,42 @@ and filter) are cacheable for an hour (`Cache-Control: public, max-age=3600`, se
 </ContextCodeBlock>
 
 Each entry is `{ type, label, description?, config_schema }`. See the [trigger types](/docs/api/resource/automation/reference/triggers).
-A `config_schema` property may carry `"readOnly": true` — a **server-assigned** field (e.g. a `webhook_received`
-trigger's `webhook_url`) that appears on read but is rejected on write. Strip read-only properties before submitting a
-config.
+
+A `config_schema` property with `"readOnly": true` marks a field Tape sets itself, for example the `webhook_url` of a `webhook_received` trigger. Tape returns it when you read a config and rejects it on write, so remove it before you send one.
+
+**Requirements:** `automations:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
 
 ## List action types
 
+Use this endpoint to list every public action type with its group and config schema.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/meta/action" />
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl #BASE_URL/v1/automation/meta/action -u #USER_API_KEY:`}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl #BASE_URL/v1/automation/meta/action \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-Each entry is `{ type, group, label, description?, config_schema }`, where `group` is `action` or `control_flow`. See
-the [action types](/docs/api/resource/automation/reference/actions).
+The response is `200` with `{ "actions": [ … ] }`.
+
+Each entry is `{ type, group, label, description?, config_schema }`. `group` is `action` or `control_flow`. See the [action types](/docs/api/resource/automation/reference/actions).
+
+**Requirements:** `automations:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
 
 ## List filter operators
 
+Use this endpoint to list the filter operators for one *field type*. The operators differ per type.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/automation/meta/filter?field_type={field_type}" />
 
-Returns the operators available for one **field type** (they differ per type). `field_type` is required — an absent or
-unknown value returns `400`.
+`field_type` is required, for example `single_text` or `number`. A missing or unknown value returns `400`. [Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app) returns the `field_type` of each field.
 
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl "#BASE_URL/v1/automation/meta/filter?field_type=number" -u #USER_API_KEY:`}
+<ContextCodeBlock language="shell" title='Request'>
+{`curl "#BASE_URL/v1/automation/meta/filter?field_type=number" \\
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-<ContextCodeBlock language="json" title='⬅️      Response'>
+<ContextCodeBlock language="json" title='Response'>
 {`{
   "field_type": "number",
   "operators": [
@@ -87,5 +97,21 @@ unknown value returns `400`.
 }`}
 </ContextCodeBlock>
 
-Each entry is `{ operator, label, description?, value_arity }`. See [Filters](/docs/api/resource/automation/reference/filters)
-for the full operator set and the tagged value union.
+Each entry is `{ operator, label, description?, value_arity }`. See [Filters](/docs/api/resource/automation/reference/filters) for the full set of operators and the tagged value union.
+
+**Requirements:** `automations:read`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
+
+## Errors
+
+- [List filter operators](#list-filter-operators) without a `field_type`, or with an unknown one, returns `400`.
+- A request without a credential returns `401`.
+- A token without `automations:read` returns `403`.
+
+See [Errors & broken reasons](/docs/api/resource/automation/reference/errors) for the Automation API and [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Triggers](/docs/api/resource/automation/reference/triggers): every trigger and what it hands to the run.
+- [Actions](/docs/api/resource/automation/reference/actions): every action, grouped by what it does.
+- [Filters](/docs/api/resource/automation/reference/filters): the condition tree and all operators.
+- [Manage](/docs/api/resource/automation/manage): create an automation from the catalog.

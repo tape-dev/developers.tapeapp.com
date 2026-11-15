@@ -2,37 +2,22 @@
 id: rollup-iterable-values
 title: rollup_iterable_values
 sidebar_label: rollup_iterable_values
-description: Config reference for the Tape automation rollup_iterable_values action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation rollup_iterable_values action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to aggregate a field across collected records into one value, for example a sum, a count or an average.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Roll up values** — aggregates the values of a collected iterable into a single result (sum, count, average, and
-similar). `group: "action"`. No specific trigger context is required.
+In the automation editor, this action is **Rollup collected values** in the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. Its `group` is `action`, and it works with every trigger but needs an earlier action that creates the record collection.
 
-Part of the [Record collections](/docs/api/resource/automation/reference/actions#record-collections) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `rollup_type` | enum | **yes** | The aggregation to perform over the iterable's values. No canonical default. |
-| `rollup_variable_def` | [reference](/docs/api/resource/automation/dynamic-values) | no | The iterable whose values are rolled up — a collection-scoped field variable an upstream collect action must have put in scope. Carried through when present, dropped when unset. |
-| `custom_variable_def` | object | no | The declared **output** variable holding the rollup result; reference it from later actions by its label. Defaults to `{ custom_type: 'any', label: 'Rollup' }`. |
-
-**`rollup_type` tokens** (lower-case): `count_all`, `count_empty`, `count_not_empty`, `percent_empty`,
-`percent_not_empty`, `sum`, `average`, `median`, `min`, `max`.
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action adds up the amounts of all collected open invoices:
 
 ```json
 {
@@ -48,22 +33,61 @@ An action entry inside an automation definition's `actions[]`:
       "previous": false,
       "triggering": false
     },
-    "custom_variable_def": { "custom_type": "any", "label": "Total amount" }
+    "custom_variable_def": { "custom_type": "any", "label": "Open invoice total" }
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- `rollup_type` is the only member required at input — it has no canonical default.
-- `rollup_variable_def` is advertised optional at input, but a rollup with no iterable in scope fails the validate gate
-  with `action_variable_def_missing` — so in practice you must supply a collection-scoped field variable that an
-  upstream **collect** action put in scope (beta — see [meta/action](/docs/api/resource/automation/discovery)).
-- `custom_variable_def` is the action's output: omit it to accept the canonical default
-  (`{ custom_type: 'any', label: 'Rollup' }`), or set a `label` to reference the result from later actions.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `rollup_type` | enum | **Required.** The aggregation to run. See [Rollup types](#rollup-types). | `"sum"` |
+| `rollup_variable_def` | [reference](/docs/api/resource/automation/dynamic-values) | **Required.** The field whose values Tape aggregates, as a field reference with `collection: true`. An earlier collect action must put it in scope. The schema lets you save without it, but validation then reports `action_variable_missing`. | `{ "kind": "variable", "source": "field", "field_id": 123, "field_type": "number", "collection": true, "previous": false, "triggering": false }` |
+| `custom_variable_def` | object | The output variable that holds the result. Default `{ "custom_type": "any", "label": "Rollup" }`. | `{ "custom_type": "any", "label": "Open invoice total" }` |
 
-## See also
+To find the field ID for `rollup_variable_def`, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids).
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Record collections](/docs/api/resource/automation/reference/actions#record-collections) — the collect action that scopes the iterable this rollup consumes
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+### Rollup types
+
+`rollup_type` takes one of these lower-case tokens:
+
+- `count_all`: counts all values.
+- `count_empty`: counts the empty values.
+- `count_not_empty`: counts the values that aren't empty.
+- `percent_empty`: share of empty values, in percent.
+- `percent_not_empty`: share of values that aren't empty, in percent.
+- `sum`: adds up the values.
+- `average`: the mean of the values.
+- `median`: the median of the values.
+- `min`: the smallest value.
+- `max`: the largest value.
+
+## Use the result in a later action
+
+The action stores the result in the variable from `custom_variable_def`. A later action reads it with a `custom` reference that has the same `custom_type` and `label`:
+
+```json
+{ "kind": "variable", "source": "custom", "custom_type": "any", "label": "Open invoice total" }
+```
+
+## General behavior {#validation--behavior}
+
+- `rollup_type` is the only key the schema requires. It has no default.
+- Validation also needs `rollup_variable_def`. Without it, validation reports `action_variable_missing`.
+- Leave `custom_variable_def` out to get the default label `Rollup`.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- An earlier action in the automation must collect the records whose field you roll up.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build field references and use the output variable.
+- [Errors & broken reasons](/docs/api/resource/automation/reference/errors): what `action_variable_missing` means.
+- [Action examples](/docs/api/resource/automation/action-examples): a full collect payload to start from.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

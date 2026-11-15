@@ -10,41 +10,30 @@ import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 import Admonition from '@theme/Admonition';
 
-For communication that happens outside of Tape, the API offers an endpoint to send emails.
+Use this endpoint to send emails from Tape to people outside Tape.
 
-## Sending an email
+## Send an email {#sending-an-email}
+
+Use this endpoint to send an email to one or more recipients.
 
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/email/send" />
 
-To send an email to one or more recipients, make a POST request to that endpoint. The POST body must contain the `to` property with one or more recipient email addresses, the `subject` property, and the `html` property, which contains the formatted email body.
+Send the recipients in `to`, the subject in `subject` and the formatted body in `html`.
 
-Optionally, the request can contain `cc`, `bcc` and `reply_to` properties, all of which can contain a list of email addresses.
-
-Further specify `attachment_ids`, an array of existing file IDs analogous to the attachment field type (temporary file ids are not yet supported). More details on file inputs can be found [here](/docs/api/resource/field-value/attachment).
-
-:::info
-If a POST request with a valid payload is submitted to this endpoint, the email is queued and not sent directly in the request transaction.
-The response to the request only contains information about whether the email passed input validation and was successfully queued, not whether the email was successfully delivered.
-Currently, there is no way to query the delivery status of an email through the API.
-
-If an email could not be delivered, the job is rescheduled after 10, 100 and 1000 seconds. If the email could not be delivered after the 4th attempt, the job is canceled.
-:::
-
-The following example sends an email with subject, and body to `recipient@example.com` with the default sender address.
-If the recipient clicks on reply-to in their email client, the recipient of the reply is `reply-to@example.com`.
+The example sends an email to `riley@acme.com`. When Riley replies, the reply goes to `juliet@acme.com`.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/email/send  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/email/send \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
-    "to": "recipient@example.com",
-    "subject": "Hello World",
-    "html": "<p> Today we show you how to use the reply_to property in emails. </p>",
-    "reply_to": "reply-to@example.com"
+    "to": "riley@acme.com",
+    "subject": "Your viewing on Friday",
+    "html": "<p>Your viewing of 12 Harbor Street is confirmed for Friday at 10 am.</p>",
+    "reply_to": "juliet@acme.com"
 }'
 `}
 </ContextCodeBlock>
@@ -52,49 +41,103 @@ If the recipient clicks on reply-to in their email client, the recipient of the 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
-  "to": "recipient@example.com",
-  "subject": "Hello World",
-  "html": "<p> This is the email body. </p>",
-  "reply_to": "reply-to@example.com"
+  "to": "riley@acme.com",
+  "subject": "Your viewing on Friday",
+  "html": "<p>Your viewing of 12 Harbor Street is confirmed for Friday at 10 am.</p>",
+  "reply_to": "juliet@acme.com"
 }
 ```
 
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "status": "SUCCESSFULLY_SCHEDULED"
 }
 ```
 
-By default, emails are sent from the address `reply.automations@tape-app.com`.
+:::info Did the email reach the recipient?
+Tape hands the email to the mail server during the request. `SUCCESSFULLY_SCHEDULED` means the mail server accepted it, not that it reached the recipient. The API can't check delivery.
+:::
 
-<b>Coming Soon: </b><br/>
+**General behavior**
 
-If your organization has configured its own SMTP server in the organization settings, the email can also be sent from your own email address. To do this, specify the `smtp_settings_id` (containing the id of the organization smtp settings to use) and the `from_address` property that contains the sender address. Note that your SMTP server must be authorized to send email on behalf of this address for the email to be sent successfully.
+- Content access doesn't limit this endpoint. A token limited to one workspace can still send email.
+- If the mail server rejects a recipient, Tape tries that recipient again a few times within the same request.
+- Tape limits how many emails an organization sends per day through Tape's own servers. To send more, use your own SMTP server. See [Sender address](#sender-address).
 
-<br/>
-<br/>
-The next example sends an email with subject, and body to "recipient-one@example.com" and "recipient-two@example.com" with the sender address "sender@example.com".
-The addresses "carbon-copy-one@example.com" and "carbon-copy-two@example.com" receive a copy of the email.
-In addition, the email contains an attachment with file ID 42, which is present in an attachment or image field-value in a record in your organization.
+**Requirements:** `email:send`. Works with a personal access token, an OAuth access token, a user API key or an automation API key.
+
+**Errors**
+
+- A request without a valid recipient in `to`, `cc` or `bcc` returns `400` with `email_send_failure`. The message reads `[EmailSendFailureException] Sending Email failed with reason: Error: No recipients defined`.
+- A mail server that can't be reached, or still rejects the email at the last attempt, returns `400` with `email_send_failure`.
+- An email over your organization's daily limit for Tape's own servers returns `400` with `email_send_failure`.
+- Attachments over the maximum total size return `400` with `validation`. See [Limits](#limits).
+- A file in `attachment_ids` you don't have access to returns `403`.
+
+**Optional body parameters**
+
+- `cc`, `bcc` and `reply_to`: one email address or a list of them.
+- `from_name`: the sender name your recipients see.
+- `attachment_ids`: a list of file IDs to attach. See [Attachments](#attachments).
+- `from_address` and `smtp_settings_id`: send from your own address. See [Sender address](#sender-address).
+
+### Attachments
+
+`attachment_ids` accepts these file IDs:
+
+- files in attachment or image fields of records. See [Attachment field value](/docs/api/resource/field-value/attachment).
+- files you uploaded with the [File resource](/docs/api/resource/file).
+- files attached to record comments or replies.
+
+You need access to every file you attach.
+
+### Sender address
+
+Without your own email server, Tape sends from `noreply@automations.tapeapp.com`. If you set `reply_to`, Tape sends from `reply@automations.tapeapp.com`. Set `from_name` to show your own sender name.
+
+To send from your own address, add an SMTP account in the **Send an email** action of an automation:
+
+1. Open an automation and add the action **Send an email**.
+2. Select **Show more**, open the **Account** menu and select **Add account**.
+3. On the **SMTP** tab, enter the user name, password, server address and port, then select **Save account**.
+4. To make the account the default of your organization, open the **Account** menu, select the three dots next to the account and select **Set as default**.
+
+Tape then sends through your organization's default SMTP account. To pick another one, set `smtp_settings_id`.
+
+The API has no endpoint that lists SMTP accounts, and the **Account** menu doesn't show the ID. To find it in the automation editor:
+
+1. In a **Send an email** action, select the account in the **Account** menu.
+2. In the action menu, select **Duplicate**.
+3. In the action menu of the copy, select **Turn into** → **Execute script**. The script shows the ID in `smtp_settings_id`.
+4. Remove the copy.
+
+The [automation API](/docs/api/resource/automation/manage#retrieve-an-automation) returns the same ID as `smtp_account_id` of the action.
+
+Set the sender address in `from_address`. Without it, Tape uses the user name of the SMTP server.
+
+Your SMTP server must be allowed to send emails for this address. Otherwise, delivery fails.
+
+The example sends an email from `juliet@acme.com` to two recipients, with two people in copy. It attaches the file with ID `42`, a file in an attachment field of a record.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
-{`curl -X POST #BASE_URL/v1/email/send  \\
-  -u #USER_API_KEY: \\
+<ContextCodeBlock language="shell" title='Request'>
+{`curl -X POST #BASE_URL/v1/email/send \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
-    "from_address": "sender@example.com",
-    "to": ["recipient-one@example.com", "recipient-two@example.com"],
-    "subject": "Hello World",
-    "html": "<p> Today we show you how to use the cc property in emails. </p>",
-    "cc": ["carbon-copy-one@example.com", "carbon-copy-two@example.com"],
+    "from_address": "juliet@acme.com",
+    "from_name": "Juliet from Acme",
+    "to": ["riley@acme.com", "sam@acme.com"],
+    "subject": "Offer for 12 Harbor Street",
+    "html": "<p>The signed offer is attached.</p>",
+    "cc": ["will@acme.com", "nora@acme.com"],
     "attachment_ids": [42]
 }'
 `}
@@ -103,13 +146,14 @@ In addition, the email contains an attachment with file ID 42, which is present 
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
-  "from_address": "sender@example.com",
-  "to": ["recipient-one@example.com", "recipient-two@example.com"],
-  "subject": "Hello World",
-  "html": "<p> Today we show you how to use the cc property in emails. </p>",
-  "cc": ["carbon-copy-one@example.com", "carbon-copy-two@example.com"],
+  "from_address": "juliet@acme.com",
+  "from_name": "Juliet from Acme",
+  "to": ["riley@acme.com", "sam@acme.com"],
+  "subject": "Offer for 12 Harbor Street",
+  "html": "<p>The signed offer is attached.</p>",
+  "cc": ["will@acme.com", "nora@acme.com"],
   "attachment_ids": [42]
 }
 ```
@@ -117,7 +161,7 @@ In addition, the email contains an attachment with file ID 42, which is present 
 </TabItem>
 </Tabs>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "status": "SUCCESSFULLY_SCHEDULED"
 }
@@ -125,23 +169,21 @@ In addition, the email contains an attachment with file ID 42, which is present 
 
 ## Limits
 
-The following limits are enforced for each email:
+Tape enforces these limits for each email:
 
-| Variable                      | Limit |
-| :---------------------------- | :---- |
-| Maximum total attachment size | 20MB  |
+| Variable | Limit |
+| :-- | :-- |
+| Maximum total attachment size | 20 MB |
 
 ## Rate limit credits
 
-Emails are rate limited based on their number of recipient addresses (sum of addresses contained in the properties `to`, `cc` and `bcc` of the request body). Every request consumes an additional credit:
+Sending an email costs the [base request cost](/docs/api/request-limits) of 10 credits, whatever the number of recipients in `to`, `cc` and `bcc`.
 
-```
-Sending to 1 recipient:  2x credits
-Sending to 2 recipients: 3x credits
-...
-Sending to 10 recipients: 11x credits
-...
-```
+One email to several recipients uses fewer credits than separate emails to each of them. Recipients in `to` and `cc` see each other. Put recipients in `bcc` if they shouldn't, and check that your choice fits your privacy policy.
 
-As you can see, sending the same email to multiple recipients at once costs fewer credits than sending the same email to multiple recipients separately.
-Note that with the first option, each recipient sees the other recipients. Depending on the use case, this could conflict with your privacy policy.
+## Next steps
+
+- [File](/docs/api/resource/file): upload files to attach them.
+- [Attachment field value](/docs/api/resource/field-value/attachment): find the file IDs of a record.
+- [Request limits](/docs/api/request-limits): how credits work.
+- [Capabilities](/docs/api/capabilities): what `email:send` allows.

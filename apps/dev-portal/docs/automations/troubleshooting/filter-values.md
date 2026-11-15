@@ -4,74 +4,53 @@ title: Filter values
 sidebar_label: Filter values
 ---
 
-A filter — and an in-action search condition — compares a field against a **value**. That value is composed at run
-time from literal input and references (a field, a variable, a prior action's output). Because it is evaluated when the
-automation runs, a filter that looks complete in the editor can still resolve to an **empty** value for a particular
-record or run. This page explains the behavior you may see and how to avoid it.
+Keep filters from matching every record when their comparison value turns out empty.
+
+A filter, or a search condition inside an action, compares a field with a value. Tape builds that value when the automation runs, from fixed input and references: a field, a variable or the output of an earlier action. A filter that looks complete can still end up with an empty value for one record.
 
 ## An empty filter value matches every record
 
-The Developer API now refuses a *statically* empty comparison at the write boundary, but a value that composes to empty
-at **run time** still matches every record. Both halves matter:
-
-:::info Write-time: a literal empty or wrong-channel comparison is now a `400`
-On create/update, the Developer API rejects a comparison it can see is empty or mistyped, naming the offending
-condition: a value tagged for a channel the field doesn't have, an empty comparison value (e.g. `{ "type": "text",
-"text": [] }`), or an arity mismatch. So you can no longer *store* one of these through the API — the error names the
-match-every-record risk and points you at `is_empty` / `is_not_empty` if that's what you meant.
+:::danger Using a field, a variable or an earlier output as the value?
+If it is empty for one record when the automation runs, the condition is `true` for every record. Under the default `and` group, the automation then runs its actions on every record in scope, without an error. Before a bulk action like "update all" or "delete all", this can change your whole dataset and use credits for every record.
 :::
 
-:::danger Run-time: a value that resolves to empty still matches everything
-The rejection above sees only the literal you send. A value built from a **reference** — a field, variable, or prior
-action's output — is accepted on write (the reference is present) but can still resolve to **empty for a particular
-record** at run time. When it does, the condition leaf compiles to a match-all short-circuit, evaluates to `true` for
-every record, and under the default `and` group the whole filter passes — the automation runs its actions against
-**every** record in scope, with no error. This is especially dangerous when a bulk action follows (an "update all" /
-"delete all" pattern): a scoped automation can quietly operate on your entire dataset, consuming credits on every
-record. Definitions stored before this check, or through the in-app editor, can also carry an empty comparison
-(create/update don't re-validate existing rows).
-:::
+:::info Getting `400` when you save a filter?
+Create and update in the Automation API reject a comparison that is empty or of the wrong type, and name the condition:
 
-Because a reference is resolved at run time, a filter can pass both create/update and `validate` and still behave this
-way — it depends on the actual values in play when the automation runs. **Always
-[`simulate`](/docs/api/resource/automation/execution) a new or edited filter before activating it**, and confirm it
-matches only the records you expect.
+- a value whose `type` doesn't match the field, for example `text` on a number field
+- an empty comparison value, for example `{ "type": "text", "text": [] }`
+- the wrong number of values
+
+The error explains the risk. To check for an empty field on purpose, use `is_empty` or `is_not_empty`.
+:::
 
 ### How a value ends up empty
 
-- **A referenced value resolved to nothing.** If the value pulls in a field, variable, or a prior action's output and
-  that source is empty for the record at run time, the composed value is empty. This is the remaining path to an
-  over-matching filter, since it can't be caught when you write the definition.
-- **The value's channel did not match the field** (now caught on write). On create/update the server picks the value
-  channel from the subject **field's type** — number / unique-id → `number`, date fields → `date`, category / status /
-  relation / user → `ids`, text → `text`. A value tagged with the wrong channel used to be silently dropped, leaving an
-  empty comparison; it is now **rejected with a `400`**. See
-  [Filters → the value union](/docs/api/resource/automation/reference/filters) for the channel rules.
+- **A referenced value is empty.** The field, variable or earlier output is empty for this record. It passes the save check, because the reference exists.
+- **The value channel doesn't match the field.** Tape catches this on save and returns `400`. Tape picks the channel from the field type: number and unique ID use `number`, date fields use `date`, category, status, relation and user use `ids`, text uses `text`. See [Match the value type to the field](/docs/api/resource/automation/reference/filters#match-the-value-type-to-the-field) for the channel rules.
+- **The automation is older than the check.** Automations saved before this check, or in the automation editor, can hold an empty comparison. Create and update don't check existing automations again.
 
 ### How to avoid it
 
-- **Guard the source.** If the value comes from a reference that can be empty, wrap the filter or action in a
-  `conditional` that first checks the source is present, or supply a fallback value. This is the main defense against
-  the run-time case.
-- **Match the value channel to the field type** so the write isn't rejected. See the channel rules linked above.
-- **Simulate before you activate.** A [`simulate`](/docs/api/resource/automation/execution) run exercises the filter
-  against a real record with no side effects, so an over-matching filter shows up before it can fire on your whole app.
-- **To match everything on purpose, remove the condition** — or send `filter: null`. A filter with no conditions always
-  runs; an explicitly empty top-level group is itself rejected with a `400`.
+- **Check the source first.** If the value comes from a reference that can be empty, put the filter or action inside a [`conditional`](/docs/api/resource/automation/reference/actions/conditional) that checks the source, or set a fallback value.
+- **Simulate before you activate.** A [simulation](/docs/api/resource/automation/execution) runs the actions on real records without changing data in Tape, so a search condition inside an action that matches too much shows up early. Requests to other services still go out. A simulation skips the filter of the automation itself.
+- **To match every record on purpose, remove the condition**, or send `filter: null`. A filter without conditions runs for every record. An empty top-level group returns `400`.
 
 ## Why `validate` does not flag an empty value
 
-`GET /v1/automation/{id}/validate` returns `valid: true` for a condition whose comparison value is empty, and that is
-structurally correct: an empty comparison is a valid definition. `validate` is **semantic-only** — it does not run the
-write-time syntactic checks above, and it can't know that a reference will resolve to empty for some record at run time.
-So it is **not** a safeguard against an over-matching filter; use [`simulate`](/docs/api/resource/automation/execution)
-for that.
+`GET /v1/automation/{id}/validate` returns `valid: true` for a condition with an empty comparison value, because the definition is valid. `validate` checks meaning only: it doesn't run the save checks of create and update, and can't know that a reference becomes empty for some record.
 
-`validate` does catch **dangling references**, which are a different problem from an empty value:
+`validate` catches missing references, which is a different problem:
 
-- a condition whose **subject** references a field that no longer exists reports `filter_variable_missing`;
-- a **value** that references a deleted field or variable reports `filter_value_variable_missing`.
+- `filter_variable_missing`: the subject of a condition points to a field that no longer exists.
+- `filter_value_variable_missing`: the value points to a deleted field or variable.
 
-So `filter_value_variable_missing` signals a *missing reference* (for example a deleted field), **not** a blank value —
-do not expect it for an empty comparison. (An earlier `filter_value_missing` code was never emitted and has been
-retired.)
+Neither code flags an empty comparison. The code `filter_value_missing` is reserved and no longer raised.
+
+## Next steps
+
+- [Run & simulate](/docs/api/resource/automation/execution): test the actions of an automation without changing data in Tape.
+- [Filters](/docs/api/resource/automation/reference/filters): conditions, operators and value channels.
+- [Execution types](/docs/automations/execution-types): how filters apply in each type of run.
+- [Errors](/docs/automations/troubleshooting/automations-troubleshooting-errors): read failed runs.
+- In the Help Center: [My filter doesn't match](https://help.tapeapp.com/en/articles/18449010-my-filter-doesn-t-match)

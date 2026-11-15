@@ -1,6 +1,6 @@
 ---
 id: date
-title: Date Field
+title: Date field
 sidebar_label: Date
 ---
 
@@ -8,71 +8,109 @@ import EndpointBadge from '@site/src/components/endpoint-badge/endpoint-badge.co
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
+import DateFieldSettingsPng from '@site/static/docs/api/resource/field/date/date-field-settings.png';
 
-There are two types of date fields: `single_date` and `range_date`.
-`single_date` field-values can only hold a single date, while `range_date` fields can hold both single dates and date ranges consisting of a start and end date.
+Use a date field to store a date, a date with a time, or a date range in a record.
 
-In addition to the common field properties, a `single_date` field definition has a `settings` property containing the following properties:
+Tape has two date field types. Both are the **Date** field in Tape:
 
-- `calendar` (optional): boolean flag (default: false) whether the records that have a value for this field should be shown in the sidebar-calendar or be included in the iCal exports
-- `time` (optional): This property specifies whether the date field values should/ have to include a time component. Can be one of ["disabled", "enabled", "required"];
-- `is_due_date_of_status_field` (optional): boolean flag (default: false) whether the date field values should be used as due date of the status field of the app. Can only be set if the app has a status field.
+- `single_date` holds one date.
+- `range_date` holds a start date and an optional end date.
 
-In addition to the common field properties, a `range_date` field definition has a `settings` property containing the following properties:
+A date field has the [common field properties](/docs/api/resource/field/overview#common-properties) and `settings` that decide whether a value has a time, an end date and a place in the calendar. To read and write the dates of a record, see [Date field value](/docs/api/resource/field-value/date).
 
-- `calendar` (optional): boolean flag (default: false) whether the records that have a value for this field should be shown in the sidebar-calendar or be included in the iCal exports
-- `time` (optional): This property specifies whether the date field values should/ have to include a time component. Can be one of ["disabled", "enabled", "required"];
-- `is_due_date_of_status_field` (optional): boolean flag (default: false) whether the date field values should be used as due date of the status field of the app. Can only be set if the app has a status field.
-- `end` (required): This property specifies whether the date field values should/ have to include an end date component. Can be one of ["enabled", "required"]. Use a `single_date` field if you want to disable setting an end date in the field values.
+```json title="Date field object"
+{
+  "field_id": 2,
+  "external_id": "installation_window",
+  "slug": "installation_window",
+  "label": "Installation Window",
+  "type": "date",
+  "field_type": "range_date",
+  "config": {
+    "label": "Installation Window",
+    "slug": "installation_window",
+    "external_id": "installation_window",
+    "description": "The days the crew installs the panels.",
+    "show_description": true,
+    "required": false,
+    "always_hidden": false,
+    "hidden_if_empty": false,
+    "primary": false,
+    "settings": {
+      "calendar": true,
+      "time": "disabled",
+      "end": "required",
+      "is_due_date_of_status_field": false
+    }
+  }
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"date"` for both date field types. | `"date"` |
+| `field_type` | `string` | `"single_date"` or `"range_date"`. | `"range_date"` |
+| `config.settings.calendar` | `boolean` | Shows the field in the Tape calendar and in iCal exports. Default: `false`. | `true` |
+| `config.settings.time` | `string` | Whether a value has a time: `"disabled"`, `"enabled"` (default) or `"required"`. | `"disabled"` |
+| `config.settings.end` | `string` | `range_date` only. Whether a value needs an end date: `"enabled"` (default) or `"required"`. | `"required"` |
+| `config.settings.is_due_date_of_status_field` | `boolean` | Uses this field as the due date of the app's [status field](/docs/api/resource/field/status), for example in **Focus**. Default: `false`. | `false` |
+
+In Tape, `time` is the **Time** setting of the field: `"disabled"` is **Hidden**, `"enabled"` is **Shown**, `"required"` is **Required**. `end` is the **End date** setting.
+
+The API has no value to hide the end date. An end date hidden in Tape reads as `"enabled"`. For a date without an end, use a `single_date` field.
+
+<MediaFrame><img src={DateFieldSettingsPng} alt="Settings of a Date field with the Time options and the End date setting" /></MediaFrame>
 
 ## App creation
 
+Use the [create app endpoint](/docs/api/resource/app#create-an-app) to create date fields together with a new app.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/app" />
 
-A date field can be created as part of an app creation. Here is an example request body for creating an excerpt of an Event app within a workspace with ID 1.
-The app contains a `single_date` field "Event date", and a `range_date` field "Preparation period". Other useful fields for an event app, like "Name" or "Location", are omitted for brevity.
+The example creates an installations app for a solar installer in the workspace with ID `1`. The app gets a `single_date` field "Site Visit" with an optional time and a `range_date` field "Installation Window" with whole days and a required end date. The example leaves out other fields of an installations app, like "Customer" or "Address".
+
+Find the workspace ID with [Retrieve workspaces](/docs/api/resource/workspace#retrieve-workspaces).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`
 curl -X POST #BASE_URL/v1/app/ \\
-   -u #USER_API_KEY: \\
-   -H "Content-Type: application/json" \\
-   --data '{
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "workspace_id": 1,
-    "name": "Events",
-    "item_name": "Event",
+    "name": "Installations",
+    "item_name": "Installation",
     "fields": [
       {
         "field_type": "single_date",
         "config": {
-          "label": "Event date",
-          "description": "The date of the event.",
+          "label": "Site Visit",
+          "description": "When the technician checks the roof.",
           "required": true,
           "settings": {
-            "calendar": false,
-            "time": "disabled",
-            "is_due_date_of_status_field": false
+            "calendar": true,
+            "time": "enabled"
           }
         }
       },
       {
         "field_type": "range_date",
         "config": {
-          "label": "Preparation period",
-          "description": "The period of time before the event.",
-          "required": false,
+          "label": "Installation Window",
+          "description": "The days the crew installs the panels.",
           "settings": {
-            "calendar": false,
+            "calendar": true,
             "time": "disabled",
-            "is_due_date_of_status_field": false,
             "end": "required"
           }
         }
       }
-    ] 
+    ]
   }'
 `}
 </ContextCodeBlock>
@@ -80,35 +118,32 @@ curl -X POST #BASE_URL/v1/app/ \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "workspace_id": 1,
-  "name": "Events",
-  "item_name": "Event",
+  "name": "Installations",
+  "item_name": "Installation",
   "fields": [
     {
       "field_type": "single_date",
       "config": {
-        "label": "Event date",
-        "description": "The date of the event.",
+        "label": "Site Visit",
+        "description": "When the technician checks the roof.",
         "required": true,
         "settings": {
-          "calendar": false,
-          "time": "disabled",
-          "is_due_date_of_status_field": false
+          "calendar": true,
+          "time": "enabled"
         }
       }
     },
     {
       "field_type": "range_date",
       "config": {
-        "label": "Preparation period",
-        "description": "The period of time before the event.",
-        "required": false,
+        "label": "Installation Window",
+        "description": "The days the crew installs the panels.",
         "settings": {
-          "calendar": false,
+          "calendar": true,
           "time": "disabled",
-          "is_due_date_of_status_field": false,
           "end": "required"
         }
       }
@@ -120,55 +155,64 @@ curl -X POST #BASE_URL/v1/app/ \\
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
-  "slug": "events",
-  "name": "Events",
-  "item_name": "Event",
+  "slug": "installations",
+  "external_id": "installations",
+  "name": "Installations",
+  "record_name": "Installation",
+  "item_name": "Installation",
   "type": "database",
-  "position": 0,
   "config": {
-    "item_name": "Event",
-    "name": "Events"
+    "item_name": "Installation",
+    "name": "Installations"
   },
   "fields": [
     {
       "field_id": 1,
-      "slug": "event_date",
-      "label": "Event date",
+      "external_id": "site_visit",
+      "slug": "site_visit",
+      "label": "Site Visit",
       "type": "date",
       "field_type": "single_date",
       "config": {
-        "label": "Event date",
-        "slug": "event_date",
-        "description": "The date of the event.",
+        "label": "Site Visit",
+        "slug": "site_visit",
+        "external_id": "site_visit",
+        "description": "When the technician checks the roof.",
+        "show_description": false,
         "required": true,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": true,
         "settings": {
-          "calendar": false,
-          "time": "disabled",
+          "calendar": true,
+          "time": "enabled",
           "is_due_date_of_status_field": false
         }
       }
     },
     {
       "field_id": 2,
-      "slug": "preparation_period",
-      "label": "Preparation period",
+      "external_id": "installation_window",
+      "slug": "installation_window",
+      "label": "Installation Window",
       "type": "date",
       "field_type": "range_date",
       "config": {
-        "label": "Preparation period",
-        "slug": "preparation_period",
-        "description": "The period of time before the event.",
+        "label": "Installation Window",
+        "slug": "installation_window",
+        "external_id": "installation_window",
+        "description": "The days the crew installs the panels.",
+        "show_description": false,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
-          "calendar": false,
+          "calendar": true,
           "time": "disabled",
           "end": "required",
           "is_due_date_of_status_field": false
@@ -179,32 +223,48 @@ curl -X POST #BASE_URL/v1/app/ \\
 }
 ```
 
+**General behavior**
+
+- Without `time`, a new field uses `"enabled"`. Without `end`, a new `range_date` field uses `"enabled"`. Without `calendar`, it's `false`.
+- Only one date field of an app can be the due date of the status field. If you set `is_due_date_of_status_field` on a field, Tape removes it from the other date fields of the app.
+- Without `primary`, Tape makes the first field of the request the primary field. Here, that's "Site Visit".
+- A new date field doesn't show its `description` as help text yet (`show_description` is `false`). To show it, send the `description` again in a field update.
+
+**Requirements:** `apps:edit`, and a workspace role that may edit apps in the workspace. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- A `time` other than `"disabled"`, `"enabled"` or `"required"`, or an `end` other than `"enabled"` or `"required"`, returns `400`.
+
 ## App update
+
+Use the [update app endpoint](/docs/api/resource/app#update-an-app) to create new date fields in an app or to change existing ones.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/app/{appId}" />
 
-A date field can be created or updated as part of an app update. Here is an example request body for updating the previously created events app with ID 1.
-The update sets the `calendar` property of the "Event date" field to `true` and sets the `end` property of the "Preparation period" field to `enabled`.
+The example makes a time required for the "Site Visit" field (ID `1`) and makes the end date of the "Installation Window" field (ID `2`) optional. The request sends all settings of both fields.
+
+Find the app ID and the field IDs in the [Developer view of the app](/docs/api/resource/app#find-app-and-field-ids).
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`
 curl -X PUT #BASE_URL/v1/app/1 \\
-   -u #USER_API_KEY: \\
-   --data '{
-    "app_id": 1,
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  --data '{
     "fields": [
       {
         "field_id": 1,
         "config": {
-          "label": "Event date",
-          "description": "The date of the event.",
+          "label": "Site Visit",
+          "description": "When the technician checks the roof.",
           "required": true,
           "settings": {
             "calendar": true,
-            "time": "disabled",
+            "time": "required",
             "is_due_date_of_status_field": false
           }
         }
@@ -212,18 +272,18 @@ curl -X PUT #BASE_URL/v1/app/1 \\
       {
         "field_id": 2,
         "config": {
-          "label": "Preparation period",
-          "description": "The period of time before the event.",
+          "label": "Installation Window",
+          "description": "The days the crew installs the panels.",
           "required": false,
           "settings": {
-            "end": "enabled",
-            "calendar": false,
+            "calendar": true,
             "time": "disabled",
+            "end": "enabled",
             "is_due_date_of_status_field": false
           }
         }
       }
-    ] 
+    ]
   }'
 `}
 </ContextCodeBlock>
@@ -231,19 +291,18 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
-  "app_id": 1,
   "fields": [
     {
       "field_id": 1,
       "config": {
-        "label": "Event date",
-        "description": "The date of the event.",
+        "label": "Site Visit",
+        "description": "When the technician checks the roof.",
         "required": true,
         "settings": {
           "calendar": true,
-          "time": "disabled",
+          "time": "required",
           "is_due_date_of_status_field": false
         }
       }
@@ -251,13 +310,13 @@ curl -X PUT #BASE_URL/v1/app/1 \\
     {
       "field_id": 2,
       "config": {
-        "label": "Preparation period",
-        "description": "The period of time before the event.",
+        "label": "Installation Window",
+        "description": "The days the crew installs the panels.",
         "required": false,
         "settings": {
-          "end": "enabled",
-          "calendar": false,
+          "calendar": true,
           "time": "disabled",
+          "end": "enabled",
           "is_due_date_of_status_field": false
         }
       }
@@ -269,56 +328,64 @@ curl -X PUT #BASE_URL/v1/app/1 \\
 </TabItem>
 </Tabs>
 
-````json title="⬅️      Response"
+```json title="Response"
 {
   "app_id": 1,
   "workspace_id": 1,
-  "slug": "events",
-  "name": "Events",
-  "item_name": "Event",
+  "slug": "installations",
+  "external_id": "installations",
+  "name": "Installations",
+  "record_name": "Installation",
+  "item_name": "Installation",
   "type": "database",
-  "position": 0,
   "config": {
-    "item_name": "Event",
-    "name": "Events"
+    "item_name": "Installation",
+    "name": "Installations"
   },
   "fields": [
     {
       "field_id": 1,
-      "slug": "event_date",
-      "label": "Event date",
+      "external_id": "site_visit",
+      "slug": "site_visit",
+      "label": "Site Visit",
       "type": "date",
       "field_type": "single_date",
       "config": {
-        "label": "Event date",
-        "slug": "event_date",
-        "description": "The date of the event.",
+        "label": "Site Visit",
+        "slug": "site_visit",
+        "external_id": "site_visit",
+        "description": "When the technician checks the roof.",
+        "show_description": true,
         "required": true,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": true,
         "settings": {
           "calendar": true,
-          "time": "disabled",
+          "time": "required",
           "is_due_date_of_status_field": false
         }
       }
     },
     {
       "field_id": 2,
-      "external_id": "preparation_period",
-      "slug": "preparation_period",
-      "label": "Preparation period",
+      "external_id": "installation_window",
+      "slug": "installation_window",
+      "label": "Installation Window",
       "type": "date",
       "field_type": "range_date",
       "config": {
-        "label": "Preparation period",
-        "slug": "preparation_period",
-        "description": "The period of time before the event.",
+        "label": "Installation Window",
+        "slug": "installation_window",
+        "external_id": "installation_window",
+        "description": "The days the crew installs the panels.",
+        "show_description": true,
         "required": false,
         "always_hidden": false,
         "hidden_if_empty": false,
+        "primary": false,
         "settings": {
-          "calendar": false,
+          "calendar": true,
           "time": "disabled",
           "end": "enabled",
           "is_due_date_of_status_field": false
@@ -327,4 +394,27 @@ curl -X PUT #BASE_URL/v1/app/1 \\
     }
   ]
 }
-````
+```
+
+**General behavior**
+
+- A field with `field_id` updates that field. A field without `field_id` creates a new field and needs a `field_type`.
+- Send all `settings` of a date field when you update it. Tape sets a missing `time` or `end` to `"enabled"`, and a missing `calendar` of a `single_date` field to `false`.
+- Send `required`, `always_hidden`, `hidden_if_empty` and `description` with every field you update. Tape sets left-out switches to `false` and hides the help text without `description`. See [Create and update fields](/docs/api/resource/field/overview#create-and-update-fields).
+- Fields that aren't in the request stay unchanged.
+
+**Requirements:** `apps:edit`, and **Full access** to the app. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- Every field you update needs `config.label`, even if the label stays the same. Without it, Tape rejects the request with `400` and `input_validation`. The message reads, for example, `Invalid input: data/fields/0/config must have required property 'label'`.
+- A `time` other than `"disabled"`, `"enabled"` or `"required"`, or an `end` other than `"enabled"` or `"required"`, returns `400`.
+
+## Next steps
+
+- [Date field value](/docs/api/resource/field-value/date): read and write the dates of a record.
+- [Date & timezone](/docs/api/date-timezone): date formats, calendar days and timezones in the API.
+- [Status field](/docs/api/resource/field/status): the field a due date belongs to.
+- [Field](/docs/api/resource/field/overview): the properties all field types share.
+- [App](/docs/api/resource/app): create, update and delete apps with their fields.
+- [Capabilities](/docs/api/capabilities): what `apps:edit` allows.

@@ -2,60 +2,66 @@
 id: current-record-comment-or-reply-delete
 title: current_record_comment_or_reply_delete
 sidebar_label: current_record_comment_or_reply_delete
-description: Config reference for the Tape automation current_record_comment_or_reply_delete action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation current_record_comment_or_reply_delete action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to delete the comment or reply that started an automation.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**Delete comment or reply** — deletes the comment or reply from the triggering record. `group: "action"`. Requires the
-`record_comment_or_reply_created` trigger context.
+In the automation editor, this action is **Delete the current comment** in the [Current record](/docs/api/resource/automation/reference/actions#current-record) family. Its `group` is `action`, and it needs the `record_comment_or_reply_created` trigger.
 
-Part of the [Current record](/docs/api/resource/automation/reference/actions#current-record) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-Deleting a comment or reply is a record mutation, so this action carries only the shared record-mutation envelope and
-has nothing of its own.
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | no | User the mutation is attributed to — a literal user id or a variable reference. Omitted → the automation itself. |
-| `trigger_webhooks` | boolean | no | Whether the deletion fires outbound webhooks. |
-| `trigger_other_flows` | boolean | no | Whether the deletion triggers other automations. |
-| `silent` | boolean | no | Whether the deletion is silent (suppresses notifications). |
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+This action removes a comment on a candidate record in an HR database app, for example after a filter found personal data in it:
 
 ```json
 {
   "type": "current_record_comment_or_reply_delete",
   "config": {
-    "author_id": { "kind": "variable", "source": "meta", "meta_type": "created_by" },
+    "author_id": { "kind": "variable", "source": "meta", "meta_type": "created_by", "app_id": 87 },
     "silent": true
   }
 }
 ```
 
-## Validation & behavior
+## Config
 
-- No members are required — an empty `"config": {}` deletes the triggering comment or reply with the internal defaults.
-- This action is only meaningful under the `record_comment_or_reply_created` trigger context, which supplies the comment
-  or reply to delete.
-- `author_id`, `trigger_webhooks`, `trigger_other_flows`, and `silent` are all optional; each omitted member falls back
-  to the internal default (the mutation is attributed to the automation itself).
-- Deleting a comment or reply is a record mutation and honors the shared mutation-control envelope above.
+The action has no keys of its own. It takes only the keys that every record-changing action shares.
 
-## See also
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `author_id` | integer \| [reference](/docs/api/resource/automation/dynamic-values) | User Tape attributes the deletion to: a user ID, or a reference to the creator, the last modifier or a user field. Left out, the automation itself is the author. | `812` |
+| `trigger_webhooks` | boolean | Whether the deletion fires outbound webhooks. Default `false`. | `false` |
+| `trigger_other_flows` | boolean | Whether the deletion starts other automations. Default `false`. | `false` |
+| `silent` | boolean | Whether Tape sends no notifications for the deletion. Default `false`. | `true` |
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — template values and references
-- [Actions](/docs/api/resource/automation/reference/actions) — how actions compose in an automation definition
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+In the action menu of the automation editor, these keys are **Author**, **Trigger webhooks**, **Trigger automations** and **Silent**. To find a user ID for `author_id`, see [Retrieve organization users](/docs/api/resource/user#retrieve-organization-users).
+
+## General behavior {#validation--behavior}
+
+- No key is required. `"config": {}` deletes the comment or reply with the defaults.
+- The action deletes the comment or reply that started the run. Only the `record_comment_or_reply_created` trigger provides it.
+- With any other trigger, validation reports the [broken reason](/docs/api/resource/automation/reference/errors#broken-reason-codes) `action_invalid`.
+- Without `author_id`, the automation itself is the author. A user ID that Tape can't find gives the broken reason `action_user_missing`.
+- Tape returns `silent` on every read. It's `false` when you left it out.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- The automation needs the `record_comment_or_reply_created` trigger.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [current_record_comment_or_reply_reply_create](/docs/api/resource/automation/reference/actions/current-record-comment-or-reply-reply-create): reply to the comment or reply that started the run.
+- [Triggers](/docs/api/resource/automation/reference/triggers): the `record_comment_or_reply_created` trigger.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): build the reference for `author_id`.
+- [Filters](/docs/api/resource/automation/reference/filters): decide which comments the automation acts on.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

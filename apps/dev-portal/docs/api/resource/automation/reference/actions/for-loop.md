@@ -2,46 +2,50 @@
 id: for-loop
 title: for_loop
 sidebar_label: for_loop
-description: Config reference for the Tape automation for_loop action — its typed config keys, defaults, and an example.
+description: Config reference for the Tape automation for_loop action, with its config keys, defaults and an example.
 ---
 
-:::caution Internal beta — config shape is being migrated
-The **Automation** API is an internal beta and is **not released yet** — endpoints and payloads may change or be
-withdrawn without notice. This action's `config` is being migrated to a **typed schema**; the fields below reflect that
-in-progress shape. Always read the authoritative, live shape from
-[`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before building against it.
+Use this action to run a set of nested actions once for each item of a collection.
+
+:::tip
+Read the live `config` shape of each action type from [`GET /v1/automation/meta/action`](/docs/api/resource/automation/discovery) before you build on it.
 :::
 
-**For loop** — iterates over an iterable and runs a nested body of actions for each item. `group: "control_flow"`. No specific trigger context is required. This is a control-flow action: its whole shape now lives in `config` (recently moved from the action's top level), and each branch is enabled by **presence** — there are no `*_enabled` flags.
+In the automation editor, this action is **Loop actions** in the [Flow control](/docs/api/resource/automation/reference/actions#flow-control) family. Its `group` is `control_flow`, and it works with every trigger.
 
-Part of the [Flow control](/docs/api/resource/automation/reference/actions#flow-control) family. This page
-documents the typed `config`; for how an action sits inside an automation definition, see
-[Actions](/docs/api/resource/automation/reference/actions) and [Action examples](/docs/api/resource/automation/action-examples).
-
-## Config
-
-| Key | Type | Required | Description |
-| --- | --- | --- | --- |
-| `iterable` | [reference](/docs/api/resource/automation/dynamic-values) | no | The collection to loop over — a `record_collection` reference produced by an upstream `collect_*` action (or a multi-value field / custom variable). Named `iterable` on the wire (renamed from the internal `iterable_variable_def`). |
-| `action_rows` | array of nested [actions](/docs/api/resource/automation/reference/actions) | no | The loop body — the actions run once per item. Empty when omitted. |
-| `break_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Stops the loop when it matches. Omitted → disabled. |
-| `continue_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | no | Skips to the next item when it matches. Omitted → disabled. |
+Send it in the `actions` array of [Create an automation](/docs/api/resource/automation/manage#create-an-automation) or [Update an automation](/docs/api/resource/automation/manage#update-an-automation). An update replaces the whole array, so include the other actions.
 
 ## Example
 
-An action entry inside an automation definition's `actions[]`:
+An earlier `collect_app_records` action collected the open invoices of database app `12345`. The loop skips invoices with the category option **Paid** (`9001`) and emails a payment reminder for each other one:
 
 ```json
 {
   "type": "for_loop",
   "config": {
     "iterable": { "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 12345 },
+    "continue_condition": {
+      "operator": "and",
+      "rows": [
+        {
+          "subject": { "kind": "variable", "source": "field", "field_id": 512, "field_type": "single_category", "previous": false, "collection": true, "triggering": false },
+          "operator": "is_any_of",
+          "value": { "type": "ids", "ids": [9001] }
+        }
+      ]
+    },
     "action_rows": [
       {
         "type": "send_email",
         "config": {
-          "to_address": ["someone@example.com"],
-          "subject": ["Processing item"]
+          "to_address": [
+            { "kind": "variable", "source": "field", "field_id": 514, "field_type": "multi_email", "previous": false, "collection": true, "triggering": false }
+          ],
+          "subject": [
+            "Payment reminder for invoice ",
+            { "kind": "variable", "source": "meta", "meta_type": "app_record_id", "collection": true, "app_id": 12345 }
+          ],
+          "message_body": ["<p>This invoice is overdue.</p>"]
         }
       }
     ]
@@ -49,18 +53,50 @@ An action entry inside an automation definition's `actions[]`:
 }
 ```
 
-## Validation & behavior
+## Config
 
-- No member is required — an empty `config` is valid, though a loop with no `iterable` or `action_rows` does nothing useful.
-- Control-flow shape lives entirely in `config`; it was recently moved from the action's top level.
-- Enabled-ness is encoded by **presence**, not by a flag: an omitted `break_condition` or `continue_condition` disables that branch (the internal `*_enabled` members are derived).
-- `action_rows` holds nested [actions](/docs/api/resource/automation/reference/actions) that execute once per iteration; `break_condition` / `continue_condition` are evaluated as [filter groups](/docs/api/resource/automation/reference/filters).
-- **A non-iterable `iterable` is accepted on write and fails only at run time.** [`validate`](/docs/api/resource/automation/execution) checks that the reference *resolves* — one that doesn't (for example a `collect_*` producer placed **after** this loop) is reported as `action_variable_missing`. It does **not** check that the resolved variable is actually iterable: a **single-value** field, or an action output that isn't a `record_collection`, passes `validate` and then throws at **run** time. Use only a `record_collection`, a multi-value field, or a custom variable (the kinds in the table above).
-- **`continue_condition` is evaluated *before* the loop body; `break_condition` *after* it.** So an item that trips `break_condition` still runs the body **once** and *then* stops the loop; `continue_condition` skips the body for a matching item. Both are evaluated against the current item.
-- An `iterable` that resolves to nothing at run time — an empty collection, or a reference that comes back `null` — runs **zero** iterations rather than erroring.
+| Property | Type | Description | Example value |
+| --- | --- | --- | --- |
+| `iterable` | [reference](/docs/api/resource/automation/dynamic-values) | What the loop goes through: a `record_collection` from an earlier `collect_*` action, a multi-value field or a custom variable. | `{ "kind": "variable", "source": "action", "action_type": "record_collection", "app_id": 12345 }` |
+| `action_rows` | array of nested [actions](/docs/api/resource/automation/reference/actions) | The loop body. Tape runs it once per item. Empty when left out. | `[{ "type": "send_email", "config": { … } }]` |
+| `break_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | Stops the loop when it matches. Off when left out. | `{ "operator": "and", "rows": [ … ] }` |
+| `continue_condition` | [filter group](/docs/api/resource/automation/reference/filters) \| `null` | Skips to the next item when it matches. Off when left out. | `{ "operator": "and", "rows": [ … ] }` |
 
-## See also
+To find the field IDs, see [App and field IDs](/docs/api/resource/app#find-app-and-field-ids). To find the option IDs for `ids`, see [Retrieve a single app](/docs/api/resource/app#retrieve-a-single-app). It returns them in `config.settings.options` of the field.
 
-- [Dynamic values](/docs/api/resource/automation/dynamic-values) — references such as `iterable`
-- [Filters](/docs/api/resource/automation/reference/filters) — the filter-group shape used by `break_condition` and `continue_condition`
-- [Action examples](/docs/api/resource/automation/action-examples) · [Actions catalog](/docs/api/resource/automation/reference/actions)
+## What happens for each item
+
+1. Tape loads the item. Inside the loop, references with `collection: true` to fields and metadata of the collection's database app point to this item. For a custom variable, a `custom` reference to that variable points to this item. To read one property of it, use a code value such as `[<reference>, ".price"]`. This works in field assignments and template values. The `assignment_code` of a `custom_variable` inside the loop body doesn't see the item yet and reads `undefined`.
+2. Tape checks `continue_condition`. When it matches, Tape skips the body and moves to the next item.
+3. Tape runs the actions in `action_rows`.
+4. Tape checks `break_condition`. When it matches, the loop stops.
+
+An item that matches `break_condition` still runs the body once. Then the loop stops.
+
+## General behavior {#validation--behavior}
+
+- No key is required. An empty `config` is valid, but the loop does nothing.
+- The whole loop lives in `config`, like every other action.
+- Send the collection as `iterable`. The internal name `iterable_variable_def` isn't part of the API.
+- Leave `break_condition` or `continue_condition` out to switch it off. There are no `*_enabled` flags. A condition sent as `null` or as an empty group has no effect and reads back as `null`.
+- Without `iterable`, Tape skips the loop when the automation runs.
+- [`validate`](/docs/api/resource/automation/execution) checks that `iterable` resolves. A reference with no matching earlier action, for example a `collect_*` action placed after the loop, reports `action_variable_missing`.
+- `validate` doesn't check that the value can be looped over. A single-value field, or an action output that isn't a `record_collection`, passes `validate` and fails when the automation runs. Use only a `record_collection`, a multi-value field or a custom variable.
+- An `iterable` that's empty or `null` when the automation runs gives zero iterations, without an error.
+- A custom variable that holds an array gives one iteration per entry. Any other value gives one iteration with the whole value.
+
+## Requirements
+
+- To add or change this action through the API, your token needs the `automations:edit` capability. See [Capabilities](/docs/api/capabilities).
+- You must administer the workspace that the automation's database app belongs to.
+- When `iterable` references a collection or custom variable, an earlier action must create it, for example `collect_app_records`, `custom_variable` or `http_call`.
+
+<a id="see-also"></a>
+
+## Next steps
+
+- [collect_app_records](/docs/api/resource/automation/reference/actions/collect-app-records): create the record collection to loop over.
+- [Dynamic values](/docs/api/resource/automation/dynamic-values): references such as `iterable`.
+- [Filters](/docs/api/resource/automation/reference/filters): the filter group used by `break_condition` and `continue_condition`.
+- [Action examples](/docs/api/resource/automation/action-examples): configs to copy for the common actions.
+- [Actions](/docs/api/resource/automation/reference/actions): all 35 action types.

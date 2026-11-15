@@ -1,6 +1,6 @@
 ---
 id: location
-title: Location Field Value
+title: Location field value
 sidebar_label: Location
 ---
 
@@ -9,50 +9,104 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ContextCodeBlock from '@site/src/components/context-code-block/context-code-block.component';
 
-A location field value consists of its `value` property, an object containing the properties that describe a location. The value is a geographic location. A `location` field value holds at most one location value.
+Use a location field value to read and write the address of a record.
+
+The value of a [location field](/docs/api/resource/field/location) is one address. `values` holds one object with the full address in `value`, its parts and its coordinates.
+
+```json title="Location field value object"
+{
+  "field_id": 2,
+  "external_id": "address",
+  "label": "Address",
+  "type": "location",
+  "field_type": "single_location",
+  "values": [
+    {
+      "city": "San Francisco",
+      "country": "United States",
+      "map_in_sync": false,
+      "original_formatted_address": "221 Elm St, San Francisco, CA 94107, USA",
+      "postal_code": "94107",
+      "state": "California",
+      "street_address": "221 Elm St",
+      "name": "221 Elm St",
+      "value": "221 Elm St, San Francisco, CA 94107, USA",
+      "latitude": 37.7694,
+      "longitude": -122.4012,
+      "lat": 37.7694,
+      "lng": -122.4012
+    }
+  ]
+}
+```
+
+| Property | Type | Description | Example value |
+| :-- | :-- | :-- | :-- |
+| `type` | `string` | `"location"` for a location field. | `"location"` |
+| `field_type` | `string` | `"single_location"`. | `"single_location"` |
+| `values[].value` | `string` | The full address. If a user picked the address in Tape, it's `original_formatted_address`. Otherwise Tape joins the street, the postal code and city, the state and the country with commas. | `"221 Elm St, San Francisco, CA 94107, USA"` |
+| `values[].street_address` | `string` | Street and house number. | `"221 Elm St"` |
+| `values[].postal_code` | `string` | Postal code. | `"94107"` |
+| `values[].city` | `string` | City. | `"San Francisco"` |
+| `values[].state` | `string` | State or region. | `"California"` |
+| `values[].country` | `string` | Country. | `"United States"` |
+| `values[].latitude`, `values[].longitude` | `number` | Coordinates of the address. | `37.7694` |
+| `values[].lat`, `values[].lng` | `number` | The same coordinates under their older names. | `37.7694` |
+| `values[].original_formatted_address` (read-only) | `string` | The address as Google Maps formatted it when a user picked it in Tape. | `"221 Elm St, San Francisco, CA 94107, USA"` |
+| `values[].name` (read-only) | `string` | Name of the place, such as a business or a landmark, when a user picked it in Tape. | `"221 Elm St"` |
+| `values[].map_in_sync` (read-only) | `boolean` | Despite its name, `true` means the address was typed or changed by hand and doesn't come from a place picked on the map. Through the API, the value doesn't tell you whether the map matches: a record created through the API gets `true`, an update through the API sets `false`. | `true` |
+
+A part without a value isn't in the response.
+
+Each field in a record response also contains the field's `config`. The examples on this page leave it out.
 
 ## Record creation
 
+Use the [create record endpoint](/docs/api/resource/record#create-a-record) to set the address of a new record.
+
 <EndpointBadge method="POST" url="https://api.tapeapp.com/v1/record/app/{app_id}" />
 
-A location field value can be created as part of a record creation. Here is an example request body for creating a record with a value for the "Company Address" field with ID 2, type `location` and external ID `company_address`:
+The example sets the "Address" field (ID `2`, type `single_location`, slug `address`) of a new property, with coordinates for the map.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X POST #BASE_URL/v1/record/app/1 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "company_address": {
-        "city": "Munich",
-        "country": "Germany",
-        "value": "Hessstr. 6, 80799 Munich, Germany",
-        "state": "Bavaria",
-        "postal_code": "80799",
-        "street_address": "Hessstr. 6"
+      "name": "Elm Street Townhouse",
+      "address": {
+        "street_address": "221 Elm Street",
+        "postal_code": "94107",
+        "city": "San Francisco",
+        "state": "California",
+        "country": "United States",
+        "latitude": 37.7694,
+        "longitude": -122.4012
       }
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "company_address": {
-      "city": "Munich",
-      "map_in_sync": true,
-      "country": "Germany",
-      "value": "Hessstr. 6, 80799 Munich, Germany",
-      "state": "Bavaria",
-      "postal_code": "80799",
-      "street_address": "Hessstr. 6"
+    "name": "Elm Street Townhouse",
+    "address": {
+      "street_address": "221 Elm Street",
+      "postal_code": "94107",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States",
+      "latitude": 37.7694,
+      "longitude": -122.4012
     }
   }
 }
@@ -61,68 +115,107 @@ A location field value can be created as part of a record creation. Here is an e
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Hessstr. 6, 80799 Munich, Germany",
+  "title": "Elm Street Townhouse",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Elm Street Townhouse" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "company_address",
+      "external_id": "address",
+      "label": "Address",
       "type": "location",
       "field_type": "single_location",
-      "label": "Company Address",
       "values": [
         {
-          "city": "Munich",
+          "city": "San Francisco",
+          "country": "United States",
           "map_in_sync": true,
-          "country": "Germany",
-          "original_formatted_address": "Hessstr. 6, 80799 Munich, Germany",
-          "value": "Hessstr. 6, 80799 Munich, Germany",
-          "state": "Bavaria",
-          "postal_code": "80799",
-          "street_address": "Hessstr. 6"
+          "postal_code": "94107",
+          "state": "California",
+          "street_address": "221 Elm Street",
+          "value": "221 Elm Street, 94107 San Francisco, California, United States",
+          "latitude": 37.7694,
+          "longitude": -122.4012,
+          "lat": 37.7694,
+          "lng": -122.4012
         }
       ]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- Use the field ID or the field's slug (returned as `external_id` in records) as the key in `fields`.
+- Send the address as an object with `street_address`, `postal_code`, `city`, `state` and `country`. Each part is optional.
+- `value` is another name for `street_address`. Tape uses it only without `street_address`. A plain string also sets `street_address`, so send a full address as separate parts.
+- Tape doesn't look up coordinates for an address. Send `latitude` and `longitude` to place the address on the map. `lat` and `lng` work too.
+- An address with coordinates only is valid. Tape shows the coordinates as its `value`.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+- An object with none of the properties `value`, `street_address`, `postal_code`, `city`, `state`, `country`, `latitude`, `longitude`, `lat` and `lng` returns `400`.
+- A part of the address that isn't a string returns `400`.
+- A `latitude` that isn't a number between -90 and 90, or a `longitude` that isn't a number between -180 and 180, returns `400`.
+- A part of the address that's too long returns `400`.
+
+See [Errors](/docs/api/errors) for all error codes.
 
 ## Record retrieval
 
+Use the [retrieve record endpoint](/docs/api/resource/record#retrieve-a-record) to read the address of a record.
+
 <EndpointBadge method="GET" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-A location field value can be retrieved as part of a record retrieval:
-
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY:`}
+  -H "Authorization: Bearer $TAPE_TOKEN"`}
 </ContextCodeBlock>
 
-```json title='⬅️      Response'
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Hessstr. 6, 80799 Munich, Germany",
+  "title": "Elm Street Townhouse",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Elm Street Townhouse" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "company_address",
+      "external_id": "address",
+      "label": "Address",
       "type": "location",
       "field_type": "single_location",
-      "label": "Company Address",
       "values": [
         {
-          "city": "Munich",
+          "city": "San Francisco",
+          "country": "United States",
           "map_in_sync": true,
-          "country": "Germany",
-          "original_formatted_address": "Hessstr. 6, 80799 Munich, Germany",
-          "value": "Hessstr. 6, 80799 Munich, Germany",
-          "state": "Bavaria",
-          "postal_code": "80799",
-          "street_address": "Hessstr. 6",
-          "latitude": 48.15397,
-          "longitude": 11.55993
+          "postal_code": "94107",
+          "state": "California",
+          "street_address": "221 Elm Street",
+          "value": "221 Elm Street, 94107 San Francisco, California, United States",
+          "latitude": 37.7694,
+          "longitude": -122.4012,
+          "lat": 37.7694,
+          "lng": -122.4012
         }
       ]
     }
@@ -130,50 +223,53 @@ A location field value can be retrieved as part of a record retrieval:
 }
 ```
 
+**Requirements:** `records:read`. Works with a personal access token, an OAuth access token or a user API key.
+
 ## Record update
+
+Use the [update record endpoint](/docs/api/resource/record#update-a-record) to change the address of a record.
 
 <EndpointBadge method="PUT" url="https://api.tapeapp.com/v1/record/{record_id}" />
 
-One or more location field values can be updated as part of a record update. Here is an example request body for updating a record with a value for the "Company Address" field with ID 2, type `location` and external ID `company_address`:
+The example corrects the house number of the property with ID `1`. It sends the whole address again.
 
 <Tabs defaultValue="curl">
 
 <TabItem value="curl" label="cURL">
-<ContextCodeBlock language="shell" title='➡️      Request'>
+<ContextCodeBlock language="shell" title='Request'>
 {`curl -X PUT #BASE_URL/v1/record/1 \\
-  -u #USER_API_KEY: \\
+  -H "Authorization: Bearer $TAPE_TOKEN" \\
   -H "Content-Type: application/json" \\
   --data '{
     "fields": {
-      "company_address": {
-        "city": "Munich",
-        "country": "Germany",
-        "value": "Hessstr. 6, 80799 Munich, Germany",
-        "state": "Bavaria",
-        "postal_code": "80799",
-        "street_address": "Hessstr. 6"
+      "address": {
+        "street_address": "225 Elm Street",
+        "postal_code": "94107",
+        "city": "San Francisco",
+        "state": "California",
+        "country": "United States",
+        "latitude": 37.7695,
+        "longitude": -122.4010
       }
     }
-  }' 
+  }'
 `}
 </ContextCodeBlock>
 </TabItem>
 
 <TabItem value="json" label="JSON">
 
-```json title="➡️      Request"
+```json title="Request"
 {
   "fields": {
-    "company_address": {
-      "city": "Munich",
-      "map_in_sync": true,
-      "country": "Germany",
-      "value": "Hessstr. 6, 80799 Munich, Germany",
-      "state": "Bavaria",
-      "postal_code": "80799",
-      "street_address": "Hessstr. 6",
-      "latitude": 48.15397,
-      "longitude": 11.55993
+    "address": {
+      "street_address": "225 Elm Street",
+      "postal_code": "94107",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States",
+      "latitude": 37.7695,
+      "longitude": -122.4010
     }
   }
 }
@@ -182,32 +278,74 @@ One or more location field values can be updated as part of a record update. Her
 </TabItem>
 </Tabs>
 
-```json title="⬅️      Response"
+```json title="Response"
 {
   "record_id": 1,
-  "title": "Hessstr. 6, 80799 Munich, Germany",
+  "title": "Elm Street Townhouse",
   "fields": [
     {
+      "field_id": 1,
+      "external_id": "name",
+      "label": "Name",
+      "type": "text",
+      "field_type": "single_text",
+      "values": [{ "value": "Elm Street Townhouse" }]
+    },
+    {
       "field_id": 2,
-      "external_id": "company_address",
+      "external_id": "address",
+      "label": "Address",
       "type": "location",
       "field_type": "single_location",
-      "label": "Company Address",
       "values": [
         {
-          "city": "Munich",
-          "map_in_sync": true,
-          "country": "Germany",
-          "original_formatted_address": "Hessstr. 6, 80799 Munich, Germany",
-          "value": "Hessstr. 6, 80799 Munich, Germany",
-          "state": "Bavaria",
-          "postal_code": "80799",
-          "street_address": "Hessstr. 6",
-          "latitude": 48.15397,
-          "longitude": 11.55993
+          "city": "San Francisco",
+          "country": "United States",
+          "map_in_sync": false,
+          "postal_code": "94107",
+          "state": "California",
+          "street_address": "225 Elm Street",
+          "value": "225 Elm Street, 94107 San Francisco, California, United States",
+          "latitude": 37.7695,
+          "longitude": -122.401,
+          "lat": 37.7695,
+          "lng": -122.401
         }
       ]
     }
   ]
 }
 ```
+
+**General behavior**
+
+- The new address replaces the whole old address. Tape removes the parts you leave out, including the coordinates.
+- An update also removes `original_formatted_address` and `name`.
+- To clear the field, send `null`.
+- You can't clear a required field. The request returns `400`.
+- Fields that aren't in the request keep their values.
+
+```json title="Request: clear the field"
+{
+  "fields": {
+    "address": null
+  }
+}
+```
+
+A cleared field isn't in the `fields` of the response.
+
+**Requirements:** `records:edit`. Works with a personal access token, an OAuth access token or a user API key.
+
+**Errors**
+
+Same errors as under [Record creation](#record-creation).
+
+See [Errors](/docs/api/errors) for all error codes.
+
+## Next steps
+
+- [Location field](/docs/api/resource/field/location): create and change location fields.
+- [Field value](/docs/api/resource/field-value/overview): how all field values work.
+- [Record](/docs/api/resource/record): create, read, update and delete records.
+- [Filter](/docs/api/resource/filter#single-location): find records by their address.

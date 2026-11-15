@@ -1,115 +1,142 @@
 ---
 id: personal-access-tokens
-title: Personal Access Tokens
-sidebar_label: Personal Access Tokens
-description: Named, capability-scoped API credentials that can be limited to specific workspaces and apps, and revoked individually.
+title: Personal access tokens
+sidebar_label: Personal access tokens
+description: Named API credentials that you limit to specific capabilities, workspaces, and apps, and revoke one by one.
 ---
 
-A **personal access token** (PAT) is a named credential you create for a single integration. Unlike the [user API key](/docs/api/authentication#user-api-key), which can do everything your account can do, a personal access token only does what you allow it to.
+import MediaFrame from '@site/src/components/media-frame/media-frame.component';
+import DeveloperNewTokenPng from '@site/static/docs/api/personal-access-tokens/developer-new-token.png';
+import NewTokenDialogPng from '@site/static/docs/api/personal-access-tokens/new-token-dialog.png';
+import CreateTokenMp4 from '@site/static/docs/api/personal-access-tokens/create-token.mp4';
 
-Every token carries two independent grants:
+A personal access token (PAT) is a named credential for one integration that can only do what you allow it to.
 
-- a set of [**capabilities**](/docs/api/capabilities) — _what_ the token may do, such as reading records or sending email,
-- a **content selection** — _which_ workspaces and apps it may do it to.
+Unlike the [user API key](/docs/api/authentication#user-api-key), which can do everything your account can do, a token carries two grants:
 
-Tokens begin with the prefix `tape_pat_`.
+- **Capabilities:** what the token may do, for example read records. See [Capabilities](/docs/api/capabilities).
+- **Content access:** which workspaces and apps the token may reach.
 
-A personal access token is the recommended credential for developers calling the API directly — for yourself, or to act in Tape on a user's behalf. [OAuth](/docs/api/oauth/overview) is mainly for MCP clients and for integrations registered by Tape; see [Which credential to use](/docs/api/authentication#which-credential-to-use).
+Tokens start with the prefix `tape_pat_`.
 
-:::info A token can never exceed you
-A token's effective access is your own permissions, narrowed by its capabilities, narrowed again by its content selection. Both grants only ever subtract. Granting a capability never gives a token access to something you cannot already reach yourself, and losing your own access to a workspace immediately narrows every token you own.
+Use a personal access token when you call the API directly, for yourself or to act in Tape on a user's behalf. [OAuth](/docs/api/oauth/overview) is mainly for MCP clients and for integrations registered by Tape. See [Which credential to use](/docs/api/authentication#which-credential-to-use).
+
+:::info Can a token reach more than you can?
+A token's access is your own permissions, narrowed by its capabilities and again by its content access. Granting a capability never reaches beyond what you can reach yourself. When you lose access to a workspace, every token you own loses it too.
 :::
 
-## Creating a token
+<a id="creating-a-token"></a>
 
-1. Click the user avatar in the top-right corner and open **Preferences**.
-2. Go to the **Developer** section.
-3. Under **Personal access tokens (PATs)**, click **New token**.
-4. Give the token a name, choose which workspaces and apps it may reach, and choose its capabilities.
-5. Click **Create token**.
+## Create a token
 
-:::caution The token is shown exactly once
-Copy the token when it is displayed and store it somewhere safe, such as your integration's secret store. Tape keeps only a hash of it, so the value cannot be shown again. If you lose it, revoke the token and create a new one.
+<MediaFrame>
+<video width="100%" controls muted preload="metadata" src={CreateTokenMp4}></video>
+</MediaFrame>
+
+1. Select your profile picture, then select **Preferences**.
+2. In the settings window, select **Developer** (under **Features**).
+3. Under **Personal access tokens (PATs)**, select **New token**.
+
+<MediaFrame><img src={DeveloperNewTokenPng} alt="Developer page in the settings window with the New token button" /></MediaFrame>
+
+4. Enter a **Token name**, for example "Monthly sales report".
+5. Under **Content access**, keep **All** or select only the workspaces and apps the integration needs.
+6. Under **Capabilities**, keep **All** or select only what the integration needs, for example **Read records**.
+7. Select **Create token** and copy the token.
+
+<MediaFrame><img src={NewTokenDialogPng} alt="New personal access token dialog with one workspace and the capability Read records" /></MediaFrame>
+
+:::caution Tape shows the token only once
+Copy the token right away and store it in a safe place, such as your integration's secret store. Tape keeps only a hash, so it can't show the value again. If you lose it, revoke the token and create a new one.
 :::
 
-Afterwards the settings list shows only the first and last few characters of each token, which is enough to identify it without exposing the secret.
+The token list then shows only the first and last few characters of each token.
 
-:::note A token's grants are chosen once
-Capabilities and content selection are fixed at creation. You can rename a token later, but to change what it may do or reach, create a new token and revoke the old one.
+:::note Need different capabilities or content access?
+You can rename a token later. To change its capabilities or content access, create a new token and revoke the old one.
 :::
 
-## Using a token
+<a id="using-a-token"></a>
 
-Send the token as a bearer token, exactly like a user API key:
+## Use a token
+
+Send the token as a bearer token, the same way as a user API key:
 
 ```shell
 curl https://api.tapeapp.com/v1/record/1 \
   -H "Authorization: Bearer tape_pat_0a1b2c3d..."
 ```
 
-A personal access token authenticates the **developer API** (`/v1/*`) and nothing else. In particular, it cannot be used to create or manage personal access tokens — that happens only while signed in to Tape.
+A personal access token works for the Developer API (`/v1/*`) only. It can't create or manage personal access tokens; you do that in Tape while signed in.
 
-## Content selection
+## Content access {#content-selection}
 
-When you create a token you choose between two kinds of reach:
+When you create a token, you choose its reach:
 
-| Content selection      | What the token can reach                                                                  |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| **All**                | Every workspace and app you can reach, including ones created later                       |
-| **Selected**           | Only the workspaces and apps you pick                                                     |
+| Content access | What the token can reach |
+| --- | --- |
+| **All** | Every workspace and app you can reach, including ones created later. |
+| **Only some** | Clear **All** and select the workspaces and apps the token may reach. |
 
-Selecting a **workspace** also covers every app inside it, including apps added to that workspace later. The reverse is not true: selecting an app does **not** grant access to its workspace.
+A selected *workspace* includes every app in it, also apps added later. A selected app does *not* include its workspace. See [Limits](#limits) for how many you can select.
 
-You can select up to 50 workspaces and up to 50 apps.
+### General behavior
 
-When a token addresses a resource outside its selection, the request is refused with a `404`, exactly as if the resource did not exist.
+- A request for a resource outside the token's content access returns `404`, as if the resource didn't exist.
+- List endpoints return `200` with fewer results. This applies to [`GET /v1/app`](/docs/api/resource/app), [`GET /v1/workspace/org`](/docs/api/resource/workspace), `GET /v1/automation/org`, the automation run history, and [search](/docs/api/resource/search).
+- Some endpoints name the resource in the request body: `workspace_id` when you create an app, `record_id`s when you batch-update record permissions, and `trigger_workflow_def_id` when you generate an automation weblink. Tape checks these against the token's content access too.
+- Creating a workspace requires a token with **All**. A new top-level workspace has no parent that content access could name.
 
-Endpoints that return **lists** behave differently: they succeed with a `200` and simply return fewer results. [`GET /v1/app`](/docs/api/resource/app), [`GET /v1/workspace/org`](/docs/api/resource/workspace), `GET /v1/automation/org`, the automation run history and [search](/docs/api/resource/search) all narrow their results this way.
+:::caution Content access limits a credential, not your data
+Content access doesn't isolate data, hide data from you, or change anyone's permissions.
 
-Some endpoints name the resource they act on in the request **body** rather than in the URL — creating an app names its `workspace_id`, batch-updating record permissions names its `record_id`s, and generating an automation weblink names its `trigger_workflow_def_id`. These are checked against the selection as well, so they succeed as long as the resource named in the body is inside it.
-
-**Creating a workspace** is the one operation a restricted token cannot perform at all. A new top-level workspace has no parent that a selection could name, and creating one would widen the token's reach — so it requires a token scoped to **All**.
-
-:::caution Content selection limits a credential, not your data
-Content selection reduces what a **token** can reach. It is not a data isolation boundary, and it does not hide data from you or change anyone's permissions.
-
-One case in particular is worth knowing: when a token reads a record in a selected app, related records are returned as small previews — their id, title, creation date and the app they live in, together with that app's workspace — **even when those related records live in an app the token did not select**. This is read-only and still bounded by your own permissions, but if you need a hard boundary around data, content selection is not the mechanism to rely on.
+Related records of a record in a selected app come back as read-only previews (ID, title, creation date, app, and workspace), even from apps the token didn't select. The previews stay within your own permissions.
 :::
 
-## Revoking a token
+<a id="revoking-a-token"></a>
 
-Revoke a token from the same **Developer** settings section. Revocation takes effect on the **next request** — there is nothing cached and nothing to re-issue.
+## Revoke a token
 
-Revoking one token never affects your other tokens, your user API key, or your account. Revoked tokens stay visible in the settings list so you keep a record of what existed.
+Revoke a token in the same **Developer** section. Revocation applies from the next request on.
+
+Revoking one token doesn't affect your other tokens, your user API key, or your account. Revoked tokens stay in the list, so you keep a record of what existed.
 
 :::caution Webhooks outlive the token that created them
-A webhook created through the API keeps delivering after the token that created it is revoked. Revoking a token does not delete the webhooks it registered — delete those separately.
+A webhook created through the API keeps delivering after you revoke the token that created it. Delete those webhooks separately.
 :::
 
 ## Limits
 
-| Limit                          | Value          |
-| ------------------------------ | -------------- |
-| Active tokens per user         | 20             |
-| Selected workspaces per token  | 50             |
-| Selected apps per token        | 50             |
-| Token name length              | 500 characters |
+| Limit | Value |
+| --- | --- |
+| Active tokens per user | 20 |
+| Selected workspaces per token | 50 |
+| Selected apps per token | 50 |
+| Token name length | 500 characters |
 
 ## Rate limits
 
-A personal access token does **not** get its own rate limit budget. All of your credentials — your user API key and every personal access token you own — draw from the **same per-user budget**.
-
-Creating more tokens therefore does not buy more throughput. See [Request limits](/docs/api/request-limits) for the credit system.
+A personal access token has no rate limit budget of its own. Your user API key, all your tokens and your [OAuth](/docs/api/oauth/overview) connections share one per-user budget, so more tokens don't mean more throughput. See [Request limits](/docs/api/request-limits).
 
 ## Attribution
 
-A token acts as **you**. Records it creates or changes show you as the author in the activity stream, and emails it sends show you as the sender. If you want an integration's activity to appear under its own name, create a dedicated user for it and mint the token from that account.
+A token acts as you. Records it creates or changes show you as the author, and it sends emails on your behalf. To show an integration under its own name, create a dedicated user for it and create the token from that account.
 
-## Keeping tokens safe
+<a id="keeping-tokens-safe"></a>
 
-- **Never commit a token** to source control, and never paste one into a client-side application. A token in a browser bundle is a public token.
-- **One token per integration.** Shared credentials cannot be revoked without breaking something unrelated.
-- **Grant the narrowest set of [capabilities](/docs/api/capabilities) that works.** In particular, `edit` is not required to read — a reporting integration should hold only read capabilities.
-- **Select only the workspaces and apps the integration needs**, rather than defaulting to all of them.
-- The `tape_pat_` prefix is designed to be recognizable by secret-scanning tools, so a leaked token can be spotted automatically.
-- If a token may have leaked, revoke it first and investigate afterwards. Revocation is instant and costs you nothing but a new token.
+## Keep tokens safe
+
+- **Never commit a token** to source control or put it in a client-side app. A token in a browser bundle is public.
+- **Use one token per integration**, so you can revoke one without breaking another.
+- **Grant the fewest capabilities that work.** A reporting integration needs only read capabilities.
+- **Select only the workspaces and apps the integration needs.**
+- Secret-scanning tools recognize the `tape_pat_` prefix, so they can spot a leaked token.
+- If a token may have leaked, revoke it first and investigate afterwards.
+
+## Next steps
+
+- [Quickstart](/docs/guide/api/getting-started): retrieve your first record with a token.
+- [Capabilities](/docs/api/capabilities): the capability each endpoint needs.
+- [Request limits](/docs/api/request-limits): the per-user budget all your tokens share.
+- [Authentication](/docs/api/authentication): compare tokens with OAuth and the user API key.
+- In the Help Center: [Personal access tokens](https://help.tapeapp.com/en/articles/18449281-personal-access-tokens)
