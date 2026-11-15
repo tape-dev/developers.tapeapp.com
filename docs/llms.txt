@@ -1,0 +1,146 @@
+# Tape Developer Docs
+
+> Build on Tape with the REST API, Tape MCP and automations.
+
+## Guides
+
+- [Contribute](https://developers.tapeapp.com/docs/contribute.md): Help improve these docs by proposing a change on GitHub.
+- [Coming from the Podio API](https://developers.tapeapp.com/docs/guide/api/coming-from-podio.md): Move your Podio API integration to Tape. Map items, spaces, and hooks to records, workspaces, and webhooks, and switch authentication.
+- [Quickstart](https://developers.tapeapp.com/docs/guide/api/getting-started.md): Retrieve a record from your Tape organization with a personal access token and a single API request.
+- [Working with webhooks](https://developers.tapeapp.com/docs/guide/api/working-with-webhooks.md): Receive record changes from Tape in your own backend. Build a webhook handler in Node.js, verify it, avoid endless loops, and test it locally.
+- [Automation showcase](https://developers.tapeapp.com/docs/guide/automations/automation-showcase.md): See how six companies use automations with code in Tape.
+- [Convert a PDF file to text](https://developers.tapeapp.com/docs/guide/automations/convert-pdf-to-text.md): Build an automation that extracts the text of an attached PDF file and saves it in the record's description.
+- [Build an MCP client for Tape](https://developers.tapeapp.com/docs/mcp/build-a-client.md): What an MCP client needs to connect to Tape — Streamable HTTP and OAuth 2.1 with PKCE — with links to the details.
+- [Connect to Tape MCP](https://developers.tapeapp.com/docs/mcp/connect.md): Add Tape to Claude, Claude Code, ChatGPT, Cursor, VS Code, Codex, Gemini Enterprise or any other MCP client, and sign in with your Tape account.
+- [Connect with a personal access token](https://developers.tapeapp.com/docs/mcp/connect-with-token.md): Connect an MCP client to Tape with a personal access token instead of signing in — for headless use, narrower access, or clients without OAuth support.
+- [Tape MCP server](https://developers.tapeapp.com/docs/mcp/overview.md): Connect an MCP client to Tape so an AI assistant can search, read and write your records, apps and views through the Tape API.
+- [Security best practices](https://developers.tapeapp.com/docs/mcp/security.md): How to connect an MCP client to Tape safely — choosing between signing in and a token, containing prompt injection, and disconnecting.
+- [Supported tools](https://developers.tapeapp.com/docs/mcp/supported-tools.md): Reference for the 23 tools the Tape MCP server exposes — what each one does, what it does not do, and which capability its token needs.
+
+## API Reference
+
+- [Authentication](https://developers.tapeapp.com/docs/api/authentication.md): Send a bearer token in the Authorization header of every request to authenticate with the Tape API.
+- [Capabilities and scopes](https://developers.tapeapp.com/docs/api/capabilities.md): The 17 capabilities a personal access token or an OAuth access token can hold, how they are requested, and how Tape enforces them.
+- [Date & timezone](https://developers.tapeapp.com/docs/api/date-timezone.md): Read, write and filter dates and datetimes in the Tape API, in your timezone or in UTC.
+- [Errors](https://developers.tapeapp.com/docs/api/errors.md): Use the HTTP status and the error_code of a response to find out why a request failed.
+- [Tape Developer API](https://developers.tapeapp.com/docs/api/introduction.md): Use the Tape API to read and change records, apps and workspaces, and to connect other services to Tape.
+- [The OAuth authorization flow](https://developers.tapeapp.com/docs/api/oauth/authorization-flow.md): Connect a user's Tape account step by step. PKCE, the authorization request, consent, the code exchange, refreshing, step-up, disconnecting, and errors.
+- [Register an OAuth client](https://developers.tapeapp.com/docs/api/oauth/clients.md): Get an OAuth client ID for Tape. Registered by Tape for integrations, or self-registered through a client ID metadata document or dynamic client registration.
+- [OAuth](https://developers.tapeapp.com/docs/api/oauth/overview.md): Let other Tape users connect your app to their account with OAuth 2.1. When to use it, supported flows, endpoints, and what an access token can do.
+- [Build a Tape integration with OAuth](https://developers.tapeapp.com/docs/api/oauth/sign-in-with-tape.md): Connect each of your product's users to their Tape account from your backend, with a "Sign in with Tape" button or a sync, and keep the connection healthy.
+- [Pagination](https://developers.tapeapp.com/docs/api/pagination.md): Use a cursor to page through endpoints that return long collections.
+- [Personal access tokens](https://developers.tapeapp.com/docs/api/personal-access-tokens.md): Named API credentials that you limit to specific capabilities, workspaces, and apps, and revoke one by one.
+- [Request limits](https://developers.tapeapp.com/docs/api/request-limits.md): Handle rate limits and size limits so your integration keeps working under load.
+- [App](https://developers.tapeapp.com/docs/api/resource/app.md): Use these endpoints to create, read, update and delete the apps of a workspace.
+- [Automation run](https://developers.tapeapp.com/docs/api/resource/automation-run.md): List and retrieve Tape automation runs and their step logs through the Developer API.
+- [Automation usage report](https://developers.tapeapp.com/docs/api/resource/automation-usage-report.md): Retrieve your organization's automation consumption, with actions consumed and run outcomes, aggregated into time buckets.
+- [Action examples](https://developers.tapeapp.com/docs/api/resource/automation/action-examples.md): Copy-paste config for the most common Tape automation actions — records, email, HTTP, code, control flow, and collections.
+- [Advanced / sandbox](https://developers.tapeapp.com/docs/api/resource/automation/advanced.md): The sandbox endpoints behind a Tape automation's call-automation and generate-weblink actions.
+- [Discovery](https://developers.tapeapp.com/docs/api/resource/automation/discovery.md): Discover the live Automation catalog — trigger types, action types, and filter operators, each with the config schema to build against.
+- [Dynamic values & references](https://developers.tapeapp.com/docs/api/resource/automation/dynamic-values.md): How Tape automation values reference live record and run data — the dynamic-value array and reference model.
+- [Run & simulate](https://developers.tapeapp.com/docs/api/resource/automation/execution.md): Run and simulate a Tape automation against a record, and validate a definition — including the asynchronous run model.
+- [Manage automations](https://developers.tapeapp.com/docs/api/resource/automation/manage.md): Create, retrieve, list, update, replace the trigger, activate, pause, and delete Tape automations through the Developer API.
+- [Automation](https://developers.tapeapp.com/docs/api/resource/automation/overview.md): The Tape Automation API — discover the catalog, then create, version, validate, and run automations (a trigger, an optional filter, and ordered actions) scoped to an app.
+- [Automation API quickstart](https://developers.tapeapp.com/docs/api/resource/automation/quickstart.md): Build a Tape automation end to end with copy-paste API calls — discover, create, configure, validate, activate, run, and observe.
+- [Actions](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions.md): The 35 Tape automation action types, grouped by family, each with its label and where to read its config schema.
+- [authenticated_http_call](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/authenticated-http-call.md): Config reference for the Tape automation authenticated_http_call action, with its config keys, defaults and an example.
+- [clear_record_collection](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/clear-record-collection.md): Config reference for the Tape automation clear_record_collection action, with its config key and an example.
+- [collect_app_records](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collect-app-records.md): Config reference for the Tape automation collect_app_records action, with its config keys, defaults and an example.
+- [collect_app_view_records](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collect-app-view-records.md): Config reference for the Tape automation collect_app_view_records action, with its config keys, defaults and an example.
+- [collect_referenced_records](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collect-referenced-records.md): Config reference for the Tape automation collect_referenced_records action, with its config keys, defaults and an example.
+- [collected_records_call_automation](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collected-records-call-automation.md): Config reference for the Tape automation collected_records_call_automation action, with its config keys, defaults and an example.
+- [collected_records_collect_referenced_records](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collected-records-collect-referenced-records.md): Config reference for the Tape automation collected_records_collect_referenced_records action, with its config keys, defaults and an example.
+- [collected_records_comment_create](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collected-records-comment-create.md): Config reference for the Tape automation collected_records_comment_create action, with its config keys, defaults and an example.
+- [collected_records_send_email](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collected-records-send-email.md): Config reference for the Tape automation collected_records_send_email action, with its config keys, defaults and an example.
+- [collected_records_update](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/collected-records-update.md): Config reference for the Tape automation collected_records_update action, with its config keys, defaults and an example.
+- [conditional](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/conditional.md): Config reference for the Tape automation conditional action, with its config keys, defaults and an example.
+- [create_pdf](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/create-pdf.md): Config reference for the Tape automation create_pdf action, with its config keys, defaults and an example.
+- [current_record_call_automation](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-call-automation.md): Config reference for the Tape automation current_record_call_automation action, with its config keys, defaults and an example.
+- [current_record_comment_create](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-comment-create.md): Config reference for the Tape automation current_record_comment_create action, with its config keys, defaults and an example.
+- [current_record_comment_or_reply_delete](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-comment-or-reply-delete.md): Config reference for the Tape automation current_record_comment_or_reply_delete action, with its config keys, defaults and an example.
+- [current_record_comment_or_reply_reply_create](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-comment-or-reply-reply-create.md): Config reference for the Tape automation current_record_comment_or_reply_reply_create action, with its config keys, defaults and an example.
+- [current_record_delete](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-delete.md): Config reference for the Tape automation current_record_delete action, with its config keys, defaults and an example.
+- [current_record_generate_automation_weblink](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-generate-automation-weblink.md): Config reference for the Tape automation current_record_generate_automation_weblink action, with its config keys, defaults and an example.
+- [current_record_get_previous_revision](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-get-previous-revision.md): Config reference for the Tape automation current_record_get_previous_revision action, with its config and an example.
+- [current_record_restore](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-restore.md): Config reference for the Tape automation current_record_restore action, with its config keys, defaults and an example.
+- [current_record_update](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/current-record-update.md): Config reference for the Tape automation current_record_update action, with its config keys, defaults and an example.
+- [custom_code](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/custom-code.md): Config reference for the Tape automation custom_code action, with its config keys, defaults and an example.
+- [custom_variable](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/custom-variable.md): Config reference for the Tape automation custom_variable action, with its config keys, defaults and an example.
+- [delay](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/delay.md): Config reference for the Tape automation delay action, with its config key, allowed values and an example.
+- [display_webpage](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/display-webpage.md): Config reference for the Tape automation display_webpage action, with its config keys, defaults and an example.
+- [exit](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/exit.md): Config reference for the Tape automation exit action, with its config key, allowed values and an example.
+- [filter_record_collection](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/filter-record-collection.md): Config reference for the Tape automation filter_record_collection action, with its config keys, defaults and an example.
+- [for_loop](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/for-loop.md): Config reference for the Tape automation for_loop action, with its config keys, defaults and an example.
+- [http_call](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/http-call.md): Config reference for the Tape automation http_call action, with its config keys, defaults and an example.
+- [record_create](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/record-create.md): Config reference for the Tape automation record_create action, with its config keys, defaults and an example.
+- [redirect_user](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/redirect-user.md): Config reference for the Tape automation redirect_user action, with its config key and an example.
+- [referenced_records_update](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/referenced-records-update.md): Config reference for the Tape automation referenced_records_update action, with its config keys, defaults and an example.
+- [rollup_iterable_values](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/rollup-iterable-values.md): Config reference for the Tape automation rollup_iterable_values action, with its config keys, defaults and an example.
+- [send_email](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/send-email.md): Config reference for the Tape automation send_email action, with its config keys, defaults and an example.
+- [sort_record_collection](https://developers.tapeapp.com/docs/api/resource/automation/reference/actions/sort-record-collection.md): Config reference for the Tape automation sort_record_collection action, with its config keys, defaults and an example.
+- [Errors & broken reasons](https://developers.tapeapp.com/docs/api/resource/automation/reference/errors.md): HTTP status codes and the broken-reason codes returned across the Tape Automation API.
+- [Filters](https://developers.tapeapp.com/docs/api/resource/automation/reference/filters.md): The Tape automation filter model — the recursive and/or condition tree, the operators, and the tagged value union.
+- [The automation object](https://developers.tapeapp.com/docs/api/resource/automation/reference/object.md): The Tape automation object — its fields, the paused/broken status model, and identifiers.
+- [Triggers](https://developers.tapeapp.com/docs/api/resource/automation/reference/triggers.md): The nine Tape automation trigger types and how to configure them.
+- [Revisions](https://developers.tapeapp.com/docs/api/resource/automation/revisions.md): Every automation edit appends an immutable revision — list and retrieve the version history, and roll a definition back.
+- [Email](https://developers.tapeapp.com/docs/api/resource/email.md): Use this endpoint to send emails from Tape to people outside Tape.
+- [Attachment field value](https://developers.tapeapp.com/docs/api/resource/field-value/attachment.md): Use an attachment field value to read and write the files of a record.
+- [Calculation field value](https://developers.tapeapp.com/docs/api/resource/field-value/calculation.md): Use a calculation field value to read the computed value of a record.
+- [Category field value](https://developers.tapeapp.com/docs/api/resource/field-value/category.md): Use a category field value to read and set the selected options of a record.
+- [Checklist field value](https://developers.tapeapp.com/docs/api/resource/field-value/checklist.md): Use a checklist field value to read and write the tasks of a record.
+- [Date field value](https://developers.tapeapp.com/docs/api/resource/field-value/date.md): Use a date field value to read and write the dates and date ranges of a record.
+- [Email field value](https://developers.tapeapp.com/docs/api/resource/field-value/email.md): Use an email field value to read and write the email addresses of a record.
+- [Image field value](https://developers.tapeapp.com/docs/api/resource/field-value/image.md): Use an image field value to read and write the images of a record.
+- [Link field value](https://developers.tapeapp.com/docs/api/resource/field-value/link.md): Use a link field value to read and write the links of a record.
+- [Location field value](https://developers.tapeapp.com/docs/api/resource/field-value/location.md): Use a location field value to read and write the address of a record.
+- [Number field value](https://developers.tapeapp.com/docs/api/resource/field-value/number.md): Use a number field value to read and write the number of a record.
+- [Field value](https://developers.tapeapp.com/docs/api/resource/field-value/overview.md): Use field values to read and write the data of a record.
+- [Phone field value](https://developers.tapeapp.com/docs/api/resource/field-value/phone.md): Use a phone field value to read and write the phone numbers of a record.
+- [Relation field value](https://developers.tapeapp.com/docs/api/resource/field-value/relation.md): Use a relation field value to read and write the related records of a record.
+- [Status field value](https://developers.tapeapp.com/docs/api/resource/field-value/status.md): Use a status field value to read and set the status of a record.
+- [Text field value](https://developers.tapeapp.com/docs/api/resource/field-value/text.md): Use a text field value to read and write the text of a record.
+- [User field value](https://developers.tapeapp.com/docs/api/resource/field-value/user.md): Use a user field value to read and write the users of a record.
+- [Attachment field](https://developers.tapeapp.com/docs/api/resource/field/attachment.md): Use an attachment field to store files like PDFs, spreadsheets or images in a record.
+- [Calculation field](https://developers.tapeapp.com/docs/api/resource/field/calculation.md): Use a calculation field to compute a value from other fields of a record or from related records.
+- [Category field](https://developers.tapeapp.com/docs/api/resource/field/category.md): Use a category field to let a record pick from a fixed list of options, like a pipeline stage or a product.
+- [Checklist field](https://developers.tapeapp.com/docs/api/resource/field/checklist.md): Use a checklist field to keep a list of tasks in a record, each with its own assignee, due date and priority.
+- [Date field](https://developers.tapeapp.com/docs/api/resource/field/date.md): Use a date field to store a date, a date with a time, or a date range in a record.
+- [Email field](https://developers.tapeapp.com/docs/api/resource/field/email.md): Use an email field to store one or more email addresses in a record.
+- [Image field](https://developers.tapeapp.com/docs/api/resource/field/image.md): Use an image field to store photos and other images in a record.
+- [Link field](https://developers.tapeapp.com/docs/api/resource/field/link.md): Use a link field to store one or more web addresses in a record, such as a company website or social profiles.
+- [Location field](https://developers.tapeapp.com/docs/api/resource/field/location.md): Use a location field to store an address in a record, such as the address of a property or a solar site.
+- [Created and last edited fields](https://developers.tapeapp.com/docs/api/resource/field/missing-types.md): Use these field types to show when a record was created or last edited, and by whom.
+- [Number field](https://developers.tapeapp.com/docs/api/resource/field/number.md): Use a number field to store an amount, a quantity or any other number in a record.
+- [Field](https://developers.tapeapp.com/docs/api/resource/field/overview.md): Use fields to define the structure of the records of a database app.
+- [Phone field](https://developers.tapeapp.com/docs/api/resource/field/phone.md): Use a phone field to store one or more phone numbers in a record.
+- [Relation field](https://developers.tapeapp.com/docs/api/resource/field/relation.md): Use a relation field to link a record to records of other database apps.
+- [Status field](https://developers.tapeapp.com/docs/api/resource/field/status.md): Use a status field to track whether a record, like a task or a deal, is still open or done.
+- [Text field](https://developers.tapeapp.com/docs/api/resource/field/text.md): Use a text field to store a name, a note or any other text in a record.
+- [Unique ID field](https://developers.tapeapp.com/docs/api/resource/field/unique-id.md): Use a unique ID field to give every record of a database app a readable ID, like DEAL-0012.
+- [User field](https://developers.tapeapp.com/docs/api/resource/field/user.md): Use a user field to assign users of your organization to a record.
+- [File](https://developers.tapeapp.com/docs/api/resource/file.md): Use these endpoints to upload files to Tape, so you can attach them to records, comments and emails.
+- [Filter](https://developers.tapeapp.com/docs/api/resource/filter.md): Use filters to choose which records of a database app a request returns.
+- [Icon](https://developers.tapeapp.com/docs/api/resource/icon.md): Use an icon object to set the icon of an app or a workspace.
+- [Organization](https://developers.tapeapp.com/docs/api/resource/organization.md): Use this endpoint to read the organization your credential belongs to.
+- [Record](https://developers.tapeapp.com/docs/api/resource/record.md): Use these endpoints to create, read, update, delete and restore the records of a database app.
+- [Record comment](https://developers.tapeapp.com/docs/api/resource/record-comment.md): Use these endpoints to create, read and delete the comments and replies on a record.
+- [Record follow](https://developers.tapeapp.com/docs/api/resource/record-follow.md): Use this endpoint to stop notifications about the records of a database app for everyone who follows them.
+- [Record sharing & permissions](https://developers.tapeapp.com/docs/api/resource/record-permissions.md): Use this endpoint to share records with individual users and to change or remove their access.
+- [Record revision](https://developers.tapeapp.com/docs/api/resource/record-revision.md): Use these endpoints to see what changed in a record, who changed it and when.
+- [Search](https://developers.tapeapp.com/docs/api/resource/search.md): Search across every app and record you have access to, with optional filtering, sorting and cursor-based pagination.
+- [User](https://developers.tapeapp.com/docs/api/resource/user.md): Use these endpoints to read the current user, list and search the users of your organization, and invite new users.
+- [View](https://developers.tapeapp.com/docs/api/resource/view.md): Use these endpoints to read, create, update, promote and delete the views of an app.
+- [Webhook](https://developers.tapeapp.com/docs/api/resource/webhook.md): Use these endpoints to create, verify, list and delete webhooks for an app.
+- [Workspace](https://developers.tapeapp.com/docs/api/resource/workspace.md): Use these endpoints to list, create, update and delete workspaces, and to manage their members.
+- [Versioning](https://developers.tapeapp.com/docs/api/versioning.md): Find out which API version to use and when Tape releases a new one.
+
+## Automations
+
+- [Base64 image payload](https://developers.tapeapp.com/docs/automations/base64-guide.md): Copy this sample payload to test an automation that receives a Base64-encoded image.
+- [Date, time & timezones](https://developers.tapeapp.com/docs/automations/date-timezone.md): Read, format and set dates in automations, and avoid timezone surprises in your scripts.
+- [Execution types](https://developers.tapeapp.com/docs/automations/execution-types.md): Run an automation through its trigger, by hand, or as a simulation that changes no data in Tape. The execution type of a run decides if filters apply and if changes are real.
+- [Automations](https://developers.tapeapp.com/docs/automations/introduction.md): Write your own JavaScript in automations to filter, calculate and call the Tape API or other services.
+- [Available libraries (automations)](https://developers.tapeapp.com/docs/automations/libraries.md): Use these Node.js libraries in the code of your automations without importing them.
+- [Limits and throttling](https://developers.tapeapp.com/docs/automations/limitations.md): Keep each automation run within the limits for time, actions and computing power. Tape also throttles organizations with very heavy use.
+- [Automation errors](https://developers.tapeapp.com/docs/automations/troubleshooting/automations-troubleshooting-errors.md): Find out why an automation run failed, and stop a run on purpose with your own error.
+- [Filter values](https://developers.tapeapp.com/docs/automations/troubleshooting/filter-values.md): Keep filters from matching every record when their comparison value turns out empty.

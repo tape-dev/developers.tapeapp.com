@@ -1,0 +1,137 @@
+/*
+ * API reference pages, measured on an endpoint page of the reference (15.11.2026):
+ * - >= 1280 px: text column + one example column per page, sticky at 152 px, exactly as high as the
+ *   window (100vh - 152), the column itself never scrolls. Request on top (at most half), response
+ *   fills the rest and scrolls inside. Our pages hold several endpoints: the column shows the endpoint
+ *   in view and fades between them (src/client/api-aside.js; out 100 ms, in 150 ms, curve of the
+ *   reference's transitions); nothing slides.
+ * - < 1280 px: no column, request and response stand at the top of each endpoint section (max 480 px).
+ * - Parameter tables are field lists (src/remark/api-params.js).
+ * Selectors start with "html" so the order of the minified media queries does not matter.
+ */
+
+/* ---------- Example column (>= 1280 px) ---------- */
+html .markdown > .tp-api-aside { display: none; }
+@media (min-width: 1280px) {
+  /* the column runs along the whole article incl. pagination and footer: at the end of the page it
+     still stands at 152 px (reference) */
+  html div[class*='docItemContainer']:has(.markdown > .tp-api-aside) { position: relative; }
+  html .markdown:has(> .tp-api-aside) { position: static; padding-right: 496px; }
+  html .markdown > .tp-api-aside {
+    display: block; position: absolute; top: 0; right: 0; bottom: 0; width: 448px; max-width: none; margin: 0;
+  }
+  html .markdown .tp-api-stick {
+    position: sticky; top: calc(var(--ifm-navbar-height) + 56px);
+    height: calc(100vh - var(--ifm-navbar-height) - 56px);
+  }
+  html .markdown .tp-api-panel {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 32px;
+    display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden; transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.1s;
+  }
+  html .markdown .tp-api-panel:empty { display: none; }
+  /* fade: the old panel goes out first, then the new one comes in (no overlapping code) */
+  html .markdown .tp-api-panel[data-on],
+  html .markdown .tp-api-aside:not([data-active]) .tp-api-panel:first-child {
+    opacity: 1; visibility: visible; transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, visibility 0s linear 0.1s;
+  }
+  /* the sections: text only, the inline copy of the examples is not shown */
+  html .markdown .tp-api-sec { display: block; }
+  html .markdown .tp-api-sec > .tp-api-ex { display: none; }
+  /* the back-to-top button would sit on the example column (the reference has none) */
+  html:has(.markdown > .tp-api-aside) button[class*='backToTopButton'] { display: none; }
+}
+
+/* ---------- Code groups in the column and inline: shrink, the code scrolls inside ---------- */
+html .markdown .tp-api-grid {
+  flex: 0 1 auto; min-height: 0;
+  display: grid; grid-template-rows: repeat(auto-fit, minmax(0, min-content)); gap: 24px;
+}
+html .markdown .tp-api-grid > * { margin: 0 !important; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+html .markdown .tp-api-panel .tabs-container,
+html .markdown .tp-api-panel .tabs-container > div:not(.tabs),
+html .markdown .tp-api-panel [role='tabpanel'],
+html .markdown .tp-api-panel div[class^='codeBlock_'],
+html .markdown .tp-api-panel .theme-code-block,
+html .markdown .tp-api-panel div[class*='codeBlockContent'],
+html .markdown .tp-api-ex .tabs-container,
+html .markdown .tp-api-ex .tabs-container > div:not(.tabs),
+html .markdown .tp-api-ex [role='tabpanel'],
+html .markdown .tp-api-ex div[class^='codeBlock_'],
+html .markdown .tp-api-ex .theme-code-block,
+html .markdown .tp-api-ex div[class*='codeBlockContent'] {
+  display: flex; flex-direction: column; min-height: 0;
+}
+html .markdown .tp-api-panel [role='tabpanel'][hidden], html .markdown .tp-api-ex [role='tabpanel'][hidden] { display: none; }
+html .markdown .tp-api-panel .tabs-container > ul.tabs, html .markdown .tp-api-ex .tabs-container > ul.tabs { flex: none; }
+html .markdown .tp-api-panel [class*='codeBlockTitle'], html .markdown .tp-api-ex [class*='codeBlockTitle'] { flex: none; }
+html .markdown .tp-api-panel pre, html .markdown .tp-api-ex pre { flex: 0 1 auto; min-height: 0; max-height: none; overflow: auto; }
+
+/* ---------- Below 1280 px: examples at the top of the section ---------- */
+@media (max-width: 1279px) {
+  html .markdown .tp-api-sec > .tp-api-ex { display: flex; flex-direction: column; gap: 0; max-height: 480px; margin: 16px 0 24px; }
+}
+
+/* ---------- Text column width: set on main (layout.css, "Breite Fenster"), not changed here.
+   Only the footer follows the text column, because the examples are no longer a grid column. ---------- */
+@media (min-width: 1280px) {
+  html .col:has(.tp-api-aside) .tp-footer, html .col:has(.tp-api-aside) .pagination-nav { max-width: calc(100% - 496px); }
+}
+
+/* ---------- Parameter lists (field per row) ---------- */
+html .markdown .tp-params { margin: 20px 0; }
+html .markdown .tp-params .tp-params { margin: 0; }
+html .markdown .tp-param { padding: 24px 0; border-bottom: 1px solid #eeeeee; }
+html .markdown .tp-params > .tp-param:last-child { border-bottom: 0; }
+html .markdown p.tp-param__head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 0 20px 0 0; padding: 2px 0;
+  font: 400 14px/20px var(--tp-mono); overflow-wrap: anywhere;
+}
+html .markdown .tp-param__name { font-weight: 600; color: #000; }
+html .markdown .tp-param__pills { display: block; font-size: 12px; font-weight: 500; line-height: 16px; }
+html .markdown .tp-param__pill {
+  display: inline; margin-right: 8px; padding: 2px 8px; border-radius: 6px;
+  font: 500 12px/20px var(--tp-mono); color: rgb(87, 83, 78); background: rgba(245, 245, 244, 0.5);
+  overflow-wrap: anywhere;
+}
+html .markdown .tp-param__pill--req { color: rgb(220, 38, 38); background: rgba(255, 226, 226, 0.5); white-space: nowrap; }
+html .markdown .tp-param__pill a { color: inherit; }
+html .markdown .tp-param__desc { margin-top: 16px; }
+html .markdown .tp-param__desc > * { margin: 0; font-size: 14px; line-height: 24px; }
+html .markdown .tp-param__desc > * + * { margin-top: 16px; }
+html .markdown .tp-param__desc > .tp-param__meta + .tp-param__meta { margin-top: 8px; }
+html .markdown .tp-param__label { font-weight: 500; color: var(--tp-strong); }
+html .markdown .tp-param__desc code:not(pre code) { padding: 2px 8px; border-radius: 6px; font-size: 12px; line-height: 18px; font-weight: 500; }
+html .markdown .tp-md-only { display: none; }
+
+/* "Show child attributes" */
+html .markdown .tp-kids { margin-top: 16px; border: 1px solid rgba(222, 222, 222, 0.7); border-radius: 12px; }
+html .markdown .tp-kids__head {
+  display: flex; align-items: center; width: 100%; padding: 12px 14px; margin: 0;
+  border: 0; border-radius: 12px; background: transparent; cursor: pointer; text-align: left;
+  font: 400 14px/20px var(--tp-font); color: rgb(87, 83, 78);
+}
+html .markdown .tp-kids[data-open] .tp-kids__head { border-radius: 12px 12px 0 0; }
+html .markdown .tp-kids__head:hover, html .markdown .tp-kids[data-open] .tp-kids__head { color: rgb(28, 25, 23); background: rgba(250, 250, 249, 0.5); }
+html .markdown .tp-kids__chev { flex: none; width: 10px; height: 10px; color: currentColor; transition: transform 0.15s ease; }
+html .markdown .tp-kids[data-open] .tp-kids__chev { transform: rotate(90deg); }
+html .markdown .tp-kids__label { margin-left: 12px; line-height: 17.5px; }
+html .markdown .tp-kids__body { margin: 0 12px; padding: 0 8px; border-top: 1px solid rgb(245, 245, 244); }
+html .markdown .tp-kids__body[hidden] { display: none; }
+
+/* dark */
+html[data-theme='dark'] .markdown .tp-param { border-bottom-color: #252525; }
+html[data-theme='dark'] .markdown .tp-params > .tp-param:last-child { border-bottom: 0; }
+html[data-theme='dark'] .markdown .tp-param__name { color: #097fe8; }
+html[data-theme='dark'] .markdown .tp-param__pill { color: rgb(231, 229, 228); background: rgba(255, 255, 255, 0.05); }
+html[data-theme='dark'] .markdown .tp-param__pill--req { color: rgb(252, 165, 165); background: rgba(255, 100, 103, 0.1); }
+html[data-theme='dark'] .markdown .tp-kids { border-color: rgba(255, 255, 255, 0.1); }
+html[data-theme='dark'] .markdown .tp-kids__head { color: rgb(214, 211, 209); }
+html[data-theme='dark'] .markdown .tp-kids__head:hover, html[data-theme='dark'] .markdown .tp-kids[data-open] .tp-kids__head { color: rgb(231, 229, 228); background: rgba(255, 255, 255, 0.05); }
+html[data-theme='dark'] .markdown .tp-kids__body { border-top-color: rgba(255, 255, 255, 0.1); }
+
+/* name that is not code (e.g. "Sum", "key omitted"): text font */
+html .markdown .tp-param__name--text { font: 600 14px/20px var(--tp-font); color: var(--tp-strong); }
+html .markdown .tp-param__name a, html .markdown .tp-param__name a code { color: inherit; }
+html[data-theme='dark'] .markdown .tp-param__name--text { color: var(--tp-strong); }

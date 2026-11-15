@@ -1,57 +1,7 @@
-import Admonition from '@theme/Admonition';
-import React from 'react';
-import {
-  getActiveUserIsLoading,
-  getActiveUserPrimaryName,
-  useAppState,
-} from '@site/src/store';
-
-const STATIC_HEIGHT = '180px';
-
+/**
+ * Kept so pages that still import it do not break. The docs no longer check a
+ * sign-in or show a login hint: every example uses fixed sample values.
+ */
 export default function UserLoginInfo() {
-  // Initialize application state usage
-  const state = useAppState();
-
-  // Select properties from state
-  const isLoading = getActiveUserIsLoading(state);
-  const primaryName = getActiveUserPrimaryName(state);
-
-  if (isLoading) {
-    return <div style={{ minHeight: STATIC_HEIGHT }}></div>;
-  }
-
-  if (primaryName) {
-    return (
-      <div style={{ minHeight: STATIC_HEIGHT }}>
-        <Admonition type="tip" title="Logged in">
-          <span>
-            Hey {primaryName}, looks like you are already logged into Tape, so
-            we were able to pre-fill your user API key and some IDs in the
-            examples below. You can use the "copy" button to copy the code to
-            your clipboard. Most cURL requests work out of the box and can be
-            directly pasted into a terminal.
-          </span>
-        </Admonition>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ minHeight: STATIC_HEIGHT }}>
-      <Admonition type="info" title="Log in">
-        <span>
-          Hey there, looks like you are currently not logged into Tape. All
-          examples in this guide will be pre-filled with stub data. To change
-          this, log into your Tape account and refresh this page.
-        </span>
-        <p>
-          <a target="_blank" href="https://tapeapp.com/signin">
-            <button type="outline-darkest" style={{ margin: '9px 0px' }}>
-              Login here
-            </button>
-          </a>
-        </p>
-      </Admonition>
-    </div>
-  );
+  return null;
 }

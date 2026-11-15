@@ -1,226 +1,110 @@
-// https://docusaurus.io/docs/sidebar
-module.exports = {
-  mainSidebar: [
-    {
-      type: 'category',
-      label: 'Developer API',
-      collapsed: true,
-      items: [
-        'api/introduction',
-        'api/authentication',
-        'api/personal-access-tokens',
-        {
-          type: 'category',
-          label: 'OAuth',
-          collapsed: true,
-          items: ['api/oauth/overview', 'api/oauth/clients', 'api/oauth/authorization-flow', 'api/oauth/sign-in-with-tape'],
-        },
-        'api/capabilities',
-        'api/pagination',
-        'api/versioning',
-        'api/errors',
-        'api/request-limits',
-        'api/date-timezone',
-        {
-          type: 'category',
-          label: 'Resources',
-          collapsed: true,
-          items: [
-            'api/resource/search',
-            'api/resource/record',
-            'api/resource/filter',
-            {
-              type: 'category',
-              label: 'Field value',
-              collapsed: true,
-              items: [
-                'api/resource/field-value/overview',
-                'api/resource/field-value/text',
-                'api/resource/field-value/status',
-                'api/resource/field-value/user',
-                'api/resource/field-value/category',
-                'api/resource/field-value/date',
-                'api/resource/field-value/relation',
-                'api/resource/field-value/attachment',
-                'api/resource/field-value/image',
-                'api/resource/field-value/checklist',
-                'api/resource/field-value/number',
-                'api/resource/field-value/link',
-                'api/resource/field-value/calculation',
-                'api/resource/field-value/location',
-                'api/resource/field-value/email',
-                'api/resource/field-value/phone',
-              ],
-            },
-            'api/resource/record-comment',
-            'api/resource/record-revision',
-            'api/resource/record-permissions',
-            'api/resource/record-follow',
-            'api/resource/app',
-            'api/resource/view',
-            {
-              type: 'category',
-              label: 'Field',
-              collapsed: true,
-              items: [
-                'api/resource/field/overview',
-                'api/resource/field/text',
-                'api/resource/field/user',
-                'api/resource/field/category',
-                'api/resource/field/status',
-                'api/resource/field/relation',
-                'api/resource/field/attachment',
-                'api/resource/field/image',
-                'api/resource/field/date',
-                'api/resource/field/location',
-                'api/resource/field/email',
-                'api/resource/field/phone',
-                'api/resource/field/number',
-                'api/resource/field/link',
-                'api/resource/field/checklist',
-                'api/resource/field/unique-id',
-                'api/resource/field/calculation',
-                'api/resource/field/missing-types',
-              ],
-            },
-            'api/resource/workspace',
-            'api/resource/organization',
-            'api/resource/user',
-            'api/resource/webhook',
-            {
-              type: 'category',
-              label: 'Automation',
-              collapsed: true,
-              items: [
-                'api/resource/automation/overview',
-                'api/resource/automation/quickstart',
-                'api/resource/automation/discovery',
-                'api/resource/automation/manage',
-                'api/resource/automation/execution',
-                'api/resource/automation/revisions',
-                'api/resource/automation/advanced',
-                'api/resource/automation/dynamic-values',
-                'api/resource/automation/action-examples',
-                {
-                  type: 'category',
-                  label: 'Reference',
-                  collapsed: true,
-                  items: [
-                    'api/resource/automation/reference/object',
-                    'api/resource/automation/reference/triggers',
-                    'api/resource/automation/reference/filters',
-                    {
-                      type: 'category',
-                      label: 'Actions',
-                      collapsed: true,
-                      link: { type: 'doc', id: 'api/resource/automation/reference/actions' },
-                      items: [
-                        'api/resource/automation/reference/actions/custom-code',
-                        'api/resource/automation/reference/actions/custom-variable',
-                        'api/resource/automation/reference/actions/record-create',
-                        'api/resource/automation/reference/actions/current-record-update',
-                        'api/resource/automation/reference/actions/current-record-delete',
-                        'api/resource/automation/reference/actions/current-record-restore',
-                        'api/resource/automation/reference/actions/current-record-get-previous-revision',
-                        'api/resource/automation/reference/actions/current-record-comment-create',
-                        'api/resource/automation/reference/actions/current-record-comment-or-reply-reply-create',
-                        'api/resource/automation/reference/actions/current-record-comment-or-reply-delete',
-                        'api/resource/automation/reference/actions/collect-app-records',
-                        'api/resource/automation/reference/actions/collect-app-view-records',
-                        'api/resource/automation/reference/actions/collect-referenced-records',
-                        'api/resource/automation/reference/actions/collected-records-collect-referenced-records',
-                        'api/resource/automation/reference/actions/filter-record-collection',
-                        'api/resource/automation/reference/actions/sort-record-collection',
-                        'api/resource/automation/reference/actions/clear-record-collection',
-                        'api/resource/automation/reference/actions/collected-records-update',
-                        'api/resource/automation/reference/actions/referenced-records-update',
-                        'api/resource/automation/reference/actions/collected-records-comment-create',
-                        'api/resource/automation/reference/actions/rollup-iterable-values',
-                        'api/resource/automation/reference/actions/current-record-call-automation',
-                        'api/resource/automation/reference/actions/collected-records-call-automation',
-                        'api/resource/automation/reference/actions/current-record-generate-automation-weblink',
-                        'api/resource/automation/reference/actions/display-webpage',
-                        'api/resource/automation/reference/actions/redirect-user',
-                        'api/resource/automation/reference/actions/send-email',
-                        'api/resource/automation/reference/actions/collected-records-send-email',
-                        'api/resource/automation/reference/actions/create-pdf',
-                        'api/resource/automation/reference/actions/http-call',
-                        'api/resource/automation/reference/actions/authenticated-http-call',
-                        'api/resource/automation/reference/actions/delay',
-                        'api/resource/automation/reference/actions/exit',
-                        'api/resource/automation/reference/actions/for-loop',
-                        'api/resource/automation/reference/actions/conditional',
-                      ],
-                    },
-                    'api/resource/automation/reference/errors',
-                  ],
-                },
-              ],
-            },
-            'api/resource/automation-run',
-            'api/resource/automation-usage-report',
-            'api/resource/file',
-            'api/resource/icon',
-            'api/resource/email',
-          ],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'MCP server',
-      collapsed: true,
-      items: ['mcp/overview', 'mcp/connect', 'mcp/connect-with-token', 'mcp/supported-tools', 'mcp/security', 'mcp/build-a-client'],
-    },
-    {
-      type: 'category',
-      label: 'Automations',
-      collapsed: true,
-      items: [
-        'automations/introduction',
-        'automations/execution-types',
-        'automations/libraries',
-        'automations/date-timezone',
-        'automations/limitations',
-        {
-          type: 'category',
-          label: 'Troubleshooting',
-          collapsed: true,
-          items: [
-            'automations/troubleshooting/filter-values',
-            'automations/troubleshooting/automations-troubleshooting-errors',
-          ],
-        },
-      ],
-    },
-    'contribute',
-    {
-      type: 'link',
-      label: 'Roadmap',
-      href: 'https://get.tapeapp.com/roadmap/',
-    },
+// Docs layout: one sidebar per tab in the header.
+// Built from the original sidebar (sidebars.orig.js), so no page or URL changes.
+const orig = require('./sidebars.orig.js');
+
+const find = (items, label) => items.find((i) => typeof i === 'object' && i.label === label);
+const api = find(orig.mainSidebar, 'Developer API').items;
+const resources = find(api, 'Resources').items;
+const automation = find(resources, 'Automation').items;
+const mcp = find(orig.mainSidebar, 'MCP server').items;
+const auto = find(orig.mainSidebar, 'Automations').items;
+const guideAuto = find(orig.guidesSidebar, 'Automations').items;
+
+// Level-1 group: grey heading, not collapsible
+const group = (label, items) => ({
+  type: 'category',
+  label,
+  collapsible: false,
+  collapsed: false,
+  className: 'sb-group',
+  items,
+});
+// Missing ids are skipped, so the layout follows content changes in the release branch
+const pick = (items, ids) => ids.map((id) => items.find((i) => i === id || i.label === id)).filter(Boolean);
+
+// Like the reference: a category with an overview page opens it when clicked (and expands).
+const withOverview = (items) => items.map((i) => {
+  if (!i || typeof i !== 'object' || !i.items) return i;
+  const out = { ...i, items: withOverview(i.items) };
+  const first = out.items[0];
+  if (!out.link && out.className !== 'sb-group' && typeof first === 'string' && /\/overview$/.test(first)) {
+    out.link = { type: 'doc', id: first };
+    out.items = out.items.slice(1);
+  }
+  return out;
+});
+
+const sidebars = {
+  guides: [
+    group('Tape API', [
+      'guide/api/getting-started',
+      'guide/api/coming-from-podio',
+      'api/authentication',
+      'api/personal-access-tokens',
+      find(api, 'OAuth'),
+      'guide/api/working-with-webhooks',
+    ]),
+    group('Tape MCP', mcp),
+    group('Automation recipes', guideAuto),
+    group('Resources', [
+      'contribute',
+      { type: 'link', label: 'Roadmap', href: 'https://get.tapeapp.com/roadmap/' },
+      { type: 'link', label: 'Community', href: 'https://community.tapeapp.com' },
+      { type: 'link', label: 'Calculation field', href: 'https://help.tapeapp.com/en/articles/18449157-calculation-syntax-examples' },
+      { type: 'link', label: 'Help Center', href: 'https://help.tapeapp.com/' },
+    ]),
   ],
-  guidesSidebar: [
-    {
-      type: 'category',
-      label: 'Developer API',
-      collapsed: false,
-      items: ['guide/api/getting-started', 'guide/api/coming-from-podio', 'guide/api/working-with-webhooks'],
-    },
-    {
-      type: 'category',
-      label: 'Automations',
-      collapsed: false,
-      items: [
-        'guide/automations/automation-showcase',
-        'guide/automations/convert-pdf-to-text',
-      ],
-    },
-    'contribute',
-    {
-      type: 'link',
-      label: 'Roadmap',
-      href: 'https://get.tapeapp.com/roadmap/',
-    },
+  apiReference: [
+    group('Tape API', [
+      'api/introduction',
+      'api/capabilities',
+      'api/pagination',
+      'api/versioning',
+      'api/errors',
+      'api/request-limits',
+      'api/date-timezone',
+    ]),
+    group('Records', pick(resources, [
+      'api/resource/search',
+      'api/resource/record',
+      'api/resource/filter',
+      'Field value',
+      'api/resource/record-comment',
+      'api/resource/record-revision',
+      'api/resource/record-permissions',
+      'api/resource/record-follow',
+    ])),
+    group('Apps and views', pick(resources, ['api/resource/app', 'api/resource/view', 'Field'])),
+    group('Organization', pick(resources, [
+      'api/resource/workspace',
+      'api/resource/organization',
+      'api/resource/user',
+    ])),
+    group('Automation API', [
+      ...automation,
+      'api/resource/automation-run',
+      'api/resource/automation-usage-report',
+    ]),
+    group('More', pick(resources, [
+      'api/resource/webhook',
+      'api/resource/file',
+      'api/resource/icon',
+      'api/resource/email',
+    ])),
+  ],
+  automations: [
+    group('Get started', pick(auto, [
+      'automations/introduction',
+      'automations/code-editor',
+      'automations/execution-types',
+    ])),
+    group('Scripting', pick(auto, [
+      'automations/libraries',
+      'automations/date-timezone',
+      'automations/limitations',
+    ])),
+    group('Troubleshooting', find(auto, 'Troubleshooting').items),
   ],
 };
+
+module.exports = Object.fromEntries(Object.entries(sidebars).map(([k, v]) => [k, withOverview(v)]));

@@ -1,0 +1,74 @@
+/* "Copy page" button and menu (src/components/layout/copy-page.js).
+   All values measured on the reference at 1440, 768 and 390 px, light and dark (15.11.2026).
+   Loaded after layout.css; the older .tp-copy rules there only place the group in the page head. */
+
+.tp-copy { --tp-cp-c: #3e3e3e; --tp-cp-chev: #ada9a3; --tp-cp-chev-h: #7d7a75; --tp-cp-ring: #000; align-items: center; }
+/* in the page head the group sits right in a 156 px slot; the copy below the lead text (narrow screens) starts left */
+.tp-head .tp-copy { min-width: 156px; justify-content: flex-end; }
+html[data-theme='dark'] .tp-copy { --tp-cp-c: #cecece; --tp-cp-chev: #7d7a75; --tp-cp-chev-h: #ada9a3; --tp-cp-ring: #097fe8; }
+
+/* both halves */
+.tp-copy .tp-cp__btn,
+.tp-copy .tp-cp__chev {
+  display: flex; align-items: center; box-sizing: border-box; height: 34px; margin: 0;
+  border: 1px solid var(--tp-border); background: transparent; color: var(--tp-cp-c);
+  font: 400 16px/16px var(--tp-font); cursor: pointer; transition: none;
+}
+.tp-copy .tp-cp__btn:hover,
+.tp-copy .tp-cp__chev:hover { background: var(--tp-fill); }
+
+/* left half: icon + label, width fixed by the hidden "Copy page" */
+.tp-copy .tp-cp__btn { padding: 6px 12px; border-right: 0; border-radius: 6px 0 0 6px; }
+.tp-cp__in { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 20px; font-weight: 500; text-align: center; }
+.tp-cp__icon { width: 16px; height: 16px; flex: none; }
+.tp-cp__label { display: grid; }
+.tp-cp__label > span { grid-column: 1; grid-row: 1; }
+.tp-cp__ghost { visibility: hidden; }
+
+/* right half: square with the chevron */
+.tp-copy .tp-cp__chev { width: 34px; padding: 2px 0; justify-content: center; border-radius: 0 6px 6px 0; overflow: hidden; color: rgba(10, 10, 10, 0.5); }
+html[data-theme='dark'] .tp-copy .tp-cp__chev { color: rgba(255, 255, 255, 0.5); }
+.tp-copy .tp-cp__btn { outline-color: var(--tp-cp-ring); }
+.tp-copy .tp-cp__chev:focus-visible { outline: 2px solid var(--tp-cp-ring); outline-offset: -2px; }
+.tp-cp__chev svg { width: 12px; height: 12px; flex: none; color: var(--tp-cp-chev); rotate: 90deg; transition: rotate 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+.tp-cp__chev:hover svg { color: var(--tp-cp-chev-h); }
+.tp-cp__chev[data-open] svg { rotate: 270deg; }
+
+/* menu (rendered in <body>) */
+.tp-cp__pos { position: absolute; top: 0; left: 0; z-index: 50; }
+.tp-cp__menu {
+  --tp-cp-item: rgba(10, 10, 10, 0.5); --tp-cp-item-h: rgba(10, 10, 10, 0.75); --tp-cp-hl: rgba(79, 79, 79, 0.05);
+  --tp-cp-line: #dedede; --tp-cp-title: #252525; --tp-cp-sub: #4f4f4f;
+  position: relative; display: inline-flex; flex-direction: column; box-sizing: border-box;
+  width: max-content; min-width: 34px; max-width: 256px; max-height: 420px; overflow-y: auto;
+  padding: 4px; border: 1px solid var(--tp-cp-line); border-radius: 16px; background: #fff;
+  color: rgba(10, 10, 10, 0.7); font: 400 16px/24px var(--tp-font); text-rendering: geometricPrecision;
+  box-shadow: 0 20px 25px -5px oklab(0.541702 0 0 / 0.05), 0 8px 10px -6px oklab(0.541702 0 0 / 0.05);
+  outline: none; transition-property: scale, opacity; transition-duration: 0.1s; transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+.tp-cp__menu[data-phase='start'], .tp-cp__menu[data-phase='end'] { opacity: 0; scale: 0.95; }
+@media (min-width: 768px) { .tp-cp__menu { max-width: 512px; min-width: 281px; } }
+@media (prefers-reduced-motion: reduce) { .tp-cp__menu, .tp-cp__chev svg { transition: none; } }
+html[data-theme='dark'] .tp-cp__menu {
+  --tp-cp-item: rgba(255, 255, 255, 0.5); --tp-cp-item-h: rgba(255, 255, 255, 0.75); --tp-cp-hl: rgba(222, 222, 222, 0.05);
+  --tp-cp-line: rgba(255, 255, 255, 0.07); --tp-cp-title: #cecece; --tp-cp-sub: #9e9e9e;
+  background: #0f0f0f; color: rgba(255, 255, 255, 0.7); box-shadow: none;
+}
+
+.tp-cp__item {
+  position: relative; display: flex; align-items: flex-start; justify-content: normal; gap: 4px; width: 100%; box-sizing: border-box;
+  padding: 6px; border-radius: 12px; color: var(--tp-cp-item); font-size: 14px; line-height: 20px;
+  cursor: pointer; user-select: none; outline: none !important;
+}
+.tp-cp__item:hover, .tp-cp__item:focus { background: var(--tp-cp-hl); color: var(--tp-cp-item-h); }
+.tp-cp__box { flex: none; margin-top: 4px; padding: 6px; border: 1px solid var(--tp-cp-line); border-radius: 6px; line-height: 0; }
+.tp-cp__box svg { width: 16px; height: 16px; flex: none; }
+.tp-cp__text { display: flex; flex-direction: column; min-width: 0; padding: 0 4px; }
+.tp-cp__title { display: flex; align-items: center; gap: 4px; color: var(--tp-cp-title); font-size: 14px; line-height: 20px; font-weight: 500; }
+.tp-cp__ext { width: 10px; height: 10px; flex: none; color: var(--tp-cp-sub); }
+.tp-cp__sub { color: var(--tp-cp-sub); font-size: 12px; line-height: 16px; overflow-wrap: break-word; }
+.tp-cp__tick { width: 14px; height: 14px; flex: none; opacity: 0; }
+
+/* layout.css has html[data-theme='dark'] .tp-copy button { background: transparent } */
+html[data-theme='dark'] .tp-copy .tp-cp__btn:hover,
+html[data-theme='dark'] .tp-copy .tp-cp__chev:hover { background: var(--tp-fill); }
