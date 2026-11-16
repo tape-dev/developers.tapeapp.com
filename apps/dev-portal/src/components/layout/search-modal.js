@@ -4,7 +4,7 @@ import { usePluginData } from '@docusaurus/useGlobalData';
 import { useHistory } from '@docusaurus/router';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { Search, FileText, Hash, AlignLeft, CornerDownLeft } from 'lucide-react';
-import { loadFulltext, searchFulltext, marks } from './fulltext';
+import { loadFulltext, searchFulltext, marks, MIN_TERM } from './fulltext';
 
 const SECTION = { guide: 'Guides', api: 'API Reference', mcp: 'Guides', automations: 'Automations', calculation: 'Calculations', contribute: 'Guides' };
 
@@ -57,26 +57,37 @@ export default function SearchModal({ onClose }) {
 
   const results = useMemo(() => {
     if (!q.trim()) return [];
-    return full ? searchFulltext(full, q) : titleSearch(pages, q);
+    // one-letter queries: titles and headings only, the full text would match nearly everything
+    const longEnough = (q.toLowerCase().match(/[^-\s]+/g) || []).some((t) => t.length >= MIN_TERM);
+    return full && longEnough ? searchFulltext(full, q) : titleSearch(pages, q);
   }, [q, pages, full]);
 
+  // After choosing a result the focus must not jump back to the search pill: the Enter key that chose the
+  // result would then activate the pill and reopen an empty dialog over the new page.
+  const navigated = useRef(false);
   useEffect(() => {
     const before = document.activeElement;
     input.current?.focus();
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; if (before && before.focus) before.focus(); };
+    return () => { document.body.style.overflow = ''; if (!navigated.current && before && before.focus) before.focus(); };
   }, []);
+  // Escape closes the dialog even when the focus is not inside it (e.g. after a click on the backdrop area)
+  useEffect(() => {
+    const onEsc = (e) => { if (e.key === 'Escape' && !e.isComposing) { e.preventDefault(); onClose(); } };
+    window.addEventListener('keydown', onEsc);
+    return () => window.removeEventListener('keydown', onEsc);
+  }, [onClose]);
   // keep the selected result in view while using the arrow keys
   useEffect(() => { document.querySelector('.tp-sm__item.is-sel')?.scrollIntoView({ block: 'nearest' }); }, [sel]);
   useEffect(() => setSel(0), [q]);
 
-  const go = (r) => { onClose(); history.push(r.url); };
+  const go = (r) => { navigated.current = true; onClose(); history.push(r.url); };
   const onKey = (e) => {
-    if (e.key === 'Escape') onClose();
-    else if (e.key === 'Tab') { e.preventDefault(); input.current?.focus(); }
+    if (e.isComposing || e.keyCode === 229) return; // Enter confirms an input-method composition, not a result
+    if (e.key === 'Tab') { e.preventDefault(); input.current?.focus(); }
     else if (e.key === 'ArrowDown') { e.preventDefault(); setSel((s) => Math.min(s + 1, results.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setSel((s) => Math.max(s - 1, 0)); }
-    else if (e.key === 'Enter' && results[sel]) go(results[sel]);
+    else if (e.key === 'Enter') { e.preventDefault(); if (results[sel]) go(results[sel]); }
   };
 
   return createPortal(
